@@ -18,8 +18,6 @@ class _FilterScreenState extends State<FilterScreen> {
     return Scaffold(
       appBar: AppBar(
         iconTheme: const IconThemeData(color: Colors.black),
-        // automaticallyImplyLeading: true,
-        // leading: Text(("Filters")),
         leadingWidth: 0,
         leading: const SizedBox.shrink(),
         title: const Text(
@@ -35,12 +33,6 @@ class _FilterScreenState extends State<FilterScreen> {
               child: const Text("Close"))
         ],
       ),
-
-      // appBar: AppBar(leading: Text("Filters"), actions: [
-      //   TextButton(
-      //       onPressed: () => Navigator.of(context).pop(), child: Text("Close"))
-      // ]),
-      //  ,
       body: FiltersAvailable(),
     );
   }
@@ -56,12 +48,18 @@ class FiltersAvailable extends StatefulWidget {
 class _FiltersAvailableState extends State<FiltersAvailable> {
   FilterType? _character;
   @override
+  void didChangeDependencies() {
+    final filterProvider2 = Provider.of<FilterProvider>(context);
+    print(filterProvider2.filterNumber);
+    _character = filterProvider2.filterNumber ==0 
+        ? null
+        : getFilterType(filterProvider2.filterNumber);
+    super.didChangeDependencies();
+  }
+  
+  @override
   Widget build(BuildContext context) {
     final filterProvider = Provider.of<FilterProvider>(context);
-    // FilterType? _character = widget.filterNumber == null
-    //     ? null
-    //     : getFilterType(widget.filterNumber!);
-
     return Column(
       children: <Widget>[
         RadioListTile(
@@ -106,38 +104,55 @@ class _FiltersAvailableState extends State<FiltersAvailable> {
             });
           },
         ),
-        TextButton(
-            onPressed: () {
-              if (_character == FilterType.atoZ) {
-                filterProvider.setFilterNumber(1);
-              } else if (_character == FilterType.priceLtoH) {
-                filterProvider.setFilterNumber(2);
-              } else if (_character == FilterType.priceHtoL) {
-                filterProvider.setFilterNumber(3);
-              }
-              Navigator.pop(context);
-            },
-            child: Text(
-              "\nSubmit",
-              style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  color: Colors.deepPurple.shade700,
-                  fontSize: 16),
-            ))
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+             TextButton(
+                onPressed: () {
+                  filterProvider.setFilterNumber(0);
+                  Navigator.pop(context);
+                },
+                child: Text(
+                  "\nClear",
+                  style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      color: Colors.deepPurple.shade700,
+                      fontSize: 16),
+                )),
+            TextButton(
+                onPressed: () {
+                  if (_character == FilterType.atoZ) {
+                    filterProvider.setFilterNumber(1);
+                  } else if (_character == FilterType.priceLtoH) {
+                    filterProvider.setFilterNumber(2);
+                  } else if (_character == FilterType.priceHtoL) {
+                    filterProvider.setFilterNumber(3);
+                  }
+                  Navigator.pop(context);
+                },
+                child: Text(
+                  "\nSubmit",
+                  style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      color: Colors.deepPurple.shade700,
+                      fontSize: 16),
+                )),
+          ],
+        )
       ],
     );
   }
 
-  // FilterType? getFilterType(int filterNumber) {
-  //   switch (filterNumber) {
-  //     case 0:
-  //       return FilterType.atoZ;
-  //     case 1:
-  //       return FilterType.priceLtoH;
-  //     case 2:
-  //       return FilterType.priceLtoH;
-  //     default:
-  //       return null;
-  //   }
-  // }
+  FilterType? getFilterType(int filterNumber) {
+    switch (filterNumber) {
+      case 1:
+        return FilterType.atoZ;
+      case 2:
+        return FilterType.priceLtoH;
+      case 3:
+        return FilterType.priceHtoL;
+      default:
+        return null;
+    }
+  }
 }
