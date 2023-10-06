@@ -26,8 +26,8 @@ class _BottomBarState extends State<BottomBar> {
   List<Widget> pages = [
     const HomeScreen(),
     CategoryGridScreen(),
-    const AccountScreen(),
     const CartScreen(),
+    const AccountScreen(),
   ];
 
   void updatePage(int page) {
@@ -92,25 +92,6 @@ class _BottomBarState extends State<BottomBar> {
             ),
             label: '',
           ),
-          //ACCOUNT
-          BottomNavigationBarItem(
-            icon: Container(
-              width: bottomBarWidth,
-              decoration: BoxDecoration(
-                border: Border(
-                  top: BorderSide(
-                      color: _page == 2
-                          ? GlobalVariables.selectedNavBarColor
-                          : GlobalVariables.backgroundColor,
-                      width: bottomBarBorderWidth),
-                ),
-              ),
-              child: _page == 2
-                  ? const Icon(Icons.person_rounded)
-                  : const Icon(Icons.person_outlined),
-            ),
-            label: '',
-          ),
           //CART
           BottomNavigationBarItem(
             icon: Container(
@@ -118,7 +99,7 @@ class _BottomBarState extends State<BottomBar> {
               decoration: BoxDecoration(
                 border: Border(
                   top: BorderSide(
-                    color: _page == 3
+                    color: _page == 2
                         ? GlobalVariables.selectedNavBarColor
                         : GlobalVariables.backgroundColor,
                     width: bottomBarBorderWidth,
@@ -138,6 +119,25 @@ class _BottomBarState extends State<BottomBar> {
                         Icons.shopping_cart_outlined,
                       ),
               ),
+            ),
+            label: '',
+          ),
+          //ACCOUNT
+           BottomNavigationBarItem(
+            icon: Container(
+              width: bottomBarWidth,
+              decoration: BoxDecoration(
+                border: Border(
+                  top: BorderSide(
+                      color: _page == 3
+                          ? GlobalVariables.selectedNavBarColor
+                          : GlobalVariables.backgroundColor,
+                      width: bottomBarBorderWidth),
+                ),
+              ),
+              child: _page == 3
+                  ? const Icon(Icons.person_rounded)
+                  : const Icon(Icons.person_outlined),
             ),
             label: '',
           ),

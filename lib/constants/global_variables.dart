@@ -5,6 +5,7 @@ import 'package:ecommerce_major_project/main.dart';
 import 'package:ecommerce_major_project/common/widgets/bottom_bar.dart';
 
 // String uri = 'https://drab-teal-crayfish-hem.cyclic.app';
+//for android 10.0.2.2 
 String uri = 'http://localhost:3000';
 
 class GlobalVariables {

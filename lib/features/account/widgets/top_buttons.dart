@@ -1,5 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:ecommerce_major_project/features/account/screens/all_orders_screen.dart';
 import 'package:ecommerce_major_project/features/home/screens/wish_list_screen.dart';
+import 'package:ecommerce_major_project/models/order.dart';
 import 'package:flutter/material.dart';
 
 import 'package:ecommerce_major_project/main.dart';
@@ -8,7 +10,8 @@ import 'package:ecommerce_major_project/features/account/widgets/account_button.
 import 'package:ecommerce_major_project/features/account/services/account_services.dart';
 
 class TopButtons extends StatelessWidget {
-  TopButtons({Key? key}) : super(key: key);
+  TopButtons({Key? key, required this.orders}) : super(key: key);
+  List<Order>? orders;
 
   // final List<String> buttonNames = [
   //   "Your Orders",
@@ -23,7 +26,14 @@ class TopButtons extends StatelessWidget {
       children: [
         Row(
           children: [
-            AccountButton(text: "Your Orders", onTap: () {}),
+            AccountButton(
+                text: "Your Orders",
+                onTap: () {
+                  orders == null || orders!.isEmpty
+                      ? null
+                      : Navigator.pushNamed(context, AllOrdersScreen.routeName,
+                          arguments: orders);
+                }),
             AccountButton(
                 text: "Your Wishlist",
                 onTap: () {
