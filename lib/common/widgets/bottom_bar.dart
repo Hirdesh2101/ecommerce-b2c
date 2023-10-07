@@ -113,7 +113,7 @@ class _BottomBarState extends State<BottomBar> {
 
                 badgeStyle: const badges.BadgeStyle(
                     badgeColor: Color.fromARGB(255, 19, 17, 17)),
-                child: _page == 3
+                child: _page == 2
                     ? const Icon(Icons.shopping_cart_rounded)
                     : const Icon(
                         Icons.shopping_cart_outlined,

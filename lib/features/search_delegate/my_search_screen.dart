@@ -139,7 +139,6 @@ class _MySearchScreenState extends State<MySearchScreen> {
           backgroundColor: Colors.white,
           leadingWidth: mq.width * .075,
           title: Container(
-            height: mq.height * .055,
             margin: EdgeInsets.only(left: mq.width * .03),
             child: Material(
               borderRadius: BorderRadius.circular(mq.width * .025),
@@ -228,14 +227,14 @@ class _MySearchScreenState extends State<MySearchScreen> {
                   filled: true,
                   fillColor: Colors.white,
                   contentPadding: EdgeInsets.only(top: mq.width * .03),
-                  border: const OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(7)),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(mq.width * .025),
                       borderSide: BorderSide.none),
-                  enabledBorder: const OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(7)),
+                  enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(mq.width * .025),
                       borderSide: BorderSide(color: Colors.black38, width: 1)),
-                  focusedBorder: const OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(7)),
+                  focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(mq.width * .025),
                       borderSide:
                           BorderSide(color: Colors.black38, width: 0.4)),
                   // border: null,
@@ -255,28 +254,44 @@ class _MySearchScreenState extends State<MySearchScreen> {
           actions: [
             Padding(
               padding: EdgeInsets.only(right: mq.width * 0.035),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  InkWell(
-                    onTap: () {
-                      // Scaffold.of(context).openDrawer();
-                      // _scaffoldKey.currentState!.openEndDrawer();
+              child: SizedBox(
+                height: 40,
+                width: 40,
+                child: FloatingActionButton(
+                  elevation: 0,
+                  backgroundColor: Color.fromARGB(255, 43, 6, 103),
+                  onPressed:
+                      // If not yet listening for speech start, otherwise stop
                       _speechToText.isNotListening
                           ? _startListening
-                          : _stopListening;
-                      // Navigator.of(context).push(
-                      //     MaterialPageRoute(builder: (_) => SpeechExample()));
-                    },
-                    child: Icon(
-                        _speechToText.isNotListening
-                            ? Icons.mic_off
-                            : Icons.mic,
-                        size: 30),
-                  ),
-                ],
+                          : _stopListening,
+                  tooltip: 'Listen',
+                  child: Icon(
+                      _speechToText.isNotListening ? Icons.mic_off : Icons.mic,
+                      color: Colors.white),
+                ),
               ),
             ),
+            // Padding(
+
+            //   padding: EdgeInsets.only(right: mq.width * 0.35),
+            //   child: InkWell(
+            //     onTap: () {
+            //       // Scaffold.of(context).openDrawer();
+            //       // _scaffoldKey.currentState!.openEndDrawer();
+            //       _speechToText.isNotListening
+            //           ? _startListening
+            //           : _stopListening;
+            //       // Navigator.of(context).push(
+            //       //     MaterialPageRoute(builder: (_) => SpeechExample()));
+            //     },
+            //     child: Icon(
+            //         _speechToText.isNotListening
+            //             ? Icons.mic_off
+            //             : Icons.mic,
+            //         size: 30),
+            //   ),
+            // ),
           ],
         ),
         body: Center(
@@ -562,27 +577,8 @@ class _MySearchScreenState extends State<MySearchScreen> {
                       },
                     ),
         ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
-        floatingActionButton: Padding(
-          padding: const EdgeInsets.only(bottom: 55),
-          child: SizedBox(
-            height: 40,
-            width: 40,
-            child: FloatingActionButton(
-              elevation: 0,
-              backgroundColor: Color.fromARGB(255, 43, 6, 103),
-              onPressed:
-                  // If not yet listening for speech start, otherwise stop
-                  _speechToText.isNotListening
-                      ? _startListening
-                      : _stopListening,
-              tooltip: 'Listen',
-              child: Icon(
-                  _speechToText.isNotListening ? Icons.mic_off : Icons.mic,
-                  color: Colors.white),
-            ),
-          ),
-        ),
+        // floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
+        // floatingActionButton:
       ),
     );
   }

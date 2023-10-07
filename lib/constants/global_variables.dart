@@ -1,3 +1,4 @@
+import 'package:ecommerce_major_project/features/search/screens/search_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -165,12 +166,12 @@ class GlobalVariables {
                       ),
                     ),
                     SizedBox(width: mq.width * .04),
-                    InkWell(
-                        onTap: () {
-                          // Scaffold.of(context).openDrawer();
-                          // _scaffoldKey.currentState!.openEndDrawer();
-                        },
-                        child: const Icon(Icons.mic, size: 30)),
+                    // InkWell(
+                    //     onTap: () {
+                    //       // Scaffold.of(context).openDrawer();
+                    //       // _scaffoldKey.currentState!.openEndDrawer();
+                    //     },
+                    //     child: const Icon(Icons.mic, size: 30)),
                   ],
                 ),
               ),
