@@ -5,8 +5,10 @@ import 'package:ecommerce_major_project/main.dart';
 import 'package:ecommerce_major_project/common/widgets/bottom_bar.dart';
 
 // String uri = 'https://drab-teal-crayfish-hem.cyclic.app';
-//for android 10.0.2.2
-String uri = 'http://localhost:3000';
+//for Android emulator: 10.0.2.2
+//for IOS emulator: localhost
+//for external devices: Your pc IP (192.168.1.5)
+String uri = 'http://192.168.1.5:3000';
 
 class GlobalVariables {
   // COLORS
