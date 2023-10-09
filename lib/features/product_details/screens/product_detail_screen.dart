@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
+import 'package:ecommerce_major_project/features/cart/screens/cart_screen.dart';
 import 'package:ecommerce_major_project/features/home/screens/wish_list_screen.dart';
 import 'package:ecommerce_major_project/features/home/services/home_services.dart';
 import 'package:flutter/material.dart';
@@ -69,7 +70,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    bool isProductAvailable = widget.product.quantity == 0;
+    bool isProductOutOfStock = widget.product.quantity == 0;
     return Scaffold(
       appBar: GlobalVariables.getAppBar(
           context: context, onClickSearchNavigateTo: const MySearchScreen()),
@@ -228,15 +229,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       }),
                 ],
               ),
-              // SizedBox(height: mq.height * .01),
-              // Divider(
-              //   endIndent: mq.width * .01,
-              //   indent: mq.width * .01,
-              //   thickness: 2,
-              //   color: Colors.grey[300],
-              // ),
-              // SizedBox(height: mq.height * .01),
-              isProductAvailable
+              isProductOutOfStock
                   ? const Text(
                       "Out of Stock",
                       style: TextStyle(
@@ -244,16 +237,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     )
                   : const Text("In Stock",
                       style: TextStyle(color: Colors.teal)),
-              // Container(height: 5, color: Colors.grey[200]),
               SizedBox(height: mq.height * .01),
-              // ElevatedButton(
-              //   onPressed: () {},
-              //   style: ElevatedButton.styleFrom(
-              //       minimumSize: Size(double.infinity, mq.height * .08),
-              //       backgroundColor: Colors.yellow.shade500),
-              //   child: const Text("Buy Now",
-              //       style: TextStyle(color: Colors.black)),
-              // ),
               SizedBox(height: mq.width * .025),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -263,29 +247,33 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(color: Colors.black, width: 1),
-                      // color: Color.fromARGB(255, 147, 147, 147),
                     ),
                     child: Text(
                       "₹ ${widget.product.price.toStringAsFixed(2)}  ",
                       textAlign: TextAlign.center,
                       style: const TextStyle(
-                          fontSize: 20,
-                          // color: Colors.,
-                          fontWeight: FontWeight.w500),
+                          fontSize: 20, fontWeight: FontWeight.w500),
                     ),
                   ),
                   SizedBox(width: mq.width * .05),
                   ElevatedButton(
-                    onPressed: isProductAvailable
-                        ? () {
-                            showSnackBar(
-                                context: context, text: "Product out of stock");
-                          }
-                        : () {
-                            showSnackBar(
-                                context: context, text: "Added to cart");
-                            addToCart();
-                          },
+                    onPressed: () {
+                      if (isProductOutOfStock) {
+                        showSnackBar(
+                            context: context, text: "Product is out of stock!");
+                        return;
+                      } else {
+                        addToCart();
+                        showSnackBar(
+                            context: context,
+                            text: "Added to Cart",
+                            onTapFunction: () {
+                              Navigator.pushNamed(
+                                  context, CartScreen.routeName);
+                            },
+                            actionLabel: "View");
+                      }
+                    },
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.orange.shade800,
                         minimumSize: Size(mq.width * .45, mq.height * .06),

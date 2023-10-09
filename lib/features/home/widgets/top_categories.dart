@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:ecommerce_major_project/features/cart/screens/cart_screen.dart';
 import 'package:ecommerce_major_project/features/home/widgets/carousel_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -277,7 +278,7 @@ class _TopCategoriesState extends State<TopCategories>
                                     childCount: min(productList!.length, 8),
                                     (context, index) {
                                   Product product = productList![index];
-                                  bool isProductAvailable =
+                                  bool isProductOutOfStock =
                                       productList![index].quantity == 0;
                                   print(
                                       "\n\n============> product category : ${categoriesList[activeTabIndex]}");
@@ -399,33 +400,39 @@ class _TopCategoriesState extends State<TopCategories>
                                                               color: Colors
                                                                   .black87)),
                                                     ),
-                                                    Container(
-                                                      child: InkWell(
-                                                          onTap:
-                                                              isProductAvailable
-                                                                  ? () {
-                                                                      showSnackBar(
-                                                                          context:
-                                                                              context,
-                                                                          text:
-                                                                              "Product out of stock");
-                                                                    }
-                                                                  : () {
-                                                                      addToCart(
-                                                                          product
-                                                                              .name,
-                                                                          product);
-                                                                      showSnackBar(
-                                                                          context:
-                                                                              context,
-                                                                          text:
-                                                                              "Added to cart");
-                                                                    },
-                                                          child: const Icon(
-                                                              CupertinoIcons
-                                                                  .cart_badge_plus,
-                                                              size: 35)),
-                                                    ),
+                                                    InkWell(
+                                                        onTap: () {
+                                                          if (isProductOutOfStock) {
+                                                            showSnackBar(
+                                                                context:
+                                                                    context,
+                                                                text:
+                                                                    "Product is out of stock!");
+                                                            return;
+                                                          } else {
+                                                            addToCart(
+                                                                product.name,
+                                                                product);
+                                                            showSnackBar(
+                                                                context:
+                                                                    context,
+                                                                text:
+                                                                    "Added to Cart",
+                                                                onTapFunction:
+                                                                    () {
+                                                                  Navigator.pushNamed(
+                                                                      context,
+                                                                      CartScreen
+                                                                          .routeName);
+                                                                },
+                                                                actionLabel:
+                                                                    "View");
+                                                          }
+                                                        },
+                                                        child: const Icon(
+                                                            CupertinoIcons
+                                                                .cart_badge_plus,
+                                                            size: 35)),
                                                   ],
                                                 )
                                               ],
