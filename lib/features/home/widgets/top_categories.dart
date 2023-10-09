@@ -93,7 +93,7 @@ class _TopCategoriesState extends State<TopCategories>
           SliverToBoxAdapter(
               child: Padding(
             padding: EdgeInsets.only(top: mq.height * .01),
-            child: CarouselImage(),
+            child: const CarouselImage(),
           )),
           // SliverToBoxAdapter(
           //   child:
@@ -285,8 +285,8 @@ class _TopCategoriesState extends State<TopCategories>
                                     alignment: AlignmentDirectional.topEnd,
                                     children: [
                                       Card(
-                                        color:
-                                            Color.fromARGB(255, 254, 252, 255),
+                                        color: const Color.fromARGB(
+                                            255, 254, 252, 255),
                                         elevation: 2.5,
                                         shape: RoundedRectangleBorder(
                                           borderRadius:
@@ -346,7 +346,7 @@ class _TopCategoriesState extends State<TopCategories>
                                                   // color: Colors.blueAccent,
                                                   child: Text(
                                                     "₹ ${product.price.toStringAsFixed(2)}",
-                                                    style: TextStyle(
+                                                    style: const TextStyle(
                                                         fontWeight:
                                                             FontWeight.bold),
                                                     textAlign: TextAlign.start,
@@ -383,27 +383,7 @@ class _TopCategoriesState extends State<TopCategories>
                                                                       context)
                                                                   .push(GlobalVariables
                                                                       .createRoute(
-                                                                          WishListScreen()));
-                                                              // Navigator.push(
-                                                              //     context,
-                                                              //     MaterialPageRoute(
-                                                              //         builder: (_) =>
-                                                              //             WishListScreen()));
-
-                                                              // List<Product>?
-                                                              //     wishList =
-                                                              //     await homeServices
-                                                              //         .fetchWishList(
-                                                              //             context)
-                                                              //         .then(
-                                                              //             (wishList) {
-                                                              //   Navigator.push(
-                                                              //       context,
-                                                              //       MaterialPageRoute(
-                                                              //           builder: (context) =>
-                                                              //               WishListScreen(wishList: wishList)));
-                                                              //   return null;
-                                                              // });
+                                                                          const WishListScreen()));
                                                             },
                                                             actionLabel:
                                                                 "View");
@@ -441,7 +421,6 @@ class _TopCategoriesState extends State<TopCategories>
                                                                           text:
                                                                               "Added to cart");
                                                                     },
-                                                      
                                                           child: const Icon(
                                                               CupertinoIcons
                                                                   .cart_badge_plus,
