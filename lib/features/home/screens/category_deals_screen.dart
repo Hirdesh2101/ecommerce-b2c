@@ -113,11 +113,13 @@ class _CategoryDealsScreenState extends State<CategoryDealsScreen> {
                       },
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
-                        children: const [
+                        children: [
                           // Divider(
                           //     height: 10, thickness: 20, color: Colors.grey),
-                          Text("Filters(1)"),
-                          Icon(Icons.arrow_drop_down),
+                          Text(filterProvider.filterNumber != 0
+                              ? "Filters(1)"
+                              : "Filters"),
+                          const Icon(Icons.arrow_drop_down),
                         ],
                       ),
                     ),
@@ -140,15 +142,14 @@ class _CategoryDealsScreenState extends State<CategoryDealsScreen> {
                                   physics: BouncingScrollPhysics(),
                                   itemCount: productList!.length,
                                   itemBuilder: (context, index) {
-                                    var map = productList!;
+                                    //var map = productList!;
                                     // print(
                                     //     "Type of productlist.....................${map[index].}");
 
                                     // productList!
                                     //     .sort((a, b) => a.brandName.contains("d"));
-
-                                    print(
-                                        "product list now..............${productList![index].name}, ");
+                                    // print(
+                                    //     "product list now..............${productList![index].name}, ");
                                     // var sortedByKeyMap = Map.fromEntries(map.entries.toList()
                                     //   ..sort((e1, e2) => e1.key.compareTo(e2.key)));
                                     return Column(
@@ -253,8 +254,8 @@ class _CategoryDealsScreenState extends State<CategoryDealsScreen> {
   }
 
   getFilterNameList(FilterProvider filterProvider) {
-    List<Product>? filterOneList = productList;
-    filterOneList!.sort((a, b) => a.brandName.compareTo(b.brandName));
+    List<Product>? filterOneList = List<Product>.from(productList!);;
+    filterOneList!.sort((a, b) => a.name.compareTo(b.name));
 
     return Expanded(
       child: ListView.builder(
@@ -262,9 +263,6 @@ class _CategoryDealsScreenState extends State<CategoryDealsScreen> {
         physics: BouncingScrollPhysics(),
         itemCount: filterOneList.length,
         itemBuilder: (context, index) {
-          // print(
-          //     "Type of productlist.....................${map[index].}");
-
           // productList!
           //     .sort((a, b) => a.brandName.contains("d"));
 
@@ -272,7 +270,7 @@ class _CategoryDealsScreenState extends State<CategoryDealsScreen> {
           //   ..sort((e1, e2) => e1.key.compareTo(e2.key)));
           return Column(
             children: [
-              Text("Filter  : ${filterProvider.getFilterNumber}"),
+              //Text("Filter  : ${filterProvider.getFilterNumber}"),
               GestureDetector(
                   onTap: () {
                     Navigator.pushNamed(context, ProductDetailScreen.routeName,
@@ -289,7 +287,7 @@ class _CategoryDealsScreenState extends State<CategoryDealsScreen> {
   }
 
   getFilterpriceLtoH(FilterProvider filterProvider) {
-    List<Product>? filterOneList = productList;
+    List<Product>? filterOneList = List<Product>.from(productList!);;
     filterOneList!.sort((a, b) => a.price.compareTo(b.price));
 
     return Expanded(
@@ -298,9 +296,6 @@ class _CategoryDealsScreenState extends State<CategoryDealsScreen> {
         physics: BouncingScrollPhysics(),
         itemCount: filterOneList.length,
         itemBuilder: (context, index) {
-          // print(
-          //     "Type of productlist.....................${map[index].}");
-
           // productList!
           //     .sort((a, b) => a.brandName.contains("d"));
 
@@ -308,7 +303,7 @@ class _CategoryDealsScreenState extends State<CategoryDealsScreen> {
           //   ..sort((e1, e2) => e1.key.compareTo(e2.key)));
           return Column(
             children: [
-              Text("Filter  : ${filterProvider.getFilterNumber}"),
+              // Text("Filter  : ${filterProvider.getFilterNumber}"),
               GestureDetector(
                   onTap: () {
                     Navigator.pushNamed(context, ProductDetailScreen.routeName,
@@ -325,7 +320,7 @@ class _CategoryDealsScreenState extends State<CategoryDealsScreen> {
   }
 
   getFilterpriceHtoL(FilterProvider filterProvider) {
-    List<Product>? filterOneList = productList;
+    List<Product>? filterOneList = List<Product>.from(productList!);;
     filterOneList!.sort((a, b) => a.price.compareTo(b.price));
 
     return Expanded(
@@ -334,9 +329,6 @@ class _CategoryDealsScreenState extends State<CategoryDealsScreen> {
         physics: BouncingScrollPhysics(),
         itemCount: filterOneList.length,
         itemBuilder: (context, index) {
-          // print(
-          //     "Type of productlist.....................${map[index].}");
-
           // productList!
           //     .sort((a, b) => a.brandName.contains("d"));
 

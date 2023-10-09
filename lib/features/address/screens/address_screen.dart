@@ -1,3 +1,4 @@
+import 'package:ecommerce_major_project/common/widgets/custom_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:pay/pay.dart';
 import 'package:provider/provider.dart';
@@ -9,7 +10,7 @@ import 'package:ecommerce_major_project/providers/user_provider.dart';
 import 'package:ecommerce_major_project/common/widgets/bottom_bar.dart';
 import 'package:ecommerce_major_project/constants/global_variables.dart';
 import 'package:ecommerce_major_project/common/widgets/custom_button.dart';
-import 'package:ecommerce_major_project/common/widgets/custom_textfield.dart';
+import 'package:badges/badges.dart' as badges;
 import 'package:ecommerce_major_project/features/address/widgets/delivery_product.dart';
 import 'package:ecommerce_major_project/features/search_delegate/my_search_screen.dart';
 import 'package:ecommerce_major_project/features/address/services/address_services.dart';
@@ -31,6 +32,7 @@ class _AddressScreenState extends State<AddressScreen> {
 
   int totalAmount = 0;
   int currentStep = 0;
+  bool addnewAdress = false;
   bool goToPayment = false;
   String addressToBeUsed = "";
   final _razorpay = Razorpay();
@@ -141,7 +143,7 @@ class _AddressScreenState extends State<AddressScreen> {
         pincodeController.text.isNotEmpty ||
         cityController.text.isNotEmpty;
 
-    if (isFormValid) {
+    if (addnewAdress) {
       if (_addressFormKey.currentState!.validate()) {
         addressToBeUsed =
             "${flatBuildingController.text}, ${areaController.text}, ${cityController.text} - ${pincodeController.text}";
@@ -149,15 +151,13 @@ class _AddressScreenState extends State<AddressScreen> {
           goToPayment = true;
         });
       } else {
-        throw Exception("Please enter all the values");
+        //throw Exception("Please enter all the values");
       }
-    } else if (addressFromProvider.isNotEmpty) {
+    } else {
       addressToBeUsed = addressFromProvider;
       setState(() {
         goToPayment = true;
       });
-    } else {
-      showSnackBar(context: context, text: "Error in address module");
     }
 
     print("Address to be used:\n==> $addressToBeUsed");
@@ -189,7 +189,8 @@ class _AddressScreenState extends State<AddressScreen> {
         ),
         body: SingleChildScrollView(
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: mq.width * .02),
+            padding: EdgeInsets.symmetric(
+                horizontal: mq.width * .02, vertical: mq.height * .02),
             child: Column(
               children: [
                 SizedBox(
@@ -416,111 +417,171 @@ class _AddressScreenState extends State<AddressScreen> {
                     
 */
 
-                    : Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          const Text("Pick an address",
-                              style: GlobalVariables.appBarTextStyle),
-                          address.isNotEmpty
-                              ? Container(
-                                  width: double.infinity,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color: Colors.black12,
+                    : Padding(
+                        padding: EdgeInsets.only(top: mq.height * .02),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            const Text("Pick an address",
+                                style: GlobalVariables.appBarTextStyle),
+                            SizedBox(height: mq.height * .015),
+                            address.isNotEmpty
+                                ? addnewAdress
+                                    ? InkWell(
+                                      onTap: (){
+                                        setState(() {
+                                          addnewAdress = !addnewAdress;
+                                        });
+                                      },
+                                      child: Container(
+                                          width: double.infinity,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            border: Border.all(
+                                              width: 2,
+                                              color: Color.fromARGB(
+                                                  255, 156, 152, 163),
+                                            ),
+                                          ),
+                                          child: Padding(
+                                            padding:
+                                                EdgeInsets.all(mq.width * .025),
+                                            child: Text(
+                                              "Delivery to : $address",
+                                              style:
+                                                  const TextStyle(fontSize: 13),
+                                            ),
+                                          ),
+                                        ),
+                                    )
+                                    : badges.Badge(
+                                        // displaying no of items in cart
+                                        badgeContent: const Icon(
+                                          Icons.check_circle,
+                                          color:
+                                              Color.fromARGB(255, 93, 36, 179),
+                                        ),
+                                        badgeStyle: const badges.BadgeStyle(
+                                          badgeColor: Color.fromARGB(
+                                              255, 255, 255, 255),
+                                        ),
+                                        child: Container(
+                                          width: double.infinity,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            border: Border.all(
+                                              width: 2,
+                                              color: const Color.fromARGB(
+                                                  255, 93, 36, 179),
+                                            ),
+                                          ),
+                                          child: Padding(
+                                            padding:
+                                                EdgeInsets.all(mq.width * .025),
+                                            child: Text(
+                                              "Delivery to : $address",
+                                              style:
+                                                  const TextStyle(fontSize: 13),
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                : Container(
+                                    width: double.infinity,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: Colors.black12,
+                                      ),
+                                    ),
+                                    child: Padding(
+                                      padding: EdgeInsets.all(mq.width * .025),
+                                      child: const Text(
+                                        "Delivery to : ",
+                                        style: TextStyle(fontSize: 12),
+                                      ),
                                     ),
                                   ),
-                                  child: Padding(
-                                    padding: EdgeInsets.all(mq.width * .025),
-                                    child: Text(
-                                      "Delivery to : $address",
-                                      style: const TextStyle(fontSize: 13),
-                                    ),
-                                  ),
-                                )
-                              : Container(
-                                  width: double.infinity,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color: Colors.black12,
-                                    ),
-                                  ),
-                                  child: Padding(
-                                    padding: EdgeInsets.all(mq.width * .025),
-                                    child: const Text(
-                                      "Delivery to : ",
-                                      style: TextStyle(fontSize: 12),
-                                    ),
-                                  ),
-                                ),
-                          SizedBox(height: mq.height * .025),
-                          address.isNotEmpty
-                              ? const Text(
-                                  "OR",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 13),
-                                )
-                              : const Text("Please add an address first",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 13)),
-                          SizedBox(height: mq.height * .025),
-                          Form(
-                            key: _addressFormKey,
-                            child: Column(
-                              // crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                CustomTextField(
-                                    controller: flatBuildingController,
-                                    hintText: "Flat, House No."),
-                                SizedBox(height: mq.height * .01),
-                                CustomTextField(
-                                    controller: areaController,
-                                    hintText: "Area, Street"),
-                                SizedBox(height: mq.height * .01),
-                                CustomTextField(
-                                    controller: pincodeController,
-                                    hintText: "Pincode",
-                                    inputType: TextInputType.number),
-                                SizedBox(height: mq.height * .01),
-                                CustomTextField(
-                                    controller: cityController,
-                                    hintText: "Town/City"),
-                                SizedBox(height: mq.height * .04),
-                                // CustomButton(
-                                //   onTap: () {
-                                //     // ensuring form validation and matching passwords
-                                //   },
-                                //   // style: ElevatedButton.styleFrom(
-                                //   //     shape: RoundedRectangleBorder(
-                                //   //         borderRadius: BorderRadius.circular(12)),
-                                //   //     minimumSize: Size(mq.width, mq.height * 0.08),
-                                //   //     backgroundColor: Colors.orange.shade700),
-                                //   text:
-                                //     "Proceed To Pay",
-                                // ),
+                            SizedBox(height: mq.height * .025),
+                            address.isNotEmpty
+                                ? const Text(
+                                    "OR ADD NEW ADDRESS",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 13),
+                                  )
+                                : const Text("Please add an address first",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 13)),
+                            SizedBox(height: mq.height * .025),
+                            Focus(
+                              onFocusChange: (value) {
+                                setState(() {
+                                  
+                                    addnewAdress = true;
+                                  
+                                });
+                              },
+                              child: Form(
+                                key: _addressFormKey,
+                                child: Column(
+                                  // crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    CustomTextField(
+                                        controller: flatBuildingController,
+                                        hintText: "Flat, House No."),
+                                    SizedBox(height: mq.height * .01),
+                                    CustomTextField(
+                                        controller: areaController,
+                                        hintText: "Area, Street"),
+                                    SizedBox(height: mq.height * .01),
+                                    CustomTextField(
+                                        controller: pincodeController,
+                                        hintText: "Pincode",
+                                        inputType: TextInputType.number),
+                                    SizedBox(height: mq.height * .01),
+                                    CustomTextField(
+                                        controller: cityController,
+                                        hintText: "Town/City"),
+                                    SizedBox(height: mq.height * .04),
+                                    // CustomButton(
+                                    //   onTap: () {
+                                    //     // ensuring form validation and matching passwords
+                                    //   },
+                                    //   // style: ElevatedButton.styleFrom(
+                                    //   //     shape: RoundedRectangleBorder(
+                                    //   //         borderRadius: BorderRadius.circular(12)),
+                                    //   //     minimumSize: Size(mq.width, mq.height * 0.08),
+                                    //   //     backgroundColor: Colors.orange.shade700),
+                                    //   text:
+                                    //     "Proceed To Pay",
+                                    // ),
 
-                                CustomButton(
-                                  text: "Deliver to this address",
-                                  onTap: () {
-                                    deliverToThisAddress(address);
-                                    // setState(() {
-                                    //   goToPayment = true;
-                                    // });
-                                  },
-                                  color: Colors.amber[400],
-                                ),
+                                    CustomButton(
+                                      text: addnewAdress? "Deliver to new address": "Deliver to selected address",
+                                      onTap: () {
+                                        deliverToThisAddress(address);
+                                        // setState(() {
+                                        //   goToPayment = true;
+                                        // });
+                                      },
+                                      color: Colors.amber[400],
+                                    ),
 
-                                //
-                                //
-                                //
-                                //
-                                //
-                                //
-                              ],
+                                    //
+                                    //
+                                    //
+                                    //
+                                    //
+                                    //
+                                  ],
+                                ),
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
               ],
             ),

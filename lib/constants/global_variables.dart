@@ -1,3 +1,4 @@
+import 'package:ecommerce_major_project/features/search/screens/search_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -5,7 +6,8 @@ import 'package:ecommerce_major_project/main.dart';
 import 'package:ecommerce_major_project/common/widgets/bottom_bar.dart';
 
 // String uri = 'https://drab-teal-crayfish-hem.cyclic.app';
-String uri = 'http://127.0.0.2:3000';
+//for android 10.0.2.2
+String uri = 'http://localhost:3000';
 
 class GlobalVariables {
   // COLORS
@@ -164,12 +166,12 @@ class GlobalVariables {
                       ),
                     ),
                     SizedBox(width: mq.width * .04),
-                    InkWell(
-                        onTap: () {
-                          // Scaffold.of(context).openDrawer();
-                          // _scaffoldKey.currentState!.openEndDrawer();
-                        },
-                        child: const Icon(Icons.mic, size: 30)),
+                    // InkWell(
+                    //     onTap: () {
+                    //       // Scaffold.of(context).openDrawer();
+                    //       // _scaffoldKey.currentState!.openEndDrawer();
+                    //     },
+                    //     child: const Icon(Icons.mic, size: 30)),
                   ],
                 ),
               ),

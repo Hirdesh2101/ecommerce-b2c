@@ -90,7 +90,11 @@ class _TopCategoriesState extends State<TopCategories>
     return NestedScrollView(
       headerSliverBuilder: (context, value) {
         return [
-          SliverToBoxAdapter(child: CarouselImage()),
+          SliverToBoxAdapter(
+              child: Padding(
+            padding: EdgeInsets.only(top: mq.height * .01),
+            child: CarouselImage(),
+          )),
           // SliverToBoxAdapter(
           //   child:
           // ),
@@ -146,7 +150,7 @@ class _TopCategoriesState extends State<TopCategories>
                         // width: 140,
                         child: Card(
                           margin: EdgeInsets.symmetric(
-                            horizontal: mq.width * .01,
+                            horizontal: mq.width * .001,
                           ),
                           color: activeTabIndex == index
                               ? Colors.black87
@@ -215,319 +219,294 @@ class _TopCategoriesState extends State<TopCategories>
                   //
                   for (int i = 0; i < _tabLength; i++)
                     Container(
-                      //height: mq.height * 0.3,
+                      height: mq.height * 0.3,
                       decoration: BoxDecoration(
-                          // color: Colors.cyanAccent,
+                          //color: Colors.cyanAccent,
                           border: Border(
                               top: BorderSide(
                                   color: Colors.grey.shade700, width: 0.4))),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.max,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          // See all button
-                          Padding(
-                            padding:
-                                EdgeInsets.symmetric(vertical: mq.height * .008)
-                                    .copyWith(right: mq.height * .015),
-                            child: InkWell(
-                              onTap: () {
-                                navigateToCategoryPage(
-                                    context, categoriesList[activeTabIndex]);
-                              },
-                              child: Text("See All",
-                                  style: TextStyle(
-                                      color: Colors.grey.shade800,
-                                      fontWeight: FontWeight.w600)),
-                            ),
-                          ),
-
-                          Expanded(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                border: Border(
-                                  top: BorderSide(
-                                      color: Colors.grey.shade200, width: 0.5),
-                                  bottom: BorderSide(
-                                      color: Colors.grey.shade700, width: 0.4),
-                                ),
+                      child: CustomScrollView(
+                        // mainAxisSize: MainAxisSize.max,
+                        // crossAxisAlignment: CrossAxisAlignment.end,
+                        slivers: [
+                          SliverToBoxAdapter(
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                vertical: mq.height * .008,
+                              ).copyWith(right: mq.height * .015),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  InkWell(
+                                    onTap: () {
+                                      navigateToCategoryPage(context,
+                                          categoriesList[activeTabIndex]);
+                                    },
+                                    child: Text("See All",
+                                        style: TextStyle(
+                                            color: Colors.grey.shade800,
+                                            fontWeight: FontWeight.w600)),
+                                  ),
+                                ],
                               ),
-                              // color: Colors.cyan,
-                              //height: mq.height * 0.4,
-                              //
-                              //
-                              //
-                              //
-                              //
-                              child: productList == null
-                                  ? const ColorLoader2()
-                                  : productList!.isEmpty
-                                      ? const Center(
-                                          child: Text("No item to fetch"))
-                                      : GridView.builder(
-                                          //scrollDirection: Axis.vertical,
-                                          physics: NeverScrollableScrollPhysics(),
-                                          padding: EdgeInsets.symmetric(
-                                            horizontal: mq.width * .04,
-                                          ),
-                                          gridDelegate:
-                                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                            crossAxisCount: 2,
-                                            childAspectRatio: 0.72,
-                                            mainAxisSpacing: 15,
-                                            crossAxisSpacing: 15,
-                                          ),
-                                          itemCount:
-                                              min(productList!.length, 8),
-                                          itemBuilder: (context, index) {
-                                            Product product =
-                                                productList![index];
-                                            bool isProductAvailable =
-                                                productList![index].quantity ==
-                                                    0;
-                                            print(
-                                                "\n\n============> product category : ${categoriesList[activeTabIndex]}");
-                                            return Stack(
-                                              alignment:
-                                                  AlignmentDirectional.topEnd,
-                                              children: [
-                                                Card(
-                                                  color: Color.fromARGB(
-                                                      255, 254, 252, 255),
-                                                  elevation: 2.5,
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            15),
-                                                  ),
-                                                  child: Padding(
-                                                    padding:
-                                                        EdgeInsets.symmetric(
-                                                            horizontal:
-                                                                mq.width * .025,
-                                                            vertical:
-                                                                mq.width * .02),
-                                                    child: Column(
-                                                      // crossAxisAlignment:
-                                                      //     CrossAxisAlignment.stretch,
-                                                      children: [
-                                                        // navigate to product details screen
-                                                        InkWell(
-                                                          onTap: () {
-                                                            Navigator.pushNamed(
-                                                              context,
-                                                              ProductDetailScreen
-                                                                  .routeName,
-                                                              arguments:
-                                                                  product,
-                                                            );
-                                                          },
-                                                          child: Container(
-                                                            // color: Colors.redAccent,
-                                                            // width: double.infinity,
-                                                            height:
-                                                                mq.height * .15,
-                                                            width:
-                                                                mq.width * .4,
-                                                            child:
-                                                                Image.network(
-                                                              // "https://rukminim1.flixcart.com/image/416/416/xif0q/computer/e/k/k/-original-imagg5jsxzthfd39.jpeg?q=70",
-                                                              //iphone
-                                                              // "https://rukminim1.flixcart.com/image/416/416/ktketu80/mobile/8/z/w/iphone-13-mlph3hn-a-apple-original-imag6vzzhrxgazsg.jpeg?q=70",
-                                                              product.images[0],
-
-                                                              //TV
-                                                              // "https://rukminim1.flixcart.com/image/416/416/kiyw9e80-0/television/p/0/w/32path0011-thomson-original-imafynyvsmeuwtzr.jpeg?q=70",
-                                                              // width: mq.width * .2,
-                                                              // height: mq.height * .15,
-                                                              fit: BoxFit
-                                                                  .contain,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        SizedBox(
-                                                            height: mq.height *
-                                                                .005),
-                                                        SizedBox(
-                                                          width:
-                                                              double.infinity,
-                                                          child: Text(
-                                                            product.name,
-                                                            maxLines: 1,
-                                                            overflow:
-                                                                TextOverflow
-                                                                    .ellipsis,
-                                                            textAlign:
-                                                                TextAlign.start,
-                                                          ),
-                                                        ),
-                                                        SizedBox(
-                                                          width:
-                                                              double.infinity,
-                                                          // color: Colors.blueAccent,
-                                                          child: Text(
-                                                            "₹ ${product.price.toStringAsFixed(2)}",
-                                                            style: TextStyle(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold),
-                                                            textAlign:
-                                                                TextAlign.start,
-                                                          ),
-                                                        ),
-                                                        Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .spaceBetween,
-                                                          children: [
-                                                            TextButton.icon(
-                                                              style: TextButton.styleFrom(
-                                                                  shape: RoundedRectangleBorder(
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
-                                                                              10)),
-                                                                  backgroundColor:
-                                                                      Colors
-                                                                          .grey
-                                                                          .shade200),
-                                                              onPressed: () {
-                                                                homeServices.addToWishList(
-                                                                    context:
-                                                                        context,
-                                                                    product:
-                                                                        product);
-                                                                showSnackBar(
-                                                                    context:
-                                                                        context,
-                                                                    text:
-                                                                        "Added to WishList",
-                                                                    onTapFunction:
-                                                                        () {
-                                                                      Navigator.of(
-                                                                              context)
-                                                                          .push(
-                                                                              GlobalVariables.createRoute(WishListScreen()));
-                                                                      // Navigator.push(
-                                                                      //     context,
-                                                                      //     MaterialPageRoute(
-                                                                      //         builder: (_) =>
-                                                                      //             WishListScreen()));
-
-                                                                      // List<Product>?
-                                                                      //     wishList =
-                                                                      //     await homeServices
-                                                                      //         .fetchWishList(
-                                                                      //             context)
-                                                                      //         .then(
-                                                                      //             (wishList) {
-                                                                      //   Navigator.push(
-                                                                      //       context,
-                                                                      //       MaterialPageRoute(
-                                                                      //           builder: (context) =>
-                                                                      //               WishListScreen(wishList: wishList)));
-                                                                      //   return null;
-                                                                      // });
-                                                                    },
-                                                                    actionLabel:
-                                                                        "View");
-                                                              },
-                                                              icon: const Icon(
-                                                                  CupertinoIcons
-                                                                      .add,
-                                                                  size: 18,
-                                                                  color: Colors
-                                                                      .black87),
-                                                              label: const Text(
-                                                                  "WishList",
-                                                                  style: TextStyle(
-                                                                      color: Colors
-                                                                          .black87)),
-                                                            ),
-                                                            Container(
-                                                              child: InkWell(
-                                                                  onTap:
-                                                                      isProductAvailable
-                                                                          ? () {
-                                                                              showSnackBar(context: context, text: "Product out of stock");
-                                                                            }
-                                                                          : () {
-                                                                              addToCart(product.name, product);
-                                                                              showSnackBar(context: context, text: "Added to cart");
-                                                                            },
-                                                                  // onTap: () {
-                                                                  //   addToCart(
-                                                                  //       product
-                                                                  //           .name,
-                                                                  //       product);
-                                                                  //   showSnackBar(
-                                                                  //       context:
-                                                                  //           context,
-                                                                  //       text:
-                                                                  //           "Added to cart!");
-                                                                  // },
-                                                                  child: const Icon(
-                                                                      CupertinoIcons
-                                                                          .cart_badge_plus,
-                                                                      size:
-                                                                          35)),
-                                                            ),
-                                                          ],
-                                                        )
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ),
-                                                // LikeButton(
-                                                //   bubblesSize: 10,
-                                                //   circleSize: 10,
-                                                //   circleColor: CircleColor(
-                                                //       start: Colors.purpleAccent,
-                                                //       end: Colors.indigoAccent),
-                                                //   likeCountAnimationDuration:
-                                                //       Duration(seconds: 2),
-                                                //   padding: EdgeInsets.only(
-                                                //       right: mq.width * .03,
-                                                //       top: mq.width * .03),
-                                                //   crossAxisAlignment:
-                                                //       CrossAxisAlignment.start,
-                                                //   mainAxisAlignment:
-                                                //       MainAxisAlignment.end,
-                                                //   animationDuration:
-                                                //       Duration(seconds: 1),
-                                                //   size: 22,
-                                                // ),
-
-                                                InkWell(
-                                                  onTap: () {
-                                                    setState(() {
-                                                      // set to fav icon index
-                                                      // favSelected = index;
-                                                    });
-                                                  },
-                                                  child: Container(
-                                                    margin:
-                                                        const EdgeInsets.only(
-                                                            top: 10, right: 10),
-                                                    padding:
-                                                        const EdgeInsets.all(3),
-                                                    // height: 30,
-                                                    decoration:
-                                                        const BoxDecoration(
-                                                            color: Colors.black,
-                                                            shape: BoxShape
-                                                                .circle),
-                                                    child: Icon(Icons.favorite,
-                                                        color: favSelected
-                                                            ? Colors.red
-                                                            : Colors.white,
-                                                        size: 17),
-                                                  ),
-                                                ),
-                                              ],
-                                            );
-                                          }),
                             ),
                           ),
+                          SliverToBoxAdapter(
+                            child: productList == null
+                                ? const ColorLoader2()
+                                : productList!.isEmpty
+                                    ? const Center(
+                                        child: Text("No item to fetch"),
+                                      )
+                                    : const SizedBox.shrink(),
+                          ),
+                          if (productList != null && productList!.isNotEmpty)
+                            SliverPadding(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: mq.width * .04,
+                              ),
+                              sliver: SliverGrid(
+                                gridDelegate:
+                                    const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2,
+                                  childAspectRatio: 0.72,
+                                  mainAxisSpacing: 15,
+                                  crossAxisSpacing: 15,
+                                ),
+                                delegate: SliverChildBuilderDelegate(
+                                    childCount: min(productList!.length, 8),
+                                    (context, index) {
+                                  Product product = productList![index];
+                                  bool isProductAvailable =
+                                      productList![index].quantity == 0;
+                                  print(
+                                      "\n\n============> product category : ${categoriesList[activeTabIndex]}");
+                                  return Stack(
+                                    alignment: AlignmentDirectional.topEnd,
+                                    children: [
+                                      Card(
+                                        color:
+                                            Color.fromARGB(255, 254, 252, 255),
+                                        elevation: 2.5,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                        ),
+                                        child: InkWell(
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                          onTap: () {
+                                            Navigator.pushNamed(
+                                              context,
+                                              ProductDetailScreen.routeName,
+                                              arguments: product,
+                                            );
+                                          },
+                                          child: Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: mq.width * .025,
+                                                vertical: mq.width * .02),
+                                            child: Column(
+                                              // crossAxisAlignment:
+                                              //     CrossAxisAlignment.stretch,
+                                              children: [
+                                                // navigate to product details screen
+                                                SizedBox(
+                                                  // color: Colors.redAccent,
+                                                  // width: double.infinity,
+                                                  height: mq.height * .15,
+                                                  width: mq.width * .4,
+                                                  child: Image.network(
+                                                    // "https://rukminim1.flixcart.com/image/416/416/xif0q/computer/e/k/k/-original-imagg5jsxzthfd39.jpeg?q=70",
+                                                    //iphone
+                                                    // "https://rukminim1.flixcart.com/image/416/416/ktketu80/mobile/8/z/w/iphone-13-mlph3hn-a-apple-original-imag6vzzhrxgazsg.jpeg?q=70",
+                                                    product.images[0],
+
+                                                    //TV
+                                                    // "https://rukminim1.flixcart.com/image/416/416/kiyw9e80-0/television/p/0/w/32path0011-thomson-original-imafynyvsmeuwtzr.jpeg?q=70",
+                                                    // width: mq.width * .2,
+                                                    // height: mq.height * .15,
+                                                    fit: BoxFit.contain,
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                    height: mq.height * .005),
+                                                SizedBox(
+                                                  width: double.infinity,
+                                                  child: Text(
+                                                    product.name,
+                                                    maxLines: 1,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    textAlign: TextAlign.start,
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  width: double.infinity,
+                                                  // color: Colors.blueAccent,
+                                                  child: Text(
+                                                    "₹ ${product.price.toStringAsFixed(2)}",
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                    textAlign: TextAlign.start,
+                                                  ),
+                                                ),
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    TextButton.icon(
+                                                      style: TextButton.styleFrom(
+                                                          shape: RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          10)),
+                                                          backgroundColor:
+                                                              Colors.grey
+                                                                  .shade200),
+                                                      onPressed: () {
+                                                        homeServices
+                                                            .addToWishList(
+                                                                context:
+                                                                    context,
+                                                                product:
+                                                                    product);
+                                                        showSnackBar(
+                                                            context: context,
+                                                            text:
+                                                                "Added to WishList",
+                                                            onTapFunction: () {
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .push(GlobalVariables
+                                                                      .createRoute(
+                                                                          WishListScreen()));
+                                                              // Navigator.push(
+                                                              //     context,
+                                                              //     MaterialPageRoute(
+                                                              //         builder: (_) =>
+                                                              //             WishListScreen()));
+
+                                                              // List<Product>?
+                                                              //     wishList =
+                                                              //     await homeServices
+                                                              //         .fetchWishList(
+                                                              //             context)
+                                                              //         .then(
+                                                              //             (wishList) {
+                                                              //   Navigator.push(
+                                                              //       context,
+                                                              //       MaterialPageRoute(
+                                                              //           builder: (context) =>
+                                                              //               WishListScreen(wishList: wishList)));
+                                                              //   return null;
+                                                              // });
+                                                            },
+                                                            actionLabel:
+                                                                "View");
+                                                      },
+                                                      icon: const Icon(
+                                                          CupertinoIcons.add,
+                                                          size: 18,
+                                                          color:
+                                                              Colors.black87),
+                                                      label: const Text(
+                                                          "WishList",
+                                                          style: TextStyle(
+                                                              color: Colors
+                                                                  .black87)),
+                                                    ),
+                                                    Container(
+                                                      child: InkWell(
+                                                          onTap:
+                                                              isProductAvailable
+                                                                  ? () {
+                                                                      showSnackBar(
+                                                                          context:
+                                                                              context,
+                                                                          text:
+                                                                              "Product out of stock");
+                                                                    }
+                                                                  : () {
+                                                                      addToCart(
+                                                                          product
+                                                                              .name,
+                                                                          product);
+                                                                      showSnackBar(
+                                                                          context:
+                                                                              context,
+                                                                          text:
+                                                                              "Added to cart");
+                                                                    },
+                                                      
+                                                          child: const Icon(
+                                                              CupertinoIcons
+                                                                  .cart_badge_plus,
+                                                              size: 35)),
+                                                    ),
+                                                  ],
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+
+                                      // LikeButton(
+                                      //   bubblesSize: 10,
+                                      //   circleSize: 10,
+                                      //   circleColor: CircleColor(
+                                      //       start: Colors.purpleAccent,
+                                      //       end: Colors.indigoAccent),
+                                      //   likeCountAnimationDuration:
+                                      //       Duration(seconds: 2),
+                                      //   padding: EdgeInsets.only(
+                                      //       right: mq.width * .03,
+                                      //       top: mq.width * .03),
+                                      //   crossAxisAlignment:
+                                      //       CrossAxisAlignment.start,
+                                      //   mainAxisAlignment:
+                                      //       MainAxisAlignment.end,
+                                      //   animationDuration:
+                                      //       Duration(seconds: 1),
+                                      //   size: 22,
+                                      // ),
+
+                                      // InkWell(
+                                      //   onTap: () {
+                                      //     setState(() {
+                                      //       // set to fav icon index
+                                      //       // favSelected = index;
+                                      //     });
+                                      //   },
+                                      //   child: Container(
+                                      //     margin:
+                                      //         const EdgeInsets.only(
+                                      //             top: 10, right: 10),
+                                      //     padding:
+                                      //         const EdgeInsets.all(3),
+                                      //     // height: 30,
+                                      //     decoration:
+                                      //         const BoxDecoration(
+                                      //             color: Colors.black,
+                                      //             shape: BoxShape
+                                      //                 .circle),
+                                      //     child: Icon(Icons.favorite,
+                                      //         color: favSelected
+                                      //             ? Colors.red
+                                      //             : Colors.white,
+                                      //         size: 17),
+                                      //   ),
+                                      // ),
+                                    ],
+                                  );
+                                }),
+                              ),
+                            ),
+                          // ),
                         ],
                       ),
                     ),
