@@ -5,9 +5,14 @@ import 'package:ecommerce_major_project/constants/global_variables.dart';
 import 'package:ecommerce_major_project/features/search_delegate/my_search_screen.dart';
 import 'package:ecommerce_major_project/features/home/screens/category_deals_screen.dart';
 
-class CategoryGridScreen extends StatelessWidget {
-  CategoryGridScreen({super.key});
+class CategoryGridScreen extends StatefulWidget {
+  const CategoryGridScreen({super.key});
 
+  @override
+  State<CategoryGridScreen> createState() => _CategoryGridScreenState();
+}
+
+class _CategoryGridScreenState extends State<CategoryGridScreen> {
   List<Map<String, String>> myCategoryList = GlobalVariables.categoryImages2;
 
   List<String> productCategories = [
@@ -67,7 +72,8 @@ class CategoryGridScreen extends StatelessWidget {
                     categoryTitle!,
                     overflow: TextOverflow.ellipsis,
                     maxLines: 2,
-                    style: TextStyle(fontWeight: FontWeight.w200, fontSize: 16),
+                    style: const TextStyle(
+                        fontWeight: FontWeight.w200, fontSize: 16),
                   )
                 ],
               ),

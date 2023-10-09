@@ -3,11 +3,9 @@ import 'package:ecommerce_major_project/constants/global_variables.dart';
 import 'package:ecommerce_major_project/features/search_delegate/my_search_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
 import 'package:ecommerce_major_project/main.dart';
-import 'package:ecommerce_major_project/models/product.dart';
 import 'package:ecommerce_major_project/providers/user_provider.dart';
 import 'package:ecommerce_major_project/common/widgets/bottom_bar.dart';
 import 'package:ecommerce_major_project/features/home/screens/wish_list_product.dart';
@@ -33,7 +31,7 @@ class _WishListScreenState extends State<WishListScreen> {
           title: "Your Wishlist",
           onClickSearchNavigateTo: MySearchScreen()),
       body: ListView(
-         padding: EdgeInsets.zero, 
+        padding: EdgeInsets.zero,
         children: [
           Container(
             alignment: Alignment.center,
@@ -70,36 +68,32 @@ class _WishListScreenState extends State<WishListScreen> {
                           ))
                     ],
                   )
-                : Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      for (int index = 0;
-                          index < user.wishList!.length;
-                          index++)
-                        Slidable(
-                            key: ValueKey(index),
-                            startActionPane: ActionPane(
-                              motion: const ScrollMotion(),
-                              dismissible: DismissiblePane(onDismissed: () {}),
-                              children: const [
-                                SlidableAction(
-                                  onPressed: null,
-                                  backgroundColor: Color(0xFFFE4A49),
-                                  foregroundColor: Colors.white,
-                                  icon: Icons.delete,
-                                  label: 'Delete',
-                                ),
-                                SlidableAction(
-                                  onPressed: null,
-                                  backgroundColor: Color(0xFF21B7CA),
-                                  foregroundColor: Colors.white,
-                                  icon: Icons.share,
-                                  label: 'Share',
-                                ),
-                              ],
-                            ),
-                            child: WishListProduct(index: index)),
-                    ]),
+                : Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+                    for (int index = 0; index < user.wishList!.length; index++)
+                      Slidable(
+                          key: ValueKey(index),
+                          startActionPane: ActionPane(
+                            motion: const ScrollMotion(),
+                            dismissible: DismissiblePane(onDismissed: () {}),
+                            children: const [
+                              SlidableAction(
+                                onPressed: null,
+                                backgroundColor: Color(0xFFFE4A49),
+                                foregroundColor: Colors.white,
+                                icon: Icons.delete,
+                                label: 'Delete',
+                              ),
+                              SlidableAction(
+                                onPressed: null,
+                                backgroundColor: Color(0xFF21B7CA),
+                                foregroundColor: Colors.white,
+                                icon: Icons.share,
+                                label: 'Share',
+                              ),
+                            ],
+                          ),
+                          child: WishListProduct(index: index)),
+                  ]),
           ),
         ],
       ),

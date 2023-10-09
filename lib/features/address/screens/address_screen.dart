@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 
 import 'package:ecommerce_major_project/main.dart';
-import 'package:ecommerce_major_project/constants/utils.dart';
 import 'package:ecommerce_major_project/providers/user_provider.dart';
 import 'package:ecommerce_major_project/common/widgets/bottom_bar.dart';
 import 'package:ecommerce_major_project/constants/global_variables.dart';
@@ -42,14 +41,14 @@ class _AddressScreenState extends State<AddressScreen> {
   final AddressServices addressServices = AddressServices();
   List<String> checkoutSteps = ["Address", "Delivery", "Payment"];
 
-  late final Future<PaymentConfiguration> _googlePayConfigFuture;
+  // late final Future<PaymentConfiguration> _googlePayConfigFuture;
 
   @override
   void initState() {
     super.initState();
     // suoer.initState
-    _googlePayConfigFuture =
-        PaymentConfiguration.fromAsset("google_pay_config.json");
+    // _googlePayConfigFuture =
+    //     PaymentConfiguration.fromAsset("google_pay_config.json");
     paymentItems.add(
       PaymentItem(
         label: 'Total Amount',
@@ -80,8 +79,8 @@ class _AddressScreenState extends State<AddressScreen> {
 
   void onGooglePayResult(paymentResult) {
     // implement google pay function
-    print("\n===> onGooglePayResult running...");
-    print(
+    debugPrint("\n===> onGooglePayResult running...");
+    debugPrint(
         "\n\nAddress of user provider ====> : ${Provider.of<UserProvider>(context, listen: false).user.address}");
     if (Provider.of<UserProvider>(context, listen: false)
         .user
@@ -138,10 +137,10 @@ class _AddressScreenState extends State<AddressScreen> {
   void deliverToThisAddress(String addressFromProvider) {
     addressToBeUsed = "";
 
-    bool isFormValid = flatBuildingController.text.isNotEmpty ||
-        areaController.text.isNotEmpty ||
-        pincodeController.text.isNotEmpty ||
-        cityController.text.isNotEmpty;
+    // bool isFormValid = flatBuildingController.text.isNotEmpty ||
+    //     areaController.text.isNotEmpty ||
+    //     pincodeController.text.isNotEmpty ||
+    //     cityController.text.isNotEmpty;
 
     if (addnewAdress) {
       if (_addressFormKey.currentState!.validate()) {
@@ -428,12 +427,12 @@ class _AddressScreenState extends State<AddressScreen> {
                             address.isNotEmpty
                                 ? addnewAdress
                                     ? InkWell(
-                                      onTap: (){
-                                        setState(() {
-                                          addnewAdress = !addnewAdress;
-                                        });
-                                      },
-                                      child: Container(
+                                        onTap: () {
+                                          setState(() {
+                                            addnewAdress = !addnewAdress;
+                                          });
+                                        },
+                                        child: Container(
                                           width: double.infinity,
                                           decoration: BoxDecoration(
                                             borderRadius:
@@ -454,7 +453,7 @@ class _AddressScreenState extends State<AddressScreen> {
                                             ),
                                           ),
                                         ),
-                                    )
+                                      )
                                     : badges.Badge(
                                         // displaying no of items in cart
                                         badgeContent: const Icon(
@@ -519,9 +518,7 @@ class _AddressScreenState extends State<AddressScreen> {
                             Focus(
                               onFocusChange: (value) {
                                 setState(() {
-                                  
-                                    addnewAdress = true;
-                                  
+                                  addnewAdress = true;
                                 });
                               },
                               child: Form(
@@ -560,7 +557,9 @@ class _AddressScreenState extends State<AddressScreen> {
                                     // ),
 
                                     CustomButton(
-                                      text: addnewAdress? "Deliver to new address": "Deliver to selected address",
+                                      text: addnewAdress
+                                          ? "Deliver to new address"
+                                          : "Deliver to selected address",
                                       onTap: () {
                                         deliverToThisAddress(address);
                                         // setState(() {

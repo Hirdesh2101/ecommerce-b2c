@@ -1,39 +1,21 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:ecommerce_major_project/constants/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-
 import 'package:ecommerce_major_project/constants/global_variables.dart';
 import 'package:ecommerce_major_project/features/order_details/screens/order_details_screen.dart';
 import 'package:ecommerce_major_project/features/search_delegate/my_search_screen.dart';
 import 'package:ecommerce_major_project/main.dart';
 import 'package:ecommerce_major_project/models/order.dart';
 
-class AllOrdersScreen extends StatefulWidget {
+class AllOrdersScreen extends StatelessWidget {
   static const String routeName = '/all-orders-screen';
-  List<Order>? allOrders;
-  AllOrdersScreen({
+  final List<Order>? allOrders;
+  const AllOrdersScreen({
     Key? key,
     this.allOrders,
   }) : super(key: key);
 
-  @override
-  State<AllOrdersScreen> createState() => _AllOrdersScreenState();
-}
-
-// Fetching all orders logic
-/*
-          for (int i = 0; i < widget.allOrders!.length; i++)
-            for (int j = 0; j < widget.allOrders![i].products.length; j++)
-              Text(
-                  "order id : ${widget.allOrders![i].orderedAt} ${widget.allOrders![i].products[j].name}\n",
-                  style: TextStyle(fontSize: 15)),
-
-
-*/
-
-class _AllOrdersScreenState extends State<AllOrdersScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,34 +33,35 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
             child: ListView.builder(
               scrollDirection: Axis.vertical,
               physics: const BouncingScrollPhysics(),
-              itemCount: widget.allOrders!.length,
+              itemCount: allOrders!.length,
               itemBuilder: (context, index) {
                 // print(
                 //     "\n -------------------> ALL ORDERS  : ${allOrders![index].products[index]}");
                 return Padding(
-                  padding:  EdgeInsets.only( top: mq.height * .01,
-                             ),
+                  padding: EdgeInsets.only(
+                    top: mq.height * .01,
+                  ),
                   child: Card(
-                    color: Color.fromARGB(255, 245, 239, 255),
+                    color: const Color.fromARGB(255, 245, 239, 255),
                     margin: EdgeInsets.symmetric(horizontal: mq.width * .02),
                     elevation: 3,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20),
-                        side: BorderSide(width: .2)),
+                        side: const BorderSide(width: .2)),
                     child: InkWell(
                       borderRadius: BorderRadius.circular(20),
-                       onTap: () {
-                              Navigator.pushNamed(
-                                context,
-                                OrderDetailsScreen.routeName,
-                                arguments: widget.allOrders![index],
-                              );
-                              // Navigator.pushNamed(
-                              //     context, ProductDetailScreen.routeName,
-                              //     arguments: allOrders![index]);
-                              Navigator.pushNamed(
-                                  context, OrderDetailsScreen.routeName);
-                            },
+                      onTap: () {
+                        Navigator.pushNamed(
+                          context,
+                          OrderDetailsScreen.routeName,
+                          arguments: allOrders![index],
+                        );
+                        // Navigator.pushNamed(
+                        //     context, ProductDetailScreen.routeName,
+                        //     arguments: allOrders![index]);
+                        Navigator.pushNamed(
+                            context, OrderDetailsScreen.routeName);
+                      },
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Column(
@@ -91,16 +74,17 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
                                   Container(
-                                    padding: EdgeInsets.all(5),
+                                    padding: const EdgeInsets.all(5),
                                     decoration: BoxDecoration(
                                         color: Colors.deepPurple.shade800,
-                                        borderRadius: BorderRadius.circular(10)),
-                                      
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+
                                     // elevation: 2,
                                     // alignment: Alignment.topRight,
                                     child: Text(
-                                      "Order ID : ${widget.allOrders![index].id}",
-                                      style: TextStyle(
+                                      "Order ID : ${allOrders![index].id}",
+                                      style: const TextStyle(
                                           color: Colors.white, fontSize: 10),
                                     ),
                                   ),
@@ -108,18 +92,19 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
                                   InkWell(
                                       onTap: () async {
                                         await Clipboard.setData(ClipboardData(
-                                                text: widget.allOrders![index].id))
+                                                text: allOrders![index].id))
                                             .then((_) => showSnackBar(
-                                                context: context, text: "Copied!"));
+                                                context: context,
+                                                text: "Copied!"));
                                       },
-                                      child: Icon(Icons.copy, size: 17))
+                                      child: const Icon(Icons.copy, size: 17))
                                 ],
                               ),
                             ),
                             Column(
                               children: [
                                 for (int j = 0;
-                                    j < widget.allOrders![index].products.length;
+                                    j < allOrders![index].products.length;
                                     j++)
                                   Container(
                                     margin: EdgeInsets.symmetric(
@@ -128,7 +113,8 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
                                       children: [
                                         // image
                                         Image.network(
-                                          widget.allOrders![index].products[j]
+                                          allOrders![index]
+                                              .products[j]
                                               .images[0],
                                           // allOrders![index].products[index].images[0],
                                           fit: BoxFit.contain,
@@ -144,12 +130,13 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
                                                   left: mq.width * .025,
                                                   top: mq.width * .0125),
                                               child: Text(
-                                                widget.allOrders![index].products[j]
+                                                allOrders![index]
+                                                    .products[j]
                                                     .name,
                                                 overflow: TextOverflow.ellipsis,
                                                 textAlign: TextAlign.left,
-                                                style:
-                                                    const TextStyle(fontSize: 16),
+                                                style: const TextStyle(
+                                                    fontSize: 16),
                                                 maxLines: 1,
                                               ),
                                             ),
@@ -166,9 +153,10 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
                                                   left: mq.width * .025,
                                                   top: mq.width * .0125),
                                               child: Text(
-                                                  "Ordered At  : ${DateFormat('yMMMd').format(DateTime.fromMillisecondsSinceEpoch(widget.allOrders![index].orderedAt))}",
+                                                  "Ordered At  : ${DateFormat('yMMMd').format(DateTime.fromMillisecondsSinceEpoch(allOrders![index].orderedAt))}",
                                                   style: const TextStyle(
-                                                      fontWeight: FontWeight.bold,
+                                                      fontWeight:
+                                                          FontWeight.bold,
                                                       fontSize: 14)),
                                             ),
                                             // Container(
@@ -202,7 +190,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
                                   ),
                               ],
                             ),
-                                      
+
                             // Divider(color: Colors.grey, thickness: mq.height * .001)
                           ],
                         ),

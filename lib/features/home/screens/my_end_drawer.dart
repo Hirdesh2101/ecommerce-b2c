@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:ecommerce_major_project/models/user.dart';
 
 class MyEndDrawer extends StatefulWidget {
-  User user;
-  MyEndDrawer({super.key, required this.user});
+  final User user;
+  const MyEndDrawer({super.key, required this.user});
 
   @override
   State<MyEndDrawer> createState() => _MyEndDrawerState();
@@ -19,6 +19,7 @@ class _MyEndDrawerState extends State<MyEndDrawer> {
     Icons.topic_rounded,
     Icons.contact_phone_rounded
   ];
+
   List<String> iconNames = [
     "Home",
     "Explore",
@@ -65,8 +66,8 @@ class _MyEndDrawerState extends State<MyEndDrawer> {
               currentAccountPicture: Container(
                 decoration: BoxDecoration(
                     shape: BoxShape.circle, color: Colors.deepOrange[900]),
-                padding: EdgeInsets.all(3),
-                child: CircleAvatar(
+                padding: const EdgeInsets.all(3),
+                child: const CircleAvatar(
                   backgroundImage: NetworkImage(
                       "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"),
                 ),
@@ -81,10 +82,11 @@ class _MyEndDrawerState extends State<MyEndDrawer> {
                 ),
                 title: Text(
                   iconNames[i],
-                  style: TextStyle(fontWeight: FontWeight.w500, fontSize: 15),
+                  style: const TextStyle(
+                      fontWeight: FontWeight.w500, fontSize: 15),
                 ),
               ),
-            SizedBox(
+            const SizedBox(
               height: 130,
             ),
             SizedBox(
@@ -92,11 +94,11 @@ class _MyEndDrawerState extends State<MyEndDrawer> {
               height: 50,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Color.fromRGBO(242, 102, 62, 1),
-                  minimumSize: Size(40, 70),
+                  backgroundColor: const Color.fromRGBO(242, 102, 62, 1),
+                  minimumSize: const Size(40, 70),
                 ),
                 onPressed: () {},
-                child: Row(
+                child: const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(

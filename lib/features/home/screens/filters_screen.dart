@@ -6,7 +6,7 @@ import 'package:ecommerce_major_project/features/home/providers/filter_provider.
 enum FilterType { atoZ, priceLtoH, priceHtoL }
 
 class FilterScreen extends StatefulWidget {
-  FilterScreen({super.key});
+  const FilterScreen({super.key});
 
   @override
   State<FilterScreen> createState() => _FilterScreenState();
@@ -39,7 +39,7 @@ class _FilterScreenState extends State<FilterScreen> {
 }
 
 class FiltersAvailable extends StatefulWidget {
-  FiltersAvailable({super.key});
+  const FiltersAvailable({super.key});
 
   @override
   State<FiltersAvailable> createState() => _FiltersAvailableState();
@@ -51,12 +51,12 @@ class _FiltersAvailableState extends State<FiltersAvailable> {
   void didChangeDependencies() {
     final filterProvider2 = Provider.of<FilterProvider>(context);
     print(filterProvider2.filterNumber);
-    _character = filterProvider2.filterNumber ==0 
+    _character = filterProvider2.filterNumber == 0
         ? null
         : getFilterType(filterProvider2.filterNumber);
     super.didChangeDependencies();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     final filterProvider = Provider.of<FilterProvider>(context);
@@ -107,7 +107,7 @@ class _FiltersAvailableState extends State<FiltersAvailable> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-             TextButton(
+            TextButton(
                 onPressed: () {
                   filterProvider.setFilterNumber(0);
                   Navigator.pop(context);

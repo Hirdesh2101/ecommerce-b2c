@@ -1,6 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
-import 'package:ecommerce_major_project/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -60,10 +59,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   }
 
   void addToCart() {
-    print("Triggered add to cart <====");
-    print("Product is  : ${widget.product.name}");
+    debugPrint("Triggered add to cart <====");
+    debugPrint("Product is  : ${widget.product.name}");
     productDetailServices.addToCart(context: context, product: widget.product);
-    print("Execution finished add to cart <====");
+    debugPrint("Execution finished add to cart <====");
   }
 
   @override
@@ -87,7 +86,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       SizedBox(
                         height: mq.height * .3,
                         child: PageView.builder(
-                            physics: BouncingScrollPhysics(),
+                            physics: const BouncingScrollPhysics(),
                             onPageChanged: (value) {
                               setState(() {
                                 currentIndex = value;

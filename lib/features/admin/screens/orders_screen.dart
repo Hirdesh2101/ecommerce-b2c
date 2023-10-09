@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 
 import 'package:ecommerce_major_project/main.dart';
 import 'package:ecommerce_major_project/models/order.dart';
-import 'package:ecommerce_major_project/common/widgets/loader.dart';
 import 'package:ecommerce_major_project/features/admin/services/admin_services.dart';
 import 'package:ecommerce_major_project/features/account/widgets/single_product.dart';
 import 'package:ecommerce_major_project/features/order_details/screens/order_details_screen.dart';
@@ -42,7 +41,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
       body: orders == null
           ? const ColorLoader2()
           : GridView.builder(
-              padding: EdgeInsets.all(10),
+              padding: const EdgeInsets.all(10),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   mainAxisSpacing: 10,
                   childAspectRatio: 1.75,
@@ -65,13 +64,13 @@ class _OrdersScreenState extends State<OrdersScreen> {
             ),
       floatingActionButton: FloatingActionButton.extended(
         elevation: 10,
-        icon: Icon(Icons.logout_outlined),
+        icon: const Icon(Icons.logout_outlined),
         onPressed: () {
           AccountServices().logOut(context);
         },
         backgroundColor: Colors.deepPurple.shade600,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-        label: Text(
+        label: const Text(
           "LogOut",
           style: TextStyle(fontSize: 12),
         ),

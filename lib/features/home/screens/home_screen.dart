@@ -1,19 +1,9 @@
-import 'package:ecommerce_major_project/common/widgets/custom_appbar.dart';
 import 'package:ecommerce_major_project/features/search_delegate/my_search_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:provider/provider.dart';
 
 import 'package:ecommerce_major_project/main.dart';
-import 'package:ecommerce_major_project/providers/user_provider.dart';
 import 'package:ecommerce_major_project/constants/global_variables.dart';
-import 'package:ecommerce_major_project/features/home/widgets/deal_of_day.dart';
-import 'package:ecommerce_major_project/features/home/screens/my_end_drawer.dart';
-import 'package:ecommerce_major_project/features/home/widgets/carousel_image.dart';
-import 'package:ecommerce_major_project/features/home/services/home_services.dart';
 import 'package:ecommerce_major_project/features/home/widgets/top_categories.dart';
-import 'package:ecommerce_major_project/features/search/screens/search_screen.dart';
-import 'package:ecommerce_major_project/features/home/providers/search_provider.dart';
 
 // Route _createRoute() {
 //   return PageRouteBuilder(
@@ -85,35 +75,34 @@ class _HomeScreenState extends State<HomeScreen> {
     return SafeArea(
       top: false,
       child: Scaffold(
-        // key: _scaffoldKey,
-        appBar: GlobalVariables.getAppBar(
-            context: context,
-            wantBackNavigation: false,
-            onClickSearchNavigateTo: MySearchScreen()),
+          // key: _scaffoldKey,
+          appBar: GlobalVariables.getAppBar(
+              context: context,
+              wantBackNavigation: false,
+              onClickSearchNavigateTo: MySearchScreen()),
 
-        //functionalities!
-        body: TopCategories()
-        ///NestedScrollView()
-        
-        
-        
-        // SingleChildScrollView(
-        //   child: Column(
-        //     children: [
-        //       // AddressBox(),
-        //       // SizedBox(height: mq.width * .05),
-        //       SizedBox(height: mq.width * .02),
-        //             const CarouselImage(),
-        //             SizedBox(height: mq.width * .01),
-        //             const TopCategories(),
-        //             // SizedBox(height: mq.width * .01),
-        //             //const DealOfDay(),
-        //     ],
-        //   ),
-        // ),
+          //functionalities!
+          body: TopCategories()
 
-        // endDrawer: MyEndDrawer(user: Provider.of<UserProvider>(context).user),
-      ),
+          ///NestedScrollView()
+
+          // SingleChildScrollView(
+          //   child: Column(
+          //     children: [
+          //       // AddressBox(),
+          //       // SizedBox(height: mq.width * .05),
+          //       SizedBox(height: mq.width * .02),
+          //             const CarouselImage(),
+          //             SizedBox(height: mq.width * .01),
+          //             const TopCategories(),
+          //             // SizedBox(height: mq.width * .01),
+          //             //const DealOfDay(),
+          //     ],
+          //   ),
+          // ),
+
+          // endDrawer: MyEndDrawer(user: Provider.of<UserProvider>(context).user),
+          ),
     );
   }
 }

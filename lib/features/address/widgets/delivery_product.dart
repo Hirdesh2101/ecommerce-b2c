@@ -32,7 +32,7 @@ class _DeliveryProductState extends State<DeliveryProduct> {
     // fetching the particular product
     final productCart = context.watch<UserProvider>().user.cart[widget.index];
     final product = Product.fromJson(productCart['product']);
-    final quantity = productCart['quantity'];
+    // final quantity = productCart['quantity'];
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,

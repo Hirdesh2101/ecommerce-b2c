@@ -1,4 +1,3 @@
-import 'package:ecommerce_major_project/constants/global_variables.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

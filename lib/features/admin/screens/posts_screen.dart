@@ -1,7 +1,6 @@
 import 'package:ecommerce_major_project/common/widgets/color_loader_2.dart';
 import 'package:ecommerce_major_project/constants/global_variables.dart';
 import 'package:ecommerce_major_project/constants/utils.dart';
-import 'package:ecommerce_major_project/features/account/services/account_services.dart';
 import 'package:ecommerce_major_project/main.dart';
 import 'package:flutter/material.dart';
 
@@ -55,7 +54,7 @@ class _PostsScreenState extends State<PostsScreen> {
             ),
             body: products == null || products!.isEmpty
                 //if no products are added by admin to sell
-                ? ColorLoader2()
+                ? const ColorLoader2()
                 //  products!.isEmpty
                 //  const Center(
                 //     child: Text("Add some products to sell",
