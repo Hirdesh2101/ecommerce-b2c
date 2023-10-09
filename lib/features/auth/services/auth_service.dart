@@ -212,7 +212,8 @@ class AuthService {
       }
     } catch (e) {
       print("Error occured in signing up user : $e");
-      showSnackBar(context: context, text: e.toString());
+      //TODO: Priyansh: THis i have commented as it has a bug.
+      // showSnackBar(context: context, text: e.toString());
     }
   }
 }

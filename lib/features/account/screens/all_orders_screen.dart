@@ -2,18 +2,13 @@
 import 'package:ecommerce_major_project/constants/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 
-import 'package:ecommerce_major_project/common/widgets/custom_appbar.dart';
 import 'package:ecommerce_major_project/constants/global_variables.dart';
 import 'package:ecommerce_major_project/features/order_details/screens/order_details_screen.dart';
-import 'package:ecommerce_major_project/features/product_details/screens/product_detail_screen.dart';
 import 'package:ecommerce_major_project/features/search_delegate/my_search_screen.dart';
 import 'package:ecommerce_major_project/main.dart';
 import 'package:ecommerce_major_project/models/order.dart';
-
-import '../../search/widgets/searched_product.dart';
 
 class AllOrdersScreen extends StatefulWidget {
   static const String routeName = '/all-orders-screen';
