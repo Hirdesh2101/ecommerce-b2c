@@ -9,17 +9,16 @@ import 'package:ecommerce_major_project/features/cart/screens/cart_screen.dart';
 import 'package:ecommerce_major_project/features/account/widgets/account_button.dart';
 import 'package:ecommerce_major_project/features/account/services/account_services.dart';
 
-class TopButtons extends StatelessWidget {
-  TopButtons({Key? key, required this.orders}) : super(key: key);
-  List<Order>? orders;
+class TopButtons extends StatefulWidget {
+  const TopButtons({Key? key, required this.orders}) : super(key: key);
+  final List<Order>? orders;
 
+  @override
+  State<TopButtons> createState() => _TopButtonsState();
+}
+
+class _TopButtonsState extends State<TopButtons> {
   // final List<String> buttonNames = [
-  //   "Your Orders",
-  //   "Turn Seller",
-  //   "Log out",
-  //   "Your Wishlist",
-  // ];
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -29,16 +28,18 @@ class TopButtons extends StatelessWidget {
             AccountButton(
                 text: "Your Orders",
                 onTap: () {
-                  orders == null || orders!.isEmpty
+                  widget.orders == null || widget.orders!.isEmpty
                       ? null
                       : Navigator.pushNamed(context, AllOrdersScreen.routeName,
-                          arguments: orders);
+                          arguments: widget.orders);
                 }),
             AccountButton(
                 text: "Your Wishlist",
                 onTap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (_) => WishListScreen()));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) => const WishListScreen()));
                 }),
           ],
         ),

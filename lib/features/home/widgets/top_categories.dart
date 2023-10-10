@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:ecommerce_major_project/features/cart/screens/cart_screen.dart';
 import 'package:ecommerce_major_project/features/home/widgets/carousel_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -93,7 +94,7 @@ class _TopCategoriesState extends State<TopCategories>
           SliverToBoxAdapter(
               child: Padding(
             padding: EdgeInsets.only(top: mq.height * .01),
-            child: CarouselImage(),
+            child: const CarouselImage(),
           )),
           // SliverToBoxAdapter(
           //   child:
@@ -277,7 +278,7 @@ class _TopCategoriesState extends State<TopCategories>
                                     childCount: min(productList!.length, 8),
                                     (context, index) {
                                   Product product = productList![index];
-                                  bool isProductAvailable =
+                                  bool isProductOutOfStock =
                                       productList![index].quantity == 0;
                                   print(
                                       "\n\n============> product category : ${categoriesList[activeTabIndex]}");
@@ -285,8 +286,8 @@ class _TopCategoriesState extends State<TopCategories>
                                     alignment: AlignmentDirectional.topEnd,
                                     children: [
                                       Card(
-                                        color:
-                                            Color.fromARGB(255, 254, 252, 255),
+                                        color: const Color.fromARGB(
+                                            255, 254, 252, 255),
                                         elevation: 2.5,
                                         shape: RoundedRectangleBorder(
                                           borderRadius:
@@ -346,7 +347,7 @@ class _TopCategoriesState extends State<TopCategories>
                                                   // color: Colors.blueAccent,
                                                   child: Text(
                                                     "₹ ${product.price.toStringAsFixed(2)}",
-                                                    style: TextStyle(
+                                                    style: const TextStyle(
                                                         fontWeight:
                                                             FontWeight.bold),
                                                     textAlign: TextAlign.start,
@@ -383,27 +384,7 @@ class _TopCategoriesState extends State<TopCategories>
                                                                       context)
                                                                   .push(GlobalVariables
                                                                       .createRoute(
-                                                                          WishListScreen()));
-                                                              // Navigator.push(
-                                                              //     context,
-                                                              //     MaterialPageRoute(
-                                                              //         builder: (_) =>
-                                                              //             WishListScreen()));
-
-                                                              // List<Product>?
-                                                              //     wishList =
-                                                              //     await homeServices
-                                                              //         .fetchWishList(
-                                                              //             context)
-                                                              //         .then(
-                                                              //             (wishList) {
-                                                              //   Navigator.push(
-                                                              //       context,
-                                                              //       MaterialPageRoute(
-                                                              //           builder: (context) =>
-                                                              //               WishListScreen(wishList: wishList)));
-                                                              //   return null;
-                                                              // });
+                                                                          const WishListScreen()));
                                                             },
                                                             actionLabel:
                                                                 "View");
@@ -419,34 +400,39 @@ class _TopCategoriesState extends State<TopCategories>
                                                               color: Colors
                                                                   .black87)),
                                                     ),
-                                                    Container(
-                                                      child: InkWell(
-                                                          onTap:
-                                                              isProductAvailable
-                                                                  ? () {
-                                                                      showSnackBar(
-                                                                          context:
-                                                                              context,
-                                                                          text:
-                                                                              "Product out of stock");
-                                                                    }
-                                                                  : () {
-                                                                      addToCart(
-                                                                          product
-                                                                              .name,
-                                                                          product);
-                                                                      showSnackBar(
-                                                                          context:
-                                                                              context,
-                                                                          text:
-                                                                              "Added to cart");
-                                                                    },
-                                                      
-                                                          child: const Icon(
-                                                              CupertinoIcons
-                                                                  .cart_badge_plus,
-                                                              size: 35)),
-                                                    ),
+                                                    InkWell(
+                                                        onTap: () {
+                                                          if (isProductOutOfStock) {
+                                                            showSnackBar(
+                                                                context:
+                                                                    context,
+                                                                text:
+                                                                    "Product is out of stock!");
+                                                            return;
+                                                          } else {
+                                                            addToCart(
+                                                                product.name,
+                                                                product);
+                                                            showSnackBar(
+                                                                context:
+                                                                    context,
+                                                                text:
+                                                                    "Added to Cart",
+                                                                onTapFunction:
+                                                                    () {
+                                                                  Navigator.pushNamed(
+                                                                      context,
+                                                                      CartScreen
+                                                                          .routeName);
+                                                                },
+                                                                actionLabel:
+                                                                    "View");
+                                                          }
+                                                        },
+                                                        child: const Icon(
+                                                            CupertinoIcons
+                                                                .cart_badge_plus,
+                                                            size: 35)),
                                                   ],
                                                 )
                                               ],

@@ -16,7 +16,7 @@ import '/models/user.dart';
 
 class AuthService {
   //signing up user
-  void signUpUser({
+  Future<void> signUpUser({
     required BuildContext context,
   }) async {
     auth.User currentUser = auth.FirebaseAuth.instance.currentUser!;
@@ -43,6 +43,8 @@ class AuthService {
           'Content-Type': 'application/json; charset=UTF-8',
         },
       );
+
+      debugPrint("Sign up user respose: $res");
 
       if (context.mounted) {
         httpErrorHandle(

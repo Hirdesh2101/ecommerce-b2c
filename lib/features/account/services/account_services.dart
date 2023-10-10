@@ -31,7 +31,7 @@ class AccountServices {
       },
     );
 
-    var data = jsonDecode(res.body);
+    // var data = jsonDecode(res.body);
 
     if (context.mounted) {
       httpErrorHandle(response: res, context: context, onSuccess: () {});

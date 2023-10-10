@@ -1,4 +1,3 @@
-import 'package:ecommerce_major_project/features/home/screens/filters_screen.dart';
 import 'package:flutter/material.dart';
 
 class FilterProvider with ChangeNotifier {

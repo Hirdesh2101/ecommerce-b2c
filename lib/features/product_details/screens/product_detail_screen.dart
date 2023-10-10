@@ -1,6 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
-import 'package:ecommerce_major_project/models/user.dart';
+import 'package:ecommerce_major_project/features/cart/screens/cart_screen.dart';
+import 'package:ecommerce_major_project/features/home/screens/wish_list_screen.dart';
+import 'package:ecommerce_major_project/features/home/services/home_services.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -60,18 +62,18 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   }
 
   void addToCart() {
-    print("Triggered add to cart <====");
-    print("Product is  : ${widget.product.name}");
+    debugPrint("Triggered add to cart <====");
+    debugPrint("Product is  : ${widget.product.name}");
     productDetailServices.addToCart(context: context, product: widget.product);
-    print("Execution finished add to cart <====");
+    debugPrint("Execution finished add to cart <====");
   }
 
   @override
   Widget build(BuildContext context) {
-    bool isProductAvailable = widget.product.quantity == 0;
+    bool isProductOutOfStock = widget.product.quantity == 0;
     return Scaffold(
       appBar: GlobalVariables.getAppBar(
-          context: context, onClickSearchNavigateTo: MySearchScreen()),
+          context: context, onClickSearchNavigateTo: const MySearchScreen()),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: mq.width * .03)
@@ -87,7 +89,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       SizedBox(
                         height: mq.height * .3,
                         child: PageView.builder(
-                            physics: BouncingScrollPhysics(),
+                            physics: const BouncingScrollPhysics(),
                             onPageChanged: (value) {
                               setState(() {
                                 currentIndex = value;
@@ -99,13 +101,38 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             itemBuilder: (context, index) {
                               // print("............index = $index");
                               return Builder(
-                                builder: (context) => Container(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: mq.height * .05),
-                                  child: Image.network(
-                                      widget.product.images[index],
-                                      fit: BoxFit.contain,
-                                      height: mq.width * .3),
+                                builder: (context) => InkWell(
+                                  onTap: () {
+                                    Navigator.of(context).push(PageRouteBuilder(
+                                        opaque: false,
+                                        barrierColor:
+                                            Colors.black.withOpacity(0.7),
+                                        barrierDismissible: true,
+                                        pageBuilder:
+                                            (BuildContext context, _, __) {
+                                          return SizedBox(
+                                            height: mq.height * 0.6,
+                                            width: mq.width * 0.8,
+                                            child: Center(
+                                              child: InteractiveViewer(
+                                                child: Image.network(
+                                                  widget.product.images[index],
+                                                  height: mq.height * 0.6,
+                                                  width: mq.width * 0.8,
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        }));
+                                  },
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: mq.height * .05),
+                                    child: Image.network(
+                                        widget.product.images[index],
+                                        fit: BoxFit.contain,
+                                        height: mq.width * .3),
+                                  ),
                                 ),
                               );
                             }),
@@ -131,25 +158,44 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 ],
               ),
               SizedBox(height: mq.height * .02),
-
-              Text(
-                widget.product.name,
-                style:
-                    const TextStyle(fontSize: 17, fontWeight: FontWeight.w200),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Flexible(
+                    child: Text(
+                      widget.product.name,
+                      style: const TextStyle(
+                          fontSize: 17, fontWeight: FontWeight.w200),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      HomeServices().addToWishList(
+                          context: context, product: widget.product);
+                      showSnackBar(
+                          context: context,
+                          text: "Added to WishList",
+                          onTapFunction: () {
+                            Navigator.of(context).push(
+                                GlobalVariables.createRoute(
+                                    const WishListScreen()));
+                          },
+                          actionLabel: "View");
+                    },
+                    child: const Icon(
+                      Icons.favorite_border_rounded,
+                    ),
+                  )
+                ],
               ),
               SizedBox(height: mq.height * .01),
-              // const Text("About the Product",
-              //     style: TextStyle(fontWeight: FontWeight.w700)),
               Text(widget.product.description,
                   style: TextStyle(color: Colors.grey.shade500),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis),
-
-              // SizedBox(height: mq.height * .01),
               Row(
-                // mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Row(
@@ -183,15 +229,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       }),
                 ],
               ),
-              // SizedBox(height: mq.height * .01),
-              // Divider(
-              //   endIndent: mq.width * .01,
-              //   indent: mq.width * .01,
-              //   thickness: 2,
-              //   color: Colors.grey[300],
-              // ),
-              // SizedBox(height: mq.height * .01),
-              isProductAvailable
+              isProductOutOfStock
                   ? const Text(
                       "Out of Stock",
                       style: TextStyle(
@@ -199,16 +237,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     )
                   : const Text("In Stock",
                       style: TextStyle(color: Colors.teal)),
-              // Container(height: 5, color: Colors.grey[200]),
               SizedBox(height: mq.height * .01),
-              // ElevatedButton(
-              //   onPressed: () {},
-              //   style: ElevatedButton.styleFrom(
-              //       minimumSize: Size(double.infinity, mq.height * .08),
-              //       backgroundColor: Colors.yellow.shade500),
-              //   child: const Text("Buy Now",
-              //       style: TextStyle(color: Colors.black)),
-              // ),
               SizedBox(height: mq.width * .025),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -218,29 +247,33 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(color: Colors.black, width: 1),
-                      // color: Color.fromARGB(255, 147, 147, 147),
                     ),
                     child: Text(
                       "₹ ${widget.product.price.toStringAsFixed(2)}  ",
                       textAlign: TextAlign.center,
                       style: const TextStyle(
-                          fontSize: 20,
-                          // color: Colors.,
-                          fontWeight: FontWeight.w500),
+                          fontSize: 20, fontWeight: FontWeight.w500),
                     ),
                   ),
                   SizedBox(width: mq.width * .05),
                   ElevatedButton(
-                    onPressed: isProductAvailable
-                        ? () {
-                            showSnackBar(
-                                context: context, text: "Product out of stock");
-                          }
-                        : () {
-                            showSnackBar(
-                                context: context, text: "Added to cart");
-                            addToCart();
-                          },
+                    onPressed: () {
+                      if (isProductOutOfStock) {
+                        showSnackBar(
+                            context: context, text: "Product is out of stock!");
+                        return;
+                      } else {
+                        addToCart();
+                        showSnackBar(
+                            context: context,
+                            text: "Added to Cart",
+                            onTapFunction: () {
+                              Navigator.pushNamed(
+                                  context, CartScreen.routeName);
+                            },
+                            actionLabel: "View");
+                      }
+                    },
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.orange.shade800,
                         minimumSize: Size(mq.width * .45, mq.height * .06),
