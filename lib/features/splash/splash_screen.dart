@@ -2,10 +2,10 @@ import 'package:ecommerce_major_project/features/splash/widgets/body.dart';
 import 'package:ecommerce_major_project/main.dart';
 import 'package:flutter/material.dart';
 
-import 'package:flutter/material.dart';
-
 class SplashScreen extends StatelessWidget {
   static String routeName = "/splash";
+
+  const SplashScreen({super.key});
   @override
   Widget build(BuildContext context) {
     mq = MediaQuery.of(context).size;

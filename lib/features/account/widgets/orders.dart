@@ -6,12 +6,11 @@ import 'package:ecommerce_major_project/common/widgets/bottom_bar.dart';
 import 'package:ecommerce_major_project/constants/global_variables.dart';
 import 'package:ecommerce_major_project/common/widgets/color_loader_2.dart';
 import 'package:ecommerce_major_project/features/account/widgets/single_product.dart';
-import 'package:ecommerce_major_project/features/account/services/account_services.dart';
 import 'package:ecommerce_major_project/features/account/screens/all_orders_screen.dart';
 import 'package:ecommerce_major_project/features/order_details/screens/order_details_screen.dart';
 
 class Orders extends StatefulWidget {
-  const Orders({super.key,required this.orders,required this.showLoader});
+  const Orders({super.key, required this.orders, required this.showLoader});
   final List<Order>? orders;
   final bool showLoader;
 
@@ -32,10 +31,6 @@ class _OrdersState extends State<Orders> {
   //   "https://images.unsplash.com/photo-1647891940243-77a6483a152e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDF8MHxlZGl0b3JpYWwtZmVlZHwxfHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=500&q=60",
   //   "https://images.unsplash.com/photo-1681926946700-73c10c72ef15?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyN3x8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60"
   // ];
-
-  
-
-  
 
   @override
   Widget build(BuildContext context) {
@@ -126,7 +121,8 @@ class _OrdersState extends State<Orders> {
                             );
                           },
                           child: SingleProduct(
-                              image: widget.orders![index].products[0].images[0]),
+                              image:
+                                  widget.orders![index].products[0].images[0]),
                         );
                       },
                     ),

@@ -1,7 +1,6 @@
 import 'package:ecommerce_major_project/features/home/providers/search_provider.dart';
 import 'package:ecommerce_major_project/features/home/services/home_services.dart';
 import 'package:ecommerce_major_project/main.dart';
-import 'package:ecommerce_major_project/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:ecommerce_major_project/features/search/screens/search_screen.dart';
 import 'package:provider/provider.dart';
@@ -9,8 +8,8 @@ import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 
 class MySearchScreen extends StatefulWidget {
-  String? searchQueryAlready;
-  MySearchScreen({this.searchQueryAlready, super.key});
+  final String? searchQueryAlready;
+  const MySearchScreen({this.searchQueryAlready, super.key});
 
   @override
   State<MySearchScreen> createState() => _MySearchScreenState();
@@ -46,7 +45,7 @@ class _MySearchScreenState extends State<MySearchScreen> {
   // maximum 10 items stored in history
   int maxLength = 10;
 
-  SpeechToText _speechToText = SpeechToText();
+  final SpeechToText _speechToText = SpeechToText();
   bool _speechEnabled = false;
   String _lastWords = '';
 
@@ -125,7 +124,7 @@ class _MySearchScreenState extends State<MySearchScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<UserProvider>(context).user;
+    // final user = Provider.of<UserProvider>(context).user;
     final searchProvider = Provider.of<SearchProvider>(context, listen: true);
     // add and remove from buildSuggestionsList according to the search query in onChange
     List<String>? buildSuggestionsList = searchProvider.getSuggetions;
@@ -218,7 +217,7 @@ class _MySearchScreenState extends State<MySearchScreen> {
                     navigateToSearchScreen(val.trim());
                   }
 
-                  print("\n\n\nHistory now  -----------> :  $historyList");
+                  debugPrint("\n\n\nHistory now  -----------> :  $historyList");
                 },
                 autofocus: true,
                 // enabled: true,
@@ -232,11 +231,12 @@ class _MySearchScreenState extends State<MySearchScreen> {
                       borderSide: BorderSide.none),
                   enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(mq.width * .025),
-                      borderSide: BorderSide(color: Colors.black38, width: 1)),
+                      borderSide:
+                          const BorderSide(color: Colors.black38, width: 1)),
                   focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(mq.width * .025),
                       borderSide:
-                          BorderSide(color: Colors.black38, width: 0.4)),
+                          const BorderSide(color: Colors.black38, width: 0.4)),
                   // border: null,
                   hintText: "Search",
                   hintStyle: const TextStyle(fontWeight: FontWeight.w400),
@@ -259,7 +259,7 @@ class _MySearchScreenState extends State<MySearchScreen> {
                 width: 40,
                 child: FloatingActionButton(
                   elevation: 0,
-                  backgroundColor: Color.fromARGB(255, 43, 6, 103),
+                  backgroundColor: const Color.fromARGB(255, 43, 6, 103),
                   onPressed:
                       // If not yet listening for speech start, otherwise stop
                       _speechToText.isNotListening

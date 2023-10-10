@@ -8,24 +8,23 @@ void showSnackBar({
   VoidCallback? onTapFunction,
   String? actionLabel,
 }) {
-  ScaffoldMessenger.of(context).showSnackBar(
-    onTapFunction != null && actionLabel != null
-        ? SnackBar(
-            content: Text(text),
-            action: SnackBarAction(
-              label: actionLabel,
-              textColor: Colors.white,
-              onPressed: onTapFunction,
-            ),
-            behavior: SnackBarBehavior.floating,
-            backgroundColor: const Color(0xFF7700C6),
+  final scaffold = ScaffoldMessenger.of(context);
+  scaffold.hideCurrentSnackBar();
+
+  final SnackBar snackBar = SnackBar(
+    content: Text(text),
+    action: onTapFunction != null && actionLabel != null
+        ? SnackBarAction(
+            label: actionLabel,
+            textColor: Colors.white,
+            onPressed: onTapFunction,
           )
-        : SnackBar(
-            content: Text(text),
-            behavior: SnackBarBehavior.floating,
-            backgroundColor: const Color(0xFF7700C6),
-          ),
+        : null,
+    behavior: SnackBarBehavior.floating,
+    backgroundColor: const Color(0xFF7700C6),
   );
+
+  ScaffoldMessenger.of(context).showSnackBar(snackBar);
 }
 
 void showErrorSnackBar({
@@ -34,24 +33,23 @@ void showErrorSnackBar({
   VoidCallback? onTapFunction,
   String? actionLabel,
 }) {
-  ScaffoldMessenger.of(context).showSnackBar(
-    onTapFunction != null && actionLabel != null
-        ? SnackBar(
-            content: Text(text),
-            action: SnackBarAction(
-              label: actionLabel,
-              textColor: Colors.white,
-              onPressed: onTapFunction,
-            ),
-            behavior: SnackBarBehavior.floating,
-            backgroundColor: Color.fromARGB(255, 252, 30, 100),
+  final scaffold = ScaffoldMessenger.of(context);
+  scaffold.hideCurrentSnackBar();
+
+  final SnackBar snackBar = SnackBar(
+    content: Text(text),
+    action: onTapFunction != null && actionLabel != null
+        ? SnackBarAction(
+            label: actionLabel,
+            textColor: Colors.white,
+            onPressed: onTapFunction,
           )
-        : SnackBar(
-            content: Text(text),
-            behavior: SnackBarBehavior.floating,
-            backgroundColor: Color.fromARGB(255, 252, 30, 100),
-          ),
+        : null,
+    behavior: SnackBarBehavior.floating,
+    backgroundColor: const Color.fromARGB(255, 252, 30, 100),
   );
+
+  ScaffoldMessenger.of(context).showSnackBar(snackBar);
 }
 
 // void showSnackBar(BuildContext context, String msg, Duration passDuration) {

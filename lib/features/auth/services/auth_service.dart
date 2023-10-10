@@ -15,7 +15,7 @@ import '/models/user.dart';
 
 class AuthService {
   //signing up user
-  void signUpUser({
+  Future<void> signUpUser({
     required BuildContext context,
     required String email,
     required String password,
@@ -44,6 +44,8 @@ class AuthService {
           'Content-Type': 'application/json; charset=UTF-8',
         },
       );
+
+      debugPrint("Sign up user respose: $res");
 
       if (context.mounted) {
         httpErrorHandle(
@@ -211,8 +213,9 @@ class AuthService {
         //     "==================> User Response :\n${userProvider.user.name} <==================");
       }
     } catch (e) {
-      print("Error occured in signing up user : $e");
-      showSnackBar(context: context, text: e.toString());
+      print("Error occured in signing up already signed user : $e");
+      //TODO: Priyansh: THis i have commented as it has a bug.
+      // showSnackBar(context: context, text: e.toString());
     }
   }
 }

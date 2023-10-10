@@ -139,7 +139,7 @@ class _CategoryDealsScreenState extends State<CategoryDealsScreen> {
                             : Expanded(
                                 child: ListView.builder(
                                   scrollDirection: Axis.vertical,
-                                  physics: BouncingScrollPhysics(),
+                                  physics: const BouncingScrollPhysics(),
                                   itemCount: productList!.length,
                                   itemBuilder: (context, index) {
                                     //var map = productList!;
@@ -254,13 +254,14 @@ class _CategoryDealsScreenState extends State<CategoryDealsScreen> {
   }
 
   getFilterNameList(FilterProvider filterProvider) {
-    List<Product>? filterOneList = List<Product>.from(productList!);;
-    filterOneList!.sort((a, b) => a.name.compareTo(b.name));
+    List<Product>? filterOneList = List<Product>.from(productList!);
+
+    filterOneList.sort((a, b) => a.name.compareTo(b.name));
 
     return Expanded(
       child: ListView.builder(
         scrollDirection: Axis.vertical,
-        physics: BouncingScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         itemCount: filterOneList.length,
         itemBuilder: (context, index) {
           // productList!
@@ -287,13 +288,14 @@ class _CategoryDealsScreenState extends State<CategoryDealsScreen> {
   }
 
   getFilterpriceLtoH(FilterProvider filterProvider) {
-    List<Product>? filterOneList = List<Product>.from(productList!);;
-    filterOneList!.sort((a, b) => a.price.compareTo(b.price));
+    List<Product>? filterOneList = List<Product>.from(productList!);
+    ;
+    filterOneList.sort((a, b) => a.price.compareTo(b.price));
 
     return Expanded(
       child: ListView.builder(
         scrollDirection: Axis.vertical,
-        physics: BouncingScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         itemCount: filterOneList.length,
         itemBuilder: (context, index) {
           // productList!
@@ -320,13 +322,14 @@ class _CategoryDealsScreenState extends State<CategoryDealsScreen> {
   }
 
   getFilterpriceHtoL(FilterProvider filterProvider) {
-    List<Product>? filterOneList = List<Product>.from(productList!);;
-    filterOneList!.sort((a, b) => a.price.compareTo(b.price));
+    List<Product>? filterOneList = List<Product>.from(productList!);
+    ;
+    filterOneList.sort((a, b) => a.price.compareTo(b.price));
 
     return Expanded(
       child: ListView.builder(
         scrollDirection: Axis.vertical,
-        physics: BouncingScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         itemCount: filterOneList.length,
         itemBuilder: (context, index) {
           // productList!

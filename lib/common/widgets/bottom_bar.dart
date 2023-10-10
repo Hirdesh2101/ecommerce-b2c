@@ -25,7 +25,7 @@ class _BottomBarState extends State<BottomBar> {
 
   List<Widget> pages = [
     const HomeScreen(),
-    CategoryGridScreen(),
+    const CategoryGridScreen(),
     const CartScreen(),
     const AccountScreen(),
   ];
@@ -123,7 +123,7 @@ class _BottomBarState extends State<BottomBar> {
             label: '',
           ),
           //ACCOUNT
-           BottomNavigationBarItem(
+          BottomNavigationBarItem(
             icon: Container(
               width: bottomBarWidth,
               decoration: BoxDecoration(

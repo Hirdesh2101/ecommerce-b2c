@@ -45,8 +45,8 @@ class _AuthScreenState extends State<AuthScreen> {
     super.dispose();
   }
 
-  void signUpUser() {
-    authService.signUpUser(
+  Future<void> signUpUser() async {
+    await authService.signUpUser(
         context: context,
         email: _emailController.text,
         password: _passwordSUpController.text,
@@ -224,12 +224,12 @@ class _AuthScreenState extends State<AuthScreen> {
                                 hintText: "Confirm Password"),
                             SizedBox(height: mq.height * .04),
                             ElevatedButton(
-                                onPressed: () {
+                                onPressed: () async {
                                   // ensuring form validation and matching passwords
                                   if (_signUpFormKey.currentState!.validate() &&
                                       _passwordSUpController.text ==
                                           _confirmPasswordController.text) {
-                                    signUpUser();
+                                    await signUpUser();
                                     setState(() {
                                       isSignIn = !isSignIn;
                                     });
@@ -298,10 +298,8 @@ class _AuthScreenState extends State<AuthScreen> {
               ),
             ),
           );
-
   }
 }
-
 
 //
 //
