@@ -1,4 +1,5 @@
 import 'package:ecommerce_major_project/features/search/screens/search_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -6,8 +7,10 @@ import 'package:ecommerce_major_project/main.dart';
 import 'package:ecommerce_major_project/common/widgets/bottom_bar.dart';
 
 // String uri = 'https://drab-teal-crayfish-hem.cyclic.app';
-//for android 10.0.2.2 
-String uri = 'http://localhost:3000';
+//for android http://10.0.2.2:3000
+//for web http://127.0.0.1:3000
+//for ios http://localhost:3000
+String uri = 'http://127.0.0.1:3000';
 
 class GlobalVariables {
   // COLORS
@@ -118,6 +121,18 @@ class GlobalVariables {
       },
     );
   }
+  static Future<String?> getFirebaseAuthToken() async {
+  try {
+    final User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      final idTokenResult = await user.getIdToken();
+      return idTokenResult;
+    }
+    return null;
+  } catch (e) {
+    return null;
+  }
+}
 
   static AppBar getAppBar({
     required BuildContext context,

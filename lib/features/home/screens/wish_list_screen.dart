@@ -40,7 +40,7 @@ class _WishListScreenState extends State<WishListScreen> {
             // color: Colors.redAccent,
             padding: EdgeInsets.only(top: mq.height * .02),
             // height: mq.height * 0.55,
-            child: user.wishList!.isEmpty
+            child: user.wishList==null || user.wishList!.isEmpty
                 ? Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     // crossAxisAlignment: CrossAxisAlignment.center,

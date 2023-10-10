@@ -59,8 +59,8 @@ class _AccountScreenState extends State<AccountScreen> {
         elevation: 10,
         icon: Icon(Icons.chat_bubble_outline_outlined),
         onPressed: () {
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (_) => ChatbotScreen()));
+          // Navigator.of(context)
+          //     .push(MaterialPageRoute(builder: (_) => ChatbotScreen()));
         },
         backgroundColor: Colors.deepPurple.shade600,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),

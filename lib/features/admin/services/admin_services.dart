@@ -25,7 +25,7 @@ class AdminServices {
     required String category,
     required List<File> images,
   }) async {
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final String? authToken = await GlobalVariables.getFirebaseAuthToken();
 
     try {
       final cloudinary = CloudinaryPublic('dyqymg02u', 'ktdtolon');
@@ -54,7 +54,7 @@ class AdminServices {
         Uri.parse('$uri/admin/add-product'),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
-          'x-auth-token': userProvider.user.token,
+          'Authorization': '$authToken',
         },
         body: bodyPostReq,
         // body: product.toJson(),
@@ -77,13 +77,13 @@ class AdminServices {
 
   // get all the products
   Future<List<Product>> fetchAllProducts(BuildContext context) async {
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final String? authToken = await GlobalVariables.getFirebaseAuthToken();
     List<Product> productList = [];
     try {
       http.Response res =
           await http.get(Uri.parse('$uri/admin/get-products'), headers: {
         'Content-Type': 'application/json; charset=UTF-8',
-        'x-auth-token': userProvider.user.token,
+        'Authorization': '$authToken',
       });
 
       var data = jsonDecode(res.body);
@@ -117,13 +117,13 @@ class AdminServices {
 
   // get all the products
   Future<List<Order>> fetchAllOrders(BuildContext context) async {
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final String? authToken = await GlobalVariables.getFirebaseAuthToken();
     List<Order> orderList = [];
     try {
       http.Response res =
           await http.get(Uri.parse('$uri/admin/get-orders'), headers: {
         'Content-Type': 'application/json; charset=UTF-8',
-        'x-auth-token': userProvider.user.token,
+        'Authorization': '$authToken',
       });
 
       var data = jsonDecode(res.body);
@@ -187,7 +187,7 @@ class AdminServices {
   //       Uri.parse("$uri/admin/add-product"),
   //       headers: <String, String>{
   //         'Content-Type': 'application/json; charset=UTF-8',
-  //         'x-auth-token': userProvider.user.token,
+  //         'Authorization': '$authToken',
   //       },
   //       body: product.toJson(),
   //     );
@@ -217,7 +217,7 @@ class AdminServices {
   //     http.Response res = await http
   //         .get(Uri.parse("$uri/admin/get-products"), headers: <String, String>{
   //       'Content-Type': 'application/json; charset=UTF-8',
-  //       'x-auth-token': userProvider.user.token,
+  //       'Authorization': '$authToken',
   //     });
 
   //     // List listLength = jsonDecode(res.body);
@@ -255,13 +255,13 @@ class AdminServices {
     required VoidCallback onSuccess,
   }) async {
     // checking the user auth token
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final String? authToken = await GlobalVariables.getFirebaseAuthToken();
     try {
       http.Response res = await http.post(
         Uri.parse("$uri/admin/delete-product"),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
-          'x-auth-token': userProvider.user.token,
+          'Authorization': '$authToken',
         },
         body: jsonEncode({
           'id': product.id,
@@ -297,13 +297,13 @@ class AdminServices {
     required VoidCallback onSuccess,
   }) async {
     // checking the user auth token
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final String? authToken = await GlobalVariables.getFirebaseAuthToken();
     try {
       http.Response res = await http.post(
         Uri.parse("$uri/admin/change-order-status"),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
-          'x-auth-token': userProvider.user.token,
+          'Authorization': '$authToken',
         },
         body: jsonEncode({'id': order.id, 'status': status}),
       );
@@ -331,7 +331,7 @@ class AdminServices {
 //
 
   Future<Map<String, dynamic>> getEarnings(BuildContext context) async {
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final String? authToken = await GlobalVariables.getFirebaseAuthToken();
     List<Sales> sales = [];
     num totalEarning = 0;
 
@@ -339,7 +339,7 @@ class AdminServices {
       http.Response res =
           await http.get(Uri.parse("$uri/admin/analytics"), headers: {
         'Content-Type': 'application/json; charset=UTF-8',
-        'x-auth-token': userProvider.user.token,
+        'Authorization': '$authToken',
       });
 
       if (context.mounted) {

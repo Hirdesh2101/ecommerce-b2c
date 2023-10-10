@@ -16,13 +16,14 @@ class AddressServices {
     required String address,
   }) async {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final String? authToken = await GlobalVariables.getFirebaseAuthToken();
 
     try {
       http.Response res = await http.post(
         Uri.parse('$uri/api/save-user-address'),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
-          'x-auth-token': userProvider.user.token,
+          'Authorization': '$authToken',
         },
         body: jsonEncode({
           'address': address,
@@ -54,13 +55,14 @@ class AddressServices {
     required num totalSum,
   }) async {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final String? authToken = await GlobalVariables.getFirebaseAuthToken();
 
     try {
       http.Response res = await http.post(
         Uri.parse('$uri/api/order'),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
-          'x-auth-token': userProvider.user.token,
+          'Authorization': '$authToken',
         },
         body: jsonEncode({
           'cart': userProvider.user.cart,

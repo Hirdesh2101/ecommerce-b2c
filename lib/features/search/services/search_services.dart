@@ -13,14 +13,14 @@ import 'package:ecommerce_major_project/constants/global_variables.dart';
 class SearchServices {
   Future<List<Product>> fetchSearchedProduct(
       {required BuildContext context, required String searchQuery}) async {
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final String? authToken = await GlobalVariables.getFirebaseAuthToken();
     List<Product> productList = [];
     try {
       http.Response res = await http.get(
         Uri.parse("$uri/api/products/search/$searchQuery"),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
-          'x-auth-token': userProvider.user.token,
+          'Authorization': '$authToken',
         },
       );
       var data = jsonDecode(res.body);

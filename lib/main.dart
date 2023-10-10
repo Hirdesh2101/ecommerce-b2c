@@ -130,8 +130,14 @@ Provider
 
 */
 
+import 'package:ecommerce_major_project/firebase_options.dart';
+import 'package:firebase_auth/firebase_auth.dart' as auth;
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_ui_auth/firebase_ui_auth.dart';
+import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+// import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:ecommerce_major_project/router.dart';
 import 'package:ecommerce_major_project/providers/user_provider.dart';
@@ -142,8 +148,22 @@ import 'package:ecommerce_major_project/features/admin/screens/admin_screen.dart
 import 'package:ecommerce_major_project/features/auth/services/auth_service.dart';
 import 'package:ecommerce_major_project/features/home/providers/search_provider.dart';
 import 'package:ecommerce_major_project/features/home/providers/filter_provider.dart';
+import 'package:provider/provider.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  FirebaseUIAuth.configureProviders([
+    EmailAuthProvider(),
+    GoogleProvider(
+        clientId:
+            "221309136169-4gv4udbroog90v8lgdhq0lnj6co82f4i.apps.googleusercontent.com",
+        iOSPreferPlist: true),
+    PhoneAuthProvider(),
+  ]);
+
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(
       create: (context) => UserProvider(),
@@ -169,10 +189,11 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final AuthService authService = AuthService();
+
   @override
   void initState() {
-    super.initState();
     authService.getUserData(context);
+    super.initState();
   }
 
   // This widget is the root of your application.
@@ -196,11 +217,24 @@ class _MyAppState extends State<MyApp> {
       onGenerateRoute: (settings) => generateRoute(settings),
       //
       //
-      home: Provider.of<UserProvider>(context).user.token.isNotEmpty
-          ? Provider.of<UserProvider>(context).user.type == 'user'
-              ? const BottomBar()
-              : const AdminScreen()
-          : const AuthScreen(),
+      home: Provider.of<UserProvider>(context).isLoading
+          ? Center(
+              child: Container(
+              color: Colors.amberAccent,
+              alignment: Alignment.center,
+              height: 400,
+              width: 400,
+              child: const Text(
+                // "User type is : ${Provider.of<UserProvider>(context).user.toJson()}",
+                "Splash Screen...",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+              ),
+            ))
+          : Provider.of<UserProvider>(context).user.token.isNotEmpty
+              ? Provider.of<UserProvider>(context).user.type == 'user'
+                  ? const BottomBar()
+                  : const AdminScreen()
+              : const AuthScreen(),
     );
   }
 }

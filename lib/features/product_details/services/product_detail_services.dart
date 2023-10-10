@@ -22,7 +22,7 @@ import 'package:ecommerce_major_project/constants/global_variables.dart';
 
  var response = await post(url, body: jsondata, headers: {
         'Content-Type': 'application/json; charset=UTF-8',
-        'x-auth-token': userProvider.user.token,
+        'Authorization': '$authToken',
       });
       print("response : ==> ${response.body}");
 
@@ -38,6 +38,7 @@ class ProductDetailServices {
   }) async {
     print("========> Inside the add to cart function");
     final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final String? authToken = await GlobalVariables.getFirebaseAuthToken();
     try {
       // var bodyData = {"id": "${product.id}"};
       http.Response res = await http.post(
@@ -46,7 +47,7 @@ class ProductDetailServices {
         ),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
-          'x-auth-token': userProvider.user.token,
+          'Authorization': '$authToken',
         },
         body: jsonEncode({'id': product.id!}),
       );
@@ -55,12 +56,12 @@ class ProductDetailServices {
       //   Uri.parse("$uri/api/add-to-cart"),
       //   headers: <String, String>{
       //     'Content-Type': 'application/json; charset=UTF-8',
-      //     'x-auth-token': userProvider.user.token,
+      //     'Authorization': '$authToken',
       //   },
       //   body: jsonEncode({'id': product.id!}),
       // );
       print(
-          "\n\nuser token after http post request: ===> ${userProvider.user.token} ");
+          "\n\nuser token after http post request: ===> ${'$authToken'} ");
 
       // print("\nPost request sent successfully...");
 
@@ -105,7 +106,7 @@ class ProductDetailServices {
   //       Uri.parse("$uri/api/get-user-of-product"),
   //       headers: {
   //         'Content-Type': 'application/json; charset=UTF-8',
-  //         'x-auth-token': userProvider.user.token,
+  //         'Authorization': '$authToken',
   //       },
   //     );
 
@@ -135,13 +136,13 @@ class ProductDetailServices {
     required Product product,
     required double rating,
   }) async {
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final String? authToken = await GlobalVariables.getFirebaseAuthToken();
     try {
       http.Response res = await http.post(
         Uri.parse("$uri/api/rate-product"),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
-          'x-auth-token': userProvider.user.token,
+          'Authorization': '$authToken',
         },
         body: jsonEncode({
           'id': product.id!,

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
@@ -13,16 +14,20 @@ import 'package:ecommerce_major_project/providers/user_provider.dart';
 import 'package:ecommerce_major_project/constants/error_handling.dart';
 import 'package:ecommerce_major_project/constants/global_variables.dart';
 import 'package:ecommerce_major_project/features/auth/screens/auth_screen.dart';
+import 'package:ecommerce_major_project/constants/global_variables.dart';
+
+
+
 
 class AccountServices {
   getAllOrders({required BuildContext context}) async {
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final String? authToken = await GlobalVariables.getFirebaseAuthToken();
 
     http.Response res = await http.get(
       Uri.parse("$uri/api/order"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        'x-auth-token': userProvider.user.token
+        'Authorization': '$authToken'
       },
     );
 
@@ -42,6 +47,7 @@ class AccountServices {
   void addProfilePicture(
       {required BuildContext context, required File imagePicked}) async {
     final user = Provider.of<UserProvider>(context, listen: false).user;
+    final String? authToken = await GlobalVariables.getFirebaseAuthToken();
 
     try {
       final cloudinary = CloudinaryPublic('dyqymg02u', 'ktdtolon');
@@ -70,7 +76,7 @@ class AccountServices {
         Uri.parse('$uri/api/add-profile-picture'),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
-          'x-auth-token': user.token,
+          'Authorization': '$authToken',
         },
         body: jsonEncode({'imageUrl': imageUrl}),
         // body: product.toJson(),
@@ -101,13 +107,13 @@ class AccountServices {
 //
 //
   Future<List<Order>?> fetchMyOrders({required BuildContext context}) async {
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final String? authToken = await GlobalVariables.getFirebaseAuthToken();
     List<Order>? orderList = [];
     try {
       http.Response res =
           await http.get(Uri.parse('$uri/api/orders/me'), headers: {
         'Content-Type': 'application/json; charset=UTF-8',
-        'x-auth-token': userProvider.user.token,
+        'Authorization': '$authToken',
       });
 
       if (context.mounted) {
@@ -147,8 +153,9 @@ class AccountServices {
 
   void logOut(BuildContext context) async {
     try {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setString('x-auth-token', '');
+      // SharedPreferences prefs = await SharedPreferences.getInstance();
+      // await prefs.setString('Authorization', '');
+      FirebaseAuth.instance.signOut();
       if (context.mounted) {
         Navigator.pushNamedAndRemoveUntil(
             context, AuthScreen.routeName, (route) => false);

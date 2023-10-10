@@ -2,11 +2,12 @@
 // ignore_for_file: avoid_print
 
 import 'dart:convert';
+import 'package:ecommerce_major_project/providers/user_provider.dart';
+import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
-import '/providers/user_provider.dart';
+import 'package:provider/provider.dart';
+// import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '/common/widgets/bottom_bar.dart';
 import '/constants/global_variables.dart';
 import '/constants/error_handling.dart';
@@ -17,23 +18,21 @@ class AuthService {
   //signing up user
   void signUpUser({
     required BuildContext context,
-    required String email,
-    required String password,
-    required String name,
   }) async {
+    auth.User currentUser = auth.FirebaseAuth.instance.currentUser!;
     try {
       print("<============= signUpUser called ===============>");
       User user = User(
-        id: '',
-        name: name,
-        email: email,
-        password: password,
+        id: currentUser.uid,
+        name: currentUser.displayName ?? "",
+        email: currentUser.email ?? '',
         address: '',
         type: '',
         token: '',
         imageUrl: '',
-        //https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnWaCAfSN08VMtSjYBj0QKSfHk4-fjJZCOxgHLPuBSAw&s
+        uid: currentUser.uid,
         cart: [],
+        wishList: []
       );
 
       //USING uri as it works for both Android and iOS
@@ -49,9 +48,25 @@ class AuthService {
         httpErrorHandle(
             response: res,
             context: context,
-            onSuccess: () {
-              showSnackBar(
-                  context: context, text: "Account created! You may login now");
+            onSuccess: () async {
+              showSnackBar(context: context, text: "Account created success!");
+              //SharedPreferences prefs = await SharedPreferences.getInstance();
+              //dont use context across asynchronous gaps
+              //using provider change UI according to user
+              if (context.mounted) {
+                Provider.of<UserProvider>(context, listen: false)
+                    .setUser(res.body);
+              }
+
+              //remember to use jsonDecode
+              // await prefs.setString(
+              //     'Authorization', jsonDecode(res.body)['token']);
+
+              //dont use context across asynchronous gaps
+              if (context.mounted) {
+                Navigator.pushNamedAndRemoveUntil(
+                    context, BottomBar.routeName, (route) => false);
+              }
             });
       }
     } catch (e) {
@@ -62,50 +77,43 @@ class AuthService {
 
   //signing in user
   void signInUser({
-    required BuildContext context,
-    required String email,
-    required String password,
+    required BuildContext context
   }) async {
+    auth.User currentUser = auth.FirebaseAuth.instance.currentUser!;
     try {
-      http.Response res = await http.post(
-        Uri.parse('$uri/api/signin'),
-        body: jsonEncode({
-          'email': email,
-          'password': password,
-        }),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
+     print("<============= signInUser called ===============>");
+      User user = User(
+        id: currentUser.uid,
+        name: currentUser.displayName ?? "",
+        email: currentUser.email ?? '',
+        address: '',
+        type: '',
+        token: '',
+        imageUrl: '',
+        uid: currentUser.uid,
+        cart: [],
       );
 
       //dont use context across asynchronous gaps
       if (context.mounted) {
-        print("Response.body in signIn ${res.body}");
-        httpErrorHandle(
-          response: res,
-          context: context,
-          onSuccess: () async {
-            //using SharedPreferences to store the user token
-            SharedPreferences prefs = await SharedPreferences.getInstance();
+    //  SharedPreferences prefs = await SharedPreferences.getInstance();
 
             //dont use context across asynchronous gaps
             //using provider change UI according to user
             if (context.mounted) {
               Provider.of<UserProvider>(context, listen: false)
-                  .setUser(res.body);
+                  .setUser(user.toJson());
             }
 
             //remember to use jsonDecode
-            await prefs.setString(
-                'x-auth-token', jsonDecode(res.body)['token']);
+            // await prefs.setString(
+            //     'Authorization', jsonDecode(res.body)['token']);
 
             //dont use context across asynchronous gaps
             if (context.mounted) {
               Navigator.pushNamedAndRemoveUntil(
                   context, BottomBar.routeName, (route) => false);
             }
-          },
-        );
       }
     } catch (e) {
       print("Error occured in Signing in user : $e");
@@ -114,28 +122,32 @@ class AuthService {
   }
 
   //getting user data
-  void getUserData(
+  Future<void> getUserData(
     BuildContext context,
   ) async {
+    var userProvider = Provider.of<UserProvider>(context, listen: false);
     try {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      String? token = prefs.getString('x-auth-token');
+    userProvider.setLoading(true);
+    final String? authToken = await GlobalVariables.getFirebaseAuthToken();
+      //SharedPreferences prefs = await SharedPreferences.getInstance();
+      //String? token = prefs.getString('Authorization');
 
       //first time user will have token as null
       //change it to empty string ''
-      if (token == null) {
-        prefs.setString('x-auth-token', '');
-      }
+      // if (token == null) {
+      //   prefs.setString('Authorization', '');
+      // }
+      if(authToken!=null){
       var tokenRes = await http.post(
         Uri.parse('$uri/tokenIsValid'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
-          'x-auth-token': token!,
+          'Authorization': authToken!,
         },
       );
 
-      var response = jsonDecode(tokenRes.body);
 
+      var response = jsonDecode(tokenRes.body);
       if (response == true) {
         //get user data
         http.Response userRes =
@@ -146,11 +158,11 @@ class AuthService {
                 ),
                 headers: <String, String>{
               'Content-Type': 'application/json; charset=UTF-8',
-              'x-auth-token': token,
+              'Authorization': authToken,
             });
         // print(
         //     "==================> User Response Decoded :\n${jsonDecode(userRes.body)['_doc']} <==================");
-        var userProvider = Provider.of<UserProvider>(context, listen: false);
+        
 
         // userRes.body return this
         /*
@@ -206,11 +218,14 @@ class AuthService {
         // userProvider.setUser(jsonEncode(jsonDecode(userRes.body)['_doc']));
 
         userProvider.setUser(userRes.body);
+        userProvider.setLoading(false);
 
         // print(
         //     "==================> User Response :\n${userProvider.user.name} <==================");
       }
+      }
     } catch (e) {
+      userProvider.setLoading(false);
       print("Error occured in signing up user : $e");
       showSnackBar(context: context, text: e.toString());
     }
@@ -257,7 +272,7 @@ class AuthService {
 
 //       //remember to use jsonDecode
 //       await prefs.setString(
-//           'x-auth-token', jsonDecode(res.body)['token']);
+//           'Authorization', jsonDecode(res.body)['token']);
 
 //       //dont use context across asynchronous gaps
 //       if (context.mounted) {

@@ -16,14 +16,14 @@ class HomeServices {
 
   Future<List<Product>> fetchCategoryProducts(
       {required BuildContext context, required String category}) async {
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final String? authToken = await GlobalVariables.getFirebaseAuthToken();
     List<Product> productList = [];
-    String tokenValue = userProvider.user.token;
+    String tokenValue = '$authToken';
     try {
       http.Response res = await http
           .get(Uri.parse('$uri/api/products?category=$category'), headers: {
         'Content-Type': 'application/json; charset=UTF-8',
-        'x-auth-token': tokenValue,
+        'Authorization': tokenValue,
       });
 
       var data = jsonDecode(res.body);
@@ -68,7 +68,7 @@ class HomeServices {
 
   // fetch deal of the day
   Future<Product> fetchDealOfDay({required BuildContext context}) async {
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final String? authToken = await GlobalVariables.getFirebaseAuthToken();
     Product product = Product(
       name: '',
       description: '',
@@ -83,7 +83,7 @@ class HomeServices {
       http.Response res =
           await http.get(Uri.parse('$uri/api/deal-of-day'), headers: {
         'Content-Type': 'application/json; charset=UTF-8',
-        'x-auth-token': userProvider.user.token,
+        'Authorization': '$authToken',
       });
 
       if (context.mounted) {
@@ -115,13 +115,13 @@ class HomeServices {
 //
 
   Future<List<String>> fetchAllProductsNames(BuildContext context) async {
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final String? authToken = await GlobalVariables.getFirebaseAuthToken();
     List<String> productNames = [];
     try {
       http.Response res = await http
           .get(Uri.parse('$uri/api/get-all-products-names'), headers: {
         'Content-Type': 'application/json; charset=UTF-8',
-        'x-auth-token': userProvider.user.token,
+        'Authorization': '$authToken',
       });
 
       var data = jsonDecode(res.body);
@@ -162,12 +162,13 @@ class HomeServices {
     required String searchQuery,
   }) async {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final String? authToken = await GlobalVariables.getFirebaseAuthToken();
     try {
       http.Response res = await http.post(
         Uri.parse("$uri/api/search-history"),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
-          'x-auth-token': userProvider.user.token,
+          'Authorization': '$authToken',
         },
         body: jsonEncode({'searchQuery': searchQuery}),
       );
@@ -208,13 +209,13 @@ class HomeServices {
     required BuildContext context,
     required String deleteQuery,
   }) async {
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final String? authToken = await GlobalVariables.getFirebaseAuthToken();
     try {
       http.Response res = await http.post(
         Uri.parse("$uri/api/delete-search-history-item"),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
-          'x-auth-token': userProvider.user.token,
+          'Authorization': '$authToken',
         },
         body: jsonEncode({'deleteQuery': deleteQuery}),
       );
@@ -242,13 +243,13 @@ class HomeServices {
 //
 
   Future<List<String>> fetchSearchHistory(BuildContext context) async {
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final String? authToken = await GlobalVariables.getFirebaseAuthToken();
     List<String> searchHistoryList = [];
     try {
       http.Response res =
           await http.get(Uri.parse('$uri/api/get-search-history'), headers: {
         'Content-Type': 'application/json; charset=UTF-8',
-        'x-auth-token': userProvider.user.token,
+        'Authorization': '$authToken',
       });
 
       var data = jsonDecode(res.body);
@@ -291,12 +292,13 @@ class HomeServices {
   }) async {
     print("========> Inside the add to /api/add-to-wishList function");
     final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final String? authToken = await GlobalVariables.getFirebaseAuthToken();
     try {
       http.Response res = await http.post(
         Uri.parse('$uri/api/add-to-wishList'),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
-          'x-auth-token': userProvider.user.token,
+          'Authorization': '$authToken',
         },
         body: jsonEncode({'id': product.id}),
       );
@@ -334,7 +336,7 @@ class HomeServices {
 //     http.Response res =
 //         await http.get(Uri.parse('$uri/api/get-wishList'), headers: {
 //       'Content-Type': 'application/json; charset=UTF-8',
-//       'x-auth-token': userProvider.user.token,
+//       'Authorization': '$authToken',
 //     });
 
 //     var data = jsonDecode(res.body);
@@ -373,7 +375,7 @@ class HomeServices {
 //           Uri.parse("$uri/api/products?category=$category"),
 //           headers: <String, String>{
 //             'Content-Type': 'application/json; charset=UTF-8',
-//             'x-auth-token': userProvider.user.token,
+//             'Authorization': '$authToken',
 //           });
 
 //       // print("res.body : ${res.body}");
