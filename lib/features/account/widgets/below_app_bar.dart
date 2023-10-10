@@ -1,9 +1,8 @@
 import 'dart:io';
-
+import 'package:ecommerce_major_project/features/profile/screens/profileScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
-
 import 'package:ecommerce_major_project/main.dart';
 import 'package:ecommerce_major_project/providers/user_provider.dart';
 import 'package:ecommerce_major_project/features/account/services/account_services.dart';
@@ -30,64 +29,72 @@ class _BelowAppBarState extends State<BelowAppBar> {
         bottom: mq.width * .025,
       ),
       // decoration: const BoxDecoration(gradient: GlobalVariables.appBarGradient),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          RichText(
-            text: TextSpan(
-                text: "Hello, ",
-                style: const TextStyle(fontSize: 22, color: Colors.black),
-                children: [
-                  TextSpan(
-                    text: user.name,
-                    style: const TextStyle(
-                      fontSize: 22,
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
+      child: InkWell(
+
+        onTap: (){
+          Navigator.of(context).push(MaterialPageRoute(builder: (context){
+            return const ProfileScreen();
+          }));
+        },
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            RichText(
+              text: TextSpan(
+                  text: "Hello, ",
+                  style: const TextStyle(fontSize: 22, color: Colors.black),
+                  children: [
+                    TextSpan(
+                      text: user.name,
+                      style: const TextStyle(
+                        fontSize: 22,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ]),
+            ),
+            Stack(
+              alignment: AlignmentDirectional.bottomEnd,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(mq.height * 0.1),
+                  //display profile picture
+                  child: CircleAvatar(
+                    radius: 28,
+                    backgroundImage: user.imageUrl == null || user.imageUrl == ""
+                        ? const NetworkImage(
+                            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnWaCAfSN08VMtSjYBj0QKSfHk4-fjJZCOxgHLPuBSAw&s")
+                        : NetworkImage(user.imageUrl!),
+                  ),
+                ),
+                // CircleAvatar(
+                //   backgroundColor: Colors.deepPurpleAccent,
+                //   radius: 25,
+                //   child: user.imageUrl == null || user.imageUrl == ""
+                //       ? Image.network(
+                //           "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnWaCAfSN08VMtSjYBj0QKSfHk4-fjJZCOxgHLPuBSAw&s")
+                //       : Image.network(user.imageUrl!),
+                // ),
+                InkWell(
+                  onTap: () {
+                    _showBottomSheet();
+                  },
+                  child: Container(
+                    decoration: const BoxDecoration(
+                        color: Colors.black, shape: BoxShape.circle),
+                    padding: EdgeInsets.all(mq.height * .003),
+                    child: const Icon(
+                      Icons.camera_alt_rounded,
+                      size: 18,
+                      color: Colors.white,
                     ),
                   ),
-                ]),
-          ),
-          Stack(
-            alignment: AlignmentDirectional.bottomEnd,
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(mq.height * 0.1),
-                //display profile picture
-                child: CircleAvatar(
-                  radius: 28,
-                  backgroundImage: user.imageUrl == null || user.imageUrl == ""
-                      ? const NetworkImage(
-                          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnWaCAfSN08VMtSjYBj0QKSfHk4-fjJZCOxgHLPuBSAw&s")
-                      : NetworkImage(user.imageUrl!),
                 ),
-              ),
-              // CircleAvatar(
-              //   backgroundColor: Colors.deepPurpleAccent,
-              //   radius: 25,
-              //   child: user.imageUrl == null || user.imageUrl == ""
-              //       ? Image.network(
-              //           "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnWaCAfSN08VMtSjYBj0QKSfHk4-fjJZCOxgHLPuBSAw&s")
-              //       : Image.network(user.imageUrl!),
-              // ),
-              InkWell(
-                onTap: () {
-                  _showBottomSheet();
-                },
-                child: Container(
-                  decoration: const BoxDecoration(
-                      color: Colors.black, shape: BoxShape.circle),
-                  padding: EdgeInsets.all(mq.height * .003),
-                  child: const Icon(
-                    Icons.camera_alt_rounded,
-                    size: 18,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ],
-          )
-        ],
+              ],
+            )
+          ],
+        ),
       ),
     );
   }

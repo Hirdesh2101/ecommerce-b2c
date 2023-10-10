@@ -142,10 +142,12 @@ class _AddressScreenState extends State<AddressScreen> {
     //     pincodeController.text.isNotEmpty ||
     //     cityController.text.isNotEmpty;
 
-    if (addnewAdress) {
+    if (addnewAdress || addressFromProvider == "") {
       if (_addressFormKey.currentState!.validate()) {
         addressToBeUsed =
             "${flatBuildingController.text}, ${areaController.text}, ${cityController.text} - ${pincodeController.text}";
+        addressServices.saveUserAddress(
+            context: context, address: addressToBeUsed);
         setState(() {
           goToPayment = true;
         });
@@ -161,14 +163,13 @@ class _AddressScreenState extends State<AddressScreen> {
 
     print("Address to be used:\n==> $addressToBeUsed");
 
-    if (Provider.of<UserProvider>(context, listen: false)
-        .user
-        .address
-        .isEmpty) {
-      addressServices.saveUserAddress(
-          context: context, address: addressToBeUsed);
-      // print( s of user in provider ====> : ${Provider.of<UserProvider>(context, listen: false).user.address}");
-    }
+    // if (Provider.of<UserProvider>(context, listen: false)
+    //     .user
+    //     .address
+    //     .isEmpty && addressToBeUsed!='') {
+
+    //   // print( s of user in provider ====> : ${Provider.of<UserProvider>(context, listen: false).user.address}");
+    // }
   }
 
   @override
@@ -278,6 +279,15 @@ class _AddressScreenState extends State<AddressScreen> {
                                   // return CartProdcut
                                   return DeliveryProduct(index: index);
                                 }),
+                          ),
+                          Container(
+                            padding: EdgeInsets.only(left: mq.width * .025),
+                            child: Text(
+                              "Total Payable Amount: ₹ ${double.parse(widget.totalAmount).toStringAsFixed(2)}",
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 17),
+                              maxLines: 2,
+                            ),
                           ),
                           SizedBox(height: mq.height * .02),
                           CustomButton(
@@ -421,87 +431,73 @@ class _AddressScreenState extends State<AddressScreen> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            const Text("Pick an address",
-                                style: GlobalVariables.appBarTextStyle),
-                            SizedBox(height: mq.height * .015),
-                            address.isNotEmpty
-                                ? addnewAdress
-                                    ? InkWell(
-                                        onTap: () {
-                                          setState(() {
-                                            addnewAdress = !addnewAdress;
-                                          });
-                                        },
-                                        child: Container(
-                                          width: double.infinity,
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                            border: Border.all(
-                                              width: 2,
-                                              color: Color.fromARGB(
-                                                  255, 156, 152, 163),
-                                            ),
-                                          ),
-                                          child: Padding(
-                                            padding:
-                                                EdgeInsets.all(mq.width * .025),
-                                            child: Text(
-                                              "Delivery to : $address",
-                                              style:
-                                                  const TextStyle(fontSize: 13),
-                                            ),
+                            if (address.isNotEmpty)
+                              const Text("Pick an address",
+                                  style: GlobalVariables.appBarTextStyle),
+                            if (address.isNotEmpty)
+                              SizedBox(height: mq.height * .015),
+                            if (address.isNotEmpty)
+                              addnewAdress
+                                  ? InkWell(
+                                      onTap: () {
+                                        setState(() {
+                                          addnewAdress = !addnewAdress;
+                                        });
+                                      },
+                                      child: Container(
+                                        width: double.infinity,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          border: Border.all(
+                                            width: 2,
+                                            color: Color.fromARGB(
+                                                255, 156, 152, 163),
                                           ),
                                         ),
-                                      )
-                                    : badges.Badge(
-                                        // displaying no of items in cart
-                                        badgeContent: const Icon(
-                                          Icons.check_circle,
-                                          color:
-                                              Color.fromARGB(255, 93, 36, 179),
-                                        ),
-                                        badgeStyle: const badges.BadgeStyle(
-                                          badgeColor: Color.fromARGB(
-                                              255, 255, 255, 255),
-                                        ),
-                                        child: Container(
-                                          width: double.infinity,
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                            border: Border.all(
-                                              width: 2,
-                                              color: const Color.fromARGB(
-                                                  255, 93, 36, 179),
-                                            ),
-                                          ),
-                                          child: Padding(
-                                            padding:
-                                                EdgeInsets.all(mq.width * .025),
-                                            child: Text(
-                                              "Delivery to : $address",
-                                              style:
-                                                  const TextStyle(fontSize: 13),
-                                            ),
+                                        child: Padding(
+                                          padding:
+                                              EdgeInsets.all(mq.width * .025),
+                                          child: Text(
+                                            "Delivery to : $address",
+                                            style:
+                                                const TextStyle(fontSize: 13),
                                           ),
                                         ),
-                                      )
-                                : Container(
-                                    width: double.infinity,
-                                    decoration: BoxDecoration(
-                                      border: Border.all(
-                                        color: Colors.black12,
+                                      ),
+                                    )
+                                  : badges.Badge(
+                                      // displaying no of items in cart
+                                      badgeContent: const Icon(
+                                        Icons.check_circle,
+                                        color: Color.fromARGB(255, 93, 36, 179),
+                                      ),
+                                      badgeStyle: const badges.BadgeStyle(
+                                        badgeColor:
+                                            Color.fromARGB(255, 255, 255, 255),
+                                      ),
+                                      child: Container(
+                                        width: double.infinity,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          border: Border.all(
+                                            width: 2,
+                                            color: const Color.fromARGB(
+                                                255, 93, 36, 179),
+                                          ),
+                                        ),
+                                        child: Padding(
+                                          padding:
+                                              EdgeInsets.all(mq.width * .025),
+                                          child: Text(
+                                            "Delivery to : $address",
+                                            style:
+                                                const TextStyle(fontSize: 13),
+                                          ),
+                                        ),
                                       ),
                                     ),
-                                    child: Padding(
-                                      padding: EdgeInsets.all(mq.width * .025),
-                                      child: const Text(
-                                        "Delivery to : ",
-                                        style: TextStyle(fontSize: 12),
-                                      ),
-                                    ),
-                                  ),
                             SizedBox(height: mq.height * .025),
                             address.isNotEmpty
                                 ? const Text(
@@ -510,7 +506,7 @@ class _AddressScreenState extends State<AddressScreen> {
                                         fontWeight: FontWeight.bold,
                                         fontSize: 13),
                                   )
-                                : const Text("Please add an address first",
+                                : const Text("ADD A NEW ADDRESS",
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 13)),
@@ -557,9 +553,11 @@ class _AddressScreenState extends State<AddressScreen> {
                                     // ),
 
                                     CustomButton(
-                                      text: addnewAdress
-                                          ? "Deliver to new address"
-                                          : "Deliver to selected address",
+                                      text: address.isNotEmpty
+                                          ? addnewAdress
+                                              ? "Deliver to new address"
+                                              : "Deliver to selected address"
+                                          : "Deliver to new address",
                                       onTap: () {
                                         deliverToThisAddress(address);
                                         // setState(() {

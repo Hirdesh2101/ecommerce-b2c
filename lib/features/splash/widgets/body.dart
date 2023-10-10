@@ -7,6 +7,7 @@ import 'package:ecommerce_major_project/main.dart';
 import 'package:ecommerce_major_project/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // This is the best practice
 
@@ -43,7 +44,7 @@ class _BodyState extends State<Body> {
         child: Column(
           children: <Widget>[
             Expanded(
-              flex: 3,
+              flex: 5,
               child: PageView.builder(
                 onPageChanged: (value) {
                   setState(() {
@@ -80,7 +81,7 @@ class _BodyState extends State<Body> {
                         curve: Curves.easeInOutBack,
                         child: CustomButton(
                           text: "Continue",
-                          onTap: () {
+                          onTap: () async {
                             setState(() {
                               opacity = 0.5;
                             });
@@ -99,6 +100,9 @@ class _BodyState extends State<Body> {
                                                 ? const BottomBar()
                                                 : const AdminScreen()
                                             : const AuthScreen()));
+                            SharedPreferences prefs =
+                                await SharedPreferences.getInstance();
+                            prefs.setBool('Onboarding', true);
                           },
                         ),
                       ),

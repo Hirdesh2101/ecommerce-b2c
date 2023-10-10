@@ -130,12 +130,12 @@ Provider
 
 */
 
+import 'package:ecommerce_major_project/features/splash/loading_splash.dart';
+import 'package:ecommerce_major_project/features/splash/splash_screen.dart';
 import 'package:ecommerce_major_project/firebase_options.dart';
-import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -149,6 +149,7 @@ import 'package:ecommerce_major_project/features/auth/services/auth_service.dart
 import 'package:ecommerce_major_project/features/home/providers/search_provider.dart';
 import 'package:ecommerce_major_project/features/home/providers/filter_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -163,26 +164,32 @@ void main() async {
         iOSPreferPlist: true),
     PhoneAuthProvider(),
   ]);
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  bool? onboarding = prefs.getBool('Onboarding');
 
-  runApp(MultiProvider(providers: [
-    ChangeNotifierProvider(
-      create: (context) => UserProvider(),
-    ),
-    ChangeNotifierProvider(
-      create: (context) => SearchProvider(),
-    ),
-    ChangeNotifierProvider(
-      create: (context) => FilterProvider(),
-    ),
-  ], child: const MyApp()));
+  runApp(MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => UserProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => SearchProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => FilterProvider(),
+        ),
+      ],
+      child: MyApp(
+        onboarding: onboarding,
+      )));
 }
 
 late Size mq;
 late TextTheme myTextTheme;
 
 class MyApp extends StatefulWidget {
-  const MyApp({super.key});
-
+  const MyApp({super.key, required this.onboarding});
+  final bool? onboarding;
   @override
   State<MyApp> createState() => _MyAppState();
 }
@@ -217,24 +224,15 @@ class _MyAppState extends State<MyApp> {
       onGenerateRoute: (settings) => generateRoute(settings),
       //
       //
-      home: Provider.of<UserProvider>(context).isLoading
-          ? Center(
-              child: Container(
-              color: Colors.amberAccent,
-              alignment: Alignment.center,
-              height: 400,
-              width: 400,
-              child: const Text(
-                // "User type is : ${Provider.of<UserProvider>(context).user.toJson()}",
-                "Splash Screen...",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
-              ),
-            ))
-          : Provider.of<UserProvider>(context).user.token.isNotEmpty
-              ? Provider.of<UserProvider>(context).user.type == 'user'
-                  ? const BottomBar()
-                  : const AdminScreen()
-              : const AuthScreen(),
+      home: widget.onboarding == null || widget.onboarding == false
+          ? const SplashScreen()
+          : Provider.of<UserProvider>(context).isLoading
+              ?const LoadingSplashScreen()
+              : Provider.of<UserProvider>(context).user.token.isNotEmpty
+                  ? Provider.of<UserProvider>(context).user.type == 'user'
+                      ? const BottomBar()
+                      : const AdminScreen()
+                  : const AuthScreen(),
     );
   }
 }

@@ -28,9 +28,7 @@ class _TopButtonsState extends State<TopButtons> {
             AccountButton(
                 text: "Your Orders",
                 onTap: () {
-                  widget.orders == null || widget.orders!.isEmpty
-                      ? null
-                      : Navigator.pushNamed(context, AllOrdersScreen.routeName,
+                  Navigator.pushNamed(context, AllOrdersScreen.routeName,
                           arguments: widget.orders);
                 }),
             AccountButton(

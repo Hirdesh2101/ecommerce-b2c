@@ -31,6 +31,7 @@ class _DeliveryProductState extends State<DeliveryProduct> {
   Widget build(BuildContext context) {
     // fetching the particular product
     final productCart = context.watch<UserProvider>().user.cart[widget.index];
+    final productQuantity = context.watch<UserProvider>().user.cart[widget.index]['quantity'];
     final product = Product.fromJson(productCart['product']);
     // final quantity = productCart['quantity'];
 
@@ -76,6 +77,14 @@ class _DeliveryProductState extends State<DeliveryProduct> {
                 product.price < 500
                     ? "Shipping charges might apply"
                     : "Eligible for free shipping",
+                style: const TextStyle(fontSize: 13),
+              ),
+            ),
+            Container(
+              width: mq.width * .57,
+              padding: EdgeInsets.only(left: mq.width * .025),
+              child: Text(
+                 "Quantity x$productQuantity",
                 style: const TextStyle(fontSize: 13),
               ),
             ),

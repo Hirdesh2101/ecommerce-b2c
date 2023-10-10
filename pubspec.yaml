@@ -173,6 +173,9 @@ flutter:
               - asset: assets/fonts/Poppins/Poppins-SemiBold.ttf
               - asset: assets/fonts/Poppins/Poppins-Medium.ttf
               - asset: assets/fonts/Poppins/Poppins-Light.ttf
+        - family: SocialIcons
+          fonts:
+              - asset: packages/firebase_ui_auth/fonts/SocialIcons.ttf
           #   - asset: fonts/Schyler-Italic.ttf
     #   - family: Trajan Pro
     #     fonts:

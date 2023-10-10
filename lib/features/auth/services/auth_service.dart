@@ -20,22 +20,22 @@ class AuthService {
     required BuildContext context,
   }) async {
     auth.User currentUser = auth.FirebaseAuth.instance.currentUser!;
+    var userProvider = Provider.of<UserProvider>(context, listen: false);
     try {
       print("<============= signUpUser called ===============>");
       User user = User(
-        id: currentUser.uid,
-        name: currentUser.displayName ?? "",
-        email: currentUser.email ?? '',
-        address: '',
-        type: '',
-        token: '',
-        imageUrl: '',
-        uid: currentUser.uid,
-        cart: [],
-        wishList: []
-      );
+          id: '',
+          name: currentUser.displayName ?? "",
+          email: currentUser.email ?? '',
+          phoneNumber: currentUser.phoneNumber ?? '',
+          address: '',
+          type: '',
+          token: '',
+          imageUrl: '',
+          uid: currentUser.uid,
+          cart: [],
+          wishList: []);
 
-      //USING uri as it works for both Android and iOS
       http.Response res = await http.post(
         Uri.parse('$uri/api/signup'),
         body: user.toJson(),
@@ -51,20 +51,8 @@ class AuthService {
             response: res,
             context: context,
             onSuccess: () async {
-              showSnackBar(context: context, text: "Account created success!");
-              //SharedPreferences prefs = await SharedPreferences.getInstance();
-              //dont use context across asynchronous gaps
-              //using provider change UI according to user
-              if (context.mounted) {
-                Provider.of<UserProvider>(context, listen: false)
-                    .setUser(res.body);
-              }
-
-              //remember to use jsonDecode
-              // await prefs.setString(
-              //     'Authorization', jsonDecode(res.body)['token']);
-
-              //dont use context across asynchronous gaps
+              //showSnackBar(context: context, text: "Account created success!");
+              userProvider.setUser(res.body);
               if (context.mounted) {
                 Navigator.pushNamedAndRemoveUntil(
                     context, BottomBar.routeName, (route) => false);
@@ -78,44 +66,26 @@ class AuthService {
   }
 
   //signing in user
-  void signInUser({
-    required BuildContext context
-  }) async {
-    auth.User currentUser = auth.FirebaseAuth.instance.currentUser!;
+  void signInUser({required BuildContext context}) async {
+    var userProvider = Provider.of<UserProvider>(context, listen: false);
+    final String? authToken = await GlobalVariables.getFirebaseAuthToken();
     try {
-     print("<============= signInUser called ===============>");
-      User user = User(
-        id: currentUser.uid,
-        name: currentUser.displayName ?? "",
-        email: currentUser.email ?? '',
-        address: '',
-        type: '',
-        token: '',
-        imageUrl: '',
-        uid: currentUser.uid,
-        cart: [],
-      );
+      print("<============= signInUser called ===============>");
 
-      //dont use context across asynchronous gaps
       if (context.mounted) {
-    //  SharedPreferences prefs = await SharedPreferences.getInstance();
-
-            //dont use context across asynchronous gaps
-            //using provider change UI according to user
-            if (context.mounted) {
-              Provider.of<UserProvider>(context, listen: false)
-                  .setUser(user.toJson());
-            }
-
-            //remember to use jsonDecode
-            // await prefs.setString(
-            //     'Authorization', jsonDecode(res.body)['token']);
-
-            //dont use context across asynchronous gaps
-            if (context.mounted) {
-              Navigator.pushNamedAndRemoveUntil(
-                  context, BottomBar.routeName, (route) => false);
-            }
+        http.Response userRes = await http.get(
+            Uri.parse(
+              '$uri/',
+            ),
+            headers: <String, String>{
+              'Content-Type': 'application/json; charset=UTF-8',
+              'Authorization': authToken!,
+            });
+        userProvider.setUser(userRes.body);
+        if (context.mounted) {
+          Navigator.pushNamedAndRemoveUntil(
+              context, BottomBar.routeName, (route) => false);
+        }
       }
     } catch (e) {
       print("Error occured in Signing in user : $e");
@@ -129,45 +99,34 @@ class AuthService {
   ) async {
     var userProvider = Provider.of<UserProvider>(context, listen: false);
     try {
-    userProvider.setLoading(true);
-    final String? authToken = await GlobalVariables.getFirebaseAuthToken();
-      //SharedPreferences prefs = await SharedPreferences.getInstance();
-      //String? token = prefs.getString('Authorization');
+      final String? authToken = await GlobalVariables.getFirebaseAuthToken();
+      if (authToken != null) {
+        var tokenRes = await http.post(
+          Uri.parse('$uri/tokenIsValid'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+            'Authorization': authToken!,
+          },
+        );
 
-      //first time user will have token as null
-      //change it to empty string ''
-      // if (token == null) {
-      //   prefs.setString('Authorization', '');
-      // }
-      if(authToken!=null){
-      var tokenRes = await http.post(
-        Uri.parse('$uri/tokenIsValid'),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-          'Authorization': authToken!,
-        },
-      );
+        var response = jsonDecode(tokenRes.body);
+        if (response == true) {
+          //get user data
+          http.Response userRes =
+              //"$uri/" important to type a slash at the end
+              await http.get(
+                  Uri.parse(
+                    '$uri/',
+                  ),
+                  headers: <String, String>{
+                'Content-Type': 'application/json; charset=UTF-8',
+                'Authorization': authToken,
+              });
+          // print(
+          //     "==================> User Response Decoded :\n${jsonDecode(userRes.body)['_doc']} <==================");
 
-
-      var response = jsonDecode(tokenRes.body);
-      if (response == true) {
-        //get user data
-        http.Response userRes =
-            //"$uri/" important to type a slash at the end
-            await http.get(
-                Uri.parse(
-                  '$uri/',
-                ),
-                headers: <String, String>{
-              'Content-Type': 'application/json; charset=UTF-8',
-              'Authorization': authToken,
-            });
-        // print(
-        //     "==================> User Response Decoded :\n${jsonDecode(userRes.body)['_doc']} <==================");
-        
-
-        // userRes.body return this
-        /*
+          // userRes.body return this
+          /*
                 {
                   "$__": {
                     "activePaths": {
@@ -213,18 +172,22 @@ class AuthService {
                   "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NTBkYWI3MWE5MmJhMWQ0NjY0ZmE2ZiIsImlhdCI6MTY4MzAyMDQ3NX0.Au7GX5n9cnsH2qOkiBYUa5GB30XThWt0e_fKFSVeGrQ"
                 }
           */
-        // hence it is important to decode the body and set "_doc" as user
-        // but token not working with this method
-        // authorization not possible somehow
-        // its about the auth middleware
-        // userProvider.setUser(jsonEncode(jsonDecode(userRes.body)['_doc']));
+          // hence it is important to decode the body and set "_doc" as user
+          // but token not working with this method
+          // authorization not possible somehow
+          // its about the auth middleware
+          // userProvider.setUser(jsonEncode(jsonDecode(userRes.body)['_doc']));
 
-        userProvider.setUser(userRes.body);
+          userProvider.setUser(userRes.body);
+          userProvider.setLoading(false);
+
+          // print(
+          //     "==================> User Response :\n${userProvider.user.name} <==================");
+        } else {
+          userProvider.setLoading(false);
+        }
+      } else {
         userProvider.setLoading(false);
-
-        // print(
-        //     "==================> User Response :\n${userProvider.user.name} <==================");
-      }
       }
     } catch (e) {
       userProvider.setLoading(false);

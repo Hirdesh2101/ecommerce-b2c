@@ -1,12 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
-import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart';
 import 'package:flutter/material.dart';
 
 import 'package:ecommerce_major_project/main.dart';
 import 'package:ecommerce_major_project/constants/utils.dart';
 import 'package:ecommerce_major_project/constants/global_variables.dart';
-import 'package:ecommerce_major_project/common/widgets/custom_textfield.dart';
 import 'package:ecommerce_major_project/features/auth/services/auth_service.dart';
 
 //enum signin, signup
@@ -110,9 +108,17 @@ class _AuthScreenState extends State<AuthScreen> {
                                 (context, state) {
                               signUpUser();
                             }),
-                            AuthStateChangeAction<AuthFailed>(
-                                (context, state) {
-                               showSnackBar(context: context, text: state.exception.toString());
+                            // SMSCodeRequestedAction(
+                            //     (context, action, flowKey, phoneNumber) {
+                            //   print(action);
+                            //   showSnackBar(
+                            //       context: context,
+                            //       text: "Code Sent to $phoneNumber");
+                            // }),
+                            AuthStateChangeAction<AuthFailed>((context, state) {
+                              showSnackBar(
+                                  context: context,
+                                  text: state.exception.toString());
                             }),
                           ],
                           child: LoginView(

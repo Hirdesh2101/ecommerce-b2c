@@ -6,6 +6,7 @@ class User {
   final String id;
   final String name;
   final String email;
+  final String phoneNumber;
   final String address;
   final String type;
   final String token;
@@ -20,6 +21,7 @@ class User {
     required this.id,
     required this.name,
     required this.email,
+    required this.phoneNumber,
     required this.address,
     required this.type,
     required this.token,
@@ -36,6 +38,7 @@ class User {
       'id': id,
       'name': name,
       'email': email,
+      'phoneNumber': phoneNumber,
       'address': address,
       'type': type,
       'token': token,
@@ -54,6 +57,7 @@ class User {
       id: map['_id'] ?? '',
       name: map['name'] ?? '',
       email: map['email'] ?? '',
+      phoneNumber: map['phoneNumber']??'',
       address: map['address'] ?? '',
       type: map['type'] ?? '',
       token: map['token'] ?? '',
@@ -98,6 +102,7 @@ class User {
     String? id,
     String? name,
     String? email,
+    String? phoneNumber,
     String? address,
     String? type,
     String? token,
@@ -112,6 +117,7 @@ class User {
       id: id ?? this.id,
       name: name ?? this.name,
       email: email ?? this.email,
+      phoneNumber: phoneNumber ?? this.phoneNumber,
       address: address ?? this.address,
       type: type ?? this.type,
       token: token ?? this.token,

@@ -44,27 +44,28 @@ class _OrdersState extends State<Orders> {
               child: const Text("Recent Orders",
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
             ),
-            InkWell(
-              onTap: widget.orders == null || widget.orders!.isEmpty
-                  ? null
-                  : () {
-                      Navigator.pushNamed(context, AllOrdersScreen.routeName,
-                          arguments: widget.orders);
-                      // Navigator.of(context).push(MaterialPageRoute(
-                      //     builder: (context) =>
-                      //         AllOrdersScreen(allOrders: orders)));
-                    },
-              child: Container(
-                padding: EdgeInsets.only(right: mq.width * 0.04),
-                child: Text(
-                  "See all",
-                  style: TextStyle(
-                      // fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                      color: GlobalVariables.selectedNavBarColor),
+            if (widget.orders != null && widget.orders!.isNotEmpty)
+              InkWell(
+                onTap: widget.orders == null || widget.orders!.isEmpty
+                    ? null
+                    : () {
+                        Navigator.pushNamed(context, AllOrdersScreen.routeName,
+                            arguments: widget.orders);
+                        // Navigator.of(context).push(MaterialPageRoute(
+                        //     builder: (context) =>
+                        //         AllOrdersScreen(allOrders: orders)));
+                      },
+                child: Container(
+                  padding: EdgeInsets.only(right: mq.width * 0.04),
+                  child: Text(
+                    "See all",
+                    style: TextStyle(
+                        // fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                        color: GlobalVariables.selectedNavBarColor),
+                  ),
                 ),
               ),
-            ),
           ],
         ),
         widget.showLoader

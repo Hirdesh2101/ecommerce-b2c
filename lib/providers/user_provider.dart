@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import '/models/user.dart';
 
 class UserProvider extends ChangeNotifier {
-  bool _isLoading = false;
+  bool _isLoading = true;
   User _user = User(
     id: '',
     name: '',
     email: '',
+    phoneNumber: '',
     address: '',
     type: '',
     token: '',
