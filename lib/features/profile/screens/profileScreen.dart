@@ -1,3 +1,4 @@
+import 'package:ecommerce_major_project/features/account/services/account_services.dart';
 import 'package:ecommerce_major_project/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:ecommerce_major_project/constants/global_variables.dart';
@@ -60,14 +61,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ],
           ),
         ),
-        showMFATile: false,
         providers: ui.FirebaseUIAuth.providersFor(
           auth.FirebaseAuth.instance.app,
         ),
         actions: [
-          // SignedOutAction((context) {
-          //   Navigator.pushReplacementNamed(context, '/sign-in');
-          // }),
+          ui.SignedOutAction((context) {
+            AccountServices().logOut(context);
+          }),
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
