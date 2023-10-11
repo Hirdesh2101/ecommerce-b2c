@@ -4,6 +4,7 @@ import 'package:ecommerce_major_project/features/cart/screens/cart_screen.dart';
 import 'package:ecommerce_major_project/features/home/screens/wish_list_screen.dart';
 import 'package:ecommerce_major_project/features/home/services/home_services.dart';
 import 'package:flutter/material.dart';
+import 'package:iconly/iconly.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
@@ -33,6 +34,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   num myRating = 0.0;
   double avgRating = 0.0;
   int currentIndex = 0;
+
+  String pincode = '395001';
 
   @override
   void initState() {
@@ -283,24 +286,164 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   ),
                 ],
               ),
-
-              // TextButton(
-              //     onPressed: () async {
-              // ProductDetailServices productDetailServices =
-              //     ProductDetailServices();
-
-              // List<User>? userList = [];
-
-              // userList = await productDetailServices.getUserImage(
-              //     context: context, product: widget.product);
-
-              // print("\n\nUserlist is :  ${userList}");
-              // },
-              // child: const Text("Get user image from rating")),
-
               SizedBox(height: mq.width * .03),
+              const Divider(thickness: 2),
+              SizedBox(height: mq.width * .03),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Flexible(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Deliver to: $pincode',
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        const Text(
+                          'N-301, Cosmos Appartment, Magarpatta City, Pune',
+                          style: TextStyle(
+                            fontSize: 12,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      //TODO: To add change address option
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 5),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey),
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: Text(
+                        'Change',
+                        style: TextStyle(color: Colors.orange.shade800),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+              SizedBox(height: mq.width * .02),
+              Row(
+                children: [
+                  const Icon(
+                    Icons.delivery_dining_outlined,
+                    color: Colors.grey,
+                    size: 28,
+                  ),
+                  SizedBox(width: mq.width * .03),
+                  Flexible(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '${pincode == '395001' ? 'Free Delivery' : '₹120 '} | Delivery by 22 Oct, Sunday',
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 14,
+                              color: (pincode == '395001'
+                                  ? Colors.green
+                                  : Colors.black)),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: mq.width * .03),
+              const Divider(thickness: 1),
+              SizedBox(height: mq.width * .01),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  iconAndText(IconlyBold.swap, '7 Days Return',
+                      '7 days return of product in case of Defective item, physical damage, wrong item or missing item.',
+                      color: Colors.red),
+                  iconAndText(IconlyBold.shield_done, '1 Year Warranty',
+                      "1 Year warranty on the item in case of internal manufacturing issue.",
+                      color: Colors.green),
+                  iconAndText(IconlyBold.star, 'Popular',
+                      'Popular item in this category.',
+                      color: Colors.amber),
+                ],
+              ),
+              SizedBox(height: mq.width * .06),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget iconAndText(IconData iconData, String title, String description,
+      {Color color = Colors.black}) {
+    return Flexible(
+      child: InkWell(
+        onTap: () {
+          showModalBottomSheet(
+              context: context,
+              builder: (bottomSheetContext) {
+                return Container(
+                  padding: const EdgeInsets.all(10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Icon(
+                            iconData,
+                            color: color,
+                          ),
+                          Text(
+                            title,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                            ),
+                          ),
+                          InkWell(
+                            onTap: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: const Icon(Icons.close_rounded, size: 28),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: mq.width * .01),
+                      const Divider(thickness: 2),
+                      SizedBox(height: mq.width * .03),
+                      Text(
+                        description,
+                        style: const TextStyle(
+                          fontSize: 14,
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              });
+        },
+        child: Column(
+          children: [
+            Icon(iconData, size: 30, color: color),
+            SizedBox(height: mq.width * .01),
+            Text(
+              title,
+              style: TextStyle(
+                  fontSize: 10,
+                  overflow: TextOverflow.ellipsis,
+                  color: color,
+                  fontWeight: FontWeight.bold),
+            ),
+          ],
         ),
       ),
     );
