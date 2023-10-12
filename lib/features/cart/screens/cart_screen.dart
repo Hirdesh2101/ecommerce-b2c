@@ -47,7 +47,7 @@ class _CartScreenState extends State<CartScreen> {
           context: context,
           wantBackNavigation: false,
           title: "Your Cart",
-          onClickSearchNavigateTo: MySearchScreen()),
+          onClickSearchNavigateTo: const MySearchScreen()),
       body: SingleChildScrollView(
         child: Column(
           children: [

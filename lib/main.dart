@@ -227,7 +227,7 @@ class _MyAppState extends State<MyApp> {
       home: widget.onboarding == null || widget.onboarding == false
           ? const SplashScreen()
           : Provider.of<UserProvider>(context).isLoading
-              ?const LoadingSplashScreen()
+              ? const LoadingSplashScreen()
               : Provider.of<UserProvider>(context).user.token.isNotEmpty
                   ? Provider.of<UserProvider>(context).user.type == 'user'
                       ? const BottomBar()

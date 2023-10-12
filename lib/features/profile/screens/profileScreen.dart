@@ -27,7 +27,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       body: ui.ProfileScreen(
         avatar: Center(
           child: Stack(
-              alignment: AlignmentDirectional.bottomEnd,
+            alignment: AlignmentDirectional.bottomEnd,
             children: [
               CircleAvatar(
                   radius: 75,
@@ -43,21 +43,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       : ClipOval(
                           child: Image.network(user.imageUrl!,
                               width: 150, height: 150, fit: BoxFit.cover))),
-                              InkWell(
-                    onTap: () {
-                     // _showBottomSheet();
-                    },
-                    child: Container(
-                      decoration: const BoxDecoration(
-                          color: Colors.black, shape: BoxShape.circle),
-                      padding: EdgeInsets.all(mq.height * .003),
-                      child: const Icon(
-                        Icons.camera_alt_rounded,
-                        size: 18,
-                        color: Colors.white,
-                      ),
-                    ),
+              InkWell(
+                onTap: () {
+                  // _showBottomSheet();
+                },
+                child: Container(
+                  decoration: const BoxDecoration(
+                      color: Colors.black, shape: BoxShape.circle),
+                  padding: EdgeInsets.all(mq.height * .003),
+                  child: const Icon(
+                    Icons.camera_alt_rounded,
+                    size: 18,
+                    color: Colors.white,
                   ),
+                ),
+              ),
             ],
           ),
         ),
@@ -70,17 +70,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
             AccountServices().logOut(context);
           }),
         ],
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        elevation: 10,
-        icon: Icon(Icons.chat_bubble_outline_outlined),
-        onPressed: () {
-          // Navigator.of(context)
-          //     .push(MaterialPageRoute(builder: (_) => ChatbotScreen()));
-        },
-        backgroundColor: Colors.deepPurple.shade600,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-        label: const Text("Ask buddy", style: TextStyle(fontSize: 12)),
       ),
     );
   }
