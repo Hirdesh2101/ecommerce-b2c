@@ -29,7 +29,7 @@ class _WishListScreenState extends State<WishListScreen> {
       appBar: GlobalVariables.getAppBar(
           context: context,
           title: "Your Wishlist",
-          onClickSearchNavigateTo: MySearchScreen()),
+          onClickSearchNavigateTo: const MySearchScreen()),
       body: ListView(
         padding: EdgeInsets.zero,
         children: [
@@ -38,7 +38,7 @@ class _WishListScreenState extends State<WishListScreen> {
             // color: Colors.redAccent,
             padding: EdgeInsets.only(top: mq.height * .02),
             // height: mq.height * 0.55,
-            child: user.wishList==null || user.wishList!.isEmpty
+            child: user.wishList == null || user.wishList!.isEmpty
                 ? Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     // crossAxisAlignment: CrossAxisAlignment.center,
@@ -70,29 +70,7 @@ class _WishListScreenState extends State<WishListScreen> {
                   )
                 : Column(mainAxisAlignment: MainAxisAlignment.start, children: [
                     for (int index = 0; index < user.wishList!.length; index++)
-                      Slidable(
-                          key: ValueKey(index),
-                          startActionPane: ActionPane(
-                            motion: const ScrollMotion(),
-                            dismissible: DismissiblePane(onDismissed: () {}),
-                            children: const [
-                              SlidableAction(
-                                onPressed: null,
-                                backgroundColor: Color(0xFFFE4A49),
-                                foregroundColor: Colors.white,
-                                icon: Icons.delete,
-                                label: 'Delete',
-                              ),
-                              SlidableAction(
-                                onPressed: null,
-                                backgroundColor: Color(0xFF21B7CA),
-                                foregroundColor: Colors.white,
-                                icon: Icons.share,
-                                label: 'Share',
-                              ),
-                            ],
-                          ),
-                          child: WishListProduct(index: index)),
+                      WishListProduct(index: index),
                   ]),
           ),
         ],

@@ -9,7 +9,7 @@ import 'package:ecommerce_major_project/common/widgets/bottom_bar.dart';
 //for android http://10.0.2.2:3000
 //for web http://127.0.0.1:3000
 //for ios http://localhost:3000
-//for external devices: Your pc IP (192.168.1.5)
+//for external devices: Your pc IP (192.168.1.5). Run ipconfig/all inc cmd to find.
 String uri = 'http://192.168.1.5:3000';
 
 class GlobalVariables {
