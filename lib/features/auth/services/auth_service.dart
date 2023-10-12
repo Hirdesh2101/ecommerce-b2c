@@ -61,7 +61,8 @@ class AuthService {
       }
     } catch (e) {
       print("Error occured in Signing up user : $e");
-      showSnackBar(context: context, text: e.toString());
+      await auth.FirebaseAuth.instance.currentUser!.delete();
+      showSnackBar(context: context, text: "Please try again!");
     }
   }
 

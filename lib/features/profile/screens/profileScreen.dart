@@ -61,6 +61,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ],
           ),
         ),
+        showUnlinkConfirmationDialog: true,
         providers: ui.FirebaseUIAuth.providersFor(
           auth.FirebaseAuth.instance.app,
         ),
