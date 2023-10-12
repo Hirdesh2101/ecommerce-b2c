@@ -50,21 +50,12 @@ class _AccountScreenState extends State<AccountScreen> {
           SizedBox(height: mq.width * .025),
           const BelowAppBar(),
           SizedBox(height: mq.width * .025),
-          TopButtons(orders: orders,),
+          TopButtons(
+            orders: orders,
+          ),
           SizedBox(height: mq.width * .045),
           Orders(orders: orders, showLoader: showLoader),
         ],
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        elevation: 10,
-        icon: Icon(Icons.chat_bubble_outline_outlined),
-        onPressed: () {
-          // Navigator.of(context)
-          //     .push(MaterialPageRoute(builder: (_) => ChatbotScreen()));
-        },
-        backgroundColor: Colors.deepPurple.shade600,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-        label: Text("Ask buddy", style: TextStyle(fontSize: 12)),
       ),
     );
   }
