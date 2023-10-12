@@ -3,6 +3,9 @@
 import 'package:ecommerce_major_project/features/cart/screens/cart_screen.dart';
 import 'package:ecommerce_major_project/features/home/screens/wish_list_screen.dart';
 import 'package:ecommerce_major_project/features/home/services/home_services.dart';
+import 'package:ecommerce_major_project/features/product_details/widgets/rating_summary.dart';
+import 'package:ecommerce_major_project/features/product_details/widgets/reviewSummary.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
 import 'package:provider/provider.dart';
@@ -34,6 +37,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   num myRating = 0.0;
   double avgRating = 0.0;
   int currentIndex = 0;
+  bool isMore = false;
 
   String pincode = '395001';
 
@@ -83,6 +87,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               .copyWith(top: 10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
             children: [
               Stack(
                 alignment: AlignmentDirectional.topEnd,
@@ -90,7 +95,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   Column(
                     children: [
                       SizedBox(
-                        height: mq.height * .3,
+                        height: mq.height * .52,
                         child: PageView.builder(
                             physics: const BouncingScrollPhysics(),
                             onPageChanged: (value) {
@@ -149,14 +154,39 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       ),
                     ],
                   ),
-                  IconButton(
-                    onPressed: () {
-                      showSnackBar(
-                          context: context,
-                          text:
-                              "Share feature yet to be implemented using deep links");
-                    },
-                    icon: const Icon(Icons.share),
+                  Positioned(
+                    top: mq.height * 0.02,
+                    child: Column(
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            HomeServices().addToWishList(
+                                context: context, product: widget.product);
+                            showSnackBar(
+                                context: context,
+                                text: "Added to WishList",
+                                onTapFunction: () {
+                                  Navigator.of(context).push(
+                                      GlobalVariables.createRoute(
+                                          const WishListScreen()));
+                                },
+                                actionLabel: "View");
+                          },
+                          child: const Icon(
+                            Icons.favorite_border_rounded,
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            showSnackBar(
+                                context: context,
+                                text:
+                                    "Share feature yet to be implemented using deep links");
+                          },
+                          icon: const Icon(Icons.share),
+                        ),
+                      ],
+                    ),
                   )
                 ],
               ),
@@ -168,36 +198,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     child: Text(
                       widget.product.name,
                       style: const TextStyle(
-                          fontSize: 17, fontWeight: FontWeight.w200),
+                          fontSize: 18, fontWeight: FontWeight.w400),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                  InkWell(
-                    onTap: () {
-                      HomeServices().addToWishList(
-                          context: context, product: widget.product);
-                      showSnackBar(
-                          context: context,
-                          text: "Added to WishList",
-                          onTapFunction: () {
-                            Navigator.of(context).push(
-                                GlobalVariables.createRoute(
-                                    const WishListScreen()));
-                          },
-                          actionLabel: "View");
-                    },
-                    child: const Icon(
-                      Icons.favorite_border_rounded,
-                    ),
-                  )
                 ],
               ),
               SizedBox(height: mq.height * .01),
-              Text(widget.product.description,
-                  style: TextStyle(color: Colors.grey.shade500),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -213,77 +221,67 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       ),
                     ],
                   ),
-                  TextButton(
-                      style: TextButton.styleFrom(
-                          backgroundColor: Colors.grey.shade100,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10))),
-                      child: Text("Rate the Product",
+                  isProductOutOfStock
+                      ? const Text(
+                          "Out of Stock",
                           style: TextStyle(
-                              color: Colors.grey.shade800,
-                              fontSize: 12,
-                              fontWeight: FontWeight.w600)),
-                      onPressed: () {
-                        showDialog(
-                            context: context,
-                            builder: (context) {
-                              return rateProductDialog();
-                            });
-                      }),
+                              color: Colors.redAccent,
+                              fontWeight: FontWeight.w600),
+                        )
+                      : const Text("In Stock",
+                          style: TextStyle(color: Colors.teal)),
                 ],
               ),
-              isProductOutOfStock
-                  ? const Text(
-                      "Out of Stock",
-                      style: TextStyle(
-                          color: Colors.redAccent, fontWeight: FontWeight.w600),
-                    )
-                  : const Text("In Stock",
-                      style: TextStyle(color: Colors.teal)),
               SizedBox(height: mq.height * .01),
               SizedBox(height: mq.width * .025),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Container(
-                    padding: const EdgeInsets.all(4),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: Colors.black, width: 1),
-                    ),
-                    child: Text(
-                      "₹ ${widget.product.price.toStringAsFixed(2)}  ",
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                          fontSize: 20, fontWeight: FontWeight.w500),
-                    ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      RichText(
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                              text:
+                                  "₹${widget.product.price.toStringAsFixed(2)}",
+                              style: const TextStyle(
+                                fontSize: 28,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            WidgetSpan(
+                              child: SizedBox(width: mq.width * .02),
+                            ),
+                            TextSpan(
+                              text:
+                                  "₹${widget.product.price.toStringAsFixed(2)}",
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.grey.shade700,
+                                decoration: TextDecoration.lineThrough,
+                              ),
+                            ),
+                            WidgetSpan(
+                              child: SizedBox(width: mq.width * .02),
+                            ),
+                            const TextSpan(
+                              text: "28% off",
+                              style: TextStyle(
+                                fontSize: 25,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.green,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                   SizedBox(width: mq.width * .05),
-                  ElevatedButton(
-                    onPressed: () {
-                      if (isProductOutOfStock) {
-                        showSnackBar(
-                            context: context, text: "Product is out of stock!");
-                        return;
-                      } else {
-                        addToCart();
-                        showSnackBar(
-                            context: context,
-                            text: "Added to Cart",
-                            onTapFunction: () {
-                              Navigator.pushNamed(
-                                  context, CartScreen.routeName);
-                            },
-                            actionLabel: "View");
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.orange.shade800,
-                        minimumSize: Size(mq.width * .45, mq.height * .06),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(22))),
-                    child: const Text("Add to Cart"),
-                  ),
                 ],
               ),
               SizedBox(height: mq.width * .03),
@@ -293,21 +291,25 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Flexible(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Deliver to: $pincode',
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        const Text(
-                          'N-301, Cosmos Appartment, Magarpatta City, Pune',
-                          style: TextStyle(
-                            fontSize: 12,
-                            overflow: TextOverflow.ellipsis,
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Deliver to: $pincode',
+                            style: const TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold),
                           ),
-                        )
-                      ],
+                          const Text(
+                            'N-301, Cosmos Appartment, Magarpatta City, Pune',
+                            style: TextStyle(
+                              fontSize: 14,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                   ),
                   InkWell(
@@ -347,7 +349,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                               fontWeight: FontWeight.w600,
-                              fontSize: 14,
+                              fontSize: 15,
                               color: (pincode == '395001'
                                   ? Colors.green
                                   : Colors.black)),
@@ -357,9 +359,69 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   ),
                 ],
               ),
+              SizedBox(height: mq.width * .07),
+              Center(
+                child: ElevatedButton(
+                  onPressed: () {
+                    if (isProductOutOfStock) {
+                      showSnackBar(
+                          context: context, text: "Product is out of stock!");
+                      return;
+                    } else {
+                      addToCart();
+                      showSnackBar(
+                          context: context,
+                          text: "Added to Cart",
+                          onTapFunction: () {
+                            Navigator.pushNamed(context, CartScreen.routeName);
+                          },
+                          actionLabel: "View");
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.yellow.shade800,
+                      minimumSize: Size(mq.width * .95, mq.height * .06),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18))),
+                  child: const Text(
+                    "Add to Cart",
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ),
+              ),
+              SizedBox(height: mq.width * .02),
+              Center(
+                child: ElevatedButton(
+                  onPressed: () {
+                    if (isProductOutOfStock) {
+                      showSnackBar(
+                          context: context, text: "Product is out of stock!");
+                      return;
+                    } else {
+                      // addToCart();
+                      showSnackBar(
+                          context: context,
+                          text: "Need to redirect",
+                          onTapFunction: () {
+                            Navigator.pushNamed(context, CartScreen.routeName);
+                          },
+                          actionLabel: "View");
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.orange.shade800,
+                      minimumSize: Size(mq.width * .95, mq.height * .06),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18))),
+                  child: const Text(
+                    "Buy Now",
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ),
+              ),
               SizedBox(height: mq.width * .03),
               const Divider(thickness: 1),
-              SizedBox(height: mq.width * .01),
+              SizedBox(height: mq.width * .02),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -374,7 +436,179 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       color: Colors.amber),
                 ],
               ),
-              SizedBox(height: mq.width * .06),
+              SizedBox(height: mq.width * .02),
+              const Divider(thickness: 1),
+              SizedBox(height: mq.width * .03),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Product Details',
+                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.w400),
+                    // maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const Divider(thickness: 1),
+                  const Text(
+                    'Top Highlights',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                    // maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  SizedBox(height: mq.width * .01),
+                  Text(
+                    "${widget.product.description}",
+                    style: TextStyle(color: Colors.black),
+                  ),
+                  SizedBox(height: mq.width * .02),
+                  const Text(
+                    'Other Details',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                    // maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  SizedBox(height: mq.width * .01),
+                  for (int i = 0; i < 5; i++)
+                    Container(
+                      width: mq.width,
+                      padding: EdgeInsets.symmetric(vertical: mq.height * 0.01),
+                      decoration: BoxDecoration(
+                          color: i % 2 != 0
+                              ? Colors.blueGrey.shade50
+                              : Colors.white),
+                      child: Text(
+                        "${widget.product.brandName}",
+                        style: TextStyle(color: Colors.black, fontSize: 16),
+                      ),
+                    ),
+                  SizedBox(height: mq.width * .02),
+                  const Text(
+                    'Warranty',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                    // maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  SizedBox(height: mq.width * .01),
+                  const Text(
+                    "Contains the warranty summary",
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ],
+              ),
+              SizedBox(height: mq.width * .02),
+              const Divider(thickness: 1),
+              SizedBox(height: mq.width * .03),
+              Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Rating & Reviews',
+                        style: TextStyle(
+                            fontSize: 22, fontWeight: FontWeight.w400),
+                        // maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      TextButton(
+                          style: TextButton.styleFrom(
+                              backgroundColor: Colors.grey.shade100,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10))),
+                          child: Text("Rate the Product",
+                              style: TextStyle(
+                                  color: Colors.grey.shade800,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w600)),
+                          onPressed: () {
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return rateProductDialog();
+                                });
+                          }),
+                    ],
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: mq.width * 0.02),
+                    child: const RatingSummary(
+                      counter: 13,
+                      average: 3.846,
+                      showAverage: true,
+                      counterFiveStars: 5,
+                      counterFourStars: 4,
+                      counterThreeStars: 2,
+                      counterTwoStars: 1,
+                      counterOneStars: 1,
+                    ),
+                  ),
+                  SizedBox(height: mq.width * .05),
+                  Container(
+                    width: mq.width,
+                    padding: const EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                        border: Border.all(width: 1, color: Colors.black38)),
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Write a review',
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w400),
+                          // maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        Icon(
+                          CupertinoIcons.right_chevron,
+                          size: 16,
+                        )
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: mq.width * .04),
+                  for (int i = 0; i < 4; i++)
+                    ReviewUI(
+                      image:
+                          "https://res.cloudinary.com/dyqymg02u/image/upload/v1684299657/Fashion/Oratech%20Latest%207%20Pro%20Max/io5pohxwxngprro4dcfp.jpg",
+                      name: 'Hirdesh',
+                      date: '20-10-2022',
+                      comment: 'nice product',
+                      rating: 5,
+                      onPressed: () => print("More Action "),
+                      onTap: () => setState(() {
+                        isMore = !isMore;
+                      }),
+                      isLess: isMore,
+                    )
+                ],
+              ),
+              SizedBox(height: mq.width * .03),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Similar Products',
+                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.w400),
+                    // maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                
+                ],
+              ),
+
+                Container(
+                    height: 500,
+                    width: mq.width,
+                    child: ListView.builder(
+                     physics: ClampingScrollPhysics(),
+                      itemCount: 30,
+                     shrinkWrap: true,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, index) => Card(child: Container(height: 100,width:100,color: Colors.red,),color: Colors.red,)
+                    ),
+                  ),
+              SizedBox(height: mq.width * .35),
             ],
           ),
         ),
