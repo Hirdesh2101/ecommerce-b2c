@@ -60,7 +60,7 @@ class ProductDetailServices {
       //   },
       //   body: jsonEncode({'id': product.id!}),
       // );
-      print(
+      debugPrint(
           "\n\nuser token after http post request: ===> ${'$authToken'} ");
 
       // print("\nPost request sent successfully...");

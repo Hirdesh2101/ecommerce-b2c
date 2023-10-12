@@ -110,7 +110,7 @@ class _TopCategoriesState extends State<TopCategories>
         children: [
           DefaultTabController(
             length: _tabLength,
-            child: Container(
+            child: SizedBox(
               // color: Colors.cyan,
               height: mq.height * .07,
               // height: mq.height * .1,

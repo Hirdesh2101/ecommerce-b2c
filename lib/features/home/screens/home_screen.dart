@@ -79,10 +79,10 @@ class _HomeScreenState extends State<HomeScreen> {
           appBar: GlobalVariables.getAppBar(
               context: context,
               wantBackNavigation: false,
-              onClickSearchNavigateTo: MySearchScreen()),
+              onClickSearchNavigateTo: const MySearchScreen()),
 
           //functionalities!
-          body: TopCategories()
+          body: const TopCategories()
 
           ///NestedScrollView()
 

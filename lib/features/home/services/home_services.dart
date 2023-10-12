@@ -318,7 +318,48 @@ class HomeServices {
         );
       }
     } catch (e) {
-      print("\n========>Inside the catch block");
+      debugPrint("\n========>Inside the catch block");
+      showSnackBar(context: context, text: e.toString());
+    }
+  }
+
+  void removeFromWishList({
+    required BuildContext context,
+    required Product product,
+  }) async {
+    print("========> Inside the remove from wishlist function");
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final String? authToken = await GlobalVariables.getFirebaseAuthToken();
+    try {
+      http.Response res = await http.delete(
+        Uri.parse(
+          '$uri/api/remove-from-wishlist/${product.id}',
+        ),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': '$authToken',
+        },
+        body: jsonEncode({
+          'id': product.id,
+        }),
+      );
+
+      //use context ensuring the mounted property across async functions
+      if (context.mounted) {
+        httpErrorHandle(
+          response: res,
+          context: context,
+          onSuccess: () {
+            print("\nInside on success method..");
+            User user = userProvider.user
+                .copyWith(wishList: jsonDecode(res.body)['wishList']);
+            userProvider.setUserFromModel(user);
+            print("\nUser wishList now is ${user.wishList}");
+          },
+        );
+      }
+    } catch (e) {
+      print("\n========>Inside the catch block of remove from wishlist");
       showSnackBar(context: context, text: e.toString());
     }
   }
