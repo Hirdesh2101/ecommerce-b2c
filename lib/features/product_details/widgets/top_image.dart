@@ -25,52 +25,82 @@ class _TopImageState extends State<TopImage> {
         Column(
           children: [
             SizedBox(
-              height: widget.height,
-              child: PageView.builder(
-                  physics: const BouncingScrollPhysics(),
-                  onPageChanged: (value) {
-                    setState(() {
-                      currentIndex = value;
-                    });
-                  },
-                  itemCount: widget.product.images.length,
-                  // physics: PageScrollPhysics(),
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) {
-                    // print("............index = $index");
-                    return Builder(
-                      builder: (context) => InkWell(
-                        onTap: () {
-                          Navigator.of(context).push(PageRouteBuilder(
-                              opaque: false,
-                              barrierColor: Colors.black.withOpacity(0.7),
-                              barrierDismissible: true,
-                              pageBuilder: (BuildContext context, _, __) {
-                                return SizedBox(
-                                  height: mq.height * 0.6,
-                                  width: mq.width * 0.8,
-                                  child: Center(
-                                    child: InteractiveViewer(
-                                      child: Image.network(
-                                        widget.product.images[index],
-                                        height: mq.height * 0.6,
-                                        width: mq.width * 0.8,
+                        height: mq.height * .52,
+                        child: PageView.builder(
+                            physics: const BouncingScrollPhysics(),
+                            onPageChanged: (value) {
+                              setState(() {
+                                currentIndex = value;
+                              });
+                            },
+                            itemCount: widget.product.images.length,
+                            // physics: PageScrollPhysics(),
+                            scrollDirection: Axis.horizontal,
+                            itemBuilder: (context, index) {
+                              // print("............index = $index");
+
+                              return Builder(
+                                builder: (context) => InkWell(
+                                  onTap: () {
+                                    Navigator.of(context).push(
+                                      PageRouteBuilder(
+                                        opaque: false,
+                                        barrierColor:
+                                            Colors.black.withOpacity(0.7),
+                                        barrierDismissible: true,
+                                        pageBuilder:
+                                            (BuildContext context, _, __) {
+                                          return InteractiveViewer(
+                                            child: Container(
+                                              color: Colors.white,
+                                              padding: const EdgeInsets.all(10),
+                                              child: SafeArea(
+                                                child: Stack(
+                                                  children: [
+                                                    Center(
+                                                      child: Container(
+                                                        color: Colors.white,
+                                                        child: Image.network(
+                                                          widget.product
+                                                              .images[index],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Padding(
+                                                      padding: const EdgeInsets
+                                                          .fromLTRB(8, 8, 0, 0),
+                                                      child: GestureDetector(
+                                                        onTap: () {
+                                                          Navigator.of(context)
+                                                              .pop();
+                                                        },
+                                                        child: const Icon(
+                                                          Icons.close_rounded,
+                                                          size: 30,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        },
                                       ),
-                                    ),
+                                    );
+                                  },
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: mq.height * .05),
+                                    child: Image.network(
+                                        widget.product.images[index],
+                                        fit: BoxFit.contain,
+                                        height: mq.width * .3),
                                   ),
-                                );
-                              }));
-                        },
-                        child: Container(
-                          padding:
-                              EdgeInsets.symmetric(vertical: mq.height * .05),
-                          child: Image.network(widget.product.images[index],
-                              fit: BoxFit.contain, height: mq.width * .3),
-                        ),
+                                ),
+                              );
+                            }),
                       ),
-                    );
-                  }),
-            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: List.generate(
