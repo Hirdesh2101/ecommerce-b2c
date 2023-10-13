@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:ecommerce_major_project/constants/global_variables.dart';
 import 'package:ecommerce_major_project/main.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class CarouselImage extends StatelessWidget {
@@ -34,7 +35,7 @@ class CarouselImage extends StatelessWidget {
         autoPlay: true,
         autoPlayInterval: const Duration(seconds: 3),
         viewportFraction: 1,
-        height: mq.width * .4,
+        height: kIsWeb ? mq.height*0.2 : mq.width * .4,
       ),
     );
   }

@@ -95,6 +95,7 @@ dependencies:
 
     flutter_slidable: ^3.0.0
     iconly: ^1.0.1
+    flutter_adaptive_scaffold: ^0.1.7+1
 
     #Firebase 
     firebase_auth: ^4.10.1

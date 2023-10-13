@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:ecommerce_major_project/features/cart/screens/cart_screen.dart';
 import 'package:ecommerce_major_project/features/home/widgets/carousel_image.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -31,7 +32,6 @@ class _TopCategoriesState extends State<TopCategories>
   late final TabController _tabController;
   final int _tabLength = 5;
 
-  // final ScrollController controller = ScrollController();
 
   //products
   List<Product>? productList;
@@ -76,15 +76,6 @@ class _TopCategoriesState extends State<TopCategories>
     setState(() {});
     print("\n\n =======> Product List is :  =======> ${productList![0].name}");
   }
-
-  // fetchCategoryProducts() async {
-  //   productList = await homeServices.fetchCategoryProducts(
-  //     context: context,
-  //     category: widget.category,
-  //   );
-  //   setState(() {});
-  // }
-
   @override
   Widget build(BuildContext context) {
     mq = MediaQuery.of(context).size;
@@ -96,16 +87,8 @@ class _TopCategoriesState extends State<TopCategories>
             padding: EdgeInsets.only(top: mq.height * .01),
             child: const CarouselImage(),
           )),
-          // SliverToBoxAdapter(
-          //   child:
-          // ),
         ];
       },
-      // foregroundDecoration:
-      //     BoxDecoration(color: Colors.grey.shade100.withOpacity(0.2)),
-      // color: Colors.redAccent,
-      // margin: EdgeInsets.symmetric(horizontal: 20),
-      //height: mq.height * .62,
       body: Column(
         children: [
           DefaultTabController(
@@ -125,24 +108,13 @@ class _TopCategoriesState extends State<TopCategories>
                     fetchCategoryProducts(categoriesList[activeTabIndex]);
                   }
                 },
-                // labelPadding: const EdgeInsets.all(5),
                 physics: const BouncingScrollPhysics(),
                 splashBorderRadius: BorderRadius.circular(15),
                 indicatorWeight: 1,
                 indicatorColor: Colors.grey,
                 indicatorSize: TabBarIndicatorSize.label,
                 indicatorPadding: EdgeInsets.zero,
-                // splashFactory: NoSplash.splashFactory,
-                // dividerColor: Colors.transparent,
-                // indicatorColor: Colors.transparent,
-                // indicator: BoxDecoration(
-                //   color: Colors.black,
-                //   borderRadius: BorderRadius.circular(20),
-                //   shape: BoxShape.rectangle,
-                // ),
                 isScrollable: true,
-                // labelColor: Colors.blueGrey,
-                // unselectedLabelColor: Colors.redAccent,
                 tabs: [
                   for (int index = 0; index < _tabLength; index++)
                     Tab(
@@ -206,14 +178,6 @@ class _TopCategoriesState extends State<TopCategories>
               return false;
             },
             child: Expanded(
-              // height: 400, //height of TabBarView
-              //height of the GridView
-              //height: mq.height * 1,
-              // decoration: const BoxDecoration(
-              //   border: Border(
-              //     top: BorderSide(color: Colors.grey, width: 0.5),
-              //   ),
-              // ),
               child: TabBarView(
                 controller: _tabController,
                 children: [
@@ -269,8 +233,8 @@ class _TopCategoriesState extends State<TopCategories>
                               sliver: SliverGrid(
                                 gridDelegate:
                                     const SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 2,
-                                  childAspectRatio: 0.72,
+                                  crossAxisCount: kIsWeb ? 4 : 2,
+                                  childAspectRatio: kIsWeb? 1.1: 0.72,
                                   mainAxisSpacing: 15,
                                   crossAxisSpacing: 15,
                                 ),
@@ -440,59 +404,11 @@ class _TopCategoriesState extends State<TopCategories>
                                           ),
                                         ),
                                       ),
-
-                                      // LikeButton(
-                                      //   bubblesSize: 10,
-                                      //   circleSize: 10,
-                                      //   circleColor: CircleColor(
-                                      //       start: Colors.purpleAccent,
-                                      //       end: Colors.indigoAccent),
-                                      //   likeCountAnimationDuration:
-                                      //       Duration(seconds: 2),
-                                      //   padding: EdgeInsets.only(
-                                      //       right: mq.width * .03,
-                                      //       top: mq.width * .03),
-                                      //   crossAxisAlignment:
-                                      //       CrossAxisAlignment.start,
-                                      //   mainAxisAlignment:
-                                      //       MainAxisAlignment.end,
-                                      //   animationDuration:
-                                      //       Duration(seconds: 1),
-                                      //   size: 22,
-                                      // ),
-
-                                      // InkWell(
-                                      //   onTap: () {
-                                      //     setState(() {
-                                      //       // set to fav icon index
-                                      //       // favSelected = index;
-                                      //     });
-                                      //   },
-                                      //   child: Container(
-                                      //     margin:
-                                      //         const EdgeInsets.only(
-                                      //             top: 10, right: 10),
-                                      //     padding:
-                                      //         const EdgeInsets.all(3),
-                                      //     // height: 30,
-                                      //     decoration:
-                                      //         const BoxDecoration(
-                                      //             color: Colors.black,
-                                      //             shape: BoxShape
-                                      //                 .circle),
-                                      //     child: Icon(Icons.favorite,
-                                      //         color: favSelected
-                                      //             ? Colors.red
-                                      //             : Colors.white,
-                                      //         size: 17),
-                                      //   ),
-                                      // ),
                                     ],
                                   );
                                 }),
                               ),
                             ),
-                          // ),
                         ],
                       ),
                     ),
@@ -502,207 +418,6 @@ class _TopCategoriesState extends State<TopCategories>
           ),
         ],
       ),
-
-      //GridView widget
-      /*
-  
-    GridView.builder(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: mq.width * .025,
-                            vertical: mq.width * .0125),
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          childAspectRatio: 0.8,
-                          mainAxisSpacing: 15,
-                          crossAxisSpacing: 15,
-                        ),
-                        itemCount: 3,
-                        itemBuilder: (context, index) {
-                          return Card(
-                              color: Color.fromARGB(255, 254, 252, 255),
-                              elevation: 2.5,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: mq.width * .025,
-                                    vertical: mq.width * .0125),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    SizedBox(
-                                      width: double.infinity,
-                                      height: mq.height * .15,
-                                      child: Image.network(
-                                        "https://rukminim1.flixcart.com/image/416/416/ktketu80/mobile/6/n/d/iphone-13-mlpg3hn-a-apple-original-imag6vpyghayhhrh.jpeg?q=70",
-                                        height: mq.height * 0.15,
-                                        // fit: BoxFit.fitHeight,
-                                      ),
-                                    ),
-                                    SizedBox(height: mq.height * .01),
-                                    SizedBox(
-                                      width: double.infinity,
-                                      child: Text(
-                                        "Iphone 128GB | 8 GB RAM Crystal White | Realease New",
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        textAlign: TextAlign.start,
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: double.infinity,
-                                      // color: Colors.blueAccent,
-                                      child: Text(
-                                        "\$99.992",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                        textAlign: TextAlign.start,
-                                      ),
-                                    ),
-                                    Container(
-                                      alignment: Alignment.bottomRight,
-                                      child: InkWell(
-                                        onTap: () {},
-                                        child: Icon(
-                                            CupertinoIcons.cart_badge_plus,
-                                            size: 35),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ));
-                        }),
-                   
-   */
-
-      //SizedBox category
-
-      /*
-  
-  Tab(
-                      child: 
-                      SizedBox(
-                        height: mq.height * .06,
-                        child: Card(
-                          margin: EdgeInsets.symmetric(
-                            horizontal: mq.width * .02,
-                          ),
-                          color: activeTabIndex == index
-                              ? Colors.black87
-                              : Colors.grey.shade50,
-                          elevation: .8,
-                          shape: RoundedRectangleBorder(
-                              side: BorderSide(
-                                  color: GlobalVariables.primaryGreyTextColor,
-                                  width: 0.1),
-                              borderRadius: BorderRadius.circular(10)),
-                          child: Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  SvgPicture.asset(
-                                    GlobalVariables.categoryImages[index]
-                                        ['image']!,
-                                    height: 30,
-                                    color: activeTabIndex == index
-                                        ? Colors.white
-                                        : Colors.grey.shade700,
-                                  ),
-                                  SizedBox(width: mq.width * .015),
-                                  Text(
-                                    GlobalVariables.categoryImages[index]
-                                        ['title']!,
-                                    style: TextStyle(
-                                      color: activeTabIndex == index
-                                          ? Colors.white
-                                          : Colors.grey.shade700,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w800,
-                                    ),
-                                  ),
-                                ]),
-                          ),
-                        ),
-                      ),
-                    ),
-            
-   */
-
-      //ListView.builder
-      /*
-      
-      ListView.builder(
-        itemCount: GlobalVariables.categoryImages.length,
-        scrollDirection: Axis.horizontal,
-        itemExtent: mq.width * .4,
-        itemBuilder: (context, index) {
-          return GestureDetector(
-              onTap: () => navigateToCategoryPage(
-                    //the context is not included
-                    context, GlobalVariables.categoryImages[index]['title']!,
-                  ),
-              child: Card(
-                margin: EdgeInsets.symmetric(
-                    horizontal: mq.width * .02, vertical: mq.width * 0.01),
-                color: Colors.grey.shade50,
-                elevation: 2,
-                shape: RoundedRectangleBorder(
-                    side: BorderSide(
-                        color: GlobalVariables.primaryGreyTextColor,
-                        width: 0.1),
-                    borderRadius: BorderRadius.circular(30)),
-                child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SvgPicture.asset(
-                          GlobalVariables.categoryImages[index]['image']!,
-                          height: 30),
-                      SizedBox(width: mq.width * .03),
-                      Text(
-                        GlobalVariables.categoryImages[index]['title']!,
-                        style: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w800,
-                        ),
-                      ),
-                    ]),
-              )
-              /*
-              Card(
-                elevation: 3,
-                child: Column(children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(50),
-                      child: Image.asset(
-                        GlobalVariables.categoryImages[index]['image']!,
-                        fit: BoxFit.cover,
-                        height: mq.width * .1,
-                        width: mq.width * .1,
-                      ),
-                    ),
-                  ),
-                  Text(
-                    GlobalVariables.categoryImages[index]['title']!,
-                    style: const TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                ]),
-              ),
-              */
-
-              );
-        },
-      ),
-    */
     );
   }
 
