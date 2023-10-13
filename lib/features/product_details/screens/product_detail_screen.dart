@@ -108,30 +108,56 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             scrollDirection: Axis.horizontal,
                             itemBuilder: (context, index) {
                               // print("............index = $index");
+
                               return Builder(
                                 builder: (context) => InkWell(
                                   onTap: () {
-                                    Navigator.of(context).push(PageRouteBuilder(
+                                    Navigator.of(context).push(
+                                      PageRouteBuilder(
                                         opaque: false,
                                         barrierColor:
                                             Colors.black.withOpacity(0.7),
                                         barrierDismissible: true,
                                         pageBuilder:
                                             (BuildContext context, _, __) {
-                                          return SizedBox(
-                                            height: mq.height * 0.6,
-                                            width: mq.width * 0.8,
-                                            child: Center(
-                                              child: InteractiveViewer(
-                                                child: Image.network(
-                                                  widget.product.images[index],
-                                                  height: mq.height * 0.6,
-                                                  width: mq.width * 0.8,
+                                          return InteractiveViewer(
+                                            child: Container(
+                                              color: Colors.white,
+                                              padding: const EdgeInsets.all(10),
+                                              child: SafeArea(
+                                                child: Stack(
+                                                  children: [
+                                                    Center(
+                                                      child: Container(
+                                                        color: Colors.white,
+                                                        child: Image.network(
+                                                          widget.product
+                                                              .images[index],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Padding(
+                                                      padding: const EdgeInsets
+                                                          .fromLTRB(8, 8, 0, 0),
+                                                      child: GestureDetector(
+                                                        onTap: () {
+                                                          Navigator.of(context)
+                                                              .pop();
+                                                        },
+                                                        child: const Icon(
+                                                          Icons.close_rounded,
+                                                          size: 30,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
                                                 ),
                                               ),
                                             ),
                                           );
-                                        }));
+                                        },
+                                      ),
+                                    );
                                   },
                                   child: Container(
                                     padding: EdgeInsets.symmetric(
@@ -458,7 +484,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   SizedBox(height: mq.width * .01),
                   Text(
                     "${widget.product.description}",
-                    style: TextStyle(color: Colors.black),
+                    style: const TextStyle(color: Colors.black),
                   ),
                   SizedBox(height: mq.width * .02),
                   const Text(
@@ -478,7 +504,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                               : Colors.white),
                       child: Text(
                         "${widget.product.brandName}",
-                        style: TextStyle(color: Colors.black, fontSize: 16),
+                        style:
+                            const TextStyle(color: Colors.black, fontSize: 16),
                       ),
                     ),
                   SizedBox(height: mq.width * .02),
@@ -584,30 +611,34 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 ],
               ),
               SizedBox(height: mq.width * .03),
-              Column(
+              const Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
+                  Text(
                     'Similar Products',
                     style: TextStyle(fontSize: 22, fontWeight: FontWeight.w400),
                     // maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
-                
                 ],
               ),
-
-                Container(
-                    height: 500,
-                    width: mq.width,
-                    child: ListView.builder(
-                     physics: ClampingScrollPhysics(),
-                      itemCount: 30,
-                     shrinkWrap: true,
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (context, index) => Card(child: Container(height: 100,width:100,color: Colors.red,),color: Colors.red,)
-                    ),
-                  ),
+              Container(
+                height: 500,
+                width: mq.width,
+                child: ListView.builder(
+                    physics: const ClampingScrollPhysics(),
+                    itemCount: 30,
+                    shrinkWrap: true,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, index) => Card(
+                          child: Container(
+                            height: 100,
+                            width: 100,
+                            color: Colors.red,
+                          ),
+                          color: Colors.red,
+                        )),
+              ),
               SizedBox(height: mq.width * .35),
             ],
           ),
