@@ -14,6 +14,8 @@ class Product {
   final String? id;
   final List<Rating>? rating;
 
+  bool isWishlisted = false;
+
   Product({
     required this.name,
     required this.description,
