@@ -238,6 +238,7 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
+
 ///For chrome scroll support in page views
 class AppScrollBehavior extends MaterialScrollBehavior {
   @override
