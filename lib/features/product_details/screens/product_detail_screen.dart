@@ -2,7 +2,7 @@
 
 import 'package:ecommerce_major_project/features/cart/screens/cart_screen.dart';
 import 'package:ecommerce_major_project/features/product_details/widgets/delivery_location.dart';
-import 'package:ecommerce_major_project/features/product_details/widgets/detils_widget.dart';
+import 'package:ecommerce_major_project/features/product_details/widgets/details_widget.dart';
 import 'package:ecommerce_major_project/features/product_details/widgets/icon_details.dart';
 import 'package:ecommerce_major_project/features/product_details/widgets/price_and_title.dart';
 import 'package:ecommerce_major_project/features/product_details/widgets/ratings_reviews.dart';
