@@ -215,7 +215,7 @@ class RatingSummary extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(average.toStringAsFixed(1), style: averageStyle),
+                Text(average.toStringAsFixed(2), style: averageStyle),
                 RatingBarIndicator(
                   rating: average,
                   itemSize: 28,

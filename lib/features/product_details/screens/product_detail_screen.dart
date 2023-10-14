@@ -7,6 +7,7 @@ import 'package:ecommerce_major_project/features/product_details/widgets/icon_de
 import 'package:ecommerce_major_project/features/product_details/widgets/price_and_title.dart';
 import 'package:ecommerce_major_project/features/product_details/widgets/ratings_reviews.dart';
 import 'package:ecommerce_major_project/features/product_details/widgets/similar_products.dart';
+import 'package:ecommerce_major_project/features/product_details/widgets/size_and_Color.dart';
 import 'package:ecommerce_major_project/features/product_details/widgets/top_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_adaptive_scaffold/flutter_adaptive_scaffold.dart';
@@ -37,6 +38,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   num myRating = 0.0;
   double avgRating = 0.0;
 
+  int counterFiveStars = 0;
+  int counterFourStars = 0;
+  int counterThreeStars = 0;
+  int counterTwoStars = 0;
+  int counterOneStars = 0;
+
   String pincode = '395001';
 
   @override
@@ -50,6 +57,17 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       //overall rating will be avgRating but
       //when we see a particular product we will be able to see
       //our given rating, i.e.  myRating
+      if (widget.product.rating![i].rating.toInt() == 1) {
+        counterOneStars++;
+      } else if (widget.product.rating![i].rating.toInt() == 2) {
+        counterTwoStars++;
+      } else if (widget.product.rating![i].rating.toInt() == 3) {
+        counterThreeStars++;
+      } else if (widget.product.rating![i].rating.toInt() == 4) {
+        counterFourStars++;
+      } else if (widget.product.rating![i].rating.toInt() == 5) {
+        counterFiveStars++;
+      }
       if (widget.product.rating![i].userId ==
           Provider.of<UserProvider>(context, listen: false).user.id) {
         myRating = widget.product.rating![i].rating;
@@ -59,13 +77,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       avgRating = totalRating / widget.product.rating!.length;
     }
   }
-  var selectedNavigation =0;
-   static const tabs = [
-   '','',''
-  ];
+
+  var selectedNavigation = 0;
+  static const tabs = ['', '', ''];
   final destinations = tabs
       .map(
-        (page) => NavigationDestination(icon: Icon( Icons.abc), label: 'page'),
+        (page) => NavigationDestination(icon: Icon(Icons.abc), label: 'page'),
       )
       .toList();
 
@@ -86,63 +103,63 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   Widget build(BuildContext context) {
     bool isProductOutOfStock = widget.product.quantity == 0;
     return AdaptiveLayout(
-  //     primaryNavigation: SlotLayout(
-  //   config: <Breakpoint, SlotLayoutConfig>{
-  //     Breakpoints.medium: SlotLayout.from(
-  //       //inAnimation: AdaptiveScaffold.leftOutIn,
-  //       key: const Key('Primary Navigation Medium'),
-  //       builder: (_) => AdaptiveScaffold.standardNavigationRail(
-  //         selectedIndex: selectedNavigation,
-  //         onDestinationSelected: (int newIndex) {
-  //           setState(() {
-  //             selectedNavigation = newIndex;
-  //           });
-  //         },
-  //         leading: const Icon(Icons.menu),
-  //         destinations: destinations
-  //             .map((_) => AdaptiveScaffold.toRailDestination(_))
-  //             .toList(),
-  //         // backgroundColor: navRailTheme.backgroundColor,
-  //         // selectedIconTheme: navRailTheme.selectedIconTheme,
-  //         // unselectedIconTheme: navRailTheme.unselectedIconTheme,
-  //         // selectedLabelTextStyle: navRailTheme.selectedLabelTextStyle,
-  //         // unSelectedLabelTextStyle: navRailTheme.unselectedLabelTextStyle,
-  //       ),
-  //     ),
-  //     Breakpoints.large: SlotLayout.from(
-  //       key: const Key('Primary Navigation Large'),
-  //       //inAnimation: AdaptiveScaffold.leftOutIn,
-  //       builder: (_) => AdaptiveScaffold.standardBottomNavigationBar(
-  //         // selectedIndex: selectedNavigation,
-  //         // onDestinationSelected: (int newIndex) {
-  //         //   setState(() {
-  //         //     selectedNavigation = newIndex;
-  //         //   });
-  //         // },
-  //         // //extended: true,
-  //         // leading: const Row(
-  //         //   mainAxisAlignment: MainAxisAlignment.spaceAround,
-  //         //   children: <Widget>[
-  //         //     Text(
-  //         //       'REPLY',
-  //         //       style: TextStyle(color: Color.fromARGB(255, 255, 201, 197)),
-  //         //     ),
-  //         //     Icon(Icons.menu_open)
-  //         //   ],
-  //         // ),
-  //         destinations: destinations
-  //             // .map((_) => AdaptiveScaffold.to(_))
-  //             // .toList(),
-  //         // trailing: trailingNavRail,
-  //         // backgroundColor: navRailTheme.backgroundColor,
-  //         // selectedIconTheme: navRailTheme.selectedIconTheme,
-  //         // unselectedIconTheme: navRailTheme.unselectedIconTheme,
-  //         // selectedLabelTextStyle: navRailTheme.selectedLabelTextStyle,
-  //         // unSelectedLabelTextStyle: navRailTheme.unselectedLabelTextStyle,
-  //       ),
-  //     ),
-  //   },
-  // ),
+      //     primaryNavigation: SlotLayout(
+      //   config: <Breakpoint, SlotLayoutConfig>{
+      //     Breakpoints.medium: SlotLayout.from(
+      //       //inAnimation: AdaptiveScaffold.leftOutIn,
+      //       key: const Key('Primary Navigation Medium'),
+      //       builder: (_) => AdaptiveScaffold.standardNavigationRail(
+      //         selectedIndex: selectedNavigation,
+      //         onDestinationSelected: (int newIndex) {
+      //           setState(() {
+      //             selectedNavigation = newIndex;
+      //           });
+      //         },
+      //         leading: const Icon(Icons.menu),
+      //         destinations: destinations
+      //             .map((_) => AdaptiveScaffold.toRailDestination(_))
+      //             .toList(),
+      //         // backgroundColor: navRailTheme.backgroundColor,
+      //         // selectedIconTheme: navRailTheme.selectedIconTheme,
+      //         // unselectedIconTheme: navRailTheme.unselectedIconTheme,
+      //         // selectedLabelTextStyle: navRailTheme.selectedLabelTextStyle,
+      //         // unSelectedLabelTextStyle: navRailTheme.unselectedLabelTextStyle,
+      //       ),
+      //     ),
+      //     Breakpoints.large: SlotLayout.from(
+      //       key: const Key('Primary Navigation Large'),
+      //       //inAnimation: AdaptiveScaffold.leftOutIn,
+      //       builder: (_) => AdaptiveScaffold.standardBottomNavigationBar(
+      //         // selectedIndex: selectedNavigation,
+      //         // onDestinationSelected: (int newIndex) {
+      //         //   setState(() {
+      //         //     selectedNavigation = newIndex;
+      //         //   });
+      //         // },
+      //         // //extended: true,
+      //         // leading: const Row(
+      //         //   mainAxisAlignment: MainAxisAlignment.spaceAround,
+      //         //   children: <Widget>[
+      //         //     Text(
+      //         //       'REPLY',
+      //         //       style: TextStyle(color: Color.fromARGB(255, 255, 201, 197)),
+      //         //     ),
+      //         //     Icon(Icons.menu_open)
+      //         //   ],
+      //         // ),
+      //         destinations: destinations
+      //             // .map((_) => AdaptiveScaffold.to(_))
+      //             // .toList(),
+      //         // trailing: trailingNavRail,
+      //         // backgroundColor: navRailTheme.backgroundColor,
+      //         // selectedIconTheme: navRailTheme.selectedIconTheme,
+      //         // unselectedIconTheme: navRailTheme.unselectedIconTheme,
+      //         // selectedLabelTextStyle: navRailTheme.selectedLabelTextStyle,
+      //         // unSelectedLabelTextStyle: navRailTheme.unselectedLabelTextStyle,
+      //       ),
+      //     ),
+      //   },
+      // ),
       body: SlotLayout(
         config: <Breakpoint, SlotLayoutConfig>{
           Breakpoints.smallAndUp: SlotLayout.from(
@@ -168,6 +185,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           product: widget.product,
                           avgRating: avgRating,
                           isProductOutOfStock: isProductOutOfStock),
+                      SizedBox(height: mq.width * .03),
+                      const Divider(thickness: 2),
+                      SizedBox(height: mq.width * .01),
+                      const SizeAndColor(),
                       SizedBox(height: mq.width * .03),
                       const Divider(thickness: 2),
                       SizedBox(height: mq.width * .03),
@@ -250,6 +271,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       const Divider(thickness: 1),
                       SizedBox(height: mq.width * .03),
                       AllRatings(
+                        counterFiveStars: counterFiveStars,
+                        counterFourStars: counterFourStars,
+                        counterThreeStars: counterThreeStars,
+                        counterTwoStars: counterTwoStars,
+                        counterOneStars: counterOneStars,
+                        avgRating: avgRating,
                         myRating: myRating,
                         product: widget.product,
                       ),
@@ -376,6 +403,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   const Divider(thickness: 1),
                   SizedBox(height: mq.width * .03),
                   AllRatings(
+                    avgRating: avgRating,
                     myRating: myRating,
                     product: widget.product,
                   ),

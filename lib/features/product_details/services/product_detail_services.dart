@@ -135,6 +135,7 @@ class ProductDetailServices {
     required BuildContext context,
     required Product product,
     required double rating,
+    // required String review,
   }) async {
     final String? authToken = await GlobalVariables.getFirebaseAuthToken();
     try {
@@ -147,6 +148,7 @@ class ProductDetailServices {
         body: jsonEncode({
           'id': product.id!,
           'rating': rating,
+          // 'review': review
         }),
       );
 

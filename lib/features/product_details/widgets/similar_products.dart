@@ -10,7 +10,9 @@ class SimilarProducts extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
        const Text(
                 'Similar Products',
                 style: TextStyle(fontSize: 22, fontWeight: FontWeight.w400),
