@@ -4,7 +4,9 @@ import 'package:ecommerce_major_project/features/home/screens/wish_list_screen.d
 import 'package:ecommerce_major_project/features/home/services/home_services.dart';
 import 'package:ecommerce_major_project/main.dart';
 import 'package:ecommerce_major_project/models/product.dart';
+import 'package:ecommerce_major_project/providers/user_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class TopImage extends StatefulWidget {
   const TopImage({super.key, required this.product, required this.height});
@@ -17,8 +19,25 @@ class TopImage extends StatefulWidget {
 
 class _TopImageState extends State<TopImage> {
   int currentIndex = 0;
+
   @override
   Widget build(BuildContext context) {
+    bool isProductWishListed = false;
+
+    final user = context.watch<UserProvider>().user;
+    List<dynamic> wishList = user.wishList != null ? user.wishList! : [];
+
+    for (int i = 0; i < wishList.length; i++) {
+      final productWishList = wishList[i];
+      final productFromJson = Product.fromJson(productWishList['product']);
+      final productId = productFromJson.id;
+
+      if (productId == widget.product.id) {
+        isProductWishListed = true;
+        break;
+      }
+    }
+
     return Stack(
       alignment: AlignmentDirectional.topEnd,
       children: [
@@ -34,11 +53,8 @@ class _TopImageState extends State<TopImage> {
                     });
                   },
                   itemCount: widget.product.images.length,
-                  // physics: PageScrollPhysics(),
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context, index) {
-                    // print("............index = $index");
-
                     return Builder(
                       builder: (context) => InkWell(
                         onTap: () {
@@ -110,19 +126,36 @@ class _TopImageState extends State<TopImage> {
             children: [
               InkWell(
                 onTap: () {
-                  HomeServices()
-                      .addToWishList(context: context, product: widget.product);
-                  showSnackBar(
+                  if (isProductWishListed) {
+                    HomeServices().removeFromWishList(
+                        context: context, product: widget.product);
+                    showSnackBar(
+                      context: context,
+                      text: "Removed from WishList",
+                    );
+                  } else {
+                    HomeServices().addToWishList(
+                        context: context, product: widget.product);
+                    showSnackBar(
                       context: context,
                       text: "Added to WishList",
                       onTapFunction: () {
-                        Navigator.of(context).push(GlobalVariables.createRoute(
-                            const WishListScreen()));
+                        Navigator.of(context).push(
+                          GlobalVariables.createRoute(
+                            const WishListScreen(),
+                          ),
+                        );
                       },
-                      actionLabel: "View");
+                      actionLabel: "View",
+                    );
+                  }
                 },
-                child: const Icon(
-                  Icons.favorite_border_rounded,
+                child: Icon(
+                  isProductWishListed
+                      ? Icons.favorite_rounded
+                      : Icons.favorite_border_rounded,
+                  size: 26,
+                  color: isProductWishListed ? Colors.pink : Colors.black,
                 ),
               ),
               IconButton(
