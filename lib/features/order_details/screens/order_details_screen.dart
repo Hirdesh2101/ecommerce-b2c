@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:ecommerce_major_project/features/product_details/screens/product_detail_screen.dart';
 import 'package:ecommerce_major_project/features/return_product/return_product_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -99,35 +100,44 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     for (int i = 0; i < widget.order.products.length; i++)
-                      Row(
-                        children: [
-                          Image.network(widget.order.products[i].images[0],
-                              height: mq.width * .25, width: mq.width * .25),
-                          SizedBox(width: mq.width * .0125),
-                          // using expanded to allow text to overflow
-                          // in case name of the product is too long
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  widget.order.products[i].name,
-                                  style: const TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w500,
+                      InkWell(
+                        onTap: () {
+                          Navigator.pushNamed(
+                            context,
+                            ProductDetailScreen.routeName,
+                            arguments: widget.order.products[i],
+                          );
+                        },
+                        child: Row(
+                          children: [
+                            Image.network(widget.order.products[i].images[0],
+                                height: mq.width * .25, width: mq.width * .25),
+                            SizedBox(width: mq.width * .0125),
+                            // using expanded to allow text to overflow
+                            // in case name of the product is too long
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    widget.order.products[i].name,
+                                    style: const TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
                                   ),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                Text(
-                                  "Qty : ${widget.order.quantity[i]}",
-                                  // style: TextStyle(
-                                  //     fontSize: 17, fontWeight: FontWeight.bold),
-                                )
-                              ],
-                            ),
-                          )
-                        ],
+                                  Text(
+                                    "Qty : ${widget.order.quantity[i]}",
+                                    // style: TextStyle(
+                                    //     fontSize: 17, fontWeight: FontWeight.bold),
+                                  )
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
                       ),
                   ],
                 ),
@@ -201,9 +211,10 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                   : ElevatedButton(
                       onPressed: allowReturn
                           ? () {
-
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (_) => ReturnProductScreen()));
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => ReturnProductScreen()));
                               showSnackBar(
                                   context: context,
                                   text: "Return product yet to be implemented");

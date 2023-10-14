@@ -168,7 +168,8 @@ void main() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   bool? onboarding = prefs.getBool('Onboarding');
 
-  runApp(MultiProvider(
+  runApp(
+    MultiProvider(
       providers: [
         ChangeNotifierProvider(
           create: (context) => UserProvider(),
@@ -182,7 +183,9 @@ void main() async {
       ],
       child: MyApp(
         onboarding: onboarding,
-      )));
+      ),
+    ),
+  );
 }
 
 late Size mq;
