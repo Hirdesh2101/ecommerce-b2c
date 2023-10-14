@@ -2,7 +2,7 @@
 
 import 'package:ecommerce_major_project/features/cart/screens/cart_screen.dart';
 import 'package:ecommerce_major_project/features/product_details/widgets/delivery_location.dart';
-import 'package:ecommerce_major_project/features/product_details/widgets/detils_widget.dart';
+import 'package:ecommerce_major_project/features/product_details/widgets/details_widget.dart';
 import 'package:ecommerce_major_project/features/product_details/widgets/icon_details.dart';
 import 'package:ecommerce_major_project/features/product_details/widgets/price_and_title.dart';
 import 'package:ecommerce_major_project/features/product_details/widgets/ratings_reviews.dart';
@@ -59,13 +59,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       avgRating = totalRating / widget.product.rating!.length;
     }
   }
-  var selectedNavigation =0;
-   static const tabs = [
-   '','',''
-  ];
+
+  var selectedNavigation = 0;
+  static const tabs = ['', '', ''];
   final destinations = tabs
       .map(
-        (page) => NavigationDestination(icon: Icon( Icons.abc), label: 'page'),
+        (page) => NavigationDestination(icon: Icon(Icons.abc), label: 'page'),
       )
       .toList();
 
@@ -86,63 +85,63 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   Widget build(BuildContext context) {
     bool isProductOutOfStock = widget.product.quantity == 0;
     return AdaptiveLayout(
-  //     primaryNavigation: SlotLayout(
-  //   config: <Breakpoint, SlotLayoutConfig>{
-  //     Breakpoints.medium: SlotLayout.from(
-  //       //inAnimation: AdaptiveScaffold.leftOutIn,
-  //       key: const Key('Primary Navigation Medium'),
-  //       builder: (_) => AdaptiveScaffold.standardNavigationRail(
-  //         selectedIndex: selectedNavigation,
-  //         onDestinationSelected: (int newIndex) {
-  //           setState(() {
-  //             selectedNavigation = newIndex;
-  //           });
-  //         },
-  //         leading: const Icon(Icons.menu),
-  //         destinations: destinations
-  //             .map((_) => AdaptiveScaffold.toRailDestination(_))
-  //             .toList(),
-  //         // backgroundColor: navRailTheme.backgroundColor,
-  //         // selectedIconTheme: navRailTheme.selectedIconTheme,
-  //         // unselectedIconTheme: navRailTheme.unselectedIconTheme,
-  //         // selectedLabelTextStyle: navRailTheme.selectedLabelTextStyle,
-  //         // unSelectedLabelTextStyle: navRailTheme.unselectedLabelTextStyle,
-  //       ),
-  //     ),
-  //     Breakpoints.large: SlotLayout.from(
-  //       key: const Key('Primary Navigation Large'),
-  //       //inAnimation: AdaptiveScaffold.leftOutIn,
-  //       builder: (_) => AdaptiveScaffold.standardBottomNavigationBar(
-  //         // selectedIndex: selectedNavigation,
-  //         // onDestinationSelected: (int newIndex) {
-  //         //   setState(() {
-  //         //     selectedNavigation = newIndex;
-  //         //   });
-  //         // },
-  //         // //extended: true,
-  //         // leading: const Row(
-  //         //   mainAxisAlignment: MainAxisAlignment.spaceAround,
-  //         //   children: <Widget>[
-  //         //     Text(
-  //         //       'REPLY',
-  //         //       style: TextStyle(color: Color.fromARGB(255, 255, 201, 197)),
-  //         //     ),
-  //         //     Icon(Icons.menu_open)
-  //         //   ],
-  //         // ),
-  //         destinations: destinations
-  //             // .map((_) => AdaptiveScaffold.to(_))
-  //             // .toList(),
-  //         // trailing: trailingNavRail,
-  //         // backgroundColor: navRailTheme.backgroundColor,
-  //         // selectedIconTheme: navRailTheme.selectedIconTheme,
-  //         // unselectedIconTheme: navRailTheme.unselectedIconTheme,
-  //         // selectedLabelTextStyle: navRailTheme.selectedLabelTextStyle,
-  //         // unSelectedLabelTextStyle: navRailTheme.unselectedLabelTextStyle,
-  //       ),
-  //     ),
-  //   },
-  // ),
+      //     primaryNavigation: SlotLayout(
+      //   config: <Breakpoint, SlotLayoutConfig>{
+      //     Breakpoints.medium: SlotLayout.from(
+      //       //inAnimation: AdaptiveScaffold.leftOutIn,
+      //       key: const Key('Primary Navigation Medium'),
+      //       builder: (_) => AdaptiveScaffold.standardNavigationRail(
+      //         selectedIndex: selectedNavigation,
+      //         onDestinationSelected: (int newIndex) {
+      //           setState(() {
+      //             selectedNavigation = newIndex;
+      //           });
+      //         },
+      //         leading: const Icon(Icons.menu),
+      //         destinations: destinations
+      //             .map((_) => AdaptiveScaffold.toRailDestination(_))
+      //             .toList(),
+      //         // backgroundColor: navRailTheme.backgroundColor,
+      //         // selectedIconTheme: navRailTheme.selectedIconTheme,
+      //         // unselectedIconTheme: navRailTheme.unselectedIconTheme,
+      //         // selectedLabelTextStyle: navRailTheme.selectedLabelTextStyle,
+      //         // unSelectedLabelTextStyle: navRailTheme.unselectedLabelTextStyle,
+      //       ),
+      //     ),
+      //     Breakpoints.large: SlotLayout.from(
+      //       key: const Key('Primary Navigation Large'),
+      //       //inAnimation: AdaptiveScaffold.leftOutIn,
+      //       builder: (_) => AdaptiveScaffold.standardBottomNavigationBar(
+      //         // selectedIndex: selectedNavigation,
+      //         // onDestinationSelected: (int newIndex) {
+      //         //   setState(() {
+      //         //     selectedNavigation = newIndex;
+      //         //   });
+      //         // },
+      //         // //extended: true,
+      //         // leading: const Row(
+      //         //   mainAxisAlignment: MainAxisAlignment.spaceAround,
+      //         //   children: <Widget>[
+      //         //     Text(
+      //         //       'REPLY',
+      //         //       style: TextStyle(color: Color.fromARGB(255, 255, 201, 197)),
+      //         //     ),
+      //         //     Icon(Icons.menu_open)
+      //         //   ],
+      //         // ),
+      //         destinations: destinations
+      //             // .map((_) => AdaptiveScaffold.to(_))
+      //             // .toList(),
+      //         // trailing: trailingNavRail,
+      //         // backgroundColor: navRailTheme.backgroundColor,
+      //         // selectedIconTheme: navRailTheme.selectedIconTheme,
+      //         // unselectedIconTheme: navRailTheme.unselectedIconTheme,
+      //         // selectedLabelTextStyle: navRailTheme.selectedLabelTextStyle,
+      //         // unSelectedLabelTextStyle: navRailTheme.unselectedLabelTextStyle,
+      //       ),
+      //     ),
+      //   },
+      // ),
       body: SlotLayout(
         config: <Breakpoint, SlotLayoutConfig>{
           Breakpoints.smallAndUp: SlotLayout.from(
