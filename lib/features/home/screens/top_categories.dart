@@ -30,12 +30,13 @@ class _TopCategoriesState extends State<TopCategories>
   // tabbar variables
   int activeTabIndex = 0;
   late final TabController _tabController;
-  final int _tabLength = 5; final indianRupeesFormat = NumberFormat.currency(
-           name: "INR",
-           locale: 'en_IN',
-           decimalDigits: 0,
-           symbol: '₹ ',
-        );
+  final int _tabLength = 5;
+  final indianRupeesFormat = NumberFormat.currency(
+    name: "INR",
+    locale: 'en_IN',
+    decimalDigits: 0,
+    symbol: '₹ ',
+  );
 
   //products
   List<Product>? productList;
@@ -307,8 +308,8 @@ class _TopCategoriesState extends State<TopCategories>
                                             text: TextSpan(
                                               children: [
                                                 TextSpan(
-                                                  text:
-                                                      indianRupeesFormat.format(product.price),
+                                                  text: indianRupeesFormat
+                                                      .format(product.price),
                                                   style: const TextStyle(
                                                     fontSize: 14,
                                                     color: Colors.black,
@@ -320,8 +321,8 @@ class _TopCategoriesState extends State<TopCategories>
                                                       width: mq.width * .02),
                                                 ),
                                                 TextSpan(
-                                                  text:
-                                                      indianRupeesFormat.format(product.price),
+                                                  text: indianRupeesFormat
+                                                      .format(product.price),
                                                   style: TextStyle(
                                                     fontSize: 14,
                                                     color: Colors.grey.shade700,

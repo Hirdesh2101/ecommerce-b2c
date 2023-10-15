@@ -9,7 +9,7 @@ void showSnackBar({
   String? actionLabel,
 }) {
   final scaffold = ScaffoldMessenger.of(context);
-  scaffold.hideCurrentSnackBar();
+  scaffold.removeCurrentSnackBar();
 
   final SnackBar snackBar = SnackBar(
     content: Text(text),
@@ -34,7 +34,7 @@ void showErrorSnackBar({
   String? actionLabel,
 }) {
   final scaffold = ScaffoldMessenger.of(context);
-  scaffold.hideCurrentSnackBar();
+  scaffold.removeCurrentSnackBar();
 
   final SnackBar snackBar = SnackBar(
     content: Text(text),
