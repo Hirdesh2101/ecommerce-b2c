@@ -1,3 +1,5 @@
+import 'package:ecommerce_major_project/features/product_details/screens/product_detail_screen.dart';
+import 'package:ecommerce_major_project/models/product.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
