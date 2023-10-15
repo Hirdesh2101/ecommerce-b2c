@@ -48,61 +48,59 @@ class _CartScreenState extends State<CartScreen> {
           wantBackNavigation: false,
           title: "Your Cart",
           onClickSearchNavigateTo: const MySearchScreen()),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            SizedBox(height: mq.height * 0.01),
-            const AddressBox(),
-            const CartSubtotal(),
-            Padding(
-              padding: EdgeInsets.all(mq.width * .025),
-              child: CustomButton(
-                  text:
-                      "Proceed to buy (${user.cart.length} ${user.cart.length == 1 ? 'item' : 'items'})",
-                  onTap: () =>
-                      user.cart.isEmpty ? () {} : navigateToAddress(sum),
-                  color: user.cart.isEmpty
-                      ? Colors.yellow[200]
-                      : Colors.yellow[500]),
-            ),
-            SizedBox(height: mq.height * 0.02),
-            Container(color: Colors.black12.withOpacity(0.08), height: 1),
-            SizedBox(height: mq.height * 0.02),
-            SizedBox(
-              height: mq.height * 0.55,
-              child: user.cart.isEmpty
-                  ? Column(
-                      children: [
-                        Image.asset("assets/images/no-orderss.png",
-                            height: mq.height * .15),
-                        const Text("No item in cart"),
-                        SizedBox(height: mq.height * 0.02),
-                        ElevatedButton(
-                            onPressed: () {
-                              Navigator.pushReplacementNamed(
-                                  context, BottomBar.routeName);
-                            },
-                            style: ElevatedButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20)),
-                                backgroundColor: Colors.deepPurpleAccent),
-                            child: const Text(
-                              "Keep Exploring",
-                              style: TextStyle(color: Colors.white),
-                            )),
-                      ],
-                    )
-                  : ListView.builder(
-                      scrollDirection: Axis.vertical,
-                      // shrinkWrap: true,
-                      itemCount: user.cart.length,
-                      itemBuilder: (context, index) {
-                        // return CartProdcut
-                        return CartProduct(index: index);
-                      }),
-            ),
-          ],
-        ),
+      body: Column(
+        children: [
+          SizedBox(height: mq.height * 0.01),
+          const AddressBox(),
+          const CartSubtotal(),
+          Padding(
+            padding: EdgeInsets.all(mq.width * .025),
+            child: CustomButton(
+                text:
+                    "Proceed to buy (${user.cart.length} ${user.cart.length == 1 ? 'item' : 'items'})",
+                onTap: () =>
+                    user.cart.isEmpty ? () {} : navigateToAddress(sum),
+                color: user.cart.isEmpty
+                    ? Colors.yellow[200]
+                    : Colors.yellow[500]),
+          ),
+          SizedBox(height: mq.height * 0.02),
+          Container(color: Colors.black12.withOpacity(0.08), height: 1),
+          SizedBox(height: mq.height * 0.02),
+          Expanded(
+            // height: mq.height * 0.5,
+            child: user.cart.isEmpty
+                ? Column(
+                    children: [
+                      Image.asset("assets/images/no-orderss.png",
+                          height: mq.height * .15),
+                      const Text("No item in cart"),
+                      SizedBox(height: mq.height * 0.02),
+                      ElevatedButton(
+                          onPressed: () {
+                            Navigator.pushReplacementNamed(
+                                context, BottomBar.routeName);
+                          },
+                          style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20)),
+                              backgroundColor: Colors.deepPurpleAccent),
+                          child: const Text(
+                            "Keep Exploring",
+                            style: TextStyle(color: Colors.white),
+                          )),
+                    ],
+                  )
+                : ListView.builder(
+                    scrollDirection: Axis.vertical,
+                    // shrinkWrap: true,
+                    itemCount: user.cart.length,
+                    itemBuilder: (context, index) {
+                      // return CartProdcut
+                      return CartProduct(index: index);
+                    }),
+          ),
+        ],
       ),
     );
   }

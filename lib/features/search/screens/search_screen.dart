@@ -1,3 +1,4 @@
+import 'package:ecommerce_major_project/common/widgets/bottom_bar.dart';
 import 'package:flutter/material.dart';
 
 import 'package:ecommerce_major_project/main.dart';
@@ -36,8 +37,8 @@ class _SearchScreenState extends State<SearchScreen> {
 
   //fetching the searched product with the search query
   fetchSearchedProduct() async {
-    products = await searchServices.fetchSearchedProduct(
-        context: context, searchQuery: widget.searchQuery);
+    products = await searchServices.searchProducts(
+        context: context, query: widget.searchQuery);
     setState(() {});
   }
 
@@ -53,7 +54,36 @@ class _SearchScreenState extends State<SearchScreen> {
       body: products == null
           ? const ColorLoader2()
           : products!.isEmpty
-              ? const Text("No product to display")
+              ? Center(
+                child: Column(
+                    //mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset(
+                        "assets/images/no-orderss.png",
+                        height: mq.height * .25,
+                      ),
+                      const Text(
+                        "Oops, No product to display",
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w300,
+                        ),
+                      ),
+                      SizedBox(height: mq.height * .01),
+                      ElevatedButton(
+                          onPressed: () {
+                            Navigator.pushReplacementNamed(
+                                context, BottomBar.routeName);
+                          },
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.deepPurpleAccent),
+                          child: const Text(
+                            "Explore other items!",
+                            style: TextStyle(color: Colors.white),
+                          ))
+                    ],
+                  ),
+              )
               : Column(
                   children: [
                     const AddressBox(),

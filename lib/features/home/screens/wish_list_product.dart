@@ -1,6 +1,7 @@
 import 'package:ecommerce_major_project/features/home/services/home_services.dart';
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import 'package:ecommerce_major_project/main.dart';
@@ -21,6 +22,12 @@ class WishListProduct extends StatefulWidget {
 class _WishListProductState extends State<WishListProduct> {
   ProductDetailServices productDetailServices = ProductDetailServices();
   final HomeServices homeServices = HomeServices();
+  final indianRupeesFormat = NumberFormat.currency(
+           name: "INR",
+           locale: 'en_IN',
+           decimalDigits: 0,
+           symbol: '₹ ',
+        );
 
   void removeProduct(Product product) {
     homeServices.removeFromWishList(context: context, product: product);
@@ -58,7 +65,7 @@ class _WishListProductState extends State<WishListProduct> {
                   maxLines: 2,
                 ),
                 Text(
-                  "₹ ${product.price.toStringAsFixed(2)}",
+                 indianRupeesFormat.format(product.price),
                   style: const TextStyle(
                       fontWeight: FontWeight.bold, fontSize: 18),
                   maxLines: 2,

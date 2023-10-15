@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import 'package:ecommerce_major_project/main.dart';
@@ -18,6 +19,12 @@ class DeliveryProduct extends StatefulWidget {
 class _DeliveryProductState extends State<DeliveryProduct> {
   final ProductDetailServices productDetailServices = ProductDetailServices();
   final CartServices cartServices = CartServices();
+  final indianRupeesFormat = NumberFormat.currency(
+           name: "INR",
+           locale: 'en_IN',
+           decimalDigits: 0,
+           symbol: '₹ ',
+        );
 
   void increaseQuantity(Product product) {
     productDetailServices.addToCart(context: context, product: product);
@@ -36,7 +43,7 @@ class _DeliveryProductState extends State<DeliveryProduct> {
     // final quantity = productCart['quantity'];
 
     return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
         // image
         Image.network(
@@ -64,7 +71,7 @@ class _DeliveryProductState extends State<DeliveryProduct> {
               width: mq.width * .57,
               padding: EdgeInsets.only(left: mq.width * .025),
               child: Text(
-                "₹ ${product.price.toStringAsFixed(2)}",
+               indianRupeesFormat.format(product.price),
                 style:
                     const TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
                 maxLines: 2,

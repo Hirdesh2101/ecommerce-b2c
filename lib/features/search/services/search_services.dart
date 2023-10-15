@@ -51,4 +51,37 @@ class SearchServices {
     }
     return productList;
   }
+  Future<List<Product>> searchProducts(
+      {required BuildContext context,required String query}) async {
+    final String? authToken = await GlobalVariables.getFirebaseAuthToken();
+    List<Product> productList = [];
+    try {
+      http.Response res = await http.get(
+          Uri.parse("$uri/api/search-products?key=$query"),
+          headers: {
+            'Content-Type': 'application/json; charset=UTF-8',
+            'Authorization': '$authToken',
+          });
+      var data = jsonDecode(res.body);
+      print(data);
+      if (context.mounted) {
+        httpErrorHandle(
+          response: res,
+          context: context,
+          onSuccess: () {
+            for (Map<String, dynamic> item in data) {
+              // print(item['name']);
+              productList.add(Product.fromJson(item));
+            }
+          },
+        );
+      }
+    } catch (e) {
+       showSnackBar(
+          context: context,
+          text:
+              "Following Error in fetching Products [Search] : ${e.toString()}");
+    }
+     return productList;
+  }
 }

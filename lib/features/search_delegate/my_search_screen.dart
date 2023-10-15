@@ -59,7 +59,8 @@ class _MySearchScreenState extends State<MySearchScreen> {
     setState(() {});
   }
 
-  deleteSearchHistoryItem(String deleteQuery) async {
+  deleteSearchHistoryItem(String deleteQuery,int index) async {
+    historyList!.removeAt(historyList!.length-index-1);
     homeServices.deleteSearchHistoryItem(
         context: context, deleteQuery: deleteQuery);
     setState(() {});
@@ -68,6 +69,10 @@ class _MySearchScreenState extends State<MySearchScreen> {
   addToHistory(String searchQuery) async {
     homeServices.addToHistory(context: context, searchQuery: searchQuery);
     setState(() {});
+  }
+
+  searchViaApi(String searchQuery) async {
+    return await homeServices.searchProducts(context, searchQuery);
   }
 
   @override
@@ -144,46 +149,20 @@ class _MySearchScreenState extends State<MySearchScreen> {
               elevation: 1,
               child: TextFormField(
                 controller: _searchController,
-                onChanged: (val) {
+                onChanged: (val) async{
                   // user is typing something
                   if (val.isNotEmpty) {
                     setState(() {
                       isUserTyping = true;
                     });
-
+                    List<String> searchResults = await searchViaApi(val.toLowerCase());
                     // show relevant suggestions if they match the value user is typing is matching
                     // character by character from the start [using startsWith()]
                     // if they dont match or stop matching after a certain length of query
                     // remove them from the list
                     // Example :  val : pum,    suggestion : Puma Shoes
                     //            val : pumxyz, suggestion : empty
-                    for (int i = 0; i < allProductsList.length; i++) {
-                      bool searchMatches = allProductsList[i]
-                          .toLowerCase()
-                          .startsWith(val.toLowerCase());
-                      if (searchMatches &&
-                          !buildSuggestionsList!.contains(allProductsList[i])) {
-                        buildSuggestionsList.add(allProductsList[i]);
-                      } else if (!searchMatches &&
-                          buildSuggestionsList!.contains(allProductsList[i])) {
-                        searchProvider
-                            .removeFromSuggestions(allProductsList[i]);
-                      }
-                    }
-                    // if no suggestions match, try to find suggestions which contain the val
-                    // [using contains()]
-                    if (buildSuggestionsList!.isEmpty) {
-                      for (int i = 0; i < allProductsList.length; i++) {
-                        bool searchMatches = allProductsList[i]
-                            .toLowerCase()
-                            .contains(val.toLowerCase());
-                        if (searchMatches &&
-                            !buildSuggestionsList
-                                .contains(allProductsList[i].toLowerCase())) {
-                          buildSuggestionsList.add(allProductsList[i]);
-                        }
-                      }
-                    }
+                    searchProvider.addListToSuggestions(searchResults);
                   }
 
                   // user is not typing OR user has cleared the search bar
@@ -564,8 +543,8 @@ class _MySearchScreenState extends State<MySearchScreen> {
                           // delete search history item
                           trailing: IconButton(
                             onPressed: () {
-                              homeServices.deleteSearchHistoryItem(
-                                  context: context, deleteQuery: listTitle);
+                              deleteSearchHistoryItem(
+                                  listTitle,index);
                             },
                             icon: const Icon(Icons.cancel),
                           ),
@@ -584,98 +563,3 @@ class _MySearchScreenState extends State<MySearchScreen> {
   }
 }
 
-/*
-class MySearchDelegate extends SearchDelegate {
-  MySearchDelegate({required this.searchResults});
-
-  List<String> searchResults;
-
-  //  ['Puma', 'DBZ', 'Bottle', 'Iphone', 'Australia'];
-
-  @override
-  ThemeData appBarTheme(BuildContext context) {
-    return ThemeData(
-      // colorScheme: ColorScheme.dark(background: Colors.redAccent),
-      colorSchemeSeed: Colors.white,
-
-      scaffoldBackgroundColor: const Color.fromARGB(255, 241, 219, 219),
-    );
-  }
-
-  @override
-  Widget? buildLeading(BuildContext context) {
-    return InkWell(
-      onTap: () => close(context, null),
-      child: const Icon(Icons.arrow_back_ios),
-    );
-  }
-
-  @override
-  InputDecorationTheme? get searchFieldDecorationTheme =>
-      const InputDecorationTheme(
-        filled: true,
-        fillColor: Colors.grey,
-        labelStyle: TextStyle(
-          color: Colors.white,
-          fontWeight: FontWeight.bold,
-        ),
-      );
-
-  @override
-  List<Widget>? buildActions(BuildContext context) {
-    return [
-      Padding(
-        padding: const EdgeInsets.only(right: 10.0),
-        child: InkWell(
-          onTap: () {
-            // if search is already empty, close it
-            if (query.isEmpty) {
-              close(context, null);
-            }
-            // else clear the query
-            else {
-              query = '';
-            }
-          },
-          child: const Icon(CupertinoIcons.xmark_circle_fill),
-        ),
-      )
-    ];
-  }
-
-  @override
-  Widget buildResults(BuildContext context) {
-    // void navigateToSearchScreen(String query) {
-    //   //make sure to pass the arguments here!
-    //   Navigator.pushNamed(context, SearchScreen.routeName, arguments: query);
-    // }
-
-    return SearchScreen(searchQuery: query);
-
-    // Center(child: Text(query, style: const TextStyle(fontSize: 50)));
-  }
-
-  @override
-  Widget buildSuggestions(BuildContext context) {
-    List<String> suggestions = searchResults.where((searchResult) {
-      final result = searchResult.toLowerCase();
-      final input = query.toLowerCase();
-      return result.contains(input);
-    }).toList();
-
-    return ListView.builder(
-      itemCount: suggestions.length,
-      itemBuilder: (context, index) {
-        final suggestion = suggestions[index];
-        return ListTile(
-          title: Text(suggestion),
-          onTap: () {
-            query = suggestion;
-            showResults(context);
-          },
-        );
-      },
-    );
-  }
-}
-*/

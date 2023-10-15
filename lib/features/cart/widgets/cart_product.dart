@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import 'package:ecommerce_major_project/main.dart';
@@ -33,6 +34,12 @@ class _CartProductState extends State<CartProduct> {
     final productCart = context.watch<UserProvider>().user.cart[widget.index];
     final product = Product.fromJson(productCart['product']);
     final quantity = productCart['quantity'];
+    final indianRupeesFormat = NumberFormat.currency(
+           name: "INR",
+           locale: 'en_IN',
+           decimalDigits: 0,
+           symbol: '₹ ',
+        );
 
     return Column(
       children: [
@@ -67,7 +74,7 @@ class _CartProductState extends State<CartProduct> {
                     padding: EdgeInsets.only(
                         left: mq.width * .025, top: mq.width * .0125),
                     child: Text(
-                      "₹ ${product.price.toStringAsFixed(2)}",
+                     indianRupeesFormat.format(product.price),
                       style: const TextStyle(
                           fontWeight: FontWeight.bold, fontSize: 15),
                       maxLines: 2,

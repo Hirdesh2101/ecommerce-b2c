@@ -2,10 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:ecommerce_major_project/main.dart';
 import 'package:ecommerce_major_project/models/product.dart';
 import 'package:ecommerce_major_project/common/widgets/stars.dart';
+import 'package:intl/intl.dart';
 
 class SearchedProduct extends StatelessWidget {
   final Product product;
-  const SearchedProduct({required this.product, super.key});
+  SearchedProduct({required this.product, super.key});
+  final indianRupeesFormat = NumberFormat.currency(
+           name: "INR",
+           locale: 'en_IN',
+           decimalDigits: 0,
+           symbol: '₹ ',
+        );
 
   //widget to display the resultant searched product
   @override
@@ -72,7 +79,7 @@ class SearchedProduct extends StatelessWidget {
                       padding: EdgeInsets.only(
                           left: mq.width * .025, top: mq.width * .0125),
                       child: Text(
-                        "₹ ${product.price.toStringAsFixed(2)}",
+                     indianRupeesFormat.format(product.price),
                         style: const TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 15),
                         maxLines: 2,

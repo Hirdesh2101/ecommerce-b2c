@@ -5,13 +5,18 @@ class SearchProvider with ChangeNotifier {
 
   List<String>? get getSuggetions => suggestionList;
 
-  void addToSuggestions(String item) {
-    suggestionList!.add(item);
+  void addListToSuggestions(List<String> item) {
+    suggestionList = List.from(item);
     notifyListeners();
   }
 
-  void removeFromSuggestions(String item) {
-    suggestionList!.removeWhere((elem) => elem == item);
-    notifyListeners();
-  }
+  // void addToSuggestions(String item) {
+  //   suggestionList!.add(item);
+  //   notifyListeners();
+  // }
+
+  // void removeFromSuggestions(String item) {
+  //   suggestionList!.removeWhere((elem) => elem == item);
+  //   notifyListeners();
+  // }
 }
