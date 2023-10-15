@@ -2,9 +2,10 @@ import 'package:ecommerce_major_project/main.dart';
 import 'package:ecommerce_major_project/models/product.dart';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class TitleAndPrice extends StatelessWidget {
-  const TitleAndPrice(
+  TitleAndPrice(
       {super.key,
       required this.product,
       required this.avgRating,
@@ -12,6 +13,12 @@ class TitleAndPrice extends StatelessWidget {
   final Product product;
   final double avgRating;
   final bool isProductOutOfStock;
+  final indianRupeesFormat = NumberFormat.currency(
+           name: "INR",
+           locale: 'en_IN',
+           decimalDigits: 0,
+           symbol: '₹ ',
+        );
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +76,7 @@ class TitleAndPrice extends StatelessWidget {
                   text: TextSpan(
                     children: [
                       TextSpan(
-                        text: "₹${product.price.toStringAsFixed(2)}",
+                        text: indianRupeesFormat.format(product.price),
                         style: const TextStyle(
                           fontSize: 28,
                           color: Colors.black,
@@ -80,7 +87,7 @@ class TitleAndPrice extends StatelessWidget {
                         child: SizedBox(width: mq.width * .02),
                       ),
                       TextSpan(
-                        text: "₹${product.price.toStringAsFixed(2)}",
+                        text: indianRupeesFormat.format(product.price),
                         style: TextStyle(
                           fontSize: 18,
                           color: Colors.grey.shade700,

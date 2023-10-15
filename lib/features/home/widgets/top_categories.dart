@@ -15,6 +15,7 @@ import 'package:ecommerce_major_project/features/home/screens/category_deals_scr
 import 'package:ecommerce_major_project/features/product_details/screens/product_detail_screen.dart';
 import 'package:ecommerce_major_project/features/product_details/services/product_detail_services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class TopCategories extends StatefulWidget {
@@ -29,7 +30,12 @@ class _TopCategoriesState extends State<TopCategories>
   // tabbar variables
   int activeTabIndex = 0;
   late final TabController _tabController;
-  final int _tabLength = 5;
+  final int _tabLength = 5; final indianRupeesFormat = NumberFormat.currency(
+           name: "INR",
+           locale: 'en_IN',
+           decimalDigits: 0,
+           symbol: '₹ ',
+        );
 
   //products
   List<Product>? productList;
@@ -302,7 +308,7 @@ class _TopCategoriesState extends State<TopCategories>
                                               children: [
                                                 TextSpan(
                                                   text:
-                                                      "₹${product.price.toInt()}",
+                                                      indianRupeesFormat.format(product.price),
                                                   style: const TextStyle(
                                                     fontSize: 14,
                                                     color: Colors.black,
@@ -315,7 +321,7 @@ class _TopCategoriesState extends State<TopCategories>
                                                 ),
                                                 TextSpan(
                                                   text:
-                                                      "₹${product.price.toInt()}",
+                                                      indianRupeesFormat.format(product.price),
                                                   style: TextStyle(
                                                     fontSize: 14,
                                                     color: Colors.grey.shade700,

@@ -30,7 +30,13 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
   final AdminServices adminServices = AdminServices();
   final int allowReturnProductDays = 15;
   bool allowReturn = false;
-  bool viewMoreDetails = false;
+  bool viewMoreDetails = true;
+ final indianRupeesFormat = NumberFormat.currency(
+           name: "INR",
+           locale: 'en_IN',
+           decimalDigits: 0,
+           symbol: '₹ ',
+        );
 
   @override
   void initState() {
@@ -268,7 +274,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                           Text(
                               "Order Date   : ${DateFormat('yMMMd').format(DateTime.fromMillisecondsSinceEpoch(widget.order.orderedAt))}"),
                           Text("Order ID        : ${widget.order.id}"),
-                          Text("Order Total   : ₹${widget.order.totalPrice}"),
+                          Text("Order Total   : ${indianRupeesFormat.format(widget.order.totalPrice)}"),
                           Text(
                               "Status            : ${getStatus(widget.order.status)}")
                         ],

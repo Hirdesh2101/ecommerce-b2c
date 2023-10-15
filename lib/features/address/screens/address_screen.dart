@@ -1,5 +1,6 @@
 import 'package:ecommerce_major_project/common/widgets/custom_textfield.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:pay/pay.dart';
 import 'package:provider/provider.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
@@ -40,6 +41,12 @@ class _AddressScreenState extends State<AddressScreen> {
   final _addressFormKey = GlobalKey<FormState>();
   final AddressServices addressServices = AddressServices();
   List<String> checkoutSteps = ["Address", "Delivery", "Payment"];
+  final indianRupeesFormat = NumberFormat.currency(
+           name: "INR",
+           locale: 'en_IN',
+           decimalDigits: 0,
+           symbol: '₹ ',
+        );
 
   // late final Future<PaymentConfiguration> _googlePayConfigFuture;
 
@@ -193,6 +200,7 @@ class _AddressScreenState extends State<AddressScreen> {
                 horizontal: mq.width * .02, vertical: mq.height * .02),
             child: Column(
               children: [
+                
                 SizedBox(
                   width: mq.width * .8,
                   height: mq.height * .06,
@@ -259,31 +267,13 @@ class _AddressScreenState extends State<AddressScreen> {
                 goToPayment
                     ? Column(
                         mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          SizedBox(height: mq.height * .02),
-                          Container(
-                              alignment: Alignment.centerLeft,
-                              child: const Text("Order Summary",
-                                  style: TextStyle(fontSize: 20))),
-                          SizedBox(height: mq.height * .02),
-                          SizedBox(
-                            // height: mq.height * .55,
-                            // width: double.infinity,
-                            child: ListView.builder(
-                                // padding: EdgeInsets.all(10),
-                                scrollDirection: Axis.vertical,
-                                physics: BouncingScrollPhysics(),
-                                shrinkWrap: true,
-                                itemCount: user.cart.length,
-                                itemBuilder: (context, index) {
-                                  // return CartProdcut
-                                  return DeliveryProduct(index: index);
-                                }),
-                          ),
+                            SizedBox(height: mq.height * .03),
                           Container(
                             padding: EdgeInsets.only(left: mq.width * .025),
                             child: Text(
-                              "Total Payable Amount: ₹ ${double.parse(widget.totalAmount).toStringAsFixed(2)}",
+                              "Total Payable Amount: ${indianRupeesFormat.format(double.parse(widget.totalAmount))}",
                               style: const TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 17),
                               maxLines: 2,
@@ -372,6 +362,31 @@ class _AddressScreenState extends State<AddressScreen> {
                                 }
                               },
                               color: const Color.fromARGB(255, 108, 255, 255)),
+                          SizedBox(height: mq.height * .02),
+                          Container(
+                              alignment: Alignment.centerLeft,
+                              child: const Text("Order Summary",
+                                  style: TextStyle(fontSize: 20))),
+                          SizedBox(height: mq.height * .02),
+                          SizedBox(
+                            // height: mq.height * .55,
+                            // width: double.infinity,
+                            child: ListView.separated(
+                                // padding: EdgeInsets.all(10),
+                                scrollDirection: Axis.vertical,
+                                physics: const BouncingScrollPhysics(),
+                                shrinkWrap: true,
+                                itemCount: user.cart.length,
+                                itemBuilder: (context, index) {
+                                  // return CartProdcut
+                                  return DeliveryProduct(index: index);
+                                },
+                                separatorBuilder: (context, index) {
+                                  return SizedBox(height: mq.height*0.01,);
+                                },
+                                ),
+                          ),
+                          
                         ],
                       )
 
