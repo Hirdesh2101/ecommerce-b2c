@@ -42,11 +42,11 @@ class _AddressScreenState extends State<AddressScreen> {
   final AddressServices addressServices = AddressServices();
   List<String> checkoutSteps = ["Address", "Delivery", "Payment"];
   final indianRupeesFormat = NumberFormat.currency(
-           name: "INR",
-           locale: 'en_IN',
-           decimalDigits: 0,
-           symbol: '₹ ',
-        );
+    name: "INR",
+    locale: 'en_IN',
+    decimalDigits: 0,
+    symbol: '₹ ',
+  );
 
   // late final Future<PaymentConfiguration> _googlePayConfigFuture;
 
@@ -191,7 +191,7 @@ class _AddressScreenState extends State<AddressScreen> {
       child: Scaffold(
         appBar: GlobalVariables.getAppBar(
           context: context,
-          onClickSearchNavigateTo: MySearchScreen(),
+          onClickSearchNavigateTo: const MySearchScreen(),
           title: "Checkout",
         ),
         body: SingleChildScrollView(
@@ -200,7 +200,6 @@ class _AddressScreenState extends State<AddressScreen> {
                 horizontal: mq.width * .02, vertical: mq.height * .02),
             child: Column(
               children: [
-                
                 SizedBox(
                   width: mq.width * .8,
                   height: mq.height * .06,
@@ -269,7 +268,7 @@ class _AddressScreenState extends State<AddressScreen> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                            SizedBox(height: mq.height * .03),
+                          SizedBox(height: mq.height * .03),
                           Container(
                             padding: EdgeInsets.only(left: mq.width * .025),
                             child: Text(
@@ -372,75 +371,24 @@ class _AddressScreenState extends State<AddressScreen> {
                             // height: mq.height * .55,
                             // width: double.infinity,
                             child: ListView.separated(
-                                // padding: EdgeInsets.all(10),
-                                scrollDirection: Axis.vertical,
-                                physics: const BouncingScrollPhysics(),
-                                shrinkWrap: true,
-                                itemCount: user.cart.length,
-                                itemBuilder: (context, index) {
-                                  // return CartProdcut
-                                  return DeliveryProduct(index: index);
-                                },
-                                separatorBuilder: (context, index) {
-                                  return SizedBox(height: mq.height*0.01,);
-                                },
-                                ),
-                          ),
-                          
-                        ],
-                      )
-
-//google pay
-/*
- Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text("Select payment method",
-                              style: GlobalVariables.appBarTextStyle),
-                          Container(
-                            width: double.infinity,
-                            // decoration: BoxDecoration(
-                            //   border: Border.all(
-                            //     color: Colors.black12,
-                            //   ),
-                            // ),
-                            child: Padding(
-                              padding: EdgeInsets.all(mq.width * .025),
-                              child: const Text(
-                                "GOOGLE PAY",
-                                style: TextStyle(fontSize: 14),
-                              ),
+                              // padding: EdgeInsets.all(10),
+                              scrollDirection: Axis.vertical,
+                              physics: const BouncingScrollPhysics(),
+                              shrinkWrap: true,
+                              itemCount: user.cart.length,
+                              itemBuilder: (context, index) {
+                                // return CartProdcut
+                                return DeliveryProduct(index: index);
+                              },
+                              separatorBuilder: (context, index) {
+                                return SizedBox(
+                                  height: mq.height * 0.01,
+                                );
+                              },
                             ),
                           ),
-
-                          // SizedBox(height: mq.height * .025),
-                          FutureBuilder<PaymentConfiguration>(
-                            future: _googlePayConfigFuture,
-                            builder: (context, snapshot) => snapshot.hasData
-                                ? GooglePayButton(
-                                    onPressed: () {
-                                      payPressed(address);
-                                    },
-                                    paymentConfiguration: snapshot.data!,
-                                    paymentItems: paymentItems,
-                                    type: GooglePayButtonType.buy,
-                                    margin: const EdgeInsets.only(top: 15.0),
-                                    onPaymentResult: onGooglePayResult,
-                                    loadingIndicator: const Center(
-                                      child: CircularProgressIndicator(),
-                                    ),
-                                  )
-                                : const SizedBox(
-                                    child: Center(
-                                        child: Text(
-                                            "Snapshot does not have data")),
-                                  ),
-                          ),
                         ],
                       )
-                    
-*/
-
                     : Padding(
                         padding: EdgeInsets.only(top: mq.height * .02),
                         child: Column(
@@ -466,7 +414,7 @@ class _AddressScreenState extends State<AddressScreen> {
                                               BorderRadius.circular(10),
                                           border: Border.all(
                                             width: 2,
-                                            color: Color.fromARGB(
+                                            color: const Color.fromARGB(
                                                 255, 156, 152, 163),
                                           ),
                                         ),
@@ -554,19 +502,6 @@ class _AddressScreenState extends State<AddressScreen> {
                                         controller: cityController,
                                         hintText: "Town/City"),
                                     SizedBox(height: mq.height * .04),
-                                    // CustomButton(
-                                    //   onTap: () {
-                                    //     // ensuring form validation and matching passwords
-                                    //   },
-                                    //   // style: ElevatedButton.styleFrom(
-                                    //   //     shape: RoundedRectangleBorder(
-                                    //   //         borderRadius: BorderRadius.circular(12)),
-                                    //   //     minimumSize: Size(mq.width, mq.height * 0.08),
-                                    //   //     backgroundColor: Colors.orange.shade700),
-                                    //   text:
-                                    //     "Proceed To Pay",
-                                    // ),
-
                                     CustomButton(
                                       text: address.isNotEmpty
                                           ? addnewAdress
@@ -575,19 +510,9 @@ class _AddressScreenState extends State<AddressScreen> {
                                           : "Deliver to new address",
                                       onTap: () {
                                         deliverToThisAddress(address);
-                                        // setState(() {
-                                        //   goToPayment = true;
-                                        // });
                                       },
                                       color: Colors.amber[400],
                                     ),
-
-                                    //
-                                    //
-                                    //
-                                    //
-                                    //
-                                    //
                                   ],
                                 ),
                               ),
