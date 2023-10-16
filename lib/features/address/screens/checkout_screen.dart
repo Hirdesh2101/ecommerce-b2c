@@ -13,18 +13,18 @@ import 'package:ecommerce_major_project/common/widgets/custom_button.dart';
 import 'package:badges/badges.dart' as badges;
 import 'package:ecommerce_major_project/features/address/widgets/delivery_product.dart';
 import 'package:ecommerce_major_project/features/search_delegate/my_search_screen.dart';
-import 'package:ecommerce_major_project/features/address/services/address_services.dart';
+import 'package:ecommerce_major_project/features/address/services/checkout_services.dart';
 
-class AddressScreen extends StatefulWidget {
-  static const String routeName = '/address';
+class CheckoutScreen extends StatefulWidget {
+  static const String routeName = '/checkout';
   final String totalAmount;
-  const AddressScreen({super.key, required this.totalAmount});
+  const CheckoutScreen({super.key, required this.totalAmount});
 
   @override
-  State<AddressScreen> createState() => _AddressScreenState();
+  State<CheckoutScreen> createState() => _CheckoutScreenState();
 }
 
-class _AddressScreenState extends State<AddressScreen> {
+class _CheckoutScreenState extends State<CheckoutScreen> {
   TextEditingController areaController = TextEditingController();
   TextEditingController cityController = TextEditingController();
   TextEditingController pincodeController = TextEditingController();
@@ -39,7 +39,7 @@ class _AddressScreenState extends State<AddressScreen> {
   bool goToFinalPayment = false;
   List<PaymentItem> paymentItems = [];
   final _addressFormKey = GlobalKey<FormState>();
-  final AddressServices addressServices = AddressServices();
+  final CheckoutServices addressServices = CheckoutServices();
   List<String> checkoutSteps = ["Address", "Delivery", "Payment"];
   final indianRupeesFormat = NumberFormat.currency(
     name: "INR",
@@ -48,14 +48,9 @@ class _AddressScreenState extends State<AddressScreen> {
     symbol: '₹ ',
   );
 
-  // late final Future<PaymentConfiguration> _googlePayConfigFuture;
-
   @override
   void initState() {
     super.initState();
-    // suoer.initState
-    // _googlePayConfigFuture =
-    //     PaymentConfiguration.fromAsset("google_pay_config.json");
     paymentItems.add(
       PaymentItem(
         label: 'Total Amount',
@@ -104,37 +99,6 @@ class _AddressScreenState extends State<AddressScreen> {
   }
 
   void payPressed(String addressFromProvider) {
-    // addressToBeUsed = "";
-
-    // bool isFormValid = flatBuildingController.text.isNotEmpty ||
-    //     areaController.text.isNotEmpty ||
-    //     pincodeController.text.isNotEmpty ||
-    //     cityController.text.isNotEmpty;
-
-    // if (isFormValid) {
-    //   if (_addressFormKey.currentState!.validate()) {
-    //     addressToBeUsed =
-    //         "${flatBuildingController.text}, ${areaController.text}, ${cityController.text} - ${pincodeController.text}";
-    //   } else {
-    //     throw Exception("Please enter all the values");
-    //   }
-    // } else if (addressFromProvider.isNotEmpty) {
-    //   addressToBeUsed = addressFromProvider;
-    // } else {
-    //   showSnackBar(context: context, text: "Error in address module");
-    // }
-
-    // print("Address to be used:\n==> $addressToBeUsed");
-
-    // if (Provider.of<UserProvider>(context, listen: false)
-    //     .user
-    //     .address
-    //     .isEmpty) {
-    //   addressServices.saveUserAddress(
-    //       context: context, address: addressToBeUsed);
-    //   // print( s of user in provider ====> : ${Provider.of<UserProvider>(context, listen: false).user.address}");
-    // }
-
     addressServices.placeOrder(
         context: context,
         address: addressToBeUsed,
@@ -281,83 +245,93 @@ class _AddressScreenState extends State<AddressScreen> {
                           SizedBox(height: mq.height * .02),
                           CustomButton(
                               text: "Pay now",
-                              onTap: () {
-                                setState(() {
-                                  goToFinalPayment = true;
-                                });
-                                var options = {
-                                  'key': 'rzp_test_7NBmERXaABkUpY',
-                                  //amount is in paisa, multiply by 100 to convert
-                                  'amount': 100 * totalAmount,
-                                  'name': 'AKR Company',
-                                  'description': 'Ecommerce Bill',
-                                  'prefill': {
-                                    'contact': '8888888888',
-                                    'email': 'test@razorpay.com'
-                                  }
-                                };
+                              onTap: () async {
+                                bool isProductAvailable =
+                                    await CheckoutServices()
+                                        .checkProductsAvailability(
+                                            context, user.cart);
 
-                                try {
-                                  _razorpay.open(options);
-
-                                  Future.delayed(const Duration(seconds: 2),
-                                      () {
-                                    showDialog(
-                                      context: context,
-                                      builder: (context) => AlertDialog(
-                                        contentPadding:
-                                            const EdgeInsets.symmetric(
-                                                horizontal: 20),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          side: const BorderSide(
-                                              color: Colors.black12, width: 4),
-                                        ),
-                                        actionsAlignment: MainAxisAlignment.end,
-                                        // actionsPadding: EdgeInsets.only(right: 20, bottom: 20),
-                                        title: Image.asset(
-                                            "assets/images/successpayment.JPG",
-                                            height: 150),
-                                        content: Padding(
-                                          padding:
-                                              const EdgeInsets.only(top: 20.0),
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              // with google fonts
-                                              const Text(
-                                                "Your order has been placed",
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.w800,
-                                                    fontSize: 18,
-                                                    color: Colors.black87),
-                                              ),
-                                              const SizedBox(height: 10),
-                                              Text(
-                                                  "Transaction ID : ${DateTime.now().millisecondsSinceEpoch}\nTime: ${DateTime.now().hour} : ${DateTime.now().minute} : ${DateTime.now().second}"),
-                                            ],
-                                          ),
-                                        ),
-                                        actions: [
-                                          TextButton(
-                                            onPressed: () {
-                                              payPressed(address);
-                                              Navigator.of(context).pop();
-                                              Navigator.pushReplacementNamed(
-                                                  context, BottomBar.routeName);
-                                            },
-                                            child: const Text("OK"),
-                                          )
-                                        ],
-                                      ),
-                                    );
+                                if (isProductAvailable) {
+                                  setState(() {
+                                    goToFinalPayment = true;
                                   });
-                                } catch (e) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(content: Text("Error : $e")));
+                                  var options = {
+                                    'key': 'rzp_test_7NBmERXaABkUpY',
+                                    //amount is in paisa, multiply by 100 to convert
+                                    'amount': 100 * totalAmount,
+                                    'name': 'AKR Company',
+                                    'description': 'Ecommerce Bill',
+                                    'prefill': {
+                                      'contact': '8888888888',
+                                      'email': 'test@razorpay.com'
+                                    }
+                                  };
+                                  try {
+                                    _razorpay.open(options);
+
+                                    Future.delayed(const Duration(seconds: 2),
+                                        () {
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) => AlertDialog(
+                                          contentPadding:
+                                              const EdgeInsets.symmetric(
+                                                  horizontal: 20),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            side: const BorderSide(
+                                                color: Colors.black12,
+                                                width: 4),
+                                          ),
+                                          actionsAlignment:
+                                              MainAxisAlignment.end,
+                                          // actionsPadding: EdgeInsets.only(right: 20, bottom: 20),
+                                          title: Image.asset(
+                                              "assets/images/successpayment.JPG",
+                                              height: 150),
+                                          content: Padding(
+                                            padding: const EdgeInsets.only(
+                                                top: 20.0),
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                // with google fonts
+                                                const Text(
+                                                  "Your order has been placed",
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w800,
+                                                      fontSize: 18,
+                                                      color: Colors.black87),
+                                                ),
+                                                const SizedBox(height: 10),
+                                                Text(
+                                                    "Transaction ID : ${DateTime.now().millisecondsSinceEpoch}\nTime: ${DateTime.now().hour} : ${DateTime.now().minute} : ${DateTime.now().second}"),
+                                              ],
+                                            ),
+                                          ),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () {
+                                                payPressed(address);
+                                                Navigator.of(context).pop();
+                                                Navigator.pushReplacementNamed(
+                                                    context,
+                                                    BottomBar.routeName);
+                                              },
+                                              child: const Text("OK"),
+                                            )
+                                          ],
+                                        ),
+                                      );
+                                    });
+                                  } catch (e) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(content: Text("Error : $e")));
+                                  }
                                 }
                               },
                               color: const Color.fromARGB(255, 108, 255, 255)),

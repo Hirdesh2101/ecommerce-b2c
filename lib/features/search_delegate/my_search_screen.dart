@@ -59,8 +59,8 @@ class _MySearchScreenState extends State<MySearchScreen> {
     setState(() {});
   }
 
-  deleteSearchHistoryItem(String deleteQuery,int index) async {
-    historyList!.removeAt(historyList!.length-index-1);
+  deleteSearchHistoryItem(String deleteQuery, int index) async {
+    historyList!.removeAt(historyList!.length - index - 1);
     homeServices.deleteSearchHistoryItem(
         context: context, deleteQuery: deleteQuery);
     setState(() {});
@@ -149,13 +149,14 @@ class _MySearchScreenState extends State<MySearchScreen> {
               elevation: 1,
               child: TextFormField(
                 controller: _searchController,
-                onChanged: (val) async{
+                onChanged: (val) async {
                   // user is typing something
                   if (val.isNotEmpty) {
                     setState(() {
                       isUserTyping = true;
                     });
-                    List<String> searchResults = await searchViaApi(val.toLowerCase());
+                    List<String> searchResults =
+                        await searchViaApi(val.toLowerCase());
                     // show relevant suggestions if they match the value user is typing is matching
                     // character by character from the start [using startsWith()]
                     // if they dont match or stop matching after a certain length of query
@@ -543,8 +544,7 @@ class _MySearchScreenState extends State<MySearchScreen> {
                           // delete search history item
                           trailing: IconButton(
                             onPressed: () {
-                              deleteSearchHistoryItem(
-                                  listTitle,index);
+                              deleteSearchHistoryItem(listTitle, index);
                             },
                             icon: const Icon(Icons.cancel),
                           ),
@@ -562,4 +562,3 @@ class _MySearchScreenState extends State<MySearchScreen> {
     );
   }
 }
-

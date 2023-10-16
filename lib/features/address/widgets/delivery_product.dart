@@ -2,7 +2,6 @@ import 'package:ecommerce_major_project/features/product_details/screens/product
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-
 import 'package:ecommerce_major_project/main.dart';
 import 'package:ecommerce_major_project/models/product.dart';
 import 'package:ecommerce_major_project/providers/user_provider.dart';
@@ -26,14 +25,6 @@ class _DeliveryProductState extends State<DeliveryProduct> {
     decimalDigits: 0,
     symbol: '₹ ',
   );
-
-  void increaseQuantity(Product product) {
-    productDetailServices.addToCart(context: context, product: product);
-  }
-
-  void decreaseQuantity(Product product) {
-    cartServices.removeFromCart(context: context, product: product);
-  }
 
   @override
   Widget build(BuildContext context) {

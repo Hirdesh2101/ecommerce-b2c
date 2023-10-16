@@ -1,12 +1,8 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:provider/provider.dart';
-
 import 'package:ecommerce_major_project/models/product.dart';
 import 'package:ecommerce_major_project/constants/utils.dart';
-import 'package:ecommerce_major_project/providers/user_provider.dart';
 import 'package:ecommerce_major_project/constants/error_handling.dart';
 import 'package:ecommerce_major_project/constants/global_variables.dart';
 

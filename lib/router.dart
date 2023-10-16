@@ -8,7 +8,7 @@ import 'package:ecommerce_major_project/common/widgets/bottom_bar.dart';
 import 'package:ecommerce_major_project/features/home/screens/home_screen.dart';
 import 'package:ecommerce_major_project/features/auth/screens/auth_screen.dart';
 import 'package:ecommerce_major_project/features/search/screens/search_screen.dart';
-import 'package:ecommerce_major_project/features/address/screens/address_screen.dart';
+import 'package:ecommerce_major_project/features/address/screens/checkout_screen.dart';
 import 'package:ecommerce_major_project/features/admin/screens/add_product_screen.dart';
 import 'package:ecommerce_major_project/features/home/screens/category_deals_screen.dart';
 import 'package:ecommerce_major_project/features/order_details/screens/order_details_screen.dart';
@@ -72,11 +72,11 @@ Route<dynamic> generateRoute(RouteSettings routeSettings) {
           builder: (_) => AllOrdersScreen(allOrders: allOrders));
 
     // AddressScreen
-    case AddressScreen.routeName:
+    case CheckoutScreen.routeName:
       var totalAmount = routeSettings.arguments as String;
       return MaterialPageRoute(
         settings: routeSettings,
-        builder: (_) => AddressScreen(totalAmount: totalAmount),
+        builder: (_) => CheckoutScreen(totalAmount: totalAmount),
       );
 
     // OrderDetailsScreen

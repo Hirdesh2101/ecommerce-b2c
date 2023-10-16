@@ -2,6 +2,13 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 
+import 'package:internet_connection_checker/internet_connection_checker.dart';
+
+Future<bool> checkNetworkConnectivity() async {
+  bool result = await InternetConnectionChecker().hasConnection;
+  return result;
+}
+
 void showSnackBar({
   required BuildContext context,
   required String text,

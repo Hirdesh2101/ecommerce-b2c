@@ -1,13 +1,9 @@
-// import 'package:flutter/material.dart';
-// ignore_for_file: avoid_print
-
 import 'dart:convert';
 import 'package:ecommerce_major_project/providers/user_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
-// import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '/common/widgets/bottom_bar.dart';
 import '/constants/global_variables.dart';
 import '/constants/error_handling.dart';
@@ -106,7 +102,7 @@ class AuthService {
           Uri.parse('$uri/tokenIsValid'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
-            'Authorization': authToken!,
+            'Authorization': authToken,
           },
         );
 
