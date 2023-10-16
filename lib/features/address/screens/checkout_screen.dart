@@ -1,4 +1,5 @@
 import 'package:ecommerce_major_project/common/widgets/custom_textfield.dart';
+import 'package:ecommerce_major_project/features/address/widgets/order_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:pay/pay.dart';
@@ -75,30 +76,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     super.dispose();
   }
 
-  // void onApplyPayResult(paymentResult) {
-  //   // implement apple pay function
-  // }
-
-  void onGooglePayResult(paymentResult) {
-    // implement google pay function
-    debugPrint("\n===> onGooglePayResult running...");
-    debugPrint(
-        "\n\nAddress of user provider ====> : ${Provider.of<UserProvider>(context, listen: false).user.address}");
-    if (Provider.of<UserProvider>(context, listen: false)
-        .user
-        .address
-        .isEmpty) {
-      addressServices.saveUserAddress(
-          context: context, address: addressToBeUsed);
-    }
-
-    addressServices.placeOrder(
-        context: context,
-        address: addressToBeUsed,
-        totalSum: num.parse(widget.totalAmount));
-  }
-
-  void payPressed(String addressFromProvider) {
+  void placeOrder(String addressFromProvider) {
     addressServices.placeOrder(
         context: context,
         address: addressToBeUsed,
@@ -107,11 +85,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
   void deliverToThisAddress(String addressFromProvider) {
     addressToBeUsed = "";
-
-    // bool isFormValid = flatBuildingController.text.isNotEmpty ||
-    //     areaController.text.isNotEmpty ||
-    //     pincodeController.text.isNotEmpty ||
-    //     cityController.text.isNotEmpty;
 
     if (addnewAdress || addressFromProvider == "") {
       if (_addressFormKey.currentState!.validate()) {
@@ -133,22 +106,12 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     }
 
     print("Address to be used:\n==> $addressToBeUsed");
-
-    // if (Provider.of<UserProvider>(context, listen: false)
-    //     .user
-    //     .address
-    //     .isEmpty && addressToBeUsed!='') {
-
-    //   // print( s of user in provider ====> : ${Provider.of<UserProvider>(context, listen: false).user.address}");
-    // }
   }
 
   @override
   Widget build(BuildContext context) {
     final user = context.watch<UserProvider>().user;
     var address = user.address;
-
-    // var address = context.watch<UserProvider>().user.address;
 
     return GestureDetector(
       onTap: FocusScope.of(context).unfocus,
@@ -213,12 +176,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                 padding: EdgeInsets.all(mq.height * .01),
                                 // color: Colors.red,
                                 alignment: Alignment.center,
-                                foregroundDecoration: const BoxDecoration(
-                                    // image: DecorationImage(
-                                    //   image: AssetImage(
-                                    //       "assets/images/chatbot2.png"),
-                                    // ),
-                                    ),
+                                foregroundDecoration: const BoxDecoration(),
                                 child: Text(checkoutSteps[i]),
                               ),
                             ),
@@ -246,15 +204,15 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                           CustomButton(
                               text: "Pay now",
                               onTap: () async {
+                                setState(() {
+                                  goToFinalPayment = true;
+                                });
                                 bool isProductAvailable =
                                     await CheckoutServices()
                                         .checkProductsAvailability(
                                             context, user.cart);
 
                                 if (isProductAvailable) {
-                                  setState(() {
-                                    goToFinalPayment = true;
-                                  });
                                   var options = {
                                     'key': 'rzp_test_7NBmERXaABkUpY',
                                     //amount is in paisa, multiply by 100 to convert
@@ -269,69 +227,16 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                   try {
                                     _razorpay.open(options);
 
-                                    Future.delayed(const Duration(seconds: 2),
-                                        () {
-                                      showDialog(
-                                        context: context,
-                                        builder: (context) => AlertDialog(
-                                          contentPadding:
-                                              const EdgeInsets.symmetric(
-                                                  horizontal: 20),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                            side: const BorderSide(
-                                                color: Colors.black12,
-                                                width: 4),
-                                          ),
-                                          actionsAlignment:
-                                              MainAxisAlignment.end,
-                                          // actionsPadding: EdgeInsets.only(right: 20, bottom: 20),
-                                          title: Image.asset(
-                                              "assets/images/successpayment.JPG",
-                                              height: 150),
-                                          content: Padding(
-                                            padding: const EdgeInsets.only(
-                                                top: 20.0),
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                // with google fonts
-                                                const Text(
-                                                  "Your order has been placed",
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w800,
-                                                      fontSize: 18,
-                                                      color: Colors.black87),
-                                                ),
-                                                const SizedBox(height: 10),
-                                                Text(
-                                                    "Transaction ID : ${DateTime.now().millisecondsSinceEpoch}\nTime: ${DateTime.now().hour} : ${DateTime.now().minute} : ${DateTime.now().second}"),
-                                              ],
-                                            ),
-                                          ),
-                                          actions: [
-                                            TextButton(
-                                              onPressed: () {
-                                                payPressed(address);
-                                                Navigator.of(context).pop();
-                                                Navigator.pushReplacementNamed(
-                                                    context,
-                                                    BottomBar.routeName);
-                                              },
-                                              child: const Text("OK"),
-                                            )
-                                          ],
-                                        ),
-                                      );
-                                    });
+                                    print(
+                                        "Inside after razor pay open..............$address");
                                   } catch (e) {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                         SnackBar(content: Text("Error : $e")));
                                   }
+                                } else {
+                                  setState(() {
+                                    goToFinalPayment = false;
+                                  });
                                 }
                               },
                               color: const Color.fromARGB(255, 108, 255, 255)),
@@ -352,7 +257,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               itemCount: user.cart.length,
                               itemBuilder: (context, index) {
                                 // return CartProdcut
-                                return DeliveryProduct(index: index);
+                                return OrderSummaryProduct(index: index);
                               },
                               separatorBuilder: (context, index) {
                                 return SizedBox(
@@ -503,50 +408,41 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   }
 
   void _handlePaymentSuccess(PaymentSuccessResponse response) {
+    String address =
+        Provider.of<UserProvider>(context, listen: false).user.address;
+    placeOrder(address);
+
     print(
         "\n\nPayment successful : \n\nPayment ID :  ${response.paymentId} \n\n Order ID : ${response.orderId} \n\n Signature : ${response.signature}");
 
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text("Success"),
-        content: Text(
-            "Payment ID : ${response.paymentId}\nOrder ID : ${response.orderId}\nSignature : ${response.signature}"),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: const Text("OK"),
-          )
-        ],
-      ),
+    OrderDialog.showOrderStatusDialog(
+      context,
+      isPaymentSuccess: true,
+      title: "Order has been placed!",
+      subtitle:
+          "Transaction ID : ${DateTime.now().millisecondsSinceEpoch}\nTime: ${DateTime.now().hour} : ${DateTime.now().minute} : ${DateTime.now().second}\nPayment ID : ${response.paymentId}\nOrder ID : ${response.orderId}\nSignature : ${response.signature}",
     );
   }
 
   void _handlePaymentError(PaymentFailureResponse response) {
     print(
         "Payment Error ==> Code : ${response.code} \nMessage : ${response.message}  ");
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text("Oops, Error occured"),
-        content: Text(
-            "Payment Error ==> Code : ${response.code} \nMessage : ${response.message}"),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: const Text("OK"),
-          )
-        ],
-      ),
+    OrderDialog.showOrderStatusDialog(
+      context,
+      subtitle:
+          "Payment Error ==> Code : ${response.code} \nMessage : ${response.message}",
     );
   }
 
   void _handleExternalWallet(ExternalWalletResponse response) {
     print("External Wallet : ${response.walletName}");
+
+    OrderDialog.showOrderStatusDialog(
+      context,
+      isPaymentSuccess: true,
+      title: "Your order has been placed!",
+      subtitle: "External Wallet : ${response.walletName}",
+    );
 
     showDialog(
       context: context,

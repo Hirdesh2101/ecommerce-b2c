@@ -8,15 +8,15 @@ import 'package:ecommerce_major_project/providers/user_provider.dart';
 import 'package:ecommerce_major_project/features/cart/services/cart_services.dart';
 import 'package:ecommerce_major_project/features/product_details/services/product_detail_services.dart';
 
-class DeliveryProduct extends StatefulWidget {
+class OrderSummaryProduct extends StatefulWidget {
   final int index;
-  const DeliveryProduct({required this.index, super.key});
+  const OrderSummaryProduct({required this.index, super.key});
 
   @override
-  State<DeliveryProduct> createState() => _DeliveryProductState();
+  State<OrderSummaryProduct> createState() => _OrderSummaryProductState();
 }
 
-class _DeliveryProductState extends State<DeliveryProduct> {
+class _OrderSummaryProductState extends State<OrderSummaryProduct> {
   final ProductDetailServices productDetailServices = ProductDetailServices();
   final CartServices cartServices = CartServices();
   final indianRupeesFormat = NumberFormat.currency(
