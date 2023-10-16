@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:ecommerce_major_project/main.dart';
 import 'package:ecommerce_major_project/constants/global_variables.dart';
-import 'package:ecommerce_major_project/features/home/widgets/top_categories.dart';
+import 'package:ecommerce_major_project/features/home/screens/top_categories.dart';
 
 // Route _createRoute() {
 //   return PageRouteBuilder(

@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:ecommerce_major_project/features/home/providers/search_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
@@ -160,19 +159,18 @@ class HomeServices {
     //final searchProvider = Provider.of<SearchProvider>(context, listen: true);
     List<String>? productList = [];
     try {
-      http.Response res = await http.get(
-          Uri.parse("$uri/api/search-products?key=$query"),
-          headers: {
-            'Content-Type': 'application/json; charset=UTF-8',
-            'Authorization': '$authToken',
-          });
+      http.Response res = await http
+          .get(Uri.parse("$uri/api/search-products?key=$query"), headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': '$authToken',
+      });
       var data = jsonDecode(res.body);
       if (context.mounted) {
         httpErrorHandle(
           response: res,
           context: context,
           onSuccess: () {
-             for (Map<String, dynamic> item in data) {
+            for (Map<String, dynamic> item in data) {
               // print(item['name']);
               productList.add(item['name']);
             }
