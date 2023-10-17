@@ -4,15 +4,21 @@ import 'dart:convert';
 class Rating {
   final String userId;
   final num rating;
+  final String? review;
+  final String? createdAt;
   Rating({
     required this.userId,
     required this.rating,
+    required this.review,
+    required this.createdAt,
   });
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'userId': userId,
       'rating': rating,
+      'review': review,
+      'createdAt': createdAt
     };
   }
 
@@ -20,6 +26,8 @@ class Rating {
     return Rating(
       userId: map['userId'] as String,
       rating: map['rating'] as num,
+      review: map['review']??'',
+      createdAt: map['createdAt'] as String?,
     );
   }
 

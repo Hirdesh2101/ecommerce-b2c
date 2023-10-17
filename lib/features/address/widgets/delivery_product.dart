@@ -40,7 +40,7 @@ class _OrderSummaryProductState extends State<OrderSummaryProduct> {
         Navigator.pushNamed(
           context,
           ProductDetailScreen.routeName,
-          arguments: product,
+          arguments: product.id,
         );
       },
       child: Row(

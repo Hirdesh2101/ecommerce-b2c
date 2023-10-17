@@ -1,6 +1,7 @@
 import 'package:ecommerce_major_project/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:intl/intl.dart';
 
 class ReviewUI extends StatelessWidget {
   final String image, name, date, comment;
@@ -25,19 +26,13 @@ class ReviewUI extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         ListTile(
-          contentPadding:  const EdgeInsets.only(left:10.0),
-          leading: Container(
-            height: mq.width * 0.08,
-            width: mq.width * 0.08,
-            decoration: BoxDecoration(
-              color: Colors.red,
-              borderRadius: BorderRadius.circular(44.0),
-            ),
-            // child:  Image.network(
-            //  image,
-            //   fit: BoxFit.cover,
-            // ),
-          ),
+          contentPadding: const EdgeInsets.only(left: 10.0),
+          leading: ClipOval(
+              child: Image.network(image ==""?
+                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnWaCAfSN08VMtSjYBj0QKSfHk4-fjJZCOxgHLPuBSAw&s":image,
+                  width: mq.width * 0.08,
+                  height: mq.width * 0.08,
+                  fit: BoxFit.cover)),
           title: Text(
             name,
             style: const TextStyle(
@@ -46,7 +41,7 @@ class ReviewUI extends StatelessWidget {
             ),
           ),
           subtitle: Text(
-            date,
+         DateFormat('yyyy-MM-dd – kk:mm').format(DateTime.fromMillisecondsSinceEpoch(int.parse(date))),
             style: TextStyle(fontSize: 14.0),
           ),
           trailing: IconButton(
@@ -54,9 +49,8 @@ class ReviewUI extends StatelessWidget {
             icon: const Icon(Icons.more_vert),
           ),
         ),
-        
         Padding(
-          padding: const EdgeInsets.only(left:10.0),
+          padding: const EdgeInsets.only(left: 10.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -71,14 +65,14 @@ class ReviewUI extends StatelessWidget {
               GestureDetector(
                 onTap: () => onTap,
                 child: Text(
-                        comment,
-                        maxLines: 3,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          fontSize: 18.0,
-                          color: Colors.grey,
-                        ),
-                      ),
+                  comment,
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontSize: 18.0,
+                    color: Colors.grey,
+                  ),
+                ),
               ),
               const Divider(thickness: 1),
             ],

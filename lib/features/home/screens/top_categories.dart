@@ -283,7 +283,7 @@ class _TopCategoriesState extends State<TopCategories>
                                             Navigator.pushNamed(
                                               context,
                                               ProductDetailScreen.routeName,
-                                              arguments: product,
+                                              arguments: product.id,
                                             );
                                           },
                                           child: Padding(
@@ -353,7 +353,7 @@ class _TopCategoriesState extends State<TopCategories>
                                                       TextSpan(
                                                         text: indianRupeesFormat
                                                             .format(
-                                                                product.price),
+                                                                product.markedprice),
                                                         style: TextStyle(
                                                           fontSize: 14,
                                                           color: Colors
@@ -368,9 +368,9 @@ class _TopCategoriesState extends State<TopCategories>
                                                             width:
                                                                 mq.width * .02),
                                                       ),
-                                                      const TextSpan(
-                                                        text: "28% off",
-                                                        style: TextStyle(
+                                                      TextSpan(
+                                                        text:  "${calculatePercentageDiscount(product.price,product.markedprice)}% off",
+                                                        style: const TextStyle(
                                                           fontSize: 14,
                                                           fontWeight:
                                                               FontWeight.w600,
@@ -483,6 +483,14 @@ class _TopCategoriesState extends State<TopCategories>
       ),
     );
   }
+  int calculatePercentageDiscount(num originalPrice, num discountedPrice) {
+  if (originalPrice <= 0 || discountedPrice <= 0) {
+    return 0;
+  }
+  double discount = (originalPrice - discountedPrice) / originalPrice * 100.0;
+
+  return discount.toInt();
+}
 
   void _onTabChanged() {
     switch (_tabController.index) {

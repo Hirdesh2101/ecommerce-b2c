@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:ecommerce_major_project/constants/global_variables.dart';
 import 'package:ecommerce_major_project/constants/utils.dart';
 import 'package:ecommerce_major_project/features/home/screens/wish_list_screen.dart';
@@ -11,8 +13,8 @@ import 'package:intl/intl.dart';
 
 class SimilarProducts extends StatelessWidget {
   SimilarProducts(
-      {super.key, required this.product, required this.isProductOutOfStock});
-  final Product product;
+      {super.key, required this.products, required this.isProductOutOfStock});
+  final List<Product>? products;
   final bool isProductOutOfStock;
   final indianRupeesFormat = NumberFormat.currency(
     name: "INR",
@@ -36,7 +38,7 @@ class SimilarProducts extends StatelessWidget {
           height: mq.height * .32,
           child: ListView.builder(
             physics: const ClampingScrollPhysics(),
-            itemCount: 10,
+            itemCount: min(products!.length, 5),
             shrinkWrap: true,
             scrollDirection: Axis.horizontal,
             itemBuilder: (context, index) => Card(
@@ -50,10 +52,10 @@ class SimilarProducts extends StatelessWidget {
                 width: mq.width * .5,
                 child: InkWell(
                   onTap: () {
-                    Navigator.pushNamed(
+                    Navigator.pushReplacementNamed(
                       context,
                       ProductDetailScreen.routeName,
-                      arguments: product,
+                      arguments: products![index].id,
                     );
                   },
                   child: Padding(
@@ -69,13 +71,13 @@ class SimilarProducts extends StatelessWidget {
                           height: mq.height * .2,
                           width: mq.width * .4,
                           child: Image.network(
-                            product.images[0],
+                            products![index].images[0],
                             fit: BoxFit.contain,
                           ),
                         ),
                         SizedBox(height: mq.height * .005),
                         Text(
-                          product.brandName,
+                          products![index].brandName,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: GoogleFonts.lato(
@@ -85,7 +87,7 @@ class SimilarProducts extends StatelessWidget {
                         ),
                         SizedBox(height: mq.height * .005),
                         Text(
-                          product.name,
+                          products![index].name,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: GoogleFonts.lato(fontSize: 13),
@@ -97,7 +99,8 @@ class SimilarProducts extends StatelessWidget {
                           text: TextSpan(
                             children: [
                               TextSpan(
-                                text: indianRupeesFormat.format(product.price),
+                                text: indianRupeesFormat
+                                    .format(products![index].price),
                                 style: const TextStyle(
                                   fontSize: 14,
                                   color: Colors.black,
@@ -108,7 +111,8 @@ class SimilarProducts extends StatelessWidget {
                                 child: SizedBox(width: mq.width * .02),
                               ),
                               TextSpan(
-                                text: indianRupeesFormat.format(product.price),
+                                text: indianRupeesFormat
+                                    .format(products![index].markedprice),
                                 style: TextStyle(
                                   fontSize: 14,
                                   color: Colors.grey.shade700,
@@ -118,9 +122,9 @@ class SimilarProducts extends StatelessWidget {
                               WidgetSpan(
                                 child: SizedBox(width: mq.width * .02),
                               ),
-                              const TextSpan(
-                                text: "28% off",
-                                style: TextStyle(
+                              TextSpan(
+                                text: "${calculatePercentageDiscount(products![index].price,products![index].markedprice)}% off",
+                                style: const TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w600,
                                   color: Colors.green,
@@ -132,44 +136,22 @@ class SimilarProducts extends StatelessWidget {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            // Text(
-                            //   isProductOutOfStock
-                            //       ? 'Out of Stock'
-                            //       : productList![index]
-                            //                   .quantity <
-                            //               5
-                            //           ? 'Only ${productList![index].quantity} left'
-                            //           : '${productList![index].quantity} available',
-                            //   maxLines: 1,
-                            //   overflow: TextOverflow.ellipsis,
-                            //   style: GoogleFonts.lato(
-                            //     fontSize: 13,
-                            //     color: isProductOutOfStock
-                            //         ? Colors.red
-                            //         : productList![index]
-                            //                     .quantity <
-                            //                 5
-                            //             ? Colors.amber
-                            //             : Colors.green,
-                            //   ),
-                            // ),
-                            InkWell(
-                              onTap: () {
-                                HomeServices().addToWishList(
-                                    context: context, product: product);
-                                showSnackBar(
-                                    context: context,
-                                    text: "Added to WishList",
-                                    onTapFunction: () {
-                                      Navigator.of(context).push(
-                                          GlobalVariables.createRoute(
-                                              const WishListScreen()));
-                                    },
-                                    actionLabel: "View");
-                              },
-                              child: const Icon(
-                                Icons.favorite_border_rounded,
-                                size: 26,
+                            Text(
+                              isProductOutOfStock
+                                  ? 'Out of Stock'
+                                  : products![index].quantity < 5
+                                      ? 'Only ${products![index].quantity} left'
+                                      : 'In Stock',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: GoogleFonts.lato(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600,
+                                color: isProductOutOfStock
+                                    ? Colors.red
+                                    : products![index].quantity < 5
+                                        ? Colors.amber
+                                        : Colors.green,
                               ),
                             ),
                           ],
@@ -185,4 +167,12 @@ class SimilarProducts extends StatelessWidget {
       ],
     );
   }
+  int calculatePercentageDiscount(num originalPrice, num discountedPrice) {
+  if (originalPrice <= 0 || discountedPrice <= 0) {
+    return 0;
+  }
+  double discount = (originalPrice - discountedPrice) / originalPrice * 100.0;
+
+  return discount.toInt();
+}
 }

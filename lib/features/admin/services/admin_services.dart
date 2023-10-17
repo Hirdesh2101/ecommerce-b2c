@@ -41,6 +41,13 @@ class AdminServices {
         images: imageUrls,
         category: category,
         price: price,
+        //TODO ask for input
+        detailDescription: [],
+        warranty: '',
+        varients: [],
+        sizeQuantities: [],
+        markedprice: 0.0,
+        color: '',
       );
 
       //use jsonEncode before sending the body to POST request

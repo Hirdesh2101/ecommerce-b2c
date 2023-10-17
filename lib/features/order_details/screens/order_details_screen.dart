@@ -111,7 +111,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                           Navigator.pushNamed(
                             context,
                             ProductDetailScreen.routeName,
-                            arguments: widget.order.products[i],
+                            arguments: widget.order.products[i].id,
                           );
                         },
                         child: Row(

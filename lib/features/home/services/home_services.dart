@@ -77,6 +77,12 @@ class HomeServices {
       quantity: 0,
       price: 0.0,
       category: '',
+      detailDescription: [],
+      varients: [],
+      warranty: '',
+      sizeQuantities: [],
+      markedprice: 0.0,
+      color: '',
     );
 
     try {

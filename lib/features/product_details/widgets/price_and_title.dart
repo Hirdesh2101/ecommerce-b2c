@@ -87,7 +87,7 @@ class TitleAndPrice extends StatelessWidget {
                         child: SizedBox(width: mq.width * .02),
                       ),
                       TextSpan(
-                        text: indianRupeesFormat.format(product.price),
+                        text: indianRupeesFormat.format(product.markedprice),
                         style: TextStyle(
                           fontSize: 18,
                           color: Colors.grey.shade700,
@@ -97,9 +97,9 @@ class TitleAndPrice extends StatelessWidget {
                       WidgetSpan(
                         child: SizedBox(width: mq.width * .02),
                       ),
-                      const TextSpan(
-                        text: "28% off",
-                        style: TextStyle(
+                      TextSpan(
+                        text: "${calculatePercentageDiscount(product.price,product.markedprice)}% off",
+                        style: const TextStyle(
                           fontSize: 25,
                           fontWeight: FontWeight.w600,
                           color: Colors.green,
@@ -116,4 +116,12 @@ class TitleAndPrice extends StatelessWidget {
       ],
     );
   }
+  int calculatePercentageDiscount(num originalPrice, num discountedPrice) {
+  if (originalPrice <= 0 || discountedPrice <= 0) {
+    return 0;
+  }
+  double discount = (originalPrice - discountedPrice) / originalPrice * 100.0;
+
+  return discount.toInt();
+}
 }

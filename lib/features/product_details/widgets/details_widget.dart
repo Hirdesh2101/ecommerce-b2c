@@ -37,15 +37,24 @@ class DetilsWidget extends StatelessWidget {
           overflow: TextOverflow.ellipsis,
         ),
         SizedBox(height: mq.width * .01),
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < product.detailDescription.length; i++)
           Container(
             width: mq.width,
-            padding: EdgeInsets.symmetric(vertical: mq.height * 0.01),
+            padding: EdgeInsets.symmetric(vertical: mq.height * 0.01,horizontal: mq.width*0.015),
             decoration: BoxDecoration(
                 color: i % 2 != 0 ? Colors.blueGrey.shade50 : Colors.white),
-            child: Text(
-              "${product.brandName}",
-              style: TextStyle(color: Colors.black, fontSize: 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "${product.detailDescription[i]['type']}",
+                  style: TextStyle(color: Colors.black, fontSize: 16),
+                ),
+                Text(
+                  "${product.detailDescription[i]['value']}",
+                  style: TextStyle(color: Colors.black, fontSize: 16),
+                ),
+              ],
             ),
           ),
         SizedBox(height: mq.width * .02),
@@ -56,8 +65,8 @@ class DetilsWidget extends StatelessWidget {
           overflow: TextOverflow.ellipsis,
         ),
         SizedBox(height: mq.width * .01),
-        const Text(
-          "Contains the warranty summary",
+        Text(
+          product.warranty,
           style: TextStyle(color: Colors.black),
         ),
       ],

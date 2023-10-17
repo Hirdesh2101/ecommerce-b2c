@@ -161,7 +161,7 @@ class _CategoryDealsScreenState extends State<CategoryDealsScreen> {
                                               Navigator.pushNamed(context,
                                                   ProductDetailScreen.routeName,
                                                   arguments:
-                                                      productList![index]);
+                                                      productList![index].id);
                                             },
                                             child: SearchedProduct(
                                                 product: productList![index])),
@@ -275,7 +275,7 @@ class _CategoryDealsScreenState extends State<CategoryDealsScreen> {
               GestureDetector(
                   onTap: () {
                     Navigator.pushNamed(context, ProductDetailScreen.routeName,
-                        arguments: filterOneList[index]);
+                        arguments: filterOneList[index].id);
                   },
                   child: SearchedProduct(product: filterOneList[index])),
               // Divider(
@@ -309,7 +309,7 @@ class _CategoryDealsScreenState extends State<CategoryDealsScreen> {
               GestureDetector(
                   onTap: () {
                     Navigator.pushNamed(context, ProductDetailScreen.routeName,
-                        arguments: filterOneList[index]);
+                        arguments: filterOneList[index].id);
                   },
                   child: SearchedProduct(product: filterOneList[index])),
               // Divider(
@@ -343,7 +343,7 @@ class _CategoryDealsScreenState extends State<CategoryDealsScreen> {
               GestureDetector(
                   onTap: () {
                     Navigator.pushNamed(context, ProductDetailScreen.routeName,
-                        arguments: filterOneList[index]);
+                        arguments: filterOneList[index].id);
                   },
                   child: SearchedProduct(
                       product: filterOneList.reversed.toList()[index])),

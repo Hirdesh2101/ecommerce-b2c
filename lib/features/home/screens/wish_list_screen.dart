@@ -83,7 +83,7 @@ class _WishListScreenState extends State<WishListScreen> {
                             Navigator.pushNamed(
                               context,
                               ProductDetailScreen.routeName,
-                              arguments: product,
+                              arguments: product.id,
                             );
                           },
                           child: WishListProduct(index: index)),

@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
+import 'package:ecommerce_major_project/common/widgets/color_loader_2.dart';
 import 'package:ecommerce_major_project/features/cart/screens/cart_screen.dart';
 import 'package:ecommerce_major_project/features/product_details/widgets/delivery_location.dart';
 import 'package:ecommerce_major_project/features/product_details/widgets/details_widget.dart';
@@ -23,9 +24,9 @@ import 'package:ecommerce_major_project/features/product_details/services/produc
 
 class ProductDetailScreen extends StatefulWidget {
   static const routeName = '/product-details';
-  final Product product;
+  final String productId;
 
-  const ProductDetailScreen({Key? key, required this.product})
+  const ProductDetailScreen({Key? key, required this.productId})
       : super(key: key);
 
   @override
@@ -45,37 +46,63 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   int counterOneStars = 0;
 
   String pincode = '395001';
+  Product? product;
+  List<Product>? _similarProducts;
+  bool isProductLoading = true;
+  bool isProductOutOfStock = false;
 
   @override
   void initState() {
+    fetchProduct(widget.productId);
     super.initState();
-    double totalRating = 0.0;
+  }
 
-    for (int i = 0; i < widget.product.rating!.length; i++) {
-      totalRating += widget.product.rating![i].rating;
-      //showing our own rating in the product details page
-      //overall rating will be avgRating but
-      //when we see a particular product we will be able to see
-      //our given rating, i.e.  myRating
-      if (widget.product.rating![i].rating.toInt() == 1) {
-        counterOneStars++;
-      } else if (widget.product.rating![i].rating.toInt() == 2) {
-        counterTwoStars++;
-      } else if (widget.product.rating![i].rating.toInt() == 3) {
-        counterThreeStars++;
-      } else if (widget.product.rating![i].rating.toInt() == 4) {
-        counterFourStars++;
-      } else if (widget.product.rating![i].rating.toInt() == 5) {
-        counterFiveStars++;
+  fetchProduct(String productId) async {
+    setState(() {
+      isProductLoading = true;
+    });
+    product = await productDetailServices.getProductById(
+      context: context,
+      productId: productId,
+    );
+    if (product != null) {
+      double totalRating = 0.0;
+
+      for (int i = 0; i < product!.rating!.length; i++) {
+        totalRating += product!.rating![i].rating;
+        //showing our own rating in the product! details page
+        //overall rating will be avgRating but
+        //when we see a particular product! we will be able to see
+        //our given rating, i.e.  myRating
+        if (product!.rating![i].rating.toInt() == 1) {
+          counterOneStars++;
+        } else if (product!.rating![i].rating.toInt() == 2) {
+          counterTwoStars++;
+        } else if (product!.rating![i].rating.toInt() == 3) {
+          counterThreeStars++;
+        } else if (product!.rating![i].rating.toInt() == 4) {
+          counterFourStars++;
+        } else if (product!.rating![i].rating.toInt() == 5) {
+          counterFiveStars++;
+        }
+        if (product!.rating![i].userId ==
+            Provider.of<UserProvider>(context, listen: false).user.id) {
+          myRating = product!.rating![i].rating;
+        }
       }
-      if (widget.product.rating![i].userId ==
-          Provider.of<UserProvider>(context, listen: false).user.id) {
-        myRating = widget.product.rating![i].rating;
+      if (totalRating != 0) {
+        avgRating = totalRating / product!.rating!.length;
       }
+      isProductOutOfStock = product!.quantity == 0;
     }
-    if (totalRating != 0) {
-      avgRating = totalRating / widget.product.rating!.length;
-    }
+    _similarProducts =  await productDetailServices.fetchSimilarProducts(
+      context: context,
+      category: product!.category,
+    );
+    setState(() {
+      isProductLoading = false;
+    });
+    print("\n\n =======> Product is :  =======> ${product!.name}");
   }
 
   var selectedNavigation = 0;
@@ -94,14 +121,13 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
   void addToCart() {
     debugPrint("Triggered add to cart <====");
-    debugPrint("Product is  : ${widget.product.name}");
-    productDetailServices.addToCart(context: context, product: widget.product);
+    debugPrint("Product is  : ${product!.name}");
+    productDetailServices.addToCart(context: context, product: product!);
     debugPrint("Execution finished add to cart <====");
   }
 
   @override
   Widget build(BuildContext context) {
-    bool isProductOutOfStock = widget.product.quantity == 0;
     return AdaptiveLayout(
       //     primaryNavigation: SlotLayout(
       //   config: <Breakpoint, SlotLayoutConfig>{
@@ -168,128 +194,133 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               appBar: GlobalVariables.getAppBar(
                   context: context,
                   onClickSearchNavigateTo: const MySearchScreen()),
-              body: SingleChildScrollView(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: mq.width * .03)
-                      .copyWith(top: 10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      TopImage(
-                        product: widget.product,
-                        height: mq.height * .52,
-                      ),
-                      SizedBox(height: mq.height * .02),
-                      TitleAndPrice(
-                          product: widget.product,
-                          avgRating: avgRating,
-                          isProductOutOfStock: isProductOutOfStock),
-                      SizedBox(height: mq.width * .03),
-                      const Divider(thickness: 2),
-                      SizedBox(height: mq.width * .01),
-                      const SizeAndColor(),
-                      SizedBox(height: mq.width * .03),
-                      const Divider(thickness: 2),
-                      SizedBox(height: mq.width * .03),
-                      DeliveyLocation(pincode: pincode),
-                      SizedBox(height: mq.width * .07),
-                      Center(
-                        child: ElevatedButton(
-                          onPressed: () {
-                            if (isProductOutOfStock) {
-                              showSnackBar(
-                                  context: context,
-                                  text: "Product is out of stock!");
-                              return;
-                            } else {
-                              addToCart();
-                              showSnackBar(
-                                  context: context,
-                                  text: "Added to Cart",
-                                  onTapFunction: () {
-                                    Navigator.pushNamed(
-                                        context, CartScreen.routeName);
-                                  },
-                                  actionLabel: "View");
-                            }
-                          },
-                          style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.yellow.shade800,
-                              minimumSize:
-                                  Size(mq.width * .95, mq.height * .06),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(18))),
-                          child: const Text(
-                            "Add to Cart",
-                            style: TextStyle(fontSize: 16),
-                          ),
+              body: isProductLoading
+                  ? const Center(
+                      child: ColorLoader2(),
+                    )
+                  : SingleChildScrollView(
+                      child: Padding(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: mq.width * .03)
+                                .copyWith(top: 10),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            TopImage(
+                              product: product!,
+                              height: mq.height * .52,
+                            ),
+                            SizedBox(height: mq.height * .02),
+                            TitleAndPrice(
+                                product: product!,
+                                avgRating: avgRating,
+                                isProductOutOfStock: isProductOutOfStock),
+                            SizedBox(height: mq.width * .03),
+                            const Divider(thickness: 2),
+                            SizedBox(height: mq.width * .01),
+                            SizeAndColor(product: product!,),
+                            
+                            DeliveyLocation(pincode: pincode),
+                            SizedBox(height: mq.width * .07),
+                            Center(
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  if (isProductOutOfStock) {
+                                    showSnackBar(
+                                        context: context,
+                                        text: "Product is out of stock!");
+                                    return;
+                                  } else {
+                                    addToCart();
+                                    showSnackBar(
+                                        context: context,
+                                        text: "Added to Cart",
+                                        onTapFunction: () {
+                                          Navigator.pushNamed(
+                                              context, CartScreen.routeName);
+                                        },
+                                        actionLabel: "View");
+                                  }
+                                },
+                                style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.yellow.shade800,
+                                    minimumSize:
+                                        Size(mq.width * .95, mq.height * .06),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(18))),
+                                child: const Text(
+                                  "Add to Cart",
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: mq.width * .02),
+                            // Center(
+                            //   child: ElevatedButton(
+                            //     onPressed: () {
+                            //       if (isProductOutOfStock) {
+                            //         showSnackBar(
+                            //             context: context,
+                            //             text: "Product is out of stock!");
+                            //         return;
+                            //       } else {
+                            //         // addToCart();
+                            //         showSnackBar(
+                            //             context: context,
+                            //             text: "Need to redirect",
+                            //             onTapFunction: () {
+                            //               Navigator.pushNamed(
+                            //                   context, CartScreen.routeName);
+                            //             },
+                            //             actionLabel: "View");
+                            //       }
+                            //     },
+                            //     style: ElevatedButton.styleFrom(
+                            //         backgroundColor: Colors.orange.shade800,
+                            //         minimumSize:
+                            //             Size(mq.width * .95, mq.height * .06),
+                            //         shape: RoundedRectangleBorder(
+                            //             borderRadius:
+                            //                 BorderRadius.circular(18))),
+                            //     child: const Text(
+                            //       "Buy Now",
+                            //       style: TextStyle(fontSize: 16),
+                            //     ),
+                            //   ),
+                            // ),
+                            SizedBox(height: mq.width * .03),
+                            const Divider(thickness: 1),
+                            SizedBox(height: mq.width * .02),
+                            const DetailsWithICons(),
+                            SizedBox(height: mq.width * .02),
+                            const Divider(thickness: 1),
+                            SizedBox(height: mq.width * .03),
+                            DetilsWidget(product: product!),
+                            SizedBox(height: mq.width * .02),
+                            const Divider(thickness: 1),
+                            SizedBox(height: mq.width * .03),
+                            AllRatings(
+                              counterFiveStars: counterFiveStars,
+                              counterFourStars: counterFourStars,
+                              counterThreeStars: counterThreeStars,
+                              counterTwoStars: counterTwoStars,
+                              counterOneStars: counterOneStars,
+                              avgRating: avgRating,
+                              myRating: myRating,
+                              product: product!,
+                            ),
+                            SizedBox(height: mq.width * .03),
+                            SimilarProducts(
+                              products: _similarProducts,
+                              isProductOutOfStock: isProductOutOfStock,
+                            ),
+                            SizedBox(height: mq.width * .35),
+                          ],
                         ),
                       ),
-                      SizedBox(height: mq.width * .02),
-                      Center(
-                        child: ElevatedButton(
-                          onPressed: () {
-                            if (isProductOutOfStock) {
-                              showSnackBar(
-                                  context: context,
-                                  text: "Product is out of stock!");
-                              return;
-                            } else {
-                              // addToCart();
-                              showSnackBar(
-                                  context: context,
-                                  text: "Need to redirect",
-                                  onTapFunction: () {
-                                    Navigator.pushNamed(
-                                        context, CartScreen.routeName);
-                                  },
-                                  actionLabel: "View");
-                            }
-                          },
-                          style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.orange.shade800,
-                              minimumSize:
-                                  Size(mq.width * .95, mq.height * .06),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(18))),
-                          child: const Text(
-                            "Buy Now",
-                            style: TextStyle(fontSize: 16),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: mq.width * .03),
-                      const Divider(thickness: 1),
-                      SizedBox(height: mq.width * .02),
-                      const DetailsWithICons(),
-                      SizedBox(height: mq.width * .02),
-                      const Divider(thickness: 1),
-                      SizedBox(height: mq.width * .03),
-                      DetilsWidget(product: widget.product),
-                      SizedBox(height: mq.width * .02),
-                      const Divider(thickness: 1),
-                      SizedBox(height: mq.width * .03),
-                      AllRatings(
-                        counterFiveStars: counterFiveStars,
-                        counterFourStars: counterFourStars,
-                        counterThreeStars: counterThreeStars,
-                        counterTwoStars: counterTwoStars,
-                        counterOneStars: counterOneStars,
-                        avgRating: avgRating,
-                        myRating: myRating,
-                        product: widget.product,
-                      ),
-                      SizedBox(height: mq.width * .03),
-                      SimilarProducts(
-                        product: widget.product,
-                        isProductOutOfStock: isProductOutOfStock,
-                      ),
-                      SizedBox(height: mq.width * .35),
-                    ],
-                  ),
-                ),
-              ),
+                    ),
             ),
           ),
           Breakpoints.large: SlotLayout.from(
@@ -301,7 +332,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     .copyWith(top: 10),
                 child: Column(children: [
                   TopImage(
-                    product: widget.product,
+                    product: product!,
                     height: mq.height * .95,
                   ),
                   SizedBox(height: mq.height * .02),
@@ -323,7 +354,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 child: Column(children: [
                   SizedBox(height: mq.height * .02),
                   TitleAndPrice(
-                      product: widget.product,
+                      product: product!,
                       avgRating: avgRating,
                       isProductOutOfStock: isProductOutOfStock),
                   SizedBox(height: mq.width * .03),
@@ -401,7 +432,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   SizedBox(height: mq.width * .02),
                   const Divider(thickness: 1),
                   SizedBox(height: mq.width * .03),
-                  DetilsWidget(product: widget.product),
+                  DetilsWidget(product: product!),
                   SizedBox(height: mq.width * .02),
                   const Divider(thickness: 1),
                   SizedBox(height: mq.width * .03),
@@ -413,11 +444,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     counterOneStars: counterOneStars,
                     avgRating: avgRating,
                     myRating: myRating,
-                    product: widget.product,
+                    product: product!,
                   ),
                   SizedBox(height: mq.width * .03),
                   SimilarProducts(
-                      product: widget.product,
+                      products: _similarProducts,
                       isProductOutOfStock: isProductOutOfStock),
                   SizedBox(height: mq.width * .35),
                 ]),

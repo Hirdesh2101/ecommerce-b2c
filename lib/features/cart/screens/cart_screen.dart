@@ -135,7 +135,7 @@ class _CartScreenState extends State<CartScreen> {
                               Navigator.pushNamed(
                                 context,
                                 ProductDetailScreen.routeName,
-                                arguments: product,
+                                arguments: product.id,
                               );
                             },
                             child: CartProduct(index: index),

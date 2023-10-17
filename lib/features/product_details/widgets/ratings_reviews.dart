@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:ecommerce_major_project/constants/global_variables.dart';
+import 'package:ecommerce_major_project/constants/utils.dart';
 import 'package:ecommerce_major_project/features/product_details/services/product_detail_services.dart';
 import 'package:ecommerce_major_project/features/product_details/widgets/rating_summary.dart';
 import 'package:ecommerce_major_project/features/product_details/widgets/reviewSummary.dart';
@@ -114,13 +115,15 @@ class _AllRatingsState extends State<AllRatings> {
           ),
         ),
         SizedBox(height: mq.width * .04),
-        for (int i = 0; i < min(widget.product.rating!.length,4); i++)
+        for (int i = 0; i < min(widget.product.rating!.length, 4); i++)
           ReviewUI(
-            image:
-                "https://res.cloudinary.com/dyqymg02u/image/upload/v1684299657/Fashion/Oratech%20Latest%207%20Pro%20Max/io5pohxwxngprro4dcfp.jpg",
-            name: 'Hirdesh',
-            date: '20-10-2022',
-            comment: 'nice product',
+            image: widget.product
+                    .ratinguser![widget.product.ratinguser!.length - i - 1]
+                ['imageUrl'],
+            name: widget.product
+                .ratinguser![widget.product.ratinguser!.length - i - 1]['name'],
+            date: widget.product.rating![i].createdAt!,
+            comment: widget.product.rating![i].review ?? '',
             rating: widget.product.rating![i].rating.toDouble(),
             onPressed: () => print("More Action "),
             onTap: () => setState(() {
@@ -133,6 +136,8 @@ class _AllRatingsState extends State<AllRatings> {
   }
 
   AlertDialog rateProductDialog() {
+    TextEditingController _controller = TextEditingController();
+    double rating = 0;
     return AlertDialog(
       title: const Text(
         "Drag your finger to rate",
@@ -158,18 +163,17 @@ class _AllRatingsState extends State<AllRatings> {
                   color: GlobalVariables.secondaryColor);
             },
             //changes here
-            onRatingUpdate: (rating) {
-              productDetailServices.rateProduct(
-                context: context,
-                product: widget.product,
-                rating: rating,
-                // review:
-              );
+            onRatingUpdate: (rate) {
+              setState(() {
+                rating = rate;
+              });
             },
           ),
           SizedBox(height: mq.width * .05),
           Text('Write a review'),
-          TextField()
+          TextField(
+            controller: _controller,
+          )
         ],
       ),
       // contentPadding: EdgeInsets.zero,
@@ -178,12 +182,19 @@ class _AllRatingsState extends State<AllRatings> {
       actions: [
         TextButton(
             onPressed: () {
-              //      productDetailServices.rateProduct(
-              //   context: context,
-              //   product: widget.product,
-              //   rating: rating,
-              //   // review:
-              // );
+              if (rating == 0 && _controller.text.trim() == "") {
+                showSnackBar(
+                  context: context,
+                  text: "Please add rating!",
+                );
+              } else {
+                productDetailServices.rateProduct(
+                  context: context,
+                  product: widget.product,
+                  rating: rating,
+                  review: _controller.text.trim(),
+                );
+              }
               Navigator.pop(context);
             },
             child: const Text(
