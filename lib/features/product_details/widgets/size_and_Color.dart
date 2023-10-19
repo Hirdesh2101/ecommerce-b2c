@@ -3,7 +3,13 @@ import 'package:ecommerce_major_project/models/product.dart';
 import 'package:flutter/material.dart';
 
 class SizeAndColor extends StatefulWidget {
-  const SizeAndColor({super.key, required this.product,required this.selectedColor,required this.selectedSize,required this.setColor,required this.setSize});
+  const SizeAndColor(
+      {super.key,
+      required this.product,
+      required this.selectedColor,
+      required this.selectedSize,
+      required this.setColor,
+      required this.setSize});
   final Product product;
   final int selectedSize;
   final int selectedColor;
@@ -36,13 +42,16 @@ class _SizeAndColorState extends State<SizeAndColor> {
             child: ListView.builder(
               physics: const BouncingScrollPhysics(),
               scrollDirection: Axis.horizontal,
-              itemCount: widget.product.varients[widget.selectedColor]['sizes'].length,
+              itemCount:
+                  widget.product.varients[widget.selectedColor]['sizes'].length,
               itemBuilder: (context, index) {
                 return Container(
                   margin: const EdgeInsets.only(right: 6),
                   child: InkWell(
                     borderRadius: BorderRadius.circular(44.0),
-                    onTap:() {widget.setSize(index);},
+                    onTap: () {
+                      widget.setSize(index);
+                    },
                     child: Container(
                       height: mq.height * .06,
                       width: mq.height * .06,
@@ -57,7 +66,8 @@ class _SizeAndColorState extends State<SizeAndColor> {
                         borderRadius: BorderRadius.circular(44.0),
                       ),
                       child: Text(
-                        widget.product.varients[widget.selectedColor]['sizes'][index]['size'],
+                        widget.product.varients[widget.selectedColor]['sizes']
+                            [index]['size'],
                         style: TextStyle(
                           fontSize: 16.0,
                           color: widget.selectedSize == index
@@ -89,24 +99,29 @@ class _SizeAndColorState extends State<SizeAndColor> {
               itemCount: widget.product.varients.length,
               itemBuilder: (context, index) {
                 return Container(
-                  margin: const EdgeInsets.only(right: 6),
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(44.0),
-                    onTap:() {widget.setColor(index);},
-                    child: Container(
-                      height: mq.height * .06,
-                      width: mq.height * .06,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: Color(int.parse('0xFF'
-                            '${widget.product.varients[index]['color'].substring(1)}')),
-                        border: Border.all(
-                          width: 4.0,
-                          color: widget.selectedColor == index
-                              ? Colors.blueAccent
-                              : Colors.black,
+                  width: mq.height * .06,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(
+                        width: 2,
+                        color: widget.selectedColor == index
+                            ? Colors.grey
+                            : Colors.white),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Center(
+                    child: FractionallySizedBox(
+                      heightFactor: 0.8,
+                      widthFactor: 0.8,
+                      child: InkWell(
+                        onTap:() {widget.setColor(index);},
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Color(int.parse('0xFF'
+                                '${widget.product.varients[index]['color'].substring(1)}')),
+                            shape: BoxShape.circle,
+                          ),
                         ),
-                        borderRadius: BorderRadius.circular(44.0),
                       ),
                     ),
                   ),

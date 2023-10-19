@@ -18,7 +18,8 @@ class CartProduct extends StatefulWidget {
       required this.product,
       required this.quantity,
       required this.size,
-      required this.color,required this.fetchCart});
+      required this.color,
+      required this.fetchCart});
 
   @override
   State<CartProduct> createState() => _CartProductState();
@@ -46,13 +47,21 @@ class _CartProductState extends State<CartProduct> {
   final ProductDetailServices productDetailServices = ProductDetailServices();
   final CartServices cartServices = CartServices();
 
-  void increaseQuantity(Product product) async{
-    await productDetailServices.addToCart(context: context, product: product,color: widget.color,size: widget.size);
+  void increaseQuantity(Product product) async {
+    await productDetailServices.addToCart(
+        context: context,
+        product: product,
+        color: widget.color,
+        size: widget.size);
     widget.fetchCart();
   }
 
-  void decreaseQuantity(Product product) async{
-    await cartServices.removeFromCart(context: context, product: product,color: widget.color,size: widget.size);
+  void decreaseQuantity(Product product) async {
+    await cartServices.removeFromCart(
+        context: context,
+        product: product,
+        color: widget.color,
+        size: widget.size);
     widget.fetchCart();
   }
 
@@ -118,18 +127,36 @@ class _CartProductState extends State<CartProduct> {
                       style: const TextStyle(fontSize: 13),
                     ),
                   ),
-                  Container(
+                  Container(padding: EdgeInsets.only(left: mq.width * .025),
                     width: mq.width * .57,
-
-                    padding: EdgeInsets.only(left: mq.width * .025),
-                    
-                    child:  Text(
-                            "Color: ${widget.color}    Size: ${widget.size}",
-                            style: const TextStyle(
-                                color: Colors.black, fontSize: 11),
-                            maxLines: 2,
-                          )
-                        
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        const Text(
+                          "Color:",
+                          style: TextStyle(color: Colors.black, fontSize: 11),
+                          maxLines: 2,
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(left: mq.width * .01),
+                          width: mq.width * .025,
+                          height: mq.width * .025,
+                            decoration: BoxDecoration(
+                              color: Color(int.parse('0xFF'
+                                  '${widget.color.substring(1)}')),
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                        Container(
+                            padding: EdgeInsets.only(left: mq.width * .025),
+                            child: Text(
+                              "Size: ${widget.size}",
+                              style: const TextStyle(
+                                  color: Colors.black, fontSize: 11),
+                              maxLines: 2,
+                            )),
+                      ],
+                    ),
                   ),
                   Container(
                     width: mq.width * .57,

@@ -9,10 +9,12 @@ class TitleAndPrice extends StatelessWidget {
       {super.key,
       required this.product,
       required this.avgRating,
+      required this.colorVarient,
       required this.isProductOutOfStock});
   final Product product;
   final double avgRating;
   final bool isProductOutOfStock;
+  final int colorVarient;
   final indianRupeesFormat = NumberFormat.currency(
            name: "INR",
            locale: 'en_IN',
@@ -76,7 +78,7 @@ class TitleAndPrice extends StatelessWidget {
                   text: TextSpan(
                     children: [
                       TextSpan(
-                        text: indianRupeesFormat.format(product.varients[0]['price']),
+                        text: indianRupeesFormat.format(product.varients[colorVarient]['price']),
                         style: const TextStyle(
                           fontSize: 28,
                           color: Colors.black,
@@ -87,7 +89,7 @@ class TitleAndPrice extends StatelessWidget {
                         child: SizedBox(width: mq.width * .02),
                       ),
                       TextSpan(
-                        text: indianRupeesFormat.format(product.varients[0]['markedprice']),
+                        text: indianRupeesFormat.format(product.varients[colorVarient]['markedprice']),
                         style: TextStyle(
                           fontSize: 18,
                           color: Colors.grey.shade700,
@@ -98,7 +100,7 @@ class TitleAndPrice extends StatelessWidget {
                         child: SizedBox(width: mq.width * .02),
                       ),
                       TextSpan(
-                        text: "${calculatePercentageDiscount(product.varients[0]['price'],product.varients[0]['markedprice'])}% off",
+                        text: "${calculatePercentageDiscount(product.varients[colorVarient]['price'],product.varients[colorVarient]['markedprice'])}% off",
                         style: const TextStyle(
                           fontSize: 25,
                           fontWeight: FontWeight.w600,

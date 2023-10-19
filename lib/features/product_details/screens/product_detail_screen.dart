@@ -157,11 +157,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   void setColor(int color) {
     setState(() {
       selectedColor = color;
-      if (selectedSize != -1) {
-        isProductOutOfStock = product!.varients[selectedColor]['sizes']
-                [selectedSize]['quantity'] ==
-            0;
-      }
+      selectedSize= -1;
     });
   }
 
@@ -262,6 +258,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             SizedBox(height: mq.height * .02),
                             TitleAndPrice(
                                 product: product!,
+                                colorVarient: selectedColor,
                                 avgRating: avgRating,
                                 isProductOutOfStock: isProductOutOfStock),
                             SizedBox(height: mq.width * .03),
@@ -393,6 +390,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   SizedBox(height: mq.height * .02),
                   TitleAndPrice(
                       product: product!,
+                      colorVarient: selectedColor,
                       avgRating: avgRating,
                       isProductOutOfStock: isProductOutOfStock),
                   SizedBox(height: mq.width * .03),
