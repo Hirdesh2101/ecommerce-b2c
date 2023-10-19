@@ -136,7 +136,7 @@ class _AllRatingsState extends State<AllRatings> {
   }
 
   AlertDialog rateProductDialog() {
-    TextEditingController _controller = TextEditingController();
+    TextEditingController controller = TextEditingController();
     double rating = 0;
     return AlertDialog(
       title: const Text(
@@ -170,9 +170,9 @@ class _AllRatingsState extends State<AllRatings> {
             },
           ),
           SizedBox(height: mq.width * .05),
-          Text('Write a review'),
+          const Text('Write a review'),
           TextField(
-            controller: _controller,
+            controller: controller,
           )
         ],
       ),
@@ -182,7 +182,7 @@ class _AllRatingsState extends State<AllRatings> {
       actions: [
         TextButton(
             onPressed: () {
-              if (rating == 0 && _controller.text.trim() == "") {
+              if (rating == 0 && controller.text.trim() == "") {
                 showSnackBar(
                   context: context,
                   text: "Please add rating!",
@@ -192,7 +192,7 @@ class _AllRatingsState extends State<AllRatings> {
                   context: context,
                   product: widget.product,
                   rating: rating,
-                  review: _controller.text.trim(),
+                  review: controller.text.trim(),
                 );
               }
               Navigator.pop(context);

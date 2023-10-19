@@ -43,7 +43,7 @@ class _AccountScreenState extends State<AccountScreen> {
           context: context,
           wantBackNavigation: false,
           title: "Your Account",
-          onClickSearchNavigateTo: MySearchScreen()),
+          onClickSearchNavigateTo: const MySearchScreen()),
       body: Column(
         children: [
           SizedBox(height: mq.width * .025),

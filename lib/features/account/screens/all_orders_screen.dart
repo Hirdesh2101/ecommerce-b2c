@@ -23,7 +23,7 @@ class AllOrdersScreen extends StatelessWidget {
       appBar: GlobalVariables.getAppBar(
           title: "All Orders",
           context: context,
-          onClickSearchNavigateTo: MySearchScreen()),
+          onClickSearchNavigateTo: const MySearchScreen()),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

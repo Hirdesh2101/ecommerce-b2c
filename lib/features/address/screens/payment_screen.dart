@@ -47,17 +47,17 @@ class _PaymentScreenState extends State<PaymentScreen> {
           showDialog(
             context: context,
             builder: (context) => AlertDialog(
-              contentPadding: EdgeInsets.symmetric(horizontal: 20),
+              contentPadding: const EdgeInsets.symmetric(horizontal: 20),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
-                side: BorderSide(color: Colors.black12, width: 4),
+                side: const BorderSide(color: Colors.black12, width: 4),
               ),
               actionsAlignment: MainAxisAlignment.end,
               // actionsPadding: EdgeInsets.only(right: 20, bottom: 20),
               title:
                   Image.asset("assets/images/croppedsuccess.gif", height: 150),
               content: Padding(
-                padding: EdgeInsets.only(top: 20.0),
+                padding: const EdgeInsets.only(top: 20.0),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
@@ -74,12 +74,12 @@ class _PaymentScreenState extends State<PaymentScreen> {
                     // with google fonts
                     Text("Your order has been placed",
                         style: GoogleFonts.lato(
-                          textStyle: TextStyle(
+                          textStyle: const TextStyle(
                               fontWeight: FontWeight.w800,
                               fontSize: 18,
                               color: Colors.black87),
                         )),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     Text(
                         "Transaction ID : 38991357462586421\nTime: ${DateTime.now().hour} : ${DateTime.now().minute}"),
                   ],
@@ -107,7 +107,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text("Success"),
+        title: const Text("Success"),
         content: Text(
             "Payment ID : ${response.paymentId}\nOrder ID : ${response.orderId}\nSignature : ${response.signature}"),
         actions: [
@@ -128,7 +128,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text("Oops, Error occured"),
+        title: const Text("Oops, Error occured"),
         content: Text(
             "Payment Error ==> Code : ${response.code} \nMessage : ${response.message}"),
         actions: [
@@ -149,7 +149,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text("External Wallet"),
+        title: const Text("External Wallet"),
         content: Text("External Wallet : ${response.walletName}"),
         actions: [
           TextButton(

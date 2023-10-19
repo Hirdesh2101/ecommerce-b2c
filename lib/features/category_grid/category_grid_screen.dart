@@ -36,7 +36,7 @@ class _CategoryGridScreenState extends State<CategoryGridScreen> {
           context: context,
           wantBackNavigation: false,
           title: "All Categories",
-          onClickSearchNavigateTo: MySearchScreen()),
+          onClickSearchNavigateTo: const MySearchScreen()),
       body: GridView.builder(
         scrollDirection: Axis.vertical,
         padding: EdgeInsets.all(mq.height * .01),

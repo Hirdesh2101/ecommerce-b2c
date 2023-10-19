@@ -80,7 +80,7 @@ class ProductDetailServices {
   }
 
 
-  void addToCart({
+  Future<void> addToCart({
     required BuildContext context,
     required Product product,
     required String color,
@@ -110,8 +110,8 @@ class ProductDetailServices {
       //   },
       //   body: jsonEncode({'id': product.id!}),
       // );
-      debugPrint(
-          "\n\nuser token after http post request: ===> ${'$authToken'} ");
+      // debugPrint(
+      //     "\n\nuser token after http post request: ===> ${'$authToken'} ");
 
       // print("\nPost request sent successfully...");
 

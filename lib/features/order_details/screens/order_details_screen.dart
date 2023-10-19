@@ -87,7 +87,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
       appBar: GlobalVariables.getAppBar(
           title: "Order Details",
           context: context,
-          onClickSearchNavigateTo: MySearchScreen()),
+          onClickSearchNavigateTo: const MySearchScreen()),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(mq.width * .025),
@@ -220,7 +220,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (_) => ReturnProductScreen()));
+                                      builder: (_) => const ReturnProductScreen()));
                               showSnackBar(
                                   context: context,
                                   text: "Return product yet to be implemented");

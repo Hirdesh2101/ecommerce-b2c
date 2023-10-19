@@ -26,8 +26,8 @@ class DetilsWidget extends StatelessWidget {
         ),
         SizedBox(height: mq.width * .01),
         Text(
-          "${product.description}",
-          style: TextStyle(color: Colors.black),
+          product.description,
+          style: const TextStyle(color: Colors.black),
         ),
         SizedBox(height: mq.width * .02),
         const Text(
@@ -48,11 +48,11 @@ class DetilsWidget extends StatelessWidget {
               children: [
                 Text(
                   "${product.detailDescription[i]['type']}",
-                  style: TextStyle(color: Colors.black, fontSize: 16),
+                  style: const TextStyle(color: Colors.black, fontSize: 16),
                 ),
                 Text(
                   "${product.detailDescription[i]['value']}",
-                  style: TextStyle(color: Colors.black, fontSize: 16),
+                  style: const TextStyle(color: Colors.black, fontSize: 16),
                 ),
               ],
             ),
@@ -67,7 +67,7 @@ class DetilsWidget extends StatelessWidget {
         SizedBox(height: mq.width * .01),
         Text(
           product.warranty,
-          style: TextStyle(color: Colors.black),
+          style: const TextStyle(color: Colors.black),
         ),
       ],
     );

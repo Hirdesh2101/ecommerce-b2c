@@ -97,7 +97,7 @@ class _MessageScreenState extends State<MessageScreen> {
           ),
         ),
         Padding(
-            padding: EdgeInsets.only(right: 8.0),
+            padding: const EdgeInsets.only(right: 8.0),
             child: CircleAvatar(
                 backgroundImage: NetworkImage(user.imageUrl!), radius: 15)),
       ],

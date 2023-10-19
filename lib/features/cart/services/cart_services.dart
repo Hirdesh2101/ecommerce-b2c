@@ -12,7 +12,7 @@ import 'package:ecommerce_major_project/constants/error_handling.dart';
 import 'package:ecommerce_major_project/constants/global_variables.dart';
 
 class CartServices {
-  void removeFromCart({
+  Future<void> removeFromCart({
     required BuildContext context,
     required Product product,
     required String color,

@@ -3,7 +3,6 @@ import 'package:ecommerce_major_project/features/cart/screens/cart_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'package:ecommerce_major_project/models/order.dart';
-import 'package:ecommerce_major_project/models/product.dart';
 import 'package:ecommerce_major_project/common/widgets/bottom_bar.dart';
 import 'package:ecommerce_major_project/features/home/screens/home_screen.dart';
 import 'package:ecommerce_major_project/features/auth/screens/auth_screen.dart';
@@ -62,7 +61,7 @@ Route<dynamic> generateRoute(RouteSettings routeSettings) {
     case CartScreen.routeName:
       // var product = routeSettings.arguments as Product;
       return MaterialPageRoute(
-          settings: routeSettings, builder: (_) => CartScreen());
+          settings: routeSettings, builder: (_) => const CartScreen());
 
     // AllOrdersScreen
     case AllOrdersScreen.routeName:

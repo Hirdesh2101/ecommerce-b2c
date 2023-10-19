@@ -203,7 +203,7 @@ class Dot extends StatelessWidget {
   final double? radius;
   final Color? color;
 
-  Dot({super.key, this.radius, this.color});
+  const Dot({super.key, this.radius, this.color});
 
   @override
   Widget build(BuildContext context) {

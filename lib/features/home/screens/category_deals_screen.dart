@@ -72,7 +72,7 @@ class _CategoryDealsScreenState extends State<CategoryDealsScreen> {
           context: context,
           wantBackNavigation: true,
           title: "All results in ${widget.category}",
-          onClickSearchNavigateTo: MySearchScreen()),
+          onClickSearchNavigateTo: const MySearchScreen()),
       body: productList == null
           ? const ColorLoader2()
           : Column(
@@ -109,7 +109,7 @@ class _CategoryDealsScreenState extends State<CategoryDealsScreen> {
                     InkWell(
                       onTap: () {
                         Navigator.of(context)
-                            .push(GlobalVariables.createRoute(FilterScreen()));
+                            .push(GlobalVariables.createRoute(const FilterScreen()));
                       },
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -289,7 +289,6 @@ class _CategoryDealsScreenState extends State<CategoryDealsScreen> {
 
   getFilterpriceLtoH(FilterProvider filterProvider) {
     List<Product>? filterOneList = List<Product>.from(productList!);
-    ;
     filterOneList.sort((a, b) => a.varients[0]['price'].compareTo(b.varients[0]['price']));
 
     return Expanded(
@@ -323,7 +322,6 @@ class _CategoryDealsScreenState extends State<CategoryDealsScreen> {
 
   getFilterpriceHtoL(FilterProvider filterProvider) {
     List<Product>? filterOneList = List<Product>.from(productList!);
-    ;
     filterOneList.sort((a, b) => a.varients[0]['price'].compareTo(b.varients[0]['price']));
 
     return Expanded(

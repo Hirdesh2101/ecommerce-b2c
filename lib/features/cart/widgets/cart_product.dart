@@ -11,13 +11,14 @@ class CartProduct extends StatefulWidget {
   final int quantity;
   final String color;
   final String size;
+  final Function() fetchCart;
   const CartProduct(
       {required this.index,
       super.key,
       required this.product,
       required this.quantity,
       required this.size,
-      required this.color});
+      required this.color,required this.fetchCart});
 
   @override
   State<CartProduct> createState() => _CartProductState();
@@ -45,12 +46,14 @@ class _CartProductState extends State<CartProduct> {
   final ProductDetailServices productDetailServices = ProductDetailServices();
   final CartServices cartServices = CartServices();
 
-  void increaseQuantity(Product product) {
-    productDetailServices.addToCart(context: context, product: product,color: widget.color,size: widget.size);
+  void increaseQuantity(Product product) async{
+    await productDetailServices.addToCart(context: context, product: product,color: widget.color,size: widget.size);
+    widget.fetchCart();
   }
 
-  void decreaseQuantity(Product product) {
-    cartServices.removeFromCart(context: context, product: product,color: widget.color,size: widget.size);
+  void decreaseQuantity(Product product) async{
+    await cartServices.removeFromCart(context: context, product: product,color: widget.color,size: widget.size);
+    widget.fetchCart();
   }
 
   @override

@@ -33,7 +33,7 @@ class _FilterScreenState extends State<FilterScreen> {
               child: const Text("Close"))
         ],
       ),
-      body: FiltersAvailable(),
+      body: const FiltersAvailable(),
     );
   }
 }

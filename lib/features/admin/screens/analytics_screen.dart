@@ -106,13 +106,13 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                 ),
       floatingActionButton: FloatingActionButton.extended(
         elevation: 10,
-        icon: Icon(Icons.logout_outlined),
+        icon: const Icon(Icons.logout_outlined),
         onPressed: () {
           AccountServices().logOut(context);
         },
         backgroundColor: Colors.deepPurple.shade600,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-        label: Text("LogOut", style: TextStyle(fontSize: 12)),
+        label: const Text("LogOut", style: TextStyle(fontSize: 12)),
       ),
     );
   }

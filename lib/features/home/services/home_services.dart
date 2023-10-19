@@ -358,7 +358,7 @@ class HomeServices {
     }
   }
 
-  void removeFromWishList({
+  Future<void> removeFromWishList({
     required BuildContext context,
     required Product product,
   }) async {
@@ -451,7 +451,7 @@ class HomeServices {
       }
     } catch (e) {
       showSnackBar(
-          context: context, text: "Error in fetchWishList : ${e.toString()}");
+          context: context, text: "Error in Cart : ${e.toString()}");
     }
     return cart;
   }

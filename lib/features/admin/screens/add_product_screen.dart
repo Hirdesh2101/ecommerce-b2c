@@ -183,7 +183,7 @@ Color
                         child: DropdownButton(
                           focusColor: Colors.pinkAccent,
                           alignment: Alignment.centerLeft,
-                          dropdownColor: Color.fromARGB(255, 202, 183, 255),
+                          dropdownColor: const Color.fromARGB(255, 202, 183, 255),
                           borderRadius: BorderRadius.circular(10),
                           value: category,
                           onChanged: (String? newVal) {

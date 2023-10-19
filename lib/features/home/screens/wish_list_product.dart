@@ -2,19 +2,15 @@ import 'package:ecommerce_major_project/features/home/services/home_services.dar
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
-
 import 'package:ecommerce_major_project/main.dart';
 import 'package:ecommerce_major_project/models/product.dart';
-import 'package:ecommerce_major_project/constants/utils.dart';
-import 'package:ecommerce_major_project/providers/user_provider.dart';
-import 'package:ecommerce_major_project/features/cart/screens/cart_screen.dart';
 import 'package:ecommerce_major_project/features/product_details/services/product_detail_services.dart';
 
 class WishListProduct extends StatefulWidget {
   final int index;
   final Product product;
-  const WishListProduct({required this.index, super.key,required this.product});
+  final Function() fetchWishList;
+  const WishListProduct({required this.index, super.key,required this.product,required this.fetchWishList});
 
   @override
   State<WishListProduct> createState() => _WishListProductState();
@@ -69,7 +65,7 @@ class _WishListProductState extends State<WishListProduct> {
                   maxLines: 2,
                 ),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     //TODO Add new button
                     // ElevatedButton(
@@ -105,9 +101,10 @@ class _WishListProductState extends State<WishListProduct> {
                     //   ),
                     // ),
                     InkWell(
-                      onTap: () {
-                        HomeServices().removeFromWishList(
+                      onTap: () async{
+                       await HomeServices().removeFromWishList(
                             context: context, product: widget.product);
+                        widget.fetchWishList();
                       },
                       child: const Icon(
                         IconlyBold.delete,

@@ -42,7 +42,7 @@ class ReviewUI extends StatelessWidget {
           ),
           subtitle: Text(
          DateFormat('yyyy-MM-dd – kk:mm').format(DateTime.fromMillisecondsSinceEpoch(int.parse(date))),
-            style: TextStyle(fontSize: 14.0),
+            style: const TextStyle(fontSize: 14.0),
           ),
           trailing: IconButton(
             onPressed: () => onPressed,

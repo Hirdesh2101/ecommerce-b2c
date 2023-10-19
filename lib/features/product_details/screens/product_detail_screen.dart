@@ -100,6 +100,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       context: context,
       category: product!.category,
     );
+    _similarProducts = _similarProducts!.where((similarProduct) {
+      return similarProduct.id != productId;
+    }).toList();
+
     setState(() {
       isProductLoading = false;
     });
@@ -110,7 +114,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   static const tabs = ['', '', ''];
   final destinations = tabs
       .map(
-        (page) => NavigationDestination(icon: Icon(Icons.abc), label: 'page'),
+        (page) =>
+            const NavigationDestination(icon: Icon(Icons.abc), label: 'page'),
       )
       .toList();
 

@@ -31,7 +31,7 @@ class CarouselImage extends StatelessWidget {
         // aspectRatio: 16 / 9,
         autoPlayCurve: Curves.easeInOutCubic,
 
-        scrollPhysics: ClampingScrollPhysics(),
+        scrollPhysics: const ClampingScrollPhysics(),
         autoPlay: true,
         autoPlayInterval: const Duration(seconds: 3),
         viewportFraction: 1,
