@@ -1,9 +1,10 @@
+import 'package:ecommerce_major_project/providers/tab_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:ecommerce_major_project/main.dart';
-import 'package:ecommerce_major_project/common/widgets/bottom_bar.dart';
+import 'package:provider/provider.dart';
 
 // String uri = 'https://drab-teal-crayfish-hem.cyclic.app';
 //for android http://10.0.2.2:3000
@@ -62,50 +63,50 @@ class GlobalVariables {
     'https://images-na.ssl-images-amazon.com/images/G/31/Symbol/2020/00NEW/1242_450Banners/PL31_copy._CB432483346_.jpg',
     'https://images-na.ssl-images-amazon.com/images/G/31/img21/shoes/September/SSW/pc-header._CB641971330_.jpg',
   ];
-  static const List<Map<String, String>> categoryImages = [
-    {
-      'title': 'Mobiles',
-      'image': 'assets/images/mobile-svg.svg',
-    },
-    {
-      'title': 'Essentials',
-      'image': 'assets/images/essentials-svg.svg',
-    },
-    {
-      'title': 'Appliances',
-      'image': 'assets/images/appliances-svg.svg',
-    },
-    {
-      'title': 'Books',
-      'image': 'assets/images/books-svg.svg',
-    },
-    {
-      'title': 'Fashion',
-      'image': 'assets/images/fashion-svg.svg',
-    },
-  ];
-  static const List<Map<String, String>> categoryImages2 = [
-    {
-      'title': 'Mobiles',
-      'image': 'assets/images/mobiles-category.jpg',
-    },
-    {
-      'title': 'Essentials',
-      'image': 'assets/images/essentials-category.jpg',
-    },
-    {
-      'title': 'Appliances',
-      'image': 'assets/images/appliances-category.jpg',
-    },
-    {
-      'title': 'Books',
-      'image': 'assets/images/books-category.jpg',
-    },
-    {
-      'title': 'Fashion',
-      'image': 'assets/images/fashion-category.jpg',
-    },
-  ];
+  // static const List<Map<String, String>> categoryImages = [
+  //   {
+  //     'title': 'Mobiles',
+  //     'image': 'assets/images/mobile-svg.svg',
+  //   },
+  //   {
+  //     'title': 'Essentials',
+  //     'image': 'assets/images/essentials-svg.svg',
+  //   },
+  //   {
+  //     'title': 'Appliances',
+  //     'image': 'assets/images/appliances-svg.svg',
+  //   },
+  //   {
+  //     'title': 'Books',
+  //     'image': 'assets/images/books-svg.svg',
+  //   },
+  //   {
+  //     'title': 'Fashion',
+  //     'image': 'assets/images/fashion-svg.svg',
+  //   },
+  // ];
+  // static const List<Map<String, String>> categoryImages2 = [
+  //   {
+  //     'title': 'Mobiles',
+  //     'image': 'assets/images/mobiles-category.jpg',
+  //   },
+  //   {
+  //     'title': 'Essentials',
+  //     'image': 'assets/images/essentials-category.jpg',
+  //   },
+  //   {
+  //     'title': 'Appliances',
+  //     'image': 'assets/images/appliances-category.jpg',
+  //   },
+  //   {
+  //     'title': 'Books',
+  //     'image': 'assets/images/books-category.jpg',
+  //   },
+  //   {
+  //     'title': 'Fashion',
+  //     'image': 'assets/images/fashion-category.jpg',
+  //   },
+  // ];
 
   static Route createRoute(Widget className) {
     return PageRouteBuilder(
@@ -142,6 +143,7 @@ class GlobalVariables {
     bool? wantActions = true,
     String? title = "",
   }) {
+    final tabProvider = Provider.of<TabProvider>(context,listen: false);
     return AppBar(
       title: Text("$title",
           style: appBarTextStyle, maxLines: 1, overflow: TextOverflow.ellipsis),
@@ -155,7 +157,7 @@ class GlobalVariables {
                 onPressed: () => Navigator.pop(context))
             : InkWell(
                 onTap: () {
-                  Navigator.pushReplacementNamed(context, BottomBar.routeName);
+                  tabProvider.setTab(0);
                 },
                 child: Image.asset(
                   "assets/images/logo.png",

@@ -1,7 +1,9 @@
 import 'package:ecommerce_major_project/features/cart/providers/cart_provider.dart';
+import 'package:ecommerce_major_project/features/home/providers/category_provider.dart';
 import 'package:ecommerce_major_project/features/splash/loading_splash.dart';
 import 'package:ecommerce_major_project/features/splash/splash_screen.dart';
 import 'package:ecommerce_major_project/firebase_options.dart';
+import 'package:ecommerce_major_project/providers/tab_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart';
@@ -50,6 +52,12 @@ void main() async {
         ),
         ChangeNotifierProvider(
           create: (context) => CartProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => TabProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => CategoryProvider(),
         ),
       ],
       child: MyApp(
