@@ -1,6 +1,6 @@
 import 'package:ecommerce_major_project/common/widgets/custom_textfield.dart';
 import 'package:ecommerce_major_project/features/address/widgets/order_dialog.dart';
-import 'package:ecommerce_major_project/models/product.dart';
+import 'package:ecommerce_major_project/features/cart/providers/cart_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:pay/pay.dart';
@@ -19,8 +19,7 @@ import 'package:ecommerce_major_project/features/address/services/checkout_servi
 class CheckoutScreen extends StatefulWidget {
   static const String routeName = '/checkout';
   final String totalAmount;
-  final List<Map<String,dynamic>> cart;
-  const CheckoutScreen({super.key, required this.totalAmount,required this.cart});
+  const CheckoutScreen({super.key, required this.totalAmount});
 
   @override
   State<CheckoutScreen> createState() => _CheckoutScreenState();
@@ -112,6 +111,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   @override
   Widget build(BuildContext context) {
     final user = context.watch<UserProvider>().user;
+    final cartProvider = Provider.of<CartProvider>(context).getCart;
     var address = user.address;
 
     return GestureDetector(
@@ -211,7 +211,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                 bool isProductAvailable =
                                     await CheckoutServices()
                                         .checkProductsAvailability(
-                                            context, user.cart);
+                                            context);
 
                                 if (isProductAvailable) {
                                   var options = {
@@ -257,8 +257,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               shrinkWrap: true,
                               itemCount: user.cart.length,
                               itemBuilder: (context, index) {
-                                // return CartProdcut
-                                return OrderSummaryProduct(index: index,product: Product.fromJson(widget.cart[index]['product']),);
+                                return OrderSummaryProduct(index: index,product: cartProvider![index].product,);
                               },
                               separatorBuilder: (context, index) {
                                 return SizedBox(

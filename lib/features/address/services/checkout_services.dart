@@ -11,7 +11,7 @@ import 'package:ecommerce_major_project/constants/global_variables.dart';
 class CheckoutServices {
   ///Checks the availability of products through backend, also shows snackbar of the info.
   Future<bool> checkProductsAvailability(
-      BuildContext context, List cart) async {
+      BuildContext context) async {
     bool isProductAvailable = false;
 
     try {

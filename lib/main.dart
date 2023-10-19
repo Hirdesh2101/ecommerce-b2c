@@ -1,3 +1,4 @@
+import 'package:ecommerce_major_project/features/cart/providers/cart_provider.dart';
 import 'package:ecommerce_major_project/features/splash/loading_splash.dart';
 import 'package:ecommerce_major_project/features/splash/splash_screen.dart';
 import 'package:ecommerce_major_project/firebase_options.dart';
@@ -46,6 +47,9 @@ void main() async {
         ),
         ChangeNotifierProvider(
           create: (context) => FilterProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => CartProvider(),
         ),
       ],
       child: MyApp(
