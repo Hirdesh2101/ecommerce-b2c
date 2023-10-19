@@ -100,7 +100,7 @@ class SimilarProducts extends StatelessWidget {
                             children: [
                               TextSpan(
                                 text: indianRupeesFormat
-                                    .format(products![index].price),
+                                    .format(products![index].varients[0]['price']),
                                 style: const TextStyle(
                                   fontSize: 14,
                                   color: Colors.black,
@@ -112,7 +112,7 @@ class SimilarProducts extends StatelessWidget {
                               ),
                               TextSpan(
                                 text: indianRupeesFormat
-                                    .format(products![index].markedprice),
+                                    .format(products![index].varients[0]['markedprice']),
                                 style: TextStyle(
                                   fontSize: 14,
                                   color: Colors.grey.shade700,
@@ -123,7 +123,7 @@ class SimilarProducts extends StatelessWidget {
                                 child: SizedBox(width: mq.width * .02),
                               ),
                               TextSpan(
-                                text: "${calculatePercentageDiscount(products![index].price,products![index].markedprice)}% off",
+                                text: "${calculatePercentageDiscount(products![index].varients[0]['price'],products![index].varients[0]['markedprice'])}% off",
                                 style: const TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w600,
@@ -139,8 +139,8 @@ class SimilarProducts extends StatelessWidget {
                             Text(
                               isProductOutOfStock
                                   ? 'Out of Stock'
-                                  : products![index].quantity < 5
-                                      ? 'Only ${products![index].quantity} left'
+                                  : products![index].totalQuantity < 5
+                                      ? 'Only ${products![index].totalQuantity} left'
                                       : 'In Stock',
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
@@ -149,7 +149,7 @@ class SimilarProducts extends StatelessWidget {
                                 fontWeight: FontWeight.w600,
                                 color: isProductOutOfStock
                                     ? Colors.red
-                                    : products![index].quantity < 5
+                                    : products![index].totalQuantity < 5
                                         ? Colors.amber
                                         : Colors.green,
                               ),

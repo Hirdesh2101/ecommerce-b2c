@@ -74,15 +74,11 @@ class HomeServices {
       description: '',
       brandName: '',
       images: [],
-      quantity: 0,
-      price: 0.0,
       category: '',
       detailDescription: [],
       varients: [],
       warranty: '',
-      sizeQuantities: [],
-      markedprice: 0.0,
-      color: '',
+      totalQuantity: 0,
     );
 
     try {
@@ -348,6 +344,7 @@ class HomeServices {
           context: context,
           onSuccess: () {
             // print("\nInside on success method..");
+            print(res.body);
             User user = userProvider.user
                 .copyWith(wishList: jsonDecode(res.body)['wishList']);
             userProvider.setUserFromModel(user);
@@ -401,42 +398,65 @@ class HomeServices {
       showSnackBar(context: context, text: e.toString());
     }
   }
+
+  Future<List<Product>?> fetchWishList(BuildContext context) async {
+    final String? authToken = await GlobalVariables.getFirebaseAuthToken();
+    List<Product>? wishList = [];
+    try {
+      http.Response res =
+          await http.get(Uri.parse('$uri/api/get-wishList'), headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': '$authToken',
+      });
+
+      var data = jsonDecode(res.body);
+      if (context.mounted) {
+        httpErrorHandle(
+          response: res,
+          context: context,
+          onSuccess: () {
+            for (int i=0;i<data.length;i++) {
+              wishList.add(Product.fromJson(data[i]));
+            }
+          },
+        );
+      }
+    } catch (e) {
+      showSnackBar(
+          context: context, text: "Error in fetchWishList : ${e.toString()}");
+    }
+    return wishList;
+  }
+  Future<List<Map<String,dynamic>>?> fetchCart(BuildContext context) async {
+    final String? authToken = await GlobalVariables.getFirebaseAuthToken();
+    List<Map<String,dynamic>>? cart = [];
+    try {
+      http.Response res =
+          await http.get(Uri.parse('$uri/api/get-cart'), headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': '$authToken',
+      });
+
+      var data = jsonDecode(res.body);
+      if (context.mounted) {
+        httpErrorHandle(
+          response: res,
+          context: context,
+          onSuccess: () {
+            cart = List.from(data['data']);
+            print(cart!.length);
+
+          },
+        );
+      }
+    } catch (e) {
+      showSnackBar(
+          context: context, text: "Error in fetchWishList : ${e.toString()}");
+    }
+    return cart;
+  }
 }
 
-//
-//
-//
-//
-
-// Future<List<Product>?> fetchWishList(BuildContext context) async {
-//   final userProvider = Provider.of<UserProvider>(context, listen: false);
-//   List<Product>? wishList = [];
-//   try {
-//     http.Response res =
-//         await http.get(Uri.parse('$uri/api/get-wishList'), headers: {
-//       'Content-Type': 'application/json; charset=UTF-8',
-//       'Authorization': '$authToken',
-//     });
-
-//     var data = jsonDecode(res.body);
-//     if (context.mounted) {
-//       httpErrorHandle(
-//         response: res,
-//         context: context,
-//         onSuccess: () {
-//           for (Product item in data) {
-//             // print(item['name']);
-//             wishList.add(item);
-//           }
-//         },
-//       );
-//     }
-//   } catch (e) {
-//     showSnackBar(
-//         context: context, text: "Error in fetchWishList : ${e.toString()}");
-//   }
-//   return wishList;
-// }
 
 //
 //

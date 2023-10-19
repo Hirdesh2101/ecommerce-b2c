@@ -1,5 +1,6 @@
 import 'package:ecommerce_major_project/common/widgets/custom_textfield.dart';
 import 'package:ecommerce_major_project/features/address/widgets/order_dialog.dart';
+import 'package:ecommerce_major_project/models/product.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:pay/pay.dart';
@@ -8,7 +9,6 @@ import 'package:razorpay_flutter/razorpay_flutter.dart';
 
 import 'package:ecommerce_major_project/main.dart';
 import 'package:ecommerce_major_project/providers/user_provider.dart';
-import 'package:ecommerce_major_project/common/widgets/bottom_bar.dart';
 import 'package:ecommerce_major_project/constants/global_variables.dart';
 import 'package:ecommerce_major_project/common/widgets/custom_button.dart';
 import 'package:badges/badges.dart' as badges;
@@ -19,7 +19,8 @@ import 'package:ecommerce_major_project/features/address/services/checkout_servi
 class CheckoutScreen extends StatefulWidget {
   static const String routeName = '/checkout';
   final String totalAmount;
-  const CheckoutScreen({super.key, required this.totalAmount});
+  final List<Map<String,dynamic>> cart;
+  const CheckoutScreen({super.key, required this.totalAmount,required this.cart});
 
   @override
   State<CheckoutScreen> createState() => _CheckoutScreenState();
@@ -257,7 +258,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               itemCount: user.cart.length,
                               itemBuilder: (context, index) {
                                 // return CartProdcut
-                                return OrderSummaryProduct(index: index);
+                                return OrderSummaryProduct(index: index,product: Product.fromJson(widget.cart[index]['product']),);
                               },
                               separatorBuilder: (context, index) {
                                 return SizedBox(

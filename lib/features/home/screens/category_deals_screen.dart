@@ -290,7 +290,7 @@ class _CategoryDealsScreenState extends State<CategoryDealsScreen> {
   getFilterpriceLtoH(FilterProvider filterProvider) {
     List<Product>? filterOneList = List<Product>.from(productList!);
     ;
-    filterOneList.sort((a, b) => a.price.compareTo(b.price));
+    filterOneList.sort((a, b) => a.varients[0]['price'].compareTo(b.varients[0]['price']));
 
     return Expanded(
       child: ListView.builder(
@@ -324,7 +324,7 @@ class _CategoryDealsScreenState extends State<CategoryDealsScreen> {
   getFilterpriceHtoL(FilterProvider filterProvider) {
     List<Product>? filterOneList = List<Product>.from(productList!);
     ;
-    filterOneList.sort((a, b) => a.price.compareTo(b.price));
+    filterOneList.sort((a, b) => a.varients[0]['price'].compareTo(b.varients[0]['price']));
 
     return Expanded(
       child: ListView.builder(

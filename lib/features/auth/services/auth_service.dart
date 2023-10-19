@@ -175,6 +175,9 @@ class AuthService {
           // its about the auth middleware
           // userProvider.setUser(jsonEncode(jsonDecode(userRes.body)['_doc']));
 
+          print('<----User----->');
+          print(userRes.body);
+
           userProvider.setUser(userRes.body);
           userProvider.setLoading(false);
 

@@ -1,45 +1,70 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
-
 import 'package:ecommerce_major_project/main.dart';
 import 'package:ecommerce_major_project/models/product.dart';
-import 'package:ecommerce_major_project/providers/user_provider.dart';
 import 'package:ecommerce_major_project/features/cart/services/cart_services.dart';
 import 'package:ecommerce_major_project/features/product_details/services/product_detail_services.dart';
 
 class CartProduct extends StatefulWidget {
   final int index;
-  const CartProduct({required this.index, super.key});
+  final Product product;
+  final int quantity;
+  final String color;
+  final String size;
+  const CartProduct(
+      {required this.index,
+      super.key,
+      required this.product,
+      required this.quantity,
+      required this.size,
+      required this.color});
 
   @override
   State<CartProduct> createState() => _CartProductState();
 }
 
 class _CartProductState extends State<CartProduct> {
+  int price = 0;
+  int quantity = 0;
+  @override
+  void initState() {
+    List<dynamic> variants = widget.product.varients;
+    for (var variant in variants) {
+      if (variant['color'] == widget.color) {
+        price = variant['price'];
+      }
+      for (var size in variant['sizes']) {
+        if (size['size'] == widget.size) {
+          quantity = size['quantity'];
+        }
+      }
+    }
+    super.initState();
+  }
+
   final ProductDetailServices productDetailServices = ProductDetailServices();
   final CartServices cartServices = CartServices();
 
   void increaseQuantity(Product product) {
-    productDetailServices.addToCart(context: context, product: product);
+    productDetailServices.addToCart(context: context, product: product,color: widget.color,size: widget.size);
   }
 
   void decreaseQuantity(Product product) {
-    cartServices.removeFromCart(context: context, product: product);
+    cartServices.removeFromCart(context: context, product: product,color: widget.color,size: widget.size);
   }
 
   @override
   Widget build(BuildContext context) {
     // fetching the particular product
-    final productCart = context.watch<UserProvider>().user.cart[widget.index];
-    final product = Product.fromJson(productCart['product']);
-    final quantity = productCart['quantity'];
+    //final productCart = context.watch<UserProvider>().user.cart[widget.index];
+    // final product = Product.fromJson(productCart['product']);
+    // final quantity = productCart['quantity'];
     final indianRupeesFormat = NumberFormat.currency(
-           name: "INR",
-           locale: 'en_IN',
-           decimalDigits: 0,
-           symbol: '₹ ',
-        );
+      name: "INR",
+      locale: 'en_IN',
+      decimalDigits: 0,
+      symbol: '₹ ',
+    );
 
     return Column(
       children: [
@@ -49,7 +74,7 @@ class _CartProductState extends State<CartProduct> {
             children: [
               // image
               Image.network(
-                product.images[0],
+                widget.product.images[0],
                 fit: BoxFit.contain,
                 height: mq.width * .25,
                 width: mq.width * .25,
@@ -63,7 +88,7 @@ class _CartProductState extends State<CartProduct> {
                     padding: EdgeInsets.only(
                         left: mq.width * .025, top: mq.width * .0125),
                     child: Text(
-                      product.name,
+                      widget.product.name,
                       textAlign: TextAlign.left,
                       style: const TextStyle(fontSize: 13),
                       maxLines: 2,
@@ -74,7 +99,7 @@ class _CartProductState extends State<CartProduct> {
                     padding: EdgeInsets.only(
                         left: mq.width * .025, top: mq.width * .0125),
                     child: Text(
-                     indianRupeesFormat.format(product.price),
+                      indianRupeesFormat.format(price),
                       style: const TextStyle(
                           fontWeight: FontWeight.bold, fontSize: 15),
                       maxLines: 2,
@@ -84,7 +109,7 @@ class _CartProductState extends State<CartProduct> {
                     width: mq.width * .57,
                     padding: EdgeInsets.only(left: mq.width * .025),
                     child: Text(
-                      product.price < 500
+                      price < 500
                           ? "Shipping charges might apply"
                           : "Eligible for free shipping",
                       style: const TextStyle(fontSize: 13),
@@ -92,8 +117,23 @@ class _CartProductState extends State<CartProduct> {
                   ),
                   Container(
                     width: mq.width * .57,
+
                     padding: EdgeInsets.only(left: mq.width * .025),
-                    child: product.quantity == 0
+                    
+                    child:  Text(
+                            "Color: ${widget.color}    Size: ${widget.size}",
+                            style: const TextStyle(
+                                color: Colors.black, fontSize: 11),
+                            maxLines: 2,
+                          )
+                        
+                  ),
+                  Container(
+                    width: mq.width * .57,
+
+                    padding: EdgeInsets.only(left: mq.width * .025),
+                    //TODO HERE ALSO NEW MAP
+                    child: quantity == 0
                         ? const Text(
                             "Out of Stock",
                             style: TextStyle(
@@ -124,7 +164,7 @@ class _CartProductState extends State<CartProduct> {
                 ),
                 child: Row(children: [
                   InkWell(
-                    onTap: () => decreaseQuantity(product),
+                    onTap: () => decreaseQuantity(widget.product),
                     child: Container(
                       width: 30,
                       height: 30,
@@ -141,11 +181,11 @@ class _CartProductState extends State<CartProduct> {
                       width: 30,
                       height: 30,
                       alignment: Alignment.center,
-                      child: Text("$quantity"),
+                      child: Text("${widget.quantity}"),
                     ),
                   ),
                   InkWell(
-                    onTap: () => increaseQuantity(product),
+                    onTap: () => increaseQuantity(widget.product),
                     child: Container(
                       width: 30,
                       height: 30,

@@ -10,7 +10,8 @@ import 'package:ecommerce_major_project/features/product_details/services/produc
 
 class OrderSummaryProduct extends StatefulWidget {
   final int index;
-  const OrderSummaryProduct({required this.index, super.key});
+  final Product product;
+  const OrderSummaryProduct({required this.index, super.key,required this.product});
 
   @override
   State<OrderSummaryProduct> createState() => _OrderSummaryProductState();
@@ -29,10 +30,10 @@ class _OrderSummaryProductState extends State<OrderSummaryProduct> {
   @override
   Widget build(BuildContext context) {
     // fetching the particular product
-    final productCart = context.watch<UserProvider>().user.cart[widget.index];
+    //final productCart = context.watch<UserProvider>().user.cart[widget.index];
     final productQuantity =
         context.watch<UserProvider>().user.cart[widget.index]['quantity'];
-    final product = Product.fromJson(productCart['product']);
+    //final product = Product.fromJson(productCart['product']);
     // final quantity = productCart['quantity'];
 
     return InkWell(
@@ -40,7 +41,7 @@ class _OrderSummaryProductState extends State<OrderSummaryProduct> {
         Navigator.pushNamed(
           context,
           ProductDetailScreen.routeName,
-          arguments: product.id,
+          arguments: widget.product.id,
         );
       },
       child: Row(
@@ -48,7 +49,7 @@ class _OrderSummaryProductState extends State<OrderSummaryProduct> {
         children: [
           // image
           Image.network(
-            product.images[0],
+            widget.product.images[0],
             fit: BoxFit.contain,
             height: mq.width * .25,
             width: mq.width * .25,
@@ -61,7 +62,7 @@ class _OrderSummaryProductState extends State<OrderSummaryProduct> {
                 padding: EdgeInsets.only(
                     left: mq.width * .025, top: mq.width * .0125),
                 child: Text(
-                  product.name,
+                  widget.product.name,
                   textAlign: TextAlign.left,
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(fontSize: 15),
@@ -72,7 +73,8 @@ class _OrderSummaryProductState extends State<OrderSummaryProduct> {
                 width: mq.width * .57,
                 padding: EdgeInsets.only(left: mq.width * .025),
                 child: Text(
-                  indianRupeesFormat.format(product.price),
+                  //TODO HERE MODIFY THE PRICE VALUE NEED ME MAKE A NEW MODEL FOR CART PRODUCT
+                  indianRupeesFormat.format(widget.product.varients[0]['price']),
                   style: const TextStyle(
                       fontWeight: FontWeight.bold, fontSize: 17),
                   maxLines: 2,
@@ -82,7 +84,7 @@ class _OrderSummaryProductState extends State<OrderSummaryProduct> {
                 width: mq.width * .57,
                 padding: EdgeInsets.only(left: mq.width * .025),
                 child: Text(
-                  product.price < 500
+                  widget.product.varients[0]['price'] < 500
                       ? "Shipping charges might apply"
                       : "Eligible for free shipping",
                   style: const TextStyle(fontSize: 13),

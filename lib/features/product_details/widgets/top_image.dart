@@ -28,11 +28,11 @@ class _TopImageState extends State<TopImage> {
     List<dynamic> wishList = user.wishList != null ? user.wishList! : [];
 
     for (int i = 0; i < wishList.length; i++) {
-      final productWishList = wishList[i];
-      final productFromJson = Product.fromJson(productWishList['product']);
-      final productId = productFromJson.id;
+      // final productWishList = wishList[i];
+      // final productFromJson = Product.fromJson(productWishList['product']);
+      // final productId = productFromJson.id;
 
-      if (productId == widget.product.id) {
+      if (wishList[i]['product'] == widget.product.id) {
         isProductWishListed = true;
         break;
       }

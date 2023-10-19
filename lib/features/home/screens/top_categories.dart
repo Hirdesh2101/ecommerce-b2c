@@ -77,12 +77,6 @@ class _TopCategoriesState extends State<TopCategories>
         arguments: category);
   }
 
-  void addToCart(String productName, Product product) {
-    print("Triggered add to cart <====");
-    print("Product is  : $productName");
-    productDetailServices.addToCart(context: context, product: product);
-    print("Execution finished add to cart <====");
-  }
 
   fetchCategoryProducts(String categoryName) async {
     setState(() {
@@ -251,7 +245,7 @@ class _TopCategoriesState extends State<TopCategories>
                                           (context, index) {
                                         Product product = productList![index];
                                         bool isProductOutOfStock =
-                                            productList![index].quantity == 0;
+                                            productList![index].totalQuantity == 0;
                                         print(
                                             "\n\n============> product category : ${categoriesList[activeTabIndex]}");
 
@@ -266,13 +260,13 @@ class _TopCategoriesState extends State<TopCategories>
                                         for (int i = 0;
                                             i < wishList.length;
                                             i++) {
-                                          final productWishList = wishList[i];
-                                          final productFromJson =
-                                              Product.fromJson(
-                                                  productWishList['product']);
-                                          final productId = productFromJson.id;
+                                          // final productWishList = wishList[i];
+                                          // final productFromJson =
+                                          //     Product.fromJson(
+                                          //         productWishList['product']);
+                                          // final productId = productFromJson.id;
 
-                                          if (productId == product.id) {
+                                          if (wishList[i]['product'] == product.id) {
                                             isProductWishListed = true;
                                             break;
                                           }
@@ -337,7 +331,7 @@ class _TopCategoriesState extends State<TopCategories>
                                                       TextSpan(
                                                         text: indianRupeesFormat
                                                             .format(
-                                                                product.price),
+                                                                product.varients[0]['price']),
                                                         style: const TextStyle(
                                                           fontSize: 14,
                                                           color: Colors.black,
@@ -353,7 +347,7 @@ class _TopCategoriesState extends State<TopCategories>
                                                       TextSpan(
                                                         text: indianRupeesFormat
                                                             .format(
-                                                                product.markedprice),
+                                                                product.varients[0]['markedprice']),
                                                         style: TextStyle(
                                                           fontSize: 14,
                                                           color: Colors
@@ -369,7 +363,7 @@ class _TopCategoriesState extends State<TopCategories>
                                                                 mq.width * .02),
                                                       ),
                                                       TextSpan(
-                                                        text:  "${calculatePercentageDiscount(product.price,product.markedprice)}% off",
+                                                        text:  "${calculatePercentageDiscount(product.varients[0]['price'],product.varients[0]['markedprice'])}% off",
                                                         style: const TextStyle(
                                                           fontSize: 14,
                                                           fontWeight:
@@ -389,9 +383,9 @@ class _TopCategoriesState extends State<TopCategories>
                                                       isProductOutOfStock
                                                           ? 'Out of Stock'
                                                           : productList![index]
-                                                                      .quantity <
+                                                                      .totalQuantity <
                                                                   5
-                                                              ? 'Only ${productList![index].quantity} left'
+                                                              ? 'Only ${productList![index].totalQuantity} left'
                                                               : 'In Stock',
                                                       maxLines: 1,
                                                       overflow:
@@ -404,7 +398,7 @@ class _TopCategoriesState extends State<TopCategories>
                                                             isProductOutOfStock
                                                                 ? Colors.red
                                                                 : productList![index]
-                                                                            .quantity <
+                                                                            .totalQuantity <
                                                                         5
                                                                     ? Colors
                                                                         .amber

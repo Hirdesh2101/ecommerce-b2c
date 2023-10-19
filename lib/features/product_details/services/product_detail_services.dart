@@ -83,6 +83,8 @@ class ProductDetailServices {
   void addToCart({
     required BuildContext context,
     required Product product,
+    required String color,
+    required String size
   }) async {
     print("========> Inside the add to cart function");
     final userProvider = Provider.of<UserProvider>(context, listen: false);
@@ -97,7 +99,7 @@ class ProductDetailServices {
           'Content-Type': 'application/json; charset=UTF-8',
           'Authorization': '$authToken',
         },
-        body: jsonEncode({'id': product.id!}),
+        body: jsonEncode({'id': product.id!,'color':color,'size':size}),
       );
 
       // http.Response res = await http.post(

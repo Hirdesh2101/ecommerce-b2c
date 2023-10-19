@@ -1,5 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:ecommerce_major_project/common/widgets/color_loader_2.dart';
+import 'package:ecommerce_major_project/common/widgets/loader.dart';
 import 'package:ecommerce_major_project/constants/global_variables.dart';
+import 'package:ecommerce_major_project/features/home/services/home_services.dart';
 import 'package:ecommerce_major_project/features/product_details/screens/product_detail_screen.dart';
 import 'package:ecommerce_major_project/features/search_delegate/my_search_screen.dart';
 import 'package:ecommerce_major_project/models/product.dart';
@@ -23,9 +26,29 @@ class WishListScreen extends StatefulWidget {
 }
 
 class _WishListScreenState extends State<WishListScreen> {
+  bool isLoading = true;
+  List<Product>? wishList;
+  final HomeServices homeServices = HomeServices();
+
+  @override
+  void initState() {
+    fetchWishlist();
+    super.initState();
+  }
+
+  fetchWishlist() async {
+    setState(() {
+      isLoading = true;
+    });
+    wishList = await homeServices.fetchWishList(context);
+    setState(() {
+      isLoading = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    final user = context.watch<UserProvider>().user;
+    //final user = context.watch<UserProvider>().user;
     return Scaffold(
       appBar: GlobalVariables.getAppBar(
           context: context,
@@ -39,7 +62,9 @@ class _WishListScreenState extends State<WishListScreen> {
             // color: Colors.redAccent,
             padding: EdgeInsets.only(top: mq.height * .02),
             // height: mq.height * 0.55,
-            child: user.wishList == null || user.wishList!.isEmpty
+            child: isLoading?const ColorLoader2() :
+            
+            wishList == null || wishList!.isEmpty
                 ? Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     // crossAxisAlignment: CrossAxisAlignment.center,
@@ -70,23 +95,16 @@ class _WishListScreenState extends State<WishListScreen> {
                     ],
                   )
                 : Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-                    for (int index = 0; index < user.wishList!.length; index++)
+                    for (int index = 0; index < wishList!.length; index++)
                       InkWell(
                           onTap: () {
-                            final productWishList = Provider.of<UserProvider>(
-                                    context,
-                                    listen: false)
-                                .user
-                                .wishList![index];
-                            final product =
-                                Product.fromJson(productWishList['product']);
                             Navigator.pushNamed(
                               context,
                               ProductDetailScreen.routeName,
-                              arguments: product.id,
+                              arguments: wishList![index].id,
                             );
                           },
-                          child: WishListProduct(index: index)),
+                          child: WishListProduct(index: index,product: wishList![index],)),
                   ]),
           ),
         ],

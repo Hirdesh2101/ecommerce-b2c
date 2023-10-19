@@ -73,10 +73,15 @@ Route<dynamic> generateRoute(RouteSettings routeSettings) {
 
     // AddressScreen
     case CheckoutScreen.routeName:
-      var totalAmount = routeSettings.arguments as String;
+      var myArguments = routeSettings.arguments as List;
+      var totalAmount = myArguments[0];
+      var cart = myArguments[1];
       return MaterialPageRoute(
         settings: routeSettings,
-        builder: (_) => CheckoutScreen(totalAmount: totalAmount),
+        builder: (_) => CheckoutScreen(
+          totalAmount: totalAmount,
+          cart: cart,
+        ),
       );
 
     // OrderDetailsScreen

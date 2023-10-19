@@ -1,5 +1,6 @@
 import 'package:ecommerce_major_project/common/widgets/color_loader_2.dart';
 import 'package:ecommerce_major_project/features/address/services/checkout_services.dart';
+import 'package:ecommerce_major_project/features/home/services/home_services.dart';
 import 'package:ecommerce_major_project/features/product_details/screens/product_detail_screen.dart';
 import 'package:ecommerce_major_project/models/product.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +27,33 @@ class CartScreen extends StatefulWidget {
 
 class _CartScreenState extends State<CartScreen> {
   bool isLoading = false;
+  final HomeServices homeServices = HomeServices();
+  List<Map<String, dynamic>>? cart;
+  num sum = 0;
+
+  @override
+  void initState() {
+    fetchCart();
+    super.initState();
+  }
+
+  fetchCart() async {
+    setState(() {
+      isLoading = true;
+    });
+    cart = await homeServices.fetchCart(context);
+    for (var cartItem in cart!) {
+      List<dynamic> variants = cartItem['product']['varients'];
+      for (var variant in variants) {
+        if (variant['color'] == cartItem['color']) {
+          sum += cartItem['quantity'] * variant['price'];
+        }
+      }
+    }
+    setState(() {
+      isLoading = false;
+    });
+  }
 
   void navigateToSearchScreen(String query) {
     //make sure to pass the arguments here!
@@ -44,7 +72,7 @@ class _CartScreenState extends State<CartScreen> {
     if (isProductAvailable) {
       //make sure to pass the arguments here!
       Navigator.pushNamed(context, CheckoutScreen.routeName,
-          arguments: sum.toString());
+          arguments: [sum.toString(), cart]);
     }
     setState(() {
       isLoading = false;
@@ -53,13 +81,6 @@ class _CartScreenState extends State<CartScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final user = context.watch<UserProvider>().user;
-    num sum = 0;
-
-    user.cart
-        .map((e) => sum += e['quantity'] * e['product']['price'] as num)
-        .toList();
-
     return Scaffold(
       appBar: GlobalVariables.getAppBar(
           context: context,
@@ -70,20 +91,22 @@ class _CartScreenState extends State<CartScreen> {
         children: [
           SizedBox(height: mq.height * 0.01),
           const AddressBox(),
-          const CartSubtotal(),
+          CartSubtotal(
+            sum: sum,
+          ),
           Padding(
             padding: EdgeInsets.all(mq.width * .025),
             child: CustomButton(
                 text: isLoading
                     ? "Checking availablity"
-                    : "Proceed to buy (${user.cart.length} ${user.cart.length == 1 ? 'item' : 'items'})",
+                    : "Proceed to buy (${cart!.length} ${cart!.length == 1 ? 'item' : 'items'})",
                 onTap: () {
-                  if (user.cart.isEmpty | isLoading) {
+                  if (isLoading || cart!.isEmpty) {
                     return;
                   }
-                  navigateToAddress(sum, user.cart);
+                  navigateToAddress(sum, cart!);
                 },
-                color: (user.cart.isEmpty | isLoading)
+                color: (isLoading || cart!.isEmpty)
                     ? Colors.yellow[200]
                     : Colors.yellow[500]),
           ),
@@ -94,7 +117,7 @@ class _CartScreenState extends State<CartScreen> {
             // height: mq.height * 0.5,
             child: isLoading
                 ? const ColorLoader2()
-                : user.cart.isEmpty
+                : cart!.isEmpty
                     ? Column(
                         children: [
                           Image.asset("assets/images/no-orderss.png",
@@ -120,25 +143,25 @@ class _CartScreenState extends State<CartScreen> {
                     : ListView.builder(
                         scrollDirection: Axis.vertical,
                         // shrinkWrap: true,
-                        itemCount: user.cart.length,
+                        itemCount: cart!.length,
                         itemBuilder: (context, index) {
                           // return CartProdcut
                           return InkWell(
                             onTap: () {
-                              final productCart = Provider.of<UserProvider>(
-                                      context,
-                                      listen: false)
-                                  .user
-                                  .cart[index];
-                              final product =
-                                  Product.fromJson(productCart['product']);
                               Navigator.pushNamed(
                                 context,
                                 ProductDetailScreen.routeName,
-                                arguments: product.id,
+                                arguments: cart![index]['product']['_id'],
                               );
                             },
-                            child: CartProduct(index: index),
+                            child: CartProduct(
+                              index: index,
+                              product:
+                                  Product.fromJson(cart![index]['product']),
+                              size: cart![index]['size'],
+                              color: cart![index]['color'],
+                              quantity: cart![index]['quantity'],
+                            ),
                           );
                         },
                       ),

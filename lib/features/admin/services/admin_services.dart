@@ -37,17 +37,13 @@ class AdminServices {
         name: name,
         description: description,
         brandName: brandName,
-        quantity: quantity,
         images: imageUrls,
         category: category,
-        price: price,
         //TODO ask for input
         detailDescription: [],
         warranty: '',
         varients: [],
-        sizeQuantities: [],
-        markedprice: 0.0,
-        color: '',
+        totalQuantity: 0,
       );
 
       //use jsonEncode before sending the body to POST request

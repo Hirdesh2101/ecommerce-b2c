@@ -13,7 +13,8 @@ import 'package:ecommerce_major_project/features/product_details/services/produc
 
 class WishListProduct extends StatefulWidget {
   final int index;
-  const WishListProduct({required this.index, super.key});
+  final Product product;
+  const WishListProduct({required this.index, super.key,required this.product});
 
   @override
   State<WishListProduct> createState() => _WishListProductState();
@@ -36,9 +37,6 @@ class _WishListProductState extends State<WishListProduct> {
   @override
   Widget build(BuildContext context) {
     // fetching the particular product
-    final productWishList =
-        context.watch<UserProvider>().user.wishList![widget.index];
-    final product = Product.fromJson(productWishList['product']);
 
     return Container(
       margin: EdgeInsets.fromLTRB(mq.width * .025, 0, mq.width * .04, 0),
@@ -46,7 +44,7 @@ class _WishListProductState extends State<WishListProduct> {
         children: [
           // image
           Image.network(
-            product.images[0],
+            widget.product.images[0],
             fit: BoxFit.contain,
             height: mq.width * .26,
             width: mq.width * .26,
@@ -58,14 +56,14 @@ class _WishListProductState extends State<WishListProduct> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  product.name,
+                  widget.product.name,
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.left,
                   style: const TextStyle(fontSize: 16),
                   maxLines: 2,
                 ),
                 Text(
-                 indianRupeesFormat.format(product.price),
+                 indianRupeesFormat.format(widget.product.varients[0]['price']),
                   style: const TextStyle(
                       fontWeight: FontWeight.bold, fontSize: 18),
                   maxLines: 2,
@@ -73,42 +71,43 @@ class _WishListProductState extends State<WishListProduct> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        if (product.quantity == 0) {
-                          showSnackBar(
-                              context: context, text: "Product out of stock");
-                        } else {
-                          productDetailServices.addToCart(
-                              context: context, product: product);
-                          showSnackBar(
-                            context: context,
-                            text: "Added to cart",
-                            actionLabel: "View Cart",
-                            onTapFunction: () {
-                              Navigator.pushNamed(
-                                  context, CartScreen.routeName);
-                            },
-                          );
-                        }
-                      },
-                      style: ElevatedButton.styleFrom(
-                        elevation: 1,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            side: const BorderSide(
-                                color: Colors.black, width: 0.4)),
-                        backgroundColor: Colors.deepPurple,
-                      ),
-                      child: const Text(
-                        "Add to cart",
-                        style: TextStyle(color: Colors.white, fontSize: 13),
-                      ),
-                    ),
+                    //TODO Add new button
+                    // ElevatedButton(
+                    //   onPressed: () {
+                    //     if (widget.product.totalQuantity == 0) {
+                    //       showSnackBar(
+                    //           context: context, text: "Product out of stock");
+                    //     } else {
+                    //       productDetailServices.addToCart(
+                    //           context: context, product: widget.product);
+                    //       showSnackBar(
+                    //         context: context,
+                    //         text: "Added to cart",
+                    //         actionLabel: "View Cart",
+                    //         onTapFunction: () {
+                    //           Navigator.pushNamed(
+                    //               context, CartScreen.routeName);
+                    //         },
+                    //       );
+                    //     }
+                    //   },
+                    //   style: ElevatedButton.styleFrom(
+                    //     elevation: 1,
+                    //     shape: RoundedRectangleBorder(
+                    //         borderRadius: BorderRadius.circular(12),
+                    //         side: const BorderSide(
+                    //             color: Colors.black, width: 0.4)),
+                    //     backgroundColor: Colors.deepPurple,
+                    //   ),
+                    //   child: const Text(
+                    //     "Add to cart",
+                    //     style: TextStyle(color: Colors.white, fontSize: 13),
+                    //   ),
+                    // ),
                     InkWell(
                       onTap: () {
                         HomeServices().removeFromWishList(
-                            context: context, product: product);
+                            context: context, product: widget.product);
                       },
                       child: const Icon(
                         IconlyBold.delete,

@@ -38,6 +38,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
   num myRating = 0.0;
   double avgRating = 0.0;
+  int selectedSize = -1;
+  int selectedColor = 0;
 
   int counterFiveStars = 0;
   int counterFourStars = 0;
@@ -93,9 +95,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       if (totalRating != 0) {
         avgRating = totalRating / product!.rating!.length;
       }
-      isProductOutOfStock = product!.quantity == 0;
     }
-    _similarProducts =  await productDetailServices.fetchSimilarProducts(
+    _similarProducts = await productDetailServices.fetchSimilarProducts(
       context: context,
       category: product!.category,
     );
@@ -120,10 +121,52 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   }
 
   void addToCart() {
-    debugPrint("Triggered add to cart <====");
-    debugPrint("Product is  : ${product!.name}");
-    productDetailServices.addToCart(context: context, product: product!);
-    debugPrint("Execution finished add to cart <====");
+    if (selectedSize == -1) {
+      showSnackBar(
+        context: context,
+        text: "Please select a size!",
+      );
+    } else if (isProductOutOfStock) {
+      showSnackBar(context: context, text: "Product is out of stock!");
+      return;
+    } else {
+      debugPrint("Triggered add to cart <====");
+      debugPrint("Product is  : ${product!.name}");
+      productDetailServices.addToCart(
+          context: context,
+          product: product!,
+          color: product!.varients[selectedColor]['color'],
+          size: product!.varients[selectedColor]['sizes'][selectedSize]
+              ['size']);
+      debugPrint("Execution finished add to cart <====");
+      showSnackBar(
+          context: context,
+          text: "Added to Cart",
+          onTapFunction: () {
+            Navigator.pushNamed(context, CartScreen.routeName);
+          },
+          actionLabel: "View");
+    }
+  }
+
+  void setColor(int color) {
+    setState(() {
+      selectedColor = color;
+      if (selectedSize != -1) {
+        isProductOutOfStock = product!.varients[selectedColor]['sizes']
+                [selectedSize]['quantity'] ==
+            0;
+      }
+    });
+  }
+
+  void setSize(int size) {
+    setState(() {
+      selectedSize = size;
+      isProductOutOfStock = product!.varients[selectedColor]['sizes']
+              [selectedSize]['quantity'] ==
+          0;
+    });
   }
 
   @override
@@ -219,29 +262,19 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             SizedBox(height: mq.width * .03),
                             const Divider(thickness: 2),
                             SizedBox(height: mq.width * .01),
-                            SizeAndColor(product: product!,),
-                            
+                            SizeAndColor(
+                                product: product!,
+                                selectedColor: selectedColor,
+                                selectedSize: selectedSize,
+                                setColor: setColor,
+                                setSize: setSize),
+
                             DeliveyLocation(pincode: pincode),
                             SizedBox(height: mq.width * .07),
                             Center(
                               child: ElevatedButton(
                                 onPressed: () {
-                                  if (isProductOutOfStock) {
-                                    showSnackBar(
-                                        context: context,
-                                        text: "Product is out of stock!");
-                                    return;
-                                  } else {
-                                    addToCart();
-                                    showSnackBar(
-                                        context: context,
-                                        text: "Added to Cart",
-                                        onTapFunction: () {
-                                          Navigator.pushNamed(
-                                              context, CartScreen.routeName);
-                                        },
-                                        actionLabel: "View");
-                                  }
+                                  addToCart();
                                 },
                                 style: ElevatedButton.styleFrom(
                                     backgroundColor: Colors.yellow.shade800,

@@ -79,7 +79,7 @@ class SearchedProduct extends StatelessWidget {
                       padding: EdgeInsets.only(
                           left: mq.width * .025, top: mq.width * .0125),
                       child: Text(
-                     indianRupeesFormat.format(product.price),
+                     indianRupeesFormat.format(product.varients[0]['price']),
                         style: const TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 15),
                         maxLines: 2,
@@ -97,7 +97,7 @@ class SearchedProduct extends StatelessWidget {
                       width: mq.width * .57,
                       padding: EdgeInsets.only(
                           left: mq.width * .025, top: mq.width * .0125),
-                      child: product.quantity == 0
+                      child: product.totalQuantity == 0
                           ? const Text(
                               "Out of Stock",
                               style: TextStyle(

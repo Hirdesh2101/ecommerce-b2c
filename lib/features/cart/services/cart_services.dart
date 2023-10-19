@@ -15,6 +15,8 @@ class CartServices {
   void removeFromCart({
     required BuildContext context,
     required Product product,
+    required String color,
+    required String size,
   }) async {
     print("========> Inside the remove from cart function");
     final userProvider = Provider.of<UserProvider>(context, listen: false);
@@ -22,7 +24,7 @@ class CartServices {
     try {
       http.Response res = await http.delete(
         Uri.parse(
-          '$uri/api/remove-from-cart/${product.id}',
+          '$uri/api/remove-from-cart',
         ),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
@@ -30,6 +32,8 @@ class CartServices {
         },
         body: jsonEncode({
           'id': product.id!,
+          'color': color,
+          'size': size
         }),
       );
 
