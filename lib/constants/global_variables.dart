@@ -13,6 +13,11 @@ import 'package:ecommerce_major_project/common/widgets/bottom_bar.dart';
 String uri = 'http://192.168.1.3:3000';
 
 class GlobalVariables {
+  //Razor pay details
+  static const String razorPayOrderApi = "https://api.razorpay.com/v1/orders";
+  static const String razorPayTestKey = "rzp_test_7NBmERXaABkUpY";
+  static const String razorPaySecretKey = "TO BE UPDATED";
+
   // COLORS
   static const appBarGradient = LinearGradient(
     colors: [

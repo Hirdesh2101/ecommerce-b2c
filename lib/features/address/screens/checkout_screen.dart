@@ -1,7 +1,9 @@
 import 'package:ecommerce_major_project/common/widgets/custom_textfield.dart';
 import 'package:ecommerce_major_project/features/address/widgets/order_dialog.dart';
 import 'package:ecommerce_major_project/models/product.dart';
+import 'package:ecommerce_major_project/models/order.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:pay/pay.dart';
 import 'package:provider/provider.dart';
@@ -19,8 +21,9 @@ import 'package:ecommerce_major_project/features/address/services/checkout_servi
 class CheckoutScreen extends StatefulWidget {
   static const String routeName = '/checkout';
   final String totalAmount;
-  final List<Map<String,dynamic>> cart;
-  const CheckoutScreen({super.key, required this.totalAmount,required this.cart});
+  final List<Map<String, dynamic>> cart;
+  const CheckoutScreen(
+      {super.key, required this.totalAmount, required this.cart});
 
   @override
   State<CheckoutScreen> createState() => _CheckoutScreenState();
@@ -75,13 +78,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     pincodeController.dispose();
     flatBuildingController.dispose();
     super.dispose();
-  }
-
-  void placeOrder(String addressFromProvider) {
-    addressServices.placeOrder(
-        context: context,
-        address: addressToBeUsed,
-        totalSum: num.parse(widget.totalAmount));
   }
 
   void deliverToThisAddress(String addressFromProvider) {
@@ -213,26 +209,43 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                         .checkProductsAvailability(
                                             context, user.cart);
 
-                                if (isProductAvailable) {
-                                  var options = {
-                                    'key': 'rzp_test_7NBmERXaABkUpY',
-                                    //amount is in paisa, multiply by 100 to convert
-                                    'amount': 100 * totalAmount,
-                                    'name': 'AKR Company',
-                                    'description': 'Ecommerce Bill',
-                                    'prefill': {
-                                      'contact': '8888888888',
-                                      'email': 'test@razorpay.com'
-                                    }
-                                  };
-                                  try {
-                                    _razorpay.open(options);
+                                if (isProductAvailable && context.mounted) {
+                                  //Order is placed first to pass the order ID in razor pay.
+                                  Response? response =
+                                      await addressServices.placeOrder(
+                                    context: context,
+                                    address: user.address,
+                                    totalSum: num.parse(widget.totalAmount),
+                                  );
 
-                                    print(
-                                        "Inside after razor pay open..............$address");
-                                  } catch (e) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                        SnackBar(content: Text("Error : $e")));
+                                  if (response?.statusCode == 200) {
+                                    Order order =
+                                        Order.fromJson(response!.body);
+                                    String orderId = order.id;
+                                    print('Order Id: $orderId');
+                                    var options = {
+                                      'key': 'rzp_test_7NBmERXaABkUpY',
+                                      //amount is in paisa, multiply by 100 to convert
+                                      'amount': 100 * totalAmount,
+                                      'name': 'AKR Company',
+                                      'order_id': "abc",
+                                      'description': 'Ecommerce Bill',
+                                      'timeout': 60,
+                                      'prefill': {
+                                        'contact': '8888888888',
+                                        'email': 'test@razorpay.com'
+                                      }
+                                    };
+                                    try {
+                                      _razorpay.open(options);
+
+                                      print(
+                                          "Inside after razor pay open..............$address");
+                                    } catch (e) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                              content: Text("Error : $e")));
+                                    }
                                   }
                                 } else {
                                   setState(() {
@@ -258,7 +271,11 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               itemCount: user.cart.length,
                               itemBuilder: (context, index) {
                                 // return CartProdcut
-                                return OrderSummaryProduct(index: index,product: Product.fromJson(widget.cart[index]['product']),);
+                                return OrderSummaryProduct(
+                                  index: index,
+                                  product: Product.fromJson(
+                                      widget.cart[index]['product']),
+                                );
                               },
                               separatorBuilder: (context, index) {
                                 return SizedBox(
@@ -409,9 +426,13 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   }
 
   void _handlePaymentSuccess(PaymentSuccessResponse response) {
-    String address =
-        Provider.of<UserProvider>(context, listen: false).user.address;
-    placeOrder(address);
+    addressServices.updateOrder(
+      context: context,
+      orderId: response.orderId != null ? response.orderId! : "",
+      paymentId: response.paymentId != null ? response.paymentId! : "",
+      paymentAt: DateTime.now().millisecondsSinceEpoch,
+      signatureId: response.signature,
+    );
 
     print(
         "\n\nPayment successful : \n\nPayment ID :  ${response.paymentId} \n\n Order ID : ${response.orderId} \n\n Signature : ${response.signature}");
