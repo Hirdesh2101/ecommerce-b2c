@@ -1,6 +1,6 @@
 import 'package:ecommerce_major_project/common/widgets/custom_textfield.dart';
 import 'package:ecommerce_major_project/features/address/widgets/order_dialog.dart';
-import 'package:ecommerce_major_project/features/cart/providers/cart_provider.dart';
+import 'package:ecommerce_major_project/models/cart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:pay/pay.dart';
@@ -19,7 +19,8 @@ import 'package:ecommerce_major_project/features/address/services/checkout_servi
 class CheckoutScreen extends StatefulWidget {
   static const String routeName = '/checkout';
   final String totalAmount;
-  const CheckoutScreen({super.key, required this.totalAmount});
+  final List<Cart> mycart;
+  const CheckoutScreen({super.key, required this.totalAmount,required this.mycart});
 
   @override
   State<CheckoutScreen> createState() => _CheckoutScreenState();
@@ -111,7 +112,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   @override
   Widget build(BuildContext context) {
     final user = context.watch<UserProvider>().user;
-    final cartProvider = Provider.of<CartProvider>(context).getCart;
     var address = user.address;
 
     return GestureDetector(
@@ -257,7 +257,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               shrinkWrap: true,
                               itemCount: user.cart.length,
                               itemBuilder: (context, index) {
-                                return OrderSummaryProduct(index: index,product: cartProvider![index].product,);
+                                return OrderSummaryProduct(index: index,product: widget.mycart[index].product,);
                               },
                               separatorBuilder: (context, index) {
                                 return SizedBox(

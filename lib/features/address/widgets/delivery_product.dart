@@ -1,4 +1,3 @@
-import 'package:ecommerce_major_project/features/product_details/screens/product_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -36,72 +35,63 @@ class _OrderSummaryProductState extends State<OrderSummaryProduct> {
     //final product = Product.fromJson(productCart['product']);
     // final quantity = productCart['quantity'];
 
-    return InkWell(
-      onTap: () {
-        Navigator.pushNamed(
-          context,
-          ProductDetailScreen.routeName,
-          arguments: widget.product.id,
-        );
-      },
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          // image
-          Image.network(
-            widget.product.images[0],
-            fit: BoxFit.contain,
-            height: mq.width * .25,
-            width: mq.width * .25,
-          ),
-          // description
-          Column(
-            children: [
-              Container(
-                width: mq.width * .57,
-                padding: EdgeInsets.only(
-                    left: mq.width * .025, top: mq.width * .0125),
-                child: Text(
-                  widget.product.name,
-                  textAlign: TextAlign.left,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(fontSize: 15),
-                  maxLines: 1,
-                ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        // image
+        Image.network(
+          widget.product.images[0],
+          fit: BoxFit.contain,
+          height: mq.width * .25,
+          width: mq.width * .25,
+        ),
+        // description
+        Column(
+          children: [
+            Container(
+              width: mq.width * .57,
+              padding: EdgeInsets.only(
+                  left: mq.width * .025, top: mq.width * .0125),
+              child: Text(
+                widget.product.name,
+                textAlign: TextAlign.left,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(fontSize: 15),
+                maxLines: 1,
               ),
-              Container(
-                width: mq.width * .57,
-                padding: EdgeInsets.only(left: mq.width * .025),
-                child: Text(
-                  //TODO HERE MODIFY THE PRICE VALUE NEED ME MAKE A NEW MODEL FOR CART PRODUCT
-                  indianRupeesFormat.format(widget.product.varients[0]['price']),
-                  style: const TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 17),
-                  maxLines: 2,
-                ),
+            ),
+            Container(
+              width: mq.width * .57,
+              padding: EdgeInsets.only(left: mq.width * .025),
+              child: Text(
+                //TODO HERE MODIFY THE PRICE VALUE NEED ME MAKE A NEW MODEL FOR CART PRODUCT
+                indianRupeesFormat.format(widget.product.varients[0]['price']),
+                style: const TextStyle(
+                    fontWeight: FontWeight.bold, fontSize: 17),
+                maxLines: 2,
               ),
-              Container(
-                width: mq.width * .57,
-                padding: EdgeInsets.only(left: mq.width * .025),
-                child: Text(
-                  widget.product.varients[0]['price'] < 500
-                      ? "Shipping charges might apply"
-                      : "Eligible for free shipping",
-                  style: const TextStyle(fontSize: 13),
-                ),
+            ),
+            Container(
+              width: mq.width * .57,
+              padding: EdgeInsets.only(left: mq.width * .025),
+              child: Text(
+                widget.product.varients[0]['price'] < 500
+                    ? "Shipping charges might apply"
+                    : "Eligible for free shipping",
+                style: const TextStyle(fontSize: 13),
               ),
-              Container(
-                width: mq.width * .57,
-                padding: EdgeInsets.only(left: mq.width * .025),
-                child: Text(
-                  "Quantity x$productQuantity",
-                  style: const TextStyle(fontSize: 13),
-                ),
+            ),
+            Container(
+              width: mq.width * .57,
+              padding: EdgeInsets.only(left: mq.width * .025),
+              child: Text(
+                "Quantity x$productQuantity",
+                style: const TextStyle(fontSize: 13),
               ),
-            ],
-          ),
-        ],
-      ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

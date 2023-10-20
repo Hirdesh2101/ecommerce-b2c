@@ -2,12 +2,13 @@
 import 'package:ecommerce_major_project/features/account/screens/all_orders_screen.dart';
 import 'package:ecommerce_major_project/features/home/screens/wish_list_screen.dart';
 import 'package:ecommerce_major_project/models/order.dart';
+import 'package:ecommerce_major_project/providers/tab_provider.dart';
 import 'package:flutter/material.dart';
 
 import 'package:ecommerce_major_project/main.dart';
-import 'package:ecommerce_major_project/features/cart/screens/cart_screen.dart';
 import 'package:ecommerce_major_project/features/account/widgets/account_button.dart';
 import 'package:ecommerce_major_project/features/account/services/account_services.dart';
+import 'package:provider/provider.dart';
 
 class TopButtons extends StatefulWidget {
   const TopButtons({Key? key, required this.orders}) : super(key: key);
@@ -21,6 +22,7 @@ class _TopButtonsState extends State<TopButtons> {
   // final List<String> buttonNames = [
   @override
   Widget build(BuildContext context) {
+    final tabProvider = Provider.of<TabProvider>(context);
     return Column(
       children: [
         Row(
@@ -47,7 +49,7 @@ class _TopButtonsState extends State<TopButtons> {
             AccountButton(
                 text: "Cart",
                 onTap: () {
-                  Navigator.pushNamed(context, CartScreen.routeName);
+                 tabProvider.setTab(2);
                 }),
             AccountButton(
                 text: "Log out",

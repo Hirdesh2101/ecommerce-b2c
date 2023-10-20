@@ -1,4 +1,4 @@
-import 'package:ecommerce_major_project/common/widgets/bottom_bar.dart';
+import 'package:ecommerce_major_project/providers/tab_provider.dart';
 import 'package:flutter/material.dart';
 
 import 'package:ecommerce_major_project/main.dart';
@@ -10,6 +10,7 @@ import 'package:ecommerce_major_project/features/search/widgets/searched_product
 import 'package:ecommerce_major_project/features/search/services/search_services.dart';
 import 'package:ecommerce_major_project/features/search_delegate/my_search_screen.dart';
 import 'package:ecommerce_major_project/features/product_details/screens/product_detail_screen.dart';
+import 'package:provider/provider.dart';
 
 class SearchScreen extends StatefulWidget {
   static const String routeName = "/search-screen";
@@ -44,6 +45,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final tabProvider = Provider.of<TabProvider>(context);
     return Scaffold(
       appBar: GlobalVariables.getAppBar(
           context: context,
@@ -72,8 +74,9 @@ class _SearchScreenState extends State<SearchScreen> {
                       SizedBox(height: mq.height * .01),
                       ElevatedButton(
                           onPressed: () {
-                            Navigator.pushReplacementNamed(
-                                context, BottomBar.routeName);
+                           tabProvider.setTab(0);
+                                Navigator.of(context)
+                                    .popUntil((route) => route.isFirst);
                           },
                           style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.deepPurpleAccent),

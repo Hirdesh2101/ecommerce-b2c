@@ -148,8 +148,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           context: context,
           text: "Added to Cart",
           onTapFunction: () {
-            print('hiscakbar');
-            final tabProvider = Provider.of<TabProvider>(context,listen: false);
+            final tabProvider =
+                Provider.of<TabProvider>(context, listen: false);
             tabProvider.setTab(2);
             Navigator.of(context).popUntil((route) => route.isFirst);
             //Navigator.pushNamed(context, CartScreen.);
@@ -159,19 +159,23 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   }
 
   void setColor(int color) {
-    setState(() {
-      selectedColor = color;
-      selectedSize= -1;
-    });
+    if (selectedColor != color) {
+      setState(() {
+        selectedColor = color;
+        selectedSize = -1;
+      });
+    }
   }
 
   void setSize(int size) {
+    if(selectedSize!=size){
     setState(() {
       selectedSize = size;
       isProductOutOfStock = product!.varients[selectedColor]['sizes']
               [selectedSize]['quantity'] ==
           0;
     });
+    }
   }
 
   @override
@@ -417,8 +421,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                               context: context,
                               text: "Added to Cart",
                               onTapFunction: () {
-                              tabProvider.setTab(2);
-                              Navigator.of(context).popUntil((route) => route.isFirst);
+                                tabProvider.setTab(2);
+                                Navigator.of(context)
+                                    .popUntil((route) => route.isFirst);
                               },
                               actionLabel: "View");
                         }
@@ -450,7 +455,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                               text: "Need to redirect",
                               onTapFunction: () {
                                 tabProvider.setTab(2);
-                                Navigator.of(context).popUntil((route) => route.isFirst);
+                                Navigator.of(context)
+                                    .popUntil((route) => route.isFirst);
                               },
                               actionLabel: "View");
                         }

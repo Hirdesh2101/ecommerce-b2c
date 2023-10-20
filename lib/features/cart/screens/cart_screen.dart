@@ -2,9 +2,9 @@ import 'package:ecommerce_major_project/features/address/services/checkout_servi
 import 'package:ecommerce_major_project/features/cart/providers/cart_provider.dart';
 import 'package:ecommerce_major_project/features/home/services/home_services.dart';
 import 'package:ecommerce_major_project/features/product_details/screens/product_detail_screen.dart';
+import 'package:ecommerce_major_project/providers/tab_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:ecommerce_major_project/main.dart';
-import 'package:ecommerce_major_project/common/widgets/bottom_bar.dart';
 import 'package:ecommerce_major_project/constants/global_variables.dart';
 import 'package:ecommerce_major_project/common/widgets/custom_button.dart';
 import 'package:ecommerce_major_project/features/home/widgets/address_box.dart';
@@ -44,6 +44,7 @@ class _CartScreenState extends State<CartScreen> {
 
   //This function checks the availablity of the products first and then move forward.
   void navigateToAddress(num sum) async {
+    final cartProvider = Provider.of<CartProvider>(context,listen: false);
     setState(() {
       isLoading = true;
     });
@@ -54,7 +55,7 @@ class _CartScreenState extends State<CartScreen> {
     if (isProductAvailable) {
       //make sure to pass the arguments here!
       Navigator.pushNamed(context, CheckoutScreen.routeName,
-          arguments: [sum.toString()]);
+          arguments: [sum.toString(),cartProvider.getCart]);
     }
     setState(() {
       isLoading = false;
@@ -63,6 +64,7 @@ class _CartScreenState extends State<CartScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final tabProvider = Provider.of<TabProvider>(context);
     final cartProvider = Provider.of<CartProvider>(context);
     return Scaffold(
       appBar: GlobalVariables.getAppBar(
@@ -107,8 +109,7 @@ class _CartScreenState extends State<CartScreen> {
                           SizedBox(height: mq.height * 0.02),
                           ElevatedButton(
                             onPressed: () {
-                              Navigator.pushReplacementNamed(
-                                  context, BottomBar.routeName);
+                             tabProvider.setTab(0);
                             },
                             style: ElevatedButton.styleFrom(
                                 shape: RoundedRectangleBorder(
@@ -134,7 +135,9 @@ class _CartScreenState extends State<CartScreen> {
                                 context,
                                 ProductDetailScreen.routeName,
                                 arguments: cartProvider.getCart![index].product.id,
-                              );
+                              ).then((value) {
+                                fetchCart();
+                              });
                             },
                             child: CartProduct(
                               index: index,
