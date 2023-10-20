@@ -11,9 +11,14 @@ import 'package:provider/provider.dart';
 //for web http://127.0.0.1:3000
 //for ios http://localhost:3000
 //for external devices: Your pc IP (192.168.1.3). Run ipconfig/all inc cmd to find.
-String uri = 'http://localhost:3000';
+String uri = 'http://192.168.1.3:3000';
 
 class GlobalVariables {
+  //Razor pay details
+  static const String razorPayOrderApi = "https://api.razorpay.com/v1/orders";
+  static const String razorPayTestKey = "rzp_test_7NBmERXaABkUpY";
+  static const String razorPaySecretKey = "TO BE UPDATED";
+
   // COLORS
   static const appBarGradient = LinearGradient(
     colors: [

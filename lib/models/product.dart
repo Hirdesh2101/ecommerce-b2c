@@ -50,10 +50,9 @@ class Product {
             : null,
         varients = json['varients'] ?? [],
         warranty = json['warranty'] ?? '',
-        totalQuantity= json['totalQuantity']??0,
+        totalQuantity = json['totalQuantity'] ?? 0,
         detailDescription = json['detailDescription'] ?? [],
-        ratinguser= json['ratinguser']??[];
-        
+        ratinguser = json['ratinguser'] ?? [];
 
   Map<String, dynamic> toJson() => {
         'id': id,
@@ -63,11 +62,11 @@ class Product {
         'images': images,
         'category': category,
         'rating': rating,
-        'ratinguser':ratinguser,
+        'ratinguser': ratinguser,
         'varients': varients,
-        'detailDescription':detailDescription,
-        'warranty':warranty,
-        'totalQuantity':totalQuantity,
+        'detailDescription': detailDescription,
+        'warranty': warranty,
+        'totalQuantity': totalQuantity,
       };
 }
 

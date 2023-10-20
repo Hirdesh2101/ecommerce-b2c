@@ -17,21 +17,20 @@ class User {
   final List<dynamic>? returnList;
   final String uid;
 
-  User({
-    required this.id,
-    required this.name,
-    required this.email,
-    required this.phoneNumber,
-    required this.address,
-    required this.type,
-    required this.token,
-    required this.imageUrl,
-    required this.cart,
-    this.wishList,
-    this.searchHistory,
-    this.returnList,
-    required this.uid
-  });
+  User(
+      {required this.id,
+      required this.name,
+      required this.email,
+      required this.phoneNumber,
+      required this.address,
+      required this.type,
+      required this.token,
+      required this.imageUrl,
+      required this.cart,
+      this.wishList,
+      this.searchHistory,
+      this.returnList,
+      required this.uid});
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -57,12 +56,12 @@ class User {
       id: map['_id'] ?? '',
       name: map['name'] ?? '',
       email: map['email'] ?? '',
-      phoneNumber: map['phoneNumber']??'',
+      phoneNumber: map['phoneNumber'] ?? '',
       address: map['address'] ?? '',
       type: map['type'] ?? '',
       token: map['token'] ?? '',
       imageUrl: map['imageUrl'] ?? '',
-      uid: map['uid']??'',
+      uid: map['uid'] ?? '',
       cart: List<Map<String, dynamic>>.from(
         map['cart']?.map(
               (x) => Map<String, dynamic>.from(x),
@@ -114,19 +113,18 @@ class User {
     List<dynamic>? returnList,
   }) {
     return User(
-      id: id ?? this.id,
-      name: name ?? this.name,
-      email: email ?? this.email,
-      phoneNumber: phoneNumber ?? this.phoneNumber,
-      address: address ?? this.address,
-      type: type ?? this.type,
-      token: token ?? this.token,
-      imageUrl: imageUrl ?? this.imageUrl,
-      cart: cart ?? this.cart,
-      wishList: wishList ?? this.wishList,
-      searchHistory: searchHistory ?? this.searchHistory,
-      returnList: returnList ?? this.returnList,
-      uid: uid ?? this.uid
-    );
+        id: id ?? this.id,
+        name: name ?? this.name,
+        email: email ?? this.email,
+        phoneNumber: phoneNumber ?? this.phoneNumber,
+        address: address ?? this.address,
+        type: type ?? this.type,
+        token: token ?? this.token,
+        imageUrl: imageUrl ?? this.imageUrl,
+        cart: cart ?? this.cart,
+        wishList: wishList ?? this.wishList,
+        searchHistory: searchHistory ?? this.searchHistory,
+        returnList: returnList ?? this.returnList,
+        uid: uid ?? this.uid);
   }
 }

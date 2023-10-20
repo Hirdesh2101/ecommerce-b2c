@@ -1,7 +1,9 @@
+import 'dart:convert';
 import 'package:ecommerce_major_project/common/widgets/custom_textfield.dart';
 import 'package:ecommerce_major_project/features/address/widgets/order_dialog.dart';
 import 'package:ecommerce_major_project/models/cart.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:pay/pay.dart';
 import 'package:provider/provider.dart';
@@ -20,7 +22,8 @@ class CheckoutScreen extends StatefulWidget {
   static const String routeName = '/checkout';
   final String totalAmount;
   final List<Cart> mycart;
-  const CheckoutScreen({super.key, required this.totalAmount,required this.mycart});
+  const CheckoutScreen(
+      {super.key, required this.totalAmount, required this.mycart});
 
   @override
   State<CheckoutScreen> createState() => _CheckoutScreenState();
@@ -32,6 +35,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   TextEditingController pincodeController = TextEditingController();
   TextEditingController flatBuildingController = TextEditingController();
 
+  String? recentOrderId;
   int totalAmount = 0;
   int currentStep = 0;
   bool addnewAdress = false;
@@ -75,13 +79,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     pincodeController.dispose();
     flatBuildingController.dispose();
     super.dispose();
-  }
-
-  void placeOrder(String addressFromProvider) {
-    addressServices.placeOrder(
-        context: context,
-        address: addressToBeUsed,
-        totalSum: num.parse(widget.totalAmount));
   }
 
   void deliverToThisAddress(String addressFromProvider) {
@@ -210,29 +207,37 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                 });
                                 bool isProductAvailable =
                                     await CheckoutServices()
-                                        .checkProductsAvailability(
-                                            context);
+                                        .checkProductsAvailability(context);
 
-                                if (isProductAvailable) {
-                                  var options = {
-                                    'key': 'rzp_test_7NBmERXaABkUpY',
-                                    //amount is in paisa, multiply by 100 to convert
-                                    'amount': 100 * totalAmount,
-                                    'name': 'AKR Company',
-                                    'description': 'Ecommerce Bill',
-                                    'prefill': {
-                                      'contact': '8888888888',
-                                      'email': 'test@razorpay.com'
+                                if (isProductAvailable && context.mounted) {
+                                  //Order is placed first to pass the order ID in razor pay.
+                                  Response? response =
+                                      await addressServices.placeOrder(
+                                    context: context,
+                                    address: user.address,
+                                    totalSum: num.parse(widget.totalAmount),
+                                  );
+
+                                  if (response?.statusCode == 200) {
+                                    try {
+                                      Map<String, dynamic> options =
+                                          jsonDecode(response!.body);
+                                      recentOrderId = options["description"];
+                                      print(
+                                          "Mongo Order Id from node: $recentOrderId");
+
+                                      _razorpay.open(options);
+                                      print("Razor Pay opened...");
+                                    } catch (e) {
+                                      recentOrderId = null;
+                                      print("Try catch error in payment: $e");
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                              content: Text("Error : $e")));
                                     }
-                                  };
-                                  try {
-                                    _razorpay.open(options);
-
-                                    print(
-                                        "Inside after razor pay open..............$address");
-                                  } catch (e) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                        SnackBar(content: Text("Error : $e")));
+                                  } else {
+                                    recentOrderId = null;
+                                    print(response?.statusCode);
                                   }
                                 } else {
                                   setState(() {
@@ -257,7 +262,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               shrinkWrap: true,
                               itemCount: user.cart.length,
                               itemBuilder: (context, index) {
-                                return OrderSummaryProduct(index: index,product: widget.mycart[index].product,);
+                                return OrderSummaryProduct(
+                                  index: index,
+                                  product: widget.mycart[index].product,
+                                );
                               },
                               separatorBuilder: (context, index) {
                                 return SizedBox(
@@ -408,20 +416,46 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   }
 
   void _handlePaymentSuccess(PaymentSuccessResponse response) {
-    String address =
-        Provider.of<UserProvider>(context, listen: false).user.address;
-    placeOrder(address);
+    if (recentOrderId != null) {
+      addressServices
+          .updateOrder(
+        context: context,
+        orderId: recentOrderId!,
+        razorPayOrderId: response.orderId != null ? response.orderId! : "",
+        paymentId: response.paymentId != null ? response.paymentId! : "",
+        paymentAt: DateTime.now().millisecondsSinceEpoch,
+        signatureId: response.signature ?? "",
+      )
+          .then((value) {
+        print(
+            "\n\nPayment successful : \n\nPayment ID :  ${response.paymentId} \n\n Order ID : ${response.orderId}");
 
-    print(
-        "\n\nPayment successful : \n\nPayment ID :  ${response.paymentId} \n\n Order ID : ${response.orderId} \n\n Signature : ${response.signature}");
-
-    OrderDialog.showOrderStatusDialog(
-      context,
-      isPaymentSuccess: true,
-      title: "Order has been placed!",
-      subtitle:
-          "Transaction ID : ${DateTime.now().millisecondsSinceEpoch}\nTime: ${DateTime.now().hour} : ${DateTime.now().minute} : ${DateTime.now().second}\nPayment ID : ${response.paymentId}\nOrder ID : ${response.orderId}\nSignature : ${response.signature}",
-    );
+        OrderDialog.showOrderStatusDialog(
+          context,
+          isPaymentSuccess: true,
+          title: "Order has been placed!",
+          subtitle:
+              "Transaction ID : ${DateTime.now().millisecondsSinceEpoch}\nTime: ${DateTime.now().hour} : ${DateTime.now().minute} : ${DateTime.now().second}\nPayment ID : ${response.paymentId}\nOrder ID : ${response.orderId}\nSignature : ${response.signature}",
+        );
+        recentOrderId = null;
+      }).onError((error, stackTrace) {
+        print("Error in update order: $error");
+        OrderDialog.showOrderStatusDialog(
+          context,
+          subtitle: "Your payment will be refunded soon!",
+        );
+        recentOrderId = null;
+      });
+    } else {
+      print("Order Id from mongo returned null");
+      OrderDialog.showOrderStatusDialog(
+        context,
+        subtitle: "Your payment will be refunded soon!",
+      );
+      recentOrderId = null;
+      return;
+      //TODO: Need to create a new order and then update the order, later
+    }
   }
 
   void _handlePaymentError(PaymentFailureResponse response) {
@@ -432,6 +466,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       subtitle:
           "Payment Error ==> Code : ${response.code} \nMessage : ${response.message}",
     );
+    recentOrderId = null;
   }
 
   void _handleExternalWallet(ExternalWalletResponse response) {
@@ -459,5 +494,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         ],
       ),
     );
+    recentOrderId = null;
   }
 }

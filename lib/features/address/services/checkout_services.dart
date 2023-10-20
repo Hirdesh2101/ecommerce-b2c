@@ -94,8 +94,83 @@ class CheckoutServices {
     }
   }
 
-  // get all the products
-  void placeOrder({
+  ///THis function creates a razor pay order and returns a razor pay order id.
+  ///This order id needs to be passed when paying through razor pay to link the
+  ///payment with the order.
+  // Future<http.Response> createRazorPayOrder(
+  //     String orderId, int amount, String userId) async {
+  //   amount = amount * 100;
+
+  //   http.Response response = await http.post(
+  //     Uri.parse(GlobalVariables.razorPayOrderApi),
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       "Authorization":
+  //           "Basic ${base64Encode(utf8.encode('${GlobalVariables.razorPayTestKey}:${GlobalVariables.razorPaySecretKey}'))} ",
+  //     },
+  //   );
+  // }
+
+  // pdates the order with quantity and payment status after payment status
+  Future<void> updateOrder({
+    required BuildContext context,
+    required String orderId,
+    required String razorPayOrderId,
+    required String paymentId,
+    required int paymentAt,
+    String? signatureId,
+  }) async {
+    print("Updating order: $orderId");
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final String? authToken = await GlobalVariables.getFirebaseAuthToken();
+
+    try {
+      http.Response res = await http.put(
+        Uri.parse('$uri/api/update-order/$orderId'),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': '$authToken',
+        },
+        body: jsonEncode({
+          'cart': userProvider.user.cart,
+          'orderId': orderId,
+          'razorPayOrderId': razorPayOrderId,
+          'paymentId': paymentId,
+          'orderedAt': paymentAt,
+          'signatureId': signatureId,
+        }),
+      );
+
+      // var data = jsonDecode(res.body);
+      if (context.mounted) {
+        httpErrorHandle(
+          response: res,
+          context: context,
+          onSuccess: () {
+            // success on the payment will redirect the user
+            // to the payment successful dialog, order placed
+            // clear the cart
+            // and add the address as the current address if one didn't exist before
+            // add the payment successful dialog here!
+            // the gif and showDialog
+            print("updating order was success!");
+            showSnackBar(context: context, text: "Your order has been placed");
+            User user = userProvider.user.copyWith(
+              cart: [],
+            );
+            userProvider.setUserFromModel(user);
+          },
+        );
+      }
+    } catch (e) {
+      print("Error updating order: $e");
+      showSnackBar(context: context, text: e.toString());
+    }
+  }
+
+  /// Places order with pending status in our DB, first checks for stock availablity,
+  /// then also places order in razor pay and return the options map
+  Future<http.Response?> placeOrder({
     required BuildContext context,
     required String address,
     required num totalSum,
@@ -129,16 +204,24 @@ class CheckoutServices {
             // and add the address as the current address if one didn't exist before
             // add the payment successful dialog here!
             // the gif and showDialog
-            showSnackBar(context: context, text: "Your order has been placed");
-            User user = userProvider.user.copyWith(
-              cart: [],
-            );
-            userProvider.setUserFromModel(user);
+            // showSnackBar(context: context, text: "Your order has been placed");
+            // User user = userProvider.user.copyWith(
+            //   cart: [],
+            // );
+            // userProvider.setUserFromModel(user);
           },
         );
+
+        if (res.statusCode == 200) {
+          return res;
+        }
       }
+      return null;
     } catch (e) {
-      showSnackBar(context: context, text: e.toString());
+      if (context.mounted) {
+        showSnackBar(context: context, text: e.toString());
+      }
     }
+    return null;
   }
 }
