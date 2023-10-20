@@ -43,7 +43,6 @@ class _BottomNavbarState extends State<BottomNavbar> {
     //     Provider.of<UserProvider>(context, listen: false).user.cart.length;
     final userCartLen = context.watch<UserProvider>().user.cart.length;
 
-    print("Cart length in bottom bar is  ===> $userCartLen");
     return BottomNavigationBar(
       currentIndex: _page,
       selectedItemColor: GlobalVariables.selectedNavBarColor,

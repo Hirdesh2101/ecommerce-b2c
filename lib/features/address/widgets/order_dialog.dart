@@ -1,12 +1,15 @@
-import 'package:ecommerce_major_project/common/widgets/bottom_bar.dart';
+import 'package:ecommerce_major_project/providers/tab_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class OrderDialog {
   static Future showOrderStatusDialog(context,
       {bool isPaymentSuccess = false,
       String title = "Order not placed",
       String subtitle = "Please try again!"}) {
+
+    final tabProvider = Provider.of<TabProvider>(context);
     return showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -45,8 +48,8 @@ class OrderDialog {
         actions: [
           TextButton(
             onPressed: () {
-              Navigator.of(context).pop();
-              Navigator.pushReplacementNamed(context, BottomBar.routeName);
+              tabProvider.setTab(0);
+              Navigator.of(context).popUntil((route) => route.isFirst);
             },
             child: const Text("OK"),
           )

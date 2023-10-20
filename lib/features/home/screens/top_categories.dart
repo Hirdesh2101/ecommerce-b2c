@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:ecommerce_major_project/features/home/providers/category_provider.dart';
 import 'package:ecommerce_major_project/features/home/widgets/carousel_image.dart';
 import 'package:ecommerce_major_project/providers/user_provider.dart';
 import 'package:flutter/foundation.dart';
@@ -20,7 +21,6 @@ import 'package:provider/provider.dart';
 
 class TopCategories extends StatefulWidget {
   const TopCategories({super.key});
-
   @override
   State<TopCategories> createState() => _TopCategoriesState();
 }
@@ -29,8 +29,6 @@ class _TopCategoriesState extends State<TopCategories>
     with TickerProviderStateMixin {
   // tabbar variables
   int activeTabIndex = 0;
-  late final TabController _tabController;
-  final int _tabLength = 5;
   final indianRupeesFormat = NumberFormat.currency(
     name: "INR",
     locale: 'en_IN',
@@ -43,33 +41,11 @@ class _TopCategoriesState extends State<TopCategories>
   List<Product>? productList;
   final HomeServices homeServices = HomeServices();
   final ProductDetailServices productDetailServices = ProductDetailServices();
-  //add to cart function copied, link it to the gridview items buttons
-
-  List<String> categoriesList = [
-    "Mobiles",
-    "Essentials",
-    "Appliances",
-    "Books",
-    "Fashion",
-  ];
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: _tabLength, vsync: this);
-    _tabController.addListener(() {
-      setState(() {
-        isProductLoading = true;
-      });
-      _onTabChanged();
-    });
-    fetchCategoryProducts(categoriesList[activeTabIndex]);
-  }
-
-  @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
+    fetchCategory();
   }
 
   void navigateToCategoryPage(BuildContext context, String category) {
@@ -77,6 +53,15 @@ class _TopCategoriesState extends State<TopCategories>
         arguments: category);
   }
 
+  fetchCategory() async {
+    final categoryProvider =
+        Provider.of<CategoryProvider>(context, listen: false);
+    await homeServices.fetchCategory(
+      context: context,
+    );
+
+    fetchCategoryProducts(categoryProvider.category[activeTabIndex].name);
+  }
 
   fetchCategoryProducts(String categoryName) async {
     setState(() {
@@ -94,6 +79,7 @@ class _TopCategoriesState extends State<TopCategories>
 
   @override
   Widget build(BuildContext context) {
+    final categoryProvider = Provider.of<CategoryProvider>(context);
     mq = MediaQuery.of(context).size;
     return NestedScrollView(
       headerSliverBuilder: (context, value) {
@@ -105,22 +91,20 @@ class _TopCategoriesState extends State<TopCategories>
           )),
         ];
       },
-      body: Column(
-        children: [
-          DefaultTabController(
-            length: _tabLength,
-            child: SizedBox(
+      body: DefaultTabController(
+        length: categoryProvider.tab,
+        child: Column(
+          children: [
+            SizedBox(
               height: mq.height * .07,
               width: double.infinity,
               child: TabBar(
-                controller: _tabController,
                 onTap: (index) {
                   setState(() {
                     activeTabIndex = index;
                   });
-                  if (productList == null) {
-                    fetchCategoryProducts(categoriesList[activeTabIndex]);
-                  }
+                  fetchCategoryProducts(
+                      categoryProvider.category[activeTabIndex].name);
                 },
                 physics: const BouncingScrollPhysics(),
                 splashBorderRadius: BorderRadius.circular(15),
@@ -130,7 +114,7 @@ class _TopCategoriesState extends State<TopCategories>
                 indicatorPadding: EdgeInsets.zero,
                 isScrollable: true,
                 tabs: [
-                  for (int index = 0; index < _tabLength; index++)
+                  for (int index = 0; index < categoryProvider.tab; index++)
                     Tab(
                       child: Card(
                         color: activeTabIndex == index
@@ -148,9 +132,8 @@ class _TopCategoriesState extends State<TopCategories>
                               mainAxisSize: MainAxisSize.min,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                SvgPicture.asset(
-                                  GlobalVariables.categoryImages[index]
-                                      ['image']!,
+                                SvgPicture.network(
+                                  categoryProvider.category[index].icon,
                                   height: 30,
                                   // ignore: deprecated_member_use
                                   color: activeTabIndex == index
@@ -159,8 +142,7 @@ class _TopCategoriesState extends State<TopCategories>
                                 ),
                                 SizedBox(width: mq.width * .015),
                                 Text(
-                                  GlobalVariables.categoryImages[index]
-                                      ['title']!,
+                                  categoryProvider.category[index].name,
                                   style: TextStyle(
                                     color: activeTabIndex == index
                                         ? Colors.white
@@ -176,345 +158,328 @@ class _TopCategoriesState extends State<TopCategories>
                 ],
               ),
             ),
-          ),
-          Expanded(
-            child: TabBarView(
-              physics: const NeverScrollableScrollPhysics(),
-              controller: _tabController,
-              children: [
-                for (int i = 0; i < _tabLength; i++)
-                  Container(
-                    height: mq.height * 0.3,
-                    decoration: BoxDecoration(
-                      border: Border(
-                        top:
-                            BorderSide(color: Colors.grey.shade700, width: 0.4),
+            Expanded(
+              child: TabBarView(
+                physics: const NeverScrollableScrollPhysics(),
+                //controller: _tabController,
+                children: [
+                  for (int i = 0; i < categoryProvider.tab; i++)
+                    Container(
+                      height: mq.height * 0.3,
+                      decoration: BoxDecoration(
+                        border: Border(
+                          top: BorderSide(
+                              color: Colors.grey.shade700, width: 0.4),
+                        ),
                       ),
-                    ),
-                    child: CustomScrollView(
-                      slivers: [
-                        SliverToBoxAdapter(
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(
-                              vertical: mq.height * .008,
-                            ).copyWith(right: mq.height * .015),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                InkWell(
-                                  onTap: () {
-                                    navigateToCategoryPage(context,
-                                        categoriesList[activeTabIndex]);
-                                  },
-                                  child: Text(
-                                    "See All",
-                                    style: TextStyle(
-                                        color: Colors.grey.shade800,
-                                        fontWeight: FontWeight.w600),
+                      child: CustomScrollView(
+                        slivers: [
+                          SliverToBoxAdapter(
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                vertical: mq.height * .008,
+                              ).copyWith(right: mq.height * .015),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  InkWell(
+                                    onTap: () {
+                                      navigateToCategoryPage(
+                                          context,
+                                          categoryProvider
+                                              .category[activeTabIndex].name);
+                                    },
+                                    child: Text(
+                                      "See All",
+                                      style: TextStyle(
+                                          color: Colors.grey.shade800,
+                                          fontWeight: FontWeight.w600),
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                        SliverPadding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 0,
-                          ),
-                          sliver: isProductLoading
-                              ? const SliverToBoxAdapter(
-                                  child: ColorLoader2(),
-                                )
-                              : productList!.isEmpty
-                                  ? const SliverToBoxAdapter(
-                                      child: Center(
-                                        child: Text("No item to fetch"),
-                                      ),
-                                    )
-                                  : SliverGrid(
-                                      gridDelegate:
-                                          const SliverGridDelegateWithFixedCrossAxisCount(
-                                        crossAxisCount: kIsWeb ? 4 : 2,
-                                        childAspectRatio: kIsWeb ? 1.1 : 0.69,
-                                        mainAxisSpacing: 5,
-                                        crossAxisSpacing: 0,
-                                      ),
-                                      delegate: SliverChildBuilderDelegate(
-                                          childCount:
-                                              min(productList!.length, 8),
-                                          (context, index) {
-                                        Product product = productList![index];
-                                        bool isProductOutOfStock =
-                                            productList![index].totalQuantity == 0;
-                                        print(
-                                            "\n\n============> product category : ${categoriesList[activeTabIndex]}");
+                          SliverPadding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 0,
+                            ),
+                            sliver: isProductLoading
+                                ? const SliverToBoxAdapter(
+                                    child: ColorLoader2(),
+                                  )
+                                : productList!.isEmpty
+                                    ? const SliverToBoxAdapter(
+                                        child: Center(
+                                          child: Text("No item to fetch"),
+                                        ),
+                                      )
+                                    : SliverGrid(
+                                        gridDelegate:
+                                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                          crossAxisCount: kIsWeb ? 4 : 2,
+                                          childAspectRatio: kIsWeb ? 1.1 : 0.69,
+                                          mainAxisSpacing: 5,
+                                          crossAxisSpacing: 0,
+                                        ),
+                                        delegate: SliverChildBuilderDelegate(
+                                            childCount:
+                                                min(productList!.length, 8),
+                                            (context, index) {
+                                          Product product = productList![index];
+                                          bool isProductOutOfStock =
+                                              productList![index]
+                                                      .totalQuantity ==
+                                                  0;
 
-                                        final user =
-                                            context.watch<UserProvider>().user;
-                                        List<dynamic> wishList =
-                                            user.wishList != null
-                                                ? user.wishList!
-                                                : [];
-                                        bool isProductWishListed = false;
+                                          final user = context
+                                              .watch<UserProvider>()
+                                              .user;
+                                          List<dynamic> wishList =
+                                              user.wishList != null
+                                                  ? user.wishList!
+                                                  : [];
+                                          bool isProductWishListed = false;
 
-                                        for (int i = 0;
-                                            i < wishList.length;
-                                            i++) {
-                                          // final productWishList = wishList[i];
-                                          // final productFromJson =
-                                          //     Product.fromJson(
-                                          //         productWishList['product']);
-                                          // final productId = productFromJson.id;
+                                          for (int i = 0;
+                                              i < wishList.length;
+                                              i++) {
+                                            // final productWishList = wishList[i];
+                                            // final productFromJson =
+                                            //     Product.fromJson(
+                                            //         productWishList['product']);
+                                            // final productId = productFromJson.id;
 
-                                          if (wishList[i]['product'] == product.id) {
-                                            isProductWishListed = true;
-                                            break;
+                                            if (wishList[i]['product'] ==
+                                                product.id) {
+                                              isProductWishListed = true;
+                                              break;
+                                            }
                                           }
-                                        }
 
-                                        return InkWell(
-                                          onTap: () {
-                                            Navigator.pushNamed(
-                                              context,
-                                              ProductDetailScreen.routeName,
-                                              arguments: product.id,
-                                            );
-                                          },
-                                          child: Padding(
-                                            padding: EdgeInsets.symmetric(
-                                              horizontal: mq.width * .025,
-                                              vertical: mq.width * .012,
-                                            ),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                // navigate to product details screen
-                                                SizedBox(
-                                                  height: mq.height * .2,
-                                                  width: mq.width * .4,
-                                                  child: Image.network(
-                                                    product.images[0],
-                                                    fit: BoxFit.contain,
+                                          return InkWell(
+                                            onTap: () {
+                                              Navigator.pushNamed(
+                                                context,
+                                                ProductDetailScreen.routeName,
+                                                arguments: product.id,
+                                              );
+                                            },
+                                            child: Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                horizontal: mq.width * .025,
+                                                vertical: mq.width * .012,
+                                              ),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  // navigate to product details screen
+                                                  SizedBox(
+                                                    height: mq.height * .2,
+                                                    width: mq.width * .4,
+                                                    child: Image.network(
+                                                      product.images[0],
+                                                      fit: BoxFit.contain,
+                                                    ),
                                                   ),
-                                                ),
-                                                SizedBox(
-                                                    height: mq.height * .005),
-                                                Text(
-                                                  product.brandName,
-                                                  maxLines: 1,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: GoogleFonts.lato(
-                                                    color: Colors.black54,
-                                                    fontWeight: FontWeight.bold,
+                                                  SizedBox(
+                                                      height: mq.height * .005),
+                                                  Text(
+                                                    product.brandName,
+                                                    maxLines: 1,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: GoogleFonts.lato(
+                                                      color: Colors.black54,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
                                                   ),
-                                                ),
-                                                SizedBox(
-                                                    height: mq.height * .005),
-                                                Text(
-                                                  product.name,
-                                                  maxLines: 1,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: GoogleFonts.lato(
-                                                      fontSize: 13),
-                                                ),
-                                                SizedBox(
-                                                    height: mq.height * .005),
-                                                RichText(
-                                                  maxLines: 1,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  text: TextSpan(
+                                                  SizedBox(
+                                                      height: mq.height * .005),
+                                                  Text(
+                                                    product.name,
+                                                    maxLines: 1,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: GoogleFonts.lato(
+                                                        fontSize: 13),
+                                                  ),
+                                                  SizedBox(
+                                                      height: mq.height * .005),
+                                                  RichText(
+                                                    maxLines: 1,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    text: TextSpan(
+                                                      children: [
+                                                        TextSpan(
+                                                          text: indianRupeesFormat
+                                                              .format(product
+                                                                      .varients[
+                                                                  0]['price']),
+                                                          style:
+                                                              const TextStyle(
+                                                            fontSize: 14,
+                                                            color: Colors.black,
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                          ),
+                                                        ),
+                                                        WidgetSpan(
+                                                          child: SizedBox(
+                                                              width: mq.width *
+                                                                  .02),
+                                                        ),
+                                                        TextSpan(
+                                                          text: indianRupeesFormat
+                                                              .format(product
+                                                                      .varients[0]
+                                                                  [
+                                                                  'markedprice']),
+                                                          style: TextStyle(
+                                                            fontSize: 14,
+                                                            color: Colors
+                                                                .grey.shade700,
+                                                            decoration:
+                                                                TextDecoration
+                                                                    .lineThrough,
+                                                          ),
+                                                        ),
+                                                        WidgetSpan(
+                                                          child: SizedBox(
+                                                              width: mq.width *
+                                                                  .02),
+                                                        ),
+                                                        TextSpan(
+                                                          text:
+                                                              "${calculatePercentageDiscount(product.varients[0]['price'], product.varients[0]['markedprice'])}% off",
+                                                          style:
+                                                              const TextStyle(
+                                                            fontSize: 14,
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                            color: Colors.green,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
                                                     children: [
-                                                      TextSpan(
-                                                        text: indianRupeesFormat
-                                                            .format(
-                                                                product.varients[0]['price']),
-                                                        style: const TextStyle(
-                                                          fontSize: 14,
-                                                          color: Colors.black,
+                                                      Text(
+                                                        isProductOutOfStock
+                                                            ? 'Out of Stock'
+                                                            : productList![index]
+                                                                        .totalQuantity <
+                                                                    5
+                                                                ? 'Only ${productList![index].totalQuantity} left'
+                                                                : 'In Stock',
+                                                        maxLines: 1,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        style: GoogleFonts.lato(
+                                                          fontSize: 13,
                                                           fontWeight:
                                                               FontWeight.w600,
+                                                          color:
+                                                              isProductOutOfStock
+                                                                  ? Colors.red
+                                                                  : productList![index]
+                                                                              .totalQuantity <
+                                                                          5
+                                                                      ? Colors
+                                                                          .amber
+                                                                      : Colors
+                                                                          .green,
                                                         ),
                                                       ),
-                                                      WidgetSpan(
-                                                        child: SizedBox(
-                                                            width:
-                                                                mq.width * .02),
-                                                      ),
-                                                      TextSpan(
-                                                        text: indianRupeesFormat
-                                                            .format(
-                                                                product.varients[0]['markedprice']),
-                                                        style: TextStyle(
-                                                          fontSize: 14,
-                                                          color: Colors
-                                                              .grey.shade700,
-                                                          decoration:
-                                                              TextDecoration
-                                                                  .lineThrough,
-                                                        ),
-                                                      ),
-                                                      WidgetSpan(
-                                                        child: SizedBox(
-                                                            width:
-                                                                mq.width * .02),
-                                                      ),
-                                                      TextSpan(
-                                                        text:  "${calculatePercentageDiscount(product.varients[0]['price'],product.varients[0]['markedprice'])}% off",
-                                                        style: const TextStyle(
-                                                          fontSize: 14,
-                                                          fontWeight:
-                                                              FontWeight.w600,
-                                                          color: Colors.green,
+                                                      InkWell(
+                                                        onTap: () {
+                                                          if (isProductWishListed) {
+                                                            HomeServices()
+                                                                .removeFromWishList(
+                                                                    context:
+                                                                        context,
+                                                                    product:
+                                                                        product);
+                                                            showSnackBar(
+                                                              context: context,
+                                                              text:
+                                                                  "Removed from WishList",
+                                                            );
+                                                          } else {
+                                                            HomeServices()
+                                                                .addToWishList(
+                                                                    context:
+                                                                        context,
+                                                                    product:
+                                                                        product);
+                                                            showSnackBar(
+                                                              context: context,
+                                                              text:
+                                                                  "Added to WishList",
+                                                              onTapFunction:
+                                                                  () {
+                                                                Navigator.of(
+                                                                        context)
+                                                                    .push(
+                                                                  GlobalVariables
+                                                                      .createRoute(
+                                                                    const WishListScreen(),
+                                                                  ),
+                                                                );
+                                                              },
+                                                              actionLabel:
+                                                                  "View",
+                                                            );
+                                                          }
+                                                        },
+                                                        child: Icon(
+                                                          isProductWishListed
+                                                              ? Icons
+                                                                  .favorite_rounded
+                                                              : Icons
+                                                                  .favorite_border_rounded,
+                                                          size: 26,
+                                                          color:
+                                                              isProductWishListed
+                                                                  ? Colors.pink
+                                                                  : Colors
+                                                                      .black,
                                                         ),
                                                       ),
                                                     ],
                                                   ),
-                                                ),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    Text(
-                                                      isProductOutOfStock
-                                                          ? 'Out of Stock'
-                                                          : productList![index]
-                                                                      .totalQuantity <
-                                                                  5
-                                                              ? 'Only ${productList![index].totalQuantity} left'
-                                                              : 'In Stock',
-                                                      maxLines: 1,
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                      style: GoogleFonts.lato(
-                                                        fontSize: 13,
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                        color:
-                                                            isProductOutOfStock
-                                                                ? Colors.red
-                                                                : productList![index]
-                                                                            .totalQuantity <
-                                                                        5
-                                                                    ? Colors
-                                                                        .amber
-                                                                    : Colors
-                                                                        .green,
-                                                      ),
-                                                    ),
-                                                    InkWell(
-                                                      onTap: () {
-                                                        if (isProductWishListed) {
-                                                          HomeServices()
-                                                              .removeFromWishList(
-                                                                  context:
-                                                                      context,
-                                                                  product:
-                                                                      product);
-                                                          showSnackBar(
-                                                            context: context,
-                                                            text:
-                                                                "Removed from WishList",
-                                                          );
-                                                        } else {
-                                                          HomeServices()
-                                                              .addToWishList(
-                                                                  context:
-                                                                      context,
-                                                                  product:
-                                                                      product);
-                                                          showSnackBar(
-                                                            context: context,
-                                                            text:
-                                                                "Added to WishList",
-                                                            onTapFunction: () {
-                                                              Navigator.of(
-                                                                      context)
-                                                                  .push(
-                                                                GlobalVariables
-                                                                    .createRoute(
-                                                                  const WishListScreen(),
-                                                                ),
-                                                              );
-                                                            },
-                                                            actionLabel: "View",
-                                                          );
-                                                        }
-                                                      },
-                                                      child: Icon(
-                                                        isProductWishListed
-                                                            ? Icons
-                                                                .favorite_rounded
-                                                            : Icons
-                                                                .favorite_border_rounded,
-                                                        size: 26,
-                                                        color:
-                                                            isProductWishListed
-                                                                ? Colors.pink
-                                                                : Colors.black,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ],
+                                                ],
+                                              ),
                                             ),
-                                          ),
-                                        );
-                                      }),
-                                    ),
-                        ),
-                      ],
+                                          );
+                                        }),
+                                      ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
+
   int calculatePercentageDiscount(num originalPrice, num discountedPrice) {
-  if (originalPrice <= 0 || discountedPrice <= 0) {
-    return 0;
-  }
-  double discount = (originalPrice - discountedPrice) / originalPrice * 100.0;
-
-  return discount.toInt();
-}
-
-  void _onTabChanged() {
-    switch (_tabController.index) {
-      case 0:
-        // handle 0 position
-        activeTabIndex = 0;
-        fetchCategoryProducts(categoriesList[activeTabIndex]);
-        break;
-
-      case 1:
-        activeTabIndex = 1;
-        fetchCategoryProducts(categoriesList[activeTabIndex]);
-        // handle 1 position
-        break;
-
-      case 2:
-        activeTabIndex = 2;
-        fetchCategoryProducts(categoriesList[activeTabIndex]);
-        // handle 1 position
-        break;
-
-      case 3:
-        activeTabIndex = 3;
-        fetchCategoryProducts(categoriesList[activeTabIndex]);
-        break;
-
-      case 4:
-        activeTabIndex = 4;
-        fetchCategoryProducts(categoriesList[activeTabIndex]);
-        break;
+    if (originalPrice <= 0 || discountedPrice <= 0) {
+      return 0;
     }
+    double discount = (originalPrice - discountedPrice) / originalPrice * 100.0;
+
+    return discount.toInt();
   }
 }

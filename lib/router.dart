@@ -79,7 +79,7 @@ Route<dynamic> generateRoute(RouteSettings routeSettings) {
         settings: routeSettings,
         builder: (_) => CheckoutScreen(
           totalAmount: totalAmount,
-          cart: cart,
+          mycart: cart
         ),
       );
 

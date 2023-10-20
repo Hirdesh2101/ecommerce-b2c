@@ -11,14 +11,14 @@ import 'package:ecommerce_major_project/constants/global_variables.dart';
 class CheckoutServices {
   ///Checks the availability of products through backend, also shows snackbar of the info.
   Future<bool> checkProductsAvailability(
-      BuildContext context, List cart) async {
+      BuildContext context) async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
     bool isProductAvailable = false;
 
     try {
       bool isInternetConnected = await checkNetworkConnectivity();
 
       if (isInternetConnected) {
-        final userProvider = Provider.of<UserProvider>(context, listen: false);
         final String? authToken = await GlobalVariables.getFirebaseAuthToken();
 
         http.Response res = await http.post(

@@ -1,3 +1,4 @@
+import 'package:ecommerce_major_project/providers/tab_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:badges/badges.dart' as badges;
@@ -19,7 +20,7 @@ class BottomBar extends StatefulWidget {
 }
 
 class _BottomBarState extends State<BottomBar> {
-  int _page = 0;
+  //int _page = 0;
   double bottomBarWidth = 42;
   double bottomBarBorderWidth = 5;
 
@@ -30,27 +31,28 @@ class _BottomBarState extends State<BottomBar> {
     const AccountScreen(),
   ];
 
-  void updatePage(int page) {
-    setState(() {
-      _page = page;
-    });
-  }
+  // void updatePage(int page) {
+    
+  // }
 
   @override
   Widget build(BuildContext context) {
     mq = MediaQuery.of(context).size;
     myTextTheme = Theme.of(context).textTheme;
+    final tabProvider = Provider.of<TabProvider>(context);
     final userCartLen = context.watch<UserProvider>().user.cart.length;
 
     return Scaffold(
-      body: pages[_page],
+      body: pages[tabProvider.tab],
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _page,
+        currentIndex: tabProvider.tab,
         selectedItemColor: GlobalVariables.selectedNavBarColor,
         unselectedItemColor: GlobalVariables.unselectedNavBarColor,
         backgroundColor: GlobalVariables.backgroundColor,
         iconSize: 28,
-        onTap: updatePage,
+        onTap: (val){
+          tabProvider.setTab(val);
+        },
         items: [
           //HOME PAGE
           BottomNavigationBarItem(
@@ -59,14 +61,14 @@ class _BottomBarState extends State<BottomBar> {
               decoration: BoxDecoration(
                 border: Border(
                   top: BorderSide(
-                    color: _page == 0
+                    color: tabProvider.tab == 0
                         ? GlobalVariables.selectedNavBarColor
                         : GlobalVariables.backgroundColor,
                     width: bottomBarBorderWidth,
                   ),
                 ),
               ),
-              child: _page == 0
+              child: tabProvider.tab == 0
                   ? const Icon(Icons.home)
                   : const Icon(Icons.home_outlined),
             ),
@@ -79,14 +81,14 @@ class _BottomBarState extends State<BottomBar> {
               decoration: BoxDecoration(
                 border: Border(
                   top: BorderSide(
-                    color: _page == 1
+                    color: tabProvider.tab == 1
                         ? GlobalVariables.selectedNavBarColor
                         : GlobalVariables.backgroundColor,
                     width: bottomBarBorderWidth,
                   ),
                 ),
               ),
-              child: _page == 1
+              child: tabProvider.tab == 1
                   ? const Icon(Icons.grid_view_sharp)
                   : const Icon(Icons.grid_view_outlined),
             ),
@@ -99,7 +101,7 @@ class _BottomBarState extends State<BottomBar> {
               decoration: BoxDecoration(
                 border: Border(
                   top: BorderSide(
-                    color: _page == 2
+                    color: tabProvider.tab == 2
                         ? GlobalVariables.selectedNavBarColor
                         : GlobalVariables.backgroundColor,
                     width: bottomBarBorderWidth,
@@ -113,7 +115,7 @@ class _BottomBarState extends State<BottomBar> {
 
                 badgeStyle: const badges.BadgeStyle(
                     badgeColor: Color.fromARGB(255, 19, 17, 17)),
-                child: _page == 2
+                child: tabProvider.tab == 2
                     ? const Icon(Icons.shopping_cart_rounded)
                     : const Icon(
                         Icons.shopping_cart_outlined,
@@ -129,13 +131,13 @@ class _BottomBarState extends State<BottomBar> {
               decoration: BoxDecoration(
                 border: Border(
                   top: BorderSide(
-                      color: _page == 3
+                      color: tabProvider.tab == 3
                           ? GlobalVariables.selectedNavBarColor
                           : GlobalVariables.backgroundColor,
                       width: bottomBarBorderWidth),
                 ),
               ),
-              child: _page == 3
+              child: tabProvider.tab == 3
                   ? const Icon(Icons.person_rounded)
                   : const Icon(Icons.person_outlined),
             ),

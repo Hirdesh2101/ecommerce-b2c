@@ -8,6 +8,7 @@ import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 
 class MySearchScreen extends StatefulWidget {
+  static const String routeName = "/search-screen-util";
   final String? searchQueryAlready;
   const MySearchScreen({this.searchQueryAlready, super.key});
 
@@ -46,7 +47,7 @@ class _MySearchScreenState extends State<MySearchScreen> {
   int maxLength = 10;
 
   final SpeechToText _speechToText = SpeechToText();
-  bool _speechEnabled = false;
+  // bool _speechEnabled = false;
   String _lastWords = '';
 
   makeSuggestionList() async {
@@ -94,12 +95,12 @@ class _MySearchScreenState extends State<MySearchScreen> {
 
   void navigateToSearchScreen(String query) {
     //make sure to pass the arguments here!
-    Navigator.pushNamed(context, SearchScreen.routeName, arguments: query);
+    Navigator.pushReplacementNamed(context, SearchScreen.routeName, arguments: query);
   }
 
   /// This has to happen only once per app
   void _initSpeech() async {
-    _speechEnabled = await _speechToText.initialize();
+    await _speechToText.initialize();
     setState(() {});
   }
 

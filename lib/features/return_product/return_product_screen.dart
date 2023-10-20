@@ -28,6 +28,11 @@ class _ReturnProductScreenState extends State<ReturnProductScreen> {
       images = result;
     });
   }
+  @override
+  void dispose() {
+    descriptionController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

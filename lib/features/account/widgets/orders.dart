@@ -1,13 +1,14 @@
+import 'package:ecommerce_major_project/providers/tab_provider.dart';
 import 'package:flutter/material.dart';
 
 import 'package:ecommerce_major_project/main.dart';
 import 'package:ecommerce_major_project/models/order.dart';
-import 'package:ecommerce_major_project/common/widgets/bottom_bar.dart';
 import 'package:ecommerce_major_project/constants/global_variables.dart';
 import 'package:ecommerce_major_project/common/widgets/color_loader_2.dart';
 import 'package:ecommerce_major_project/features/account/widgets/single_product.dart';
 import 'package:ecommerce_major_project/features/account/screens/all_orders_screen.dart';
 import 'package:ecommerce_major_project/features/order_details/screens/order_details_screen.dart';
+import 'package:provider/provider.dart';
 
 class Orders extends StatefulWidget {
   const Orders({super.key, required this.orders, required this.showLoader});
@@ -34,6 +35,8 @@ class _OrdersState extends State<Orders> {
 
   @override
   Widget build(BuildContext context) {
+
+    final tabProvider = Provider.of<TabProvider>(context);
     return Column(
       children: [
         Row(
@@ -80,8 +83,7 @@ class _OrdersState extends State<Orders> {
                       SizedBox(height: mq.height * 0.02),
                       ElevatedButton(
                           onPressed: () {
-                            Navigator.pushReplacementNamed(
-                                context, BottomBar.routeName);
+                            tabProvider.setTab(0);
                           },
                           style: ElevatedButton.styleFrom(
                               shape: RoundedRectangleBorder(

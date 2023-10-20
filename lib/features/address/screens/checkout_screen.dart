@@ -1,10 +1,7 @@
 import 'dart:convert';
-
 import 'package:ecommerce_major_project/common/widgets/custom_textfield.dart';
-import 'package:ecommerce_major_project/constants/utils.dart';
 import 'package:ecommerce_major_project/features/address/widgets/order_dialog.dart';
-import 'package:ecommerce_major_project/models/product.dart';
-import 'package:ecommerce_major_project/models/order.dart';
+import 'package:ecommerce_major_project/models/cart.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
@@ -24,9 +21,9 @@ import 'package:ecommerce_major_project/features/address/services/checkout_servi
 class CheckoutScreen extends StatefulWidget {
   static const String routeName = '/checkout';
   final String totalAmount;
-  final List<Map<String, dynamic>> cart;
+  final List<Cart> mycart;
   const CheckoutScreen(
-      {super.key, required this.totalAmount, required this.cart});
+      {super.key, required this.totalAmount, required this.mycart});
 
   @override
   State<CheckoutScreen> createState() => _CheckoutScreenState();
@@ -210,8 +207,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                 });
                                 bool isProductAvailable =
                                     await CheckoutServices()
-                                        .checkProductsAvailability(
-                                            context, user.cart);
+                                        .checkProductsAvailability(context);
 
                                 if (isProductAvailable && context.mounted) {
                                   //Order is placed first to pass the order ID in razor pay.
@@ -266,11 +262,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               shrinkWrap: true,
                               itemCount: user.cart.length,
                               itemBuilder: (context, index) {
-                                // return CartProdcut
                                 return OrderSummaryProduct(
                                   index: index,
-                                  product: Product.fromJson(
-                                      widget.cart[index]['product']),
+                                  product: widget.mycart[index].product,
                                 );
                               },
                               separatorBuilder: (context, index) {

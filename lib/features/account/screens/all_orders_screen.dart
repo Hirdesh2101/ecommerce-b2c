@@ -1,5 +1,5 @@
-import 'package:ecommerce_major_project/common/widgets/bottom_bar.dart';
 import 'package:ecommerce_major_project/constants/utils.dart';
+import 'package:ecommerce_major_project/providers/tab_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -8,6 +8,7 @@ import 'package:ecommerce_major_project/features/order_details/screens/order_det
 import 'package:ecommerce_major_project/features/search_delegate/my_search_screen.dart';
 import 'package:ecommerce_major_project/main.dart';
 import 'package:ecommerce_major_project/models/order.dart';
+import 'package:provider/provider.dart';
 
 class AllOrdersScreen extends StatelessWidget {
   static const String routeName = '/all-orders-screen';
@@ -19,6 +20,7 @@ class AllOrdersScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final tabProvider = Provider.of<TabProvider>(context);
     return Scaffold(
       appBar: GlobalVariables.getAppBar(
           title: "All Orders",
@@ -43,8 +45,8 @@ class AllOrdersScreen extends StatelessWidget {
                         SizedBox(height: mq.height * 0.02),
                         ElevatedButton(
                             onPressed: () {
-                              Navigator.pushReplacementNamed(
-                                  context, BottomBar.routeName);
+                             tabProvider.setTab(0);
+                             Navigator.of(context).pop();
                             },
                             style: ElevatedButton.styleFrom(
                                 shape: RoundedRectangleBorder(

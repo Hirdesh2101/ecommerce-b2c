@@ -1,5 +1,8 @@
 import 'dart:convert';
 
+import 'package:ecommerce_major_project/features/cart/providers/cart_provider.dart';
+import 'package:ecommerce_major_project/features/home/providers/category_provider.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
@@ -60,6 +63,36 @@ class HomeServices {
           text: "Following Error in fetching Products [home]: $e");
     }
     return productList;
+  }
+
+  Future<void> fetchCategory(
+      {required BuildContext context}) async {
+    final String? authToken = await GlobalVariables.getFirebaseAuthToken();
+    final categoryProvider = Provider.of<CategoryProvider>(context, listen: false);
+    String tokenValue = '$authToken';
+    try {
+      http.Response res = await http
+          .get(Uri.parse('$uri/api/category'), headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': tokenValue,
+      });
+
+      var data = jsonDecode(res.body);
+      if (context.mounted) {
+        httpErrorHandle(
+          response: res,
+          context: context,
+          onSuccess: () {
+            categoryProvider.setCategories(data);
+            categoryProvider.setTab(data.length);
+          },
+        );
+      }
+    } catch (e) {
+      showSnackBar(
+          context: context,
+          text: "Following Error in fetching Products [home]: $e");
+    }
   }
 
 //
@@ -428,6 +461,7 @@ class HomeServices {
     return wishList;
   }
   Future<List<Map<String,dynamic>>?> fetchCart(BuildContext context) async {
+    var cartProvider = Provider.of<CartProvider>(context, listen: false);
     final String? authToken = await GlobalVariables.getFirebaseAuthToken();
     List<Map<String,dynamic>>? cart = [];
     try {
@@ -445,6 +479,7 @@ class HomeServices {
           onSuccess: () {
             cart = List.from(data['data']);
             print(cart!.length);
+            cartProvider.setCartFromDynamic(data['data']);
 
           },
         );

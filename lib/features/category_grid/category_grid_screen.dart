@@ -1,9 +1,10 @@
+import 'package:ecommerce_major_project/features/home/providers/category_provider.dart';
 import 'package:flutter/material.dart';
-
 import 'package:ecommerce_major_project/main.dart';
 import 'package:ecommerce_major_project/constants/global_variables.dart';
 import 'package:ecommerce_major_project/features/search_delegate/my_search_screen.dart';
 import 'package:ecommerce_major_project/features/home/screens/category_deals_screen.dart';
+import 'package:provider/provider.dart';
 
 class CategoryGridScreen extends StatefulWidget {
   const CategoryGridScreen({super.key});
@@ -13,16 +14,6 @@ class CategoryGridScreen extends StatefulWidget {
 }
 
 class _CategoryGridScreenState extends State<CategoryGridScreen> {
-  List<Map<String, String>> myCategoryList = GlobalVariables.categoryImages2;
-
-  List<String> productCategories = [
-    "Mobiles",
-    "Essentials",
-    "Appliances",
-    "Books",
-    "Fashion"
-  ];
-
   void navigateToCategoryPage(BuildContext context, String category) {
     Navigator.pushNamed(context, CategoryDealsScreen.routeName,
         arguments: category);
@@ -30,6 +21,7 @@ class _CategoryGridScreenState extends State<CategoryGridScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final categoryProvider = Provider.of<CategoryProvider>(context);
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
       appBar: GlobalVariables.getAppBar(
@@ -45,15 +37,16 @@ class _CategoryGridScreenState extends State<CategoryGridScreen> {
             crossAxisSpacing: mq.width * .03,
             mainAxisSpacing: mq.width * .015,
             crossAxisCount: 2),
-        itemCount: myCategoryList.length,
+        itemCount: categoryProvider.tab,
         itemBuilder: (context, index) {
           // print("\n\nimage path is : ${myCategoryList[index]['title']}");
-          final categoryTitle = myCategoryList[index]['title'];
-          final categoryImage = myCategoryList[index]['image'];
+          final categoryTitle = categoryProvider.category[index].name;
+          final categoryImage = categoryProvider.category[index].image;
 
           return InkWell(
             onTap: () {
-              navigateToCategoryPage(context, productCategories[index]);
+              navigateToCategoryPage(
+                  context, categoryProvider.category[index].name);
             },
             child: Card(
               shape: RoundedRectangleBorder(
@@ -65,11 +58,11 @@ class _CategoryGridScreenState extends State<CategoryGridScreen> {
                 children: [
                   SizedBox(
                     height: 80,
-                    child: Image.asset(categoryImage!),
+                    child: Image.network(categoryImage),
                   ),
                   SizedBox(height: mq.height * .01),
                   Text(
-                    categoryTitle!,
+                    categoryTitle,
                     overflow: TextOverflow.ellipsis,
                     maxLines: 2,
                     style: const TextStyle(
