@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:ecommerce_major_project/common/widgets/custom_textfield.dart';
+import 'package:ecommerce_major_project/constants/utils.dart';
 import 'package:ecommerce_major_project/features/address/widgets/order_dialog.dart';
 import 'package:ecommerce_major_project/models/product.dart';
 import 'package:ecommerce_major_project/models/order.dart';
@@ -35,6 +38,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   TextEditingController pincodeController = TextEditingController();
   TextEditingController flatBuildingController = TextEditingController();
 
+  String? recentOrderId;
   int totalAmount = 0;
   int currentStep = 0;
   bool addnewAdress = false;
@@ -219,33 +223,25 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                   );
 
                                   if (response?.statusCode == 200) {
-                                    Order order =
-                                        Order.fromJson(response!.body);
-                                    String orderId = order.id;
-                                    print('Order Id: $orderId');
-                                    var options = {
-                                      'key': 'rzp_test_7NBmERXaABkUpY',
-                                      //amount is in paisa, multiply by 100 to convert
-                                      'amount': 100 * totalAmount,
-                                      'name': 'AKR Company',
-                                      'order_id': "abc",
-                                      'description': 'Ecommerce Bill',
-                                      'timeout': 60,
-                                      'prefill': {
-                                        'contact': '8888888888',
-                                        'email': 'test@razorpay.com'
-                                      }
-                                    };
                                     try {
-                                      _razorpay.open(options);
-
+                                      Map<String, dynamic> options =
+                                          jsonDecode(response!.body);
+                                      recentOrderId = options["description"];
                                       print(
-                                          "Inside after razor pay open..............$address");
+                                          "Mongo Order Id from node: $recentOrderId");
+
+                                      _razorpay.open(options);
+                                      print("Razor Pay opened...");
                                     } catch (e) {
+                                      recentOrderId = null;
+                                      print("Try catch error in payment: $e");
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(SnackBar(
                                               content: Text("Error : $e")));
                                     }
+                                  } else {
+                                    recentOrderId = null;
+                                    print(response?.statusCode);
                                   }
                                 } else {
                                   setState(() {
@@ -426,24 +422,46 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   }
 
   void _handlePaymentSuccess(PaymentSuccessResponse response) {
-    addressServices.updateOrder(
-      context: context,
-      orderId: response.orderId != null ? response.orderId! : "",
-      paymentId: response.paymentId != null ? response.paymentId! : "",
-      paymentAt: DateTime.now().millisecondsSinceEpoch,
-      signatureId: response.signature,
-    );
+    if (recentOrderId != null) {
+      addressServices
+          .updateOrder(
+        context: context,
+        orderId: recentOrderId!,
+        razorPayOrderId: response.orderId != null ? response.orderId! : "",
+        paymentId: response.paymentId != null ? response.paymentId! : "",
+        paymentAt: DateTime.now().millisecondsSinceEpoch,
+        signatureId: response.signature ?? "",
+      )
+          .then((value) {
+        print(
+            "\n\nPayment successful : \n\nPayment ID :  ${response.paymentId} \n\n Order ID : ${response.orderId}");
 
-    print(
-        "\n\nPayment successful : \n\nPayment ID :  ${response.paymentId} \n\n Order ID : ${response.orderId} \n\n Signature : ${response.signature}");
-
-    OrderDialog.showOrderStatusDialog(
-      context,
-      isPaymentSuccess: true,
-      title: "Order has been placed!",
-      subtitle:
-          "Transaction ID : ${DateTime.now().millisecondsSinceEpoch}\nTime: ${DateTime.now().hour} : ${DateTime.now().minute} : ${DateTime.now().second}\nPayment ID : ${response.paymentId}\nOrder ID : ${response.orderId}\nSignature : ${response.signature}",
-    );
+        OrderDialog.showOrderStatusDialog(
+          context,
+          isPaymentSuccess: true,
+          title: "Order has been placed!",
+          subtitle:
+              "Transaction ID : ${DateTime.now().millisecondsSinceEpoch}\nTime: ${DateTime.now().hour} : ${DateTime.now().minute} : ${DateTime.now().second}\nPayment ID : ${response.paymentId}\nOrder ID : ${response.orderId}\nSignature : ${response.signature}",
+        );
+        recentOrderId = null;
+      }).onError((error, stackTrace) {
+        print("Error in update order: $error");
+        OrderDialog.showOrderStatusDialog(
+          context,
+          subtitle: "Your payment will be refunded soon!",
+        );
+        recentOrderId = null;
+      });
+    } else {
+      print("Order Id from mongo returned null");
+      OrderDialog.showOrderStatusDialog(
+        context,
+        subtitle: "Your payment will be refunded soon!",
+      );
+      recentOrderId = null;
+      return;
+      //TODO: Need to create a new order and then update the order, later
+    }
   }
 
   void _handlePaymentError(PaymentFailureResponse response) {
@@ -454,6 +472,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       subtitle:
           "Payment Error ==> Code : ${response.code} \nMessage : ${response.message}",
     );
+    recentOrderId = null;
   }
 
   void _handleExternalWallet(ExternalWalletResponse response) {
@@ -481,5 +500,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         ],
       ),
     );
+    recentOrderId = null;
   }
 }

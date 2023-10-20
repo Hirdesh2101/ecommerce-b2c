@@ -97,28 +97,30 @@ class CheckoutServices {
   ///THis function creates a razor pay order and returns a razor pay order id.
   ///This order id needs to be passed when paying through razor pay to link the
   ///payment with the order.
-  Future<http.Response> createRazorPayOrder(
-      String orderId, int amount, String userId) async {
-    amount = amount * 100;
+  // Future<http.Response> createRazorPayOrder(
+  //     String orderId, int amount, String userId) async {
+  //   amount = amount * 100;
 
-    http.Response response = await http.post(
-      Uri.parse(GlobalVariables.razorPayOrderApi),
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization":
-            "Basic ${base64Encode(utf8.encode('${GlobalVariables.razorPayTestKey}:${GlobalVariables.razorPaySecretKey}'))} ",
-      },
-    );
-  }
+  //   http.Response response = await http.post(
+  //     Uri.parse(GlobalVariables.razorPayOrderApi),
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       "Authorization":
+  //           "Basic ${base64Encode(utf8.encode('${GlobalVariables.razorPayTestKey}:${GlobalVariables.razorPaySecretKey}'))} ",
+  //     },
+  //   );
+  // }
 
   // pdates the order with quantity and payment status after payment status
-  void updateOrder({
+  Future<void> updateOrder({
     required BuildContext context,
     required String orderId,
+    required String razorPayOrderId,
     required String paymentId,
     required int paymentAt,
     String? signatureId,
   }) async {
+    print("Updating order: $orderId");
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     final String? authToken = await GlobalVariables.getFirebaseAuthToken();
 
@@ -132,6 +134,7 @@ class CheckoutServices {
         body: jsonEncode({
           'cart': userProvider.user.cart,
           'orderId': orderId,
+          'razorPayOrderId': razorPayOrderId,
           'paymentId': paymentId,
           'orderedAt': paymentAt,
           'signatureId': signatureId,
@@ -150,6 +153,7 @@ class CheckoutServices {
             // and add the address as the current address if one didn't exist before
             // add the payment successful dialog here!
             // the gif and showDialog
+            print("updating order was success!");
             showSnackBar(context: context, text: "Your order has been placed");
             User user = userProvider.user.copyWith(
               cart: [],
@@ -159,11 +163,13 @@ class CheckoutServices {
         );
       }
     } catch (e) {
+      print("Error updating order: $e");
       showSnackBar(context: context, text: e.toString());
     }
   }
 
-  /// Places order with pending status.
+  /// Places order with pending status in our DB, first checks for stock availablity,
+  /// then also places order in razor pay and return the options map
   Future<http.Response?> placeOrder({
     required BuildContext context,
     required String address,
