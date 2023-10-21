@@ -7,7 +7,7 @@ import 'package:ecommerce_major_project/common/widgets/bottom_bar.dart';
 import 'package:ecommerce_major_project/features/home/screens/home_screen.dart';
 import 'package:ecommerce_major_project/features/auth/screens/auth_screen.dart';
 import 'package:ecommerce_major_project/features/search/screens/search_screen.dart';
-import 'package:ecommerce_major_project/features/address/screens/checkout_screen.dart';
+import 'package:ecommerce_major_project/features/checkout/screens/checkout_screen.dart';
 import 'package:ecommerce_major_project/features/admin/screens/add_product_screen.dart';
 import 'package:ecommerce_major_project/features/home/screens/category_deals_screen.dart';
 import 'package:ecommerce_major_project/features/order_details/screens/order_details_screen.dart';
@@ -75,11 +75,13 @@ Route<dynamic> generateRoute(RouteSettings routeSettings) {
       var myArguments = routeSettings.arguments as List;
       var totalAmount = myArguments[0];
       var cart = myArguments[1];
+      var userProviderCart = myArguments[2];
       return MaterialPageRoute(
         settings: routeSettings,
         builder: (_) => CheckoutScreen(
           totalAmount: totalAmount,
-          mycart: cart
+          mycart: cart,
+          userProviderCart: userProviderCart,
         ),
       );
 

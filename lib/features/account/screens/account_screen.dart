@@ -22,8 +22,8 @@ class _AccountScreenState extends State<AccountScreen> {
   bool showLoader = false;
   @override
   void initState() {
-    super.initState();
     fetchOrders();
+    super.initState();
   }
 
   void fetchOrders() async {

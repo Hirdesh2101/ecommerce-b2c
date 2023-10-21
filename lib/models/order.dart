@@ -3,34 +3,34 @@ import 'dart:convert';
 class Order {
   final String id;
   final List<dynamic> products;
-  final List<int> quantity;
   final String address;
   final String userId;
   final int orderedAt;
   final int status;
   final num totalPrice;
+  final String paymentStatus;
 
   Order({
     required this.id,
     required this.products,
-    required this.quantity,
     required this.address,
     required this.userId,
     required this.orderedAt,
     required this.status,
     required this.totalPrice,
+    required this.paymentStatus
   });
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,
       'products': products,
-      'quantity': quantity,
       'address': address,
       'userId': userId,
       'orderedAt': orderedAt,
       'status': status,
-      'totalPrice': totalPrice
+      'totalPrice': totalPrice,
+       'paymentStatus': paymentStatus
     };
   }
 
@@ -43,8 +43,8 @@ class Order {
             ) ??
             [],
       ),
-      quantity: List<int>.from(map['products']?.map((x) => x['quantity'])),
       address: map['address'] as String,
+      paymentStatus: map['paymentStatus'] as String,
       userId: map['userId'] as String,
       orderedAt: map['orderedAt'] as int,
       status: map['status'] as int,

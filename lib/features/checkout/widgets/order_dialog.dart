@@ -8,8 +8,7 @@ class OrderDialog {
       {bool isPaymentSuccess = false,
       String title = "Order not placed",
       String subtitle = "Please try again!"}) {
-
-    final tabProvider = Provider.of<TabProvider>(context);
+    final tabProvider = Provider.of<TabProvider>(context, listen: false);
     return showDialog(
       context: context,
       builder: (context) => AlertDialog(

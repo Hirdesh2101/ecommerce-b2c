@@ -1,8 +1,9 @@
-import 'package:ecommerce_major_project/features/address/services/checkout_services.dart';
+import 'package:ecommerce_major_project/features/checkout/services/checkout_services.dart';
 import 'package:ecommerce_major_project/features/cart/providers/cart_provider.dart';
 import 'package:ecommerce_major_project/features/home/services/home_services.dart';
 import 'package:ecommerce_major_project/features/product_details/screens/product_detail_screen.dart';
 import 'package:ecommerce_major_project/providers/tab_provider.dart';
+import 'package:ecommerce_major_project/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:ecommerce_major_project/main.dart';
 import 'package:ecommerce_major_project/constants/global_variables.dart';
@@ -11,7 +12,7 @@ import 'package:ecommerce_major_project/features/home/widgets/address_box.dart';
 import 'package:ecommerce_major_project/features/cart/widgets/cart_product.dart';
 import 'package:ecommerce_major_project/features/cart/widgets/cart_subtotal.dart';
 import 'package:ecommerce_major_project/features/search/screens/search_screen.dart';
-import 'package:ecommerce_major_project/features/address/screens/checkout_screen.dart';
+import 'package:ecommerce_major_project/features/checkout/screens/checkout_screen.dart';
 import 'package:ecommerce_major_project/features/search_delegate/my_search_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -45,6 +46,7 @@ class _CartScreenState extends State<CartScreen> {
   //This function checks the availablity of the products first and then move forward.
   void navigateToAddress(num sum) async {
     final cartProvider = Provider.of<CartProvider>(context,listen: false);
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
     setState(() {
       isLoading = true;
     });
@@ -55,7 +57,7 @@ class _CartScreenState extends State<CartScreen> {
     if (isProductAvailable) {
       //make sure to pass the arguments here!
       Navigator.pushNamed(context, CheckoutScreen.routeName,
-          arguments: [sum.toString(),cartProvider.getCart]);
+          arguments: [sum.toString(),cartProvider.getCart,userProvider.user.cart]);
     }
     setState(() {
       isLoading = false;

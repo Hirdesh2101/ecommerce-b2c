@@ -10,7 +10,9 @@ import 'package:ecommerce_major_project/features/product_details/services/produc
 class OrderSummaryProduct extends StatefulWidget {
   final int index;
   final Product product;
-  const OrderSummaryProduct({required this.index, super.key,required this.product});
+  final String color;
+  final String size;
+  const OrderSummaryProduct({required this.index, super.key,required this.product,required this.color,required this.size});
 
   @override
   State<OrderSummaryProduct> createState() => _OrderSummaryProductState();
@@ -18,6 +20,7 @@ class OrderSummaryProduct extends StatefulWidget {
 
 class _OrderSummaryProductState extends State<OrderSummaryProduct> {
   final ProductDetailServices productDetailServices = ProductDetailServices();
+  int price = 0;
   final CartServices cartServices = CartServices();
   final indianRupeesFormat = NumberFormat.currency(
     name: "INR",
@@ -25,6 +28,16 @@ class _OrderSummaryProductState extends State<OrderSummaryProduct> {
     decimalDigits: 0,
     symbol: '₹ ',
   );
+  @override
+  void initState() {
+    List<dynamic> variants = widget.product.varients;
+    for (var variant in variants) {
+      if (variant['color'] == widget.color) {
+        price = variant['price'];
+      }
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +78,7 @@ class _OrderSummaryProductState extends State<OrderSummaryProduct> {
               padding: EdgeInsets.only(left: mq.width * .025),
               child: Text(
                 //TODO HERE MODIFY THE PRICE VALUE NEED ME MAKE A NEW MODEL FOR CART PRODUCT
-                indianRupeesFormat.format(widget.product.varients[0]['price']),
+                indianRupeesFormat.format(price),
                 style: const TextStyle(
                     fontWeight: FontWeight.bold, fontSize: 17),
                 maxLines: 2,
@@ -75,7 +88,7 @@ class _OrderSummaryProductState extends State<OrderSummaryProduct> {
               width: mq.width * .57,
               padding: EdgeInsets.only(left: mq.width * .025),
               child: Text(
-                widget.product.varients[0]['price'] < 500
+                price < 500
                     ? "Shipping charges might apply"
                     : "Eligible for free shipping",
                 style: const TextStyle(fontSize: 13),

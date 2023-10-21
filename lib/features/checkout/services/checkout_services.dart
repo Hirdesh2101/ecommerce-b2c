@@ -174,10 +174,9 @@ class CheckoutServices {
     required BuildContext context,
     required String address,
     required num totalSum,
+    required  List<dynamic> cart,
   }) async {
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
     final String? authToken = await GlobalVariables.getFirebaseAuthToken();
-
     try {
       http.Response res = await http.post(
         Uri.parse('$uri/api/order'),
@@ -186,7 +185,7 @@ class CheckoutServices {
           'Authorization': '$authToken',
         },
         body: jsonEncode({
-          'cart': userProvider.user.cart,
+          'cart': cart,
           'address': address,
           'totalPrice': totalSum,
         }),

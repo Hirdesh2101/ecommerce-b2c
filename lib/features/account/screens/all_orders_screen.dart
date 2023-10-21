@@ -17,6 +17,12 @@ class AllOrdersScreen extends StatelessWidget {
     Key? key,
     this.allOrders,
   }) : super(key: key);
+  static final indianRupeesFormat = NumberFormat.currency(
+    name: "INR",
+    locale: 'en_IN',
+    decimalDigits: 0,
+    symbol: '₹ ',
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -35,18 +41,17 @@ class AllOrdersScreen extends StatelessWidget {
           Expanded(
             child: allOrders != null && allOrders!.isEmpty
                 ? Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Image.asset("assets/images/no-orderss.png",
                             height: mq.height * .15),
-                
                         const Text("No Orders found"),
                         SizedBox(height: mq.height * 0.02),
                         ElevatedButton(
                             onPressed: () {
-                             tabProvider.setTab(0);
-                             Navigator.of(context).pop();
+                              tabProvider.setTab(0);
+                              Navigator.of(context).pop();
                             },
                             style: ElevatedButton.styleFrom(
                                 shape: RoundedRectangleBorder(
@@ -58,7 +63,7 @@ class AllOrdersScreen extends StatelessWidget {
                             )),
                       ],
                     ),
-                )
+                  )
                 : ListView.builder(
                     scrollDirection: Axis.vertical,
                     physics: const BouncingScrollPhysics(),
@@ -89,8 +94,8 @@ class AllOrdersScreen extends StatelessWidget {
                               // Navigator.pushNamed(
                               //     context, ProductDetailScreen.routeName,
                               //     arguments: allOrders![index]);
-                              Navigator.pushNamed(
-                                  context, OrderDetailsScreen.routeName);
+                              // Navigator.pushNamed(
+                              //     context, OrderDetailsScreen.routeName);
                             },
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
@@ -144,14 +149,14 @@ class AllOrdersScreen extends StatelessWidget {
                                           j++)
                                         Container(
                                           margin: EdgeInsets.symmetric(
+                                            vertical: mq.height *.01,
                                               horizontal: mq.width * .025),
                                           child: Row(
                                             children: [
                                               // image
                                               Image.network(
-                                                allOrders![index]
-                                                    .products[j]
-                                                    .images[0],
+                                                allOrders![index].products[j]
+                                                    ['product']['images'][0],
                                                 // allOrders![index].products[index].images[0],
                                                 fit: BoxFit.contain,
                                                 height: mq.width * .25,
@@ -167,8 +172,8 @@ class AllOrdersScreen extends StatelessWidget {
                                                         top: mq.width * .0125),
                                                     child: Text(
                                                       allOrders![index]
-                                                          .products[j]
-                                                          .name,
+                                                              .products[j]
+                                                          ['product']['name'],
                                                       overflow:
                                                           TextOverflow.ellipsis,
                                                       textAlign: TextAlign.left,
@@ -177,18 +182,86 @@ class AllOrdersScreen extends StatelessWidget {
                                                       maxLines: 1,
                                                     ),
                                                   ),
-                                                  // Container(
-                                                  //   width: mq.width * .57,
-                                                  //   padding: EdgeInsets.only(
-                                                  //       left: mq.width * .025, top: mq.width * .0125),
-                                                  //   //here is the static rating
-                                                  //   child: Stars(rating: avgRating),
-                                                  // ),
+                                                  Container(
+                                                    width: mq.width * .57,
+                                                    padding: EdgeInsets.only(
+                                                      left: mq.width * .025,
+                                                    ),
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        const Text(
+                                                          "Color:",
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.black,
+                                                              fontSize: 11),
+                                                          maxLines: 2,
+                                                        ),
+                                                        Container(
+                                                          margin:
+                                                              EdgeInsets.only(
+                                                                  left:
+                                                                      mq.width *
+                                                                          .01),
+                                                          width:
+                                                              mq.width * .025,
+                                                          height:
+                                                              mq.width * .025,
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            color: Color(int.parse(
+                                                                '0xFF'
+                                                                '${allOrders![index].products[j]['color'].substring(1)}')),
+                                                            shape:
+                                                                BoxShape.circle,
+                                                          ),
+                                                        ),
+                                                        Container(
+                                                            padding:
+                                                                EdgeInsets.only(
+                                                                    left: mq.width *
+                                                                        .025),
+                                                            child: Text(
+                                                              "Size: ${allOrders![index].products[j]['size']}",
+                                                              style: const TextStyle(
+                                                                  color: Colors
+                                                                      .black,
+                                                                  fontSize: 11),
+                                                              maxLines: 2,
+                                                            )),
+                                                            Container(
+                                            padding: EdgeInsets.only(
+                                                left: mq.width * .025),
+                                            child: Text(
+                                              "Quantity: x${allOrders![index].products[j]['quantity']}",
+                                              style: const TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 11),
+                                              maxLines: 2,
+                                            )),
+                                                      ],
+                                                    ),
+                                                  ),
                                                   Container(
                                                     width: mq.width * .57,
                                                     padding: EdgeInsets.only(
                                                         left: mq.width * .025,
                                                         top: mq.width * .0125),
+                                                    child: Text(
+                                                        "Item Value  : ${indianRupeesFormat.format(allOrders![index].products[j]['price'])}",
+                                                        style: const TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize: 14)),
+                                                  ),
+                                                  Container(
+                                                    width: mq.width * .57,
+                                                    padding: EdgeInsets.only(
+                                                      left: mq.width * .025,
+                                                    ),
                                                     child: Text(
                                                         "Ordered At  : ${DateFormat('yMMMd').format(DateTime.fromMillisecondsSinceEpoch(allOrders![index].orderedAt))}",
                                                         style: const TextStyle(
@@ -196,29 +269,9 @@ class AllOrdersScreen extends StatelessWidget {
                                                                 FontWeight.bold,
                                                             fontSize: 14)),
                                                   ),
-                                                  // Container(
-                                                  //   width: mq.width * .57,
-                                                  //   padding: EdgeInsets.only(left: mq.width * .025),
-                                                  //   child: Text("Eligible for free shipping"),
-                                                  // ),
-                                                  // Container(
-                                                  //   width: mq.width * .57,
-                                                  //   padding: EdgeInsets.only(
-                                                  //       left: mq.width * .025, top: mq.width * .0125),
-                                                  //   child: product.quantity == 0
-                                                  //       ? const Text(
-                                                  //           "Out of Stock",
-                                                  //           style: TextStyle(color: Colors.redAccent),
-                                                  //           maxLines: 2,
-                                                  //         )
-                                                  //       : const Text(
-                                                  //           "In Stock",
-                                                  //           style: TextStyle(color: Colors.teal),
-                                                  //           maxLines: 2,
-                                                  //         ),
-                                                  // ),
                                                 ],
                                               ),
+
                                               SizedBox(
                                                 height: mq.height * .01,
                                               )

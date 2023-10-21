@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:ecommerce_major_project/common/widgets/custom_textfield.dart';
-import 'package:ecommerce_major_project/features/address/widgets/order_dialog.dart';
+import 'package:ecommerce_major_project/features/auth/services/auth_service.dart';
+import 'package:ecommerce_major_project/features/checkout/widgets/order_dialog.dart';
 import 'package:ecommerce_major_project/models/cart.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
@@ -14,16 +15,17 @@ import 'package:ecommerce_major_project/providers/user_provider.dart';
 import 'package:ecommerce_major_project/constants/global_variables.dart';
 import 'package:ecommerce_major_project/common/widgets/custom_button.dart';
 import 'package:badges/badges.dart' as badges;
-import 'package:ecommerce_major_project/features/address/widgets/delivery_product.dart';
+import 'package:ecommerce_major_project/features/checkout/widgets/delivery_product.dart';
 import 'package:ecommerce_major_project/features/search_delegate/my_search_screen.dart';
-import 'package:ecommerce_major_project/features/address/services/checkout_services.dart';
+import 'package:ecommerce_major_project/features/checkout/services/checkout_services.dart';
 
 class CheckoutScreen extends StatefulWidget {
   static const String routeName = '/checkout';
   final String totalAmount;
   final List<Cart> mycart;
+  final List<dynamic> userProviderCart;
   const CheckoutScreen(
-      {super.key, required this.totalAmount, required this.mycart});
+      {super.key, required this.totalAmount, required this.mycart,required this.userProviderCart});
 
   @override
   State<CheckoutScreen> createState() => _CheckoutScreenState();
@@ -40,6 +42,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   int currentStep = 0;
   bool addnewAdress = false;
   bool goToPayment = false;
+  bool paymentProcess = false;
   String addressToBeUsed = "";
   final _razorpay = Razorpay();
   bool goToFinalPayment = false;
@@ -200,10 +203,11 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                           ),
                           SizedBox(height: mq.height * .02),
                           CustomButton(
-                              text: "Pay now",
+                              text: paymentProcess ? "Processing.." : "Pay now",
                               onTap: () async {
                                 setState(() {
                                   goToFinalPayment = true;
+                                  paymentProcess = true;
                                 });
                                 bool isProductAvailable =
                                     await CheckoutServices()
@@ -215,6 +219,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                       await addressServices.placeOrder(
                                     context: context,
                                     address: user.address,
+                                    cart: widget.userProviderCart,
                                     totalSum: num.parse(widget.totalAmount),
                                   );
 
@@ -230,6 +235,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                       print("Razor Pay opened...");
                                     } catch (e) {
                                       recentOrderId = null;
+                                      setState(() {
+                                        paymentProcess = false;
+                                      });
                                       print("Try catch error in payment: $e");
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(SnackBar(
@@ -237,11 +245,16 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                     }
                                   } else {
                                     recentOrderId = null;
+                                    setState(() {
+                                      paymentProcess = false;
+                                    });
+                                    paymentProcess = false;
                                     print(response?.statusCode);
                                   }
                                 } else {
                                   setState(() {
                                     goToFinalPayment = false;
+                                    paymentProcess = false;
                                   });
                                 }
                               },
@@ -265,6 +278,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                 return OrderSummaryProduct(
                                   index: index,
                                   product: widget.mycart[index].product,
+                                  color: widget.mycart[index].color,
+                                  size: widget.mycart[index].size,
                                 );
                               },
                               separatorBuilder: (context, index) {
@@ -417,35 +432,16 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
   void _handlePaymentSuccess(PaymentSuccessResponse response) {
     if (recentOrderId != null) {
-      addressServices
-          .updateOrder(
-        context: context,
-        orderId: recentOrderId!,
-        razorPayOrderId: response.orderId != null ? response.orderId! : "",
-        paymentId: response.paymentId != null ? response.paymentId! : "",
-        paymentAt: DateTime.now().millisecondsSinceEpoch,
-        signatureId: response.signature ?? "",
-      )
-          .then((value) {
-        print(
-            "\n\nPayment successful : \n\nPayment ID :  ${response.paymentId} \n\n Order ID : ${response.orderId}");
-
-        OrderDialog.showOrderStatusDialog(
-          context,
-          isPaymentSuccess: true,
-          title: "Order has been placed!",
-          subtitle:
-              "Transaction ID : ${DateTime.now().millisecondsSinceEpoch}\nTime: ${DateTime.now().hour} : ${DateTime.now().minute} : ${DateTime.now().second}\nPayment ID : ${response.paymentId}\nOrder ID : ${response.orderId}\nSignature : ${response.signature}",
-        );
-        recentOrderId = null;
-      }).onError((error, stackTrace) {
-        print("Error in update order: $error");
-        OrderDialog.showOrderStatusDialog(
-          context,
-          subtitle: "Your payment will be refunded soon!",
-        );
-        recentOrderId = null;
-      });
+      final AuthService authService = AuthService();
+              authService.getUserData(context);
+      OrderDialog.showOrderStatusDialog(
+        context,
+        isPaymentSuccess: true,
+        title: "Order has been placed!",
+        subtitle:
+            "Transaction ID : ${DateTime.now().millisecondsSinceEpoch}\nTime: ${DateTime.now().hour} : ${DateTime.now().minute} : ${DateTime.now().second}\nPayment ID : ${response.paymentId}\nOrder ID : ${response.orderId}\nSignature : ${response.signature}",
+      );
+      recentOrderId = null;
     } else {
       print("Order Id from mongo returned null");
       OrderDialog.showOrderStatusDialog(

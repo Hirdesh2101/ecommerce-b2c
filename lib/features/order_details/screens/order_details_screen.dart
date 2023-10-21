@@ -31,12 +31,12 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
   final int allowReturnProductDays = 15;
   bool allowReturn = false;
   bool viewMoreDetails = true;
- final indianRupeesFormat = NumberFormat.currency(
-           name: "INR",
-           locale: 'en_IN',
-           decimalDigits: 0,
-           symbol: '₹ ',
-        );
+  final indianRupeesFormat = NumberFormat.currency(
+    name: "INR",
+    locale: 'en_IN',
+    decimalDigits: 0,
+    symbol: '₹ ',
+  );
 
   @override
   void initState() {
@@ -106,43 +106,87 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     for (int i = 0; i < widget.order.products.length; i++)
-                      InkWell(
-                        onTap: () {
-                          Navigator.pushNamed(
-                            context,
-                            ProductDetailScreen.routeName,
-                            arguments: widget.order.products[i].id,
-                          );
-                        },
-                        child: Row(
-                          children: [
-                            Image.network(widget.order.products[i].images[0],
-                                height: mq.width * .25, width: mq.width * .25),
-                            SizedBox(width: mq.width * .0125),
-                            // using expanded to allow text to overflow
-                            // in case name of the product is too long
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    widget.order.products[i].name,
-                                    style: const TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w500,
+                      Padding(
+                        padding: const EdgeInsets.only(top:8.0),
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.pushNamed(
+                              context,
+                              ProductDetailScreen.routeName,
+                              arguments: widget.order.products[i]['product']
+                                  ['_id'],
+                            );
+                          },
+                          child: Row(
+                            children: [
+                              Image.network(
+                                  widget.order.products[i]['product']['images']
+                                      [0],
+                                  height: mq.width * .25,
+                                  width: mq.width * .25),
+                              SizedBox(width: mq.width * .0125),
+                              // using expanded to allow text to overflow
+                              // in case name of the product is too long
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      widget.order.products[i]['product']['name'],
+                                      style: const TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
                                     ),
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                  Text(
-                                    "Qty : ${widget.order.quantity[i]}",
-                                    // style: TextStyle(
-                                    //     fontSize: 17, fontWeight: FontWeight.bold),
-                                  )
-                                ],
-                              ),
-                            )
-                          ],
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: [
+                                        const Text(
+                                          "Color:",
+                                          style: TextStyle(
+                                              color: Colors.black, fontSize: 11),
+                                          maxLines: 2,
+                                        ),
+                                        Container(
+                                          margin: EdgeInsets.only(
+                                              left: mq.width * .01),
+                                          width: mq.width * .025,
+                                          height: mq.width * .025,
+                                          decoration: BoxDecoration(
+                                            color: Color(int.parse('0xFF'
+                                                '${widget.order.products[i]['color'].substring(1)}')),
+                                            shape: BoxShape.circle,
+                                          ),
+                                        ),
+                                        Container(
+                                            padding: EdgeInsets.only(
+                                                left: mq.width * .025),
+                                            child: Text(
+                                              "Size: ${widget.order.products[i]['size']}",
+                                              style: const TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 11),
+                                              maxLines: 2,
+                                            )),
+                                             Container(
+                                            padding: EdgeInsets.only(
+                                                left: mq.width * .025),
+                                            child: Text(
+                                              "Quantity: x${widget.order.products[i]['quantity']}",
+                                              style: const TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 11),
+                                              maxLines: 2,
+                                            )),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
                         ),
                       ),
                   ],
@@ -220,7 +264,8 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (_) => const ReturnProductScreen()));
+                                      builder: (_) =>
+                                          const ReturnProductScreen()));
                               showSnackBar(
                                   context: context,
                                   text: "Return product yet to be implemented");
@@ -274,7 +319,8 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                           Text(
                               "Order Date   : ${DateFormat('yMMMd').format(DateTime.fromMillisecondsSinceEpoch(widget.order.orderedAt))}"),
                           Text("Order ID        : ${widget.order.id}"),
-                          Text("Order Total   : ${indianRupeesFormat.format(widget.order.totalPrice)}"),
+                          Text(
+                              "Order Total   : ${indianRupeesFormat.format(widget.order.totalPrice)}"),
                           Text(
                               "Status            : ${getStatus(widget.order.status)}")
                         ],

@@ -35,7 +35,6 @@ class _OrdersState extends State<Orders> {
 
   @override
   Widget build(BuildContext context) {
-
     final tabProvider = Provider.of<TabProvider>(context);
     return Column(
       children: [
@@ -124,8 +123,8 @@ class _OrdersState extends State<Orders> {
                             );
                           },
                           child: SingleProduct(
-                              image:
-                                  widget.orders![index].products[0].images[0]),
+                              image: widget.orders![index].products[0]
+                                  ['product']['images'][0]),
                         );
                       },
                     ),
