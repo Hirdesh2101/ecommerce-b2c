@@ -8,8 +8,6 @@ void httpErrorHandle({
   required BuildContext context,
   required VoidCallback onSuccess,
 }) {
-  //print(jsonDecode(response.body)['msg']);
-  //print(jsonDecode(response.body)['error']);
   switch (response.statusCode) {
     //Successful responses (200 – 299)
     //200 OK
