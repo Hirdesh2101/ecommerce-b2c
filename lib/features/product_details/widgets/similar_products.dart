@@ -24,6 +24,7 @@ class SimilarProducts extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        if(products!.isNotEmpty)
         const Text(
           'Similar Products',
           style: TextStyle(fontSize: 22, fontWeight: FontWeight.w400),
@@ -31,7 +32,7 @@ class SimilarProducts extends StatelessWidget {
           overflow: TextOverflow.ellipsis,
         ),
         SizedBox(
-          height: mq.height * .32,
+          height: products!.isNotEmpty?mq.height * .32:0,
           child: ListView.builder(
             physics: const ClampingScrollPhysics(),
             itemCount: min(products!.length, 5),

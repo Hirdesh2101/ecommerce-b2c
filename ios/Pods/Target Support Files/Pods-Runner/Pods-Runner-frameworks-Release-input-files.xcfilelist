@@ -23,7 +23,6 @@ ${BUILT_PRODUCTS_DIR}/fluttertoast/fluttertoast.framework
 ${BUILT_PRODUCTS_DIR}/image_picker_ios/image_picker_ios.framework
 ${BUILT_PRODUCTS_DIR}/package_info_plus/package_info_plus.framework
 ${BUILT_PRODUCTS_DIR}/path_provider_foundation/path_provider_foundation.framework
-${BUILT_PRODUCTS_DIR}/pay_ios/pay_ios.framework
 ${BUILT_PRODUCTS_DIR}/razorpay_flutter/razorpay_flutter.framework
 ${BUILT_PRODUCTS_DIR}/shared_preferences_foundation/shared_preferences_foundation.framework
 ${BUILT_PRODUCTS_DIR}/speech_to_text/speech_to_text.framework

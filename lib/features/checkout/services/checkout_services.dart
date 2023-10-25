@@ -10,8 +10,7 @@ import 'package:ecommerce_major_project/constants/global_variables.dart';
 
 class CheckoutServices {
   ///Checks the availability of products through backend, also shows snackbar of the info.
-  Future<bool> checkProductsAvailability(
-      BuildContext context) async {
+  Future<bool> checkProductsAvailability(BuildContext context) async {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     bool isProductAvailable = false;
 
@@ -94,22 +93,84 @@ class CheckoutServices {
     }
   }
 
-  ///THis function creates a razor pay order and returns a razor pay order id.
-  ///This order id needs to be passed when paying through razor pay to link the
-  ///payment with the order.
-  // Future<http.Response> createRazorPayOrder(
-  //     String orderId, int amount, String userId) async {
-  //   amount = amount * 100;
+  Future<dynamic> getDeliveryCharges(
+      BuildContext context, String pincode) async {
+    try {
+      bool isInternetConnected = await checkNetworkConnectivity();
+      dynamic charges;
+      if (isInternetConnected) {
+        final String? authToken = await GlobalVariables.getFirebaseAuthToken();
 
-  //   http.Response response = await http.post(
-  //     Uri.parse(GlobalVariables.razorPayOrderApi),
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       "Authorization":
-  //           "Basic ${base64Encode(utf8.encode('${GlobalVariables.razorPayTestKey}:${GlobalVariables.razorPaySecretKey}'))} ",
-  //     },
-  //   );
-  // }
+        http.Response res = await http.get(
+          Uri.parse('$uri/api/check-free-delivery'),
+          headers: {
+            'Content-Type': 'application/json; charset=UTF-8',
+            'Authorization': '$authToken',
+            'pincode': pincode,
+          },
+        );
+
+        // var data = jsonDecode(res.body);
+        if (context.mounted) {
+          httpErrorHandle(
+            response: res,
+            context: context,
+            onSuccess: () {
+              charges = jsonDecode(res.body);
+            },
+          );
+        }
+        return charges;
+      } else {
+        showSnackBar(
+            context: context, text: "Please check your internet connection!");
+        return "Please check your internet connection!";
+      }
+    } catch (e) {
+      showSnackBar(context: context, text: e.toString());
+      return "Error: $e";
+    }
+  }
+
+  Future<dynamic> checkPaymentStatus(
+      BuildContext context, String orderId) async {
+    try {
+      bool isInternetConnected = await checkNetworkConnectivity();
+      dynamic status;
+      if (isInternetConnected) {
+        final String? authToken = await GlobalVariables.getFirebaseAuthToken();
+
+        http.Response res = await http.get(
+          Uri.parse('$uri/api/check-payment-status'),
+          headers: {
+            'Content-Type': 'application/json; charset=UTF-8',
+            'Authorization': '$authToken',
+            'orderid': orderId,
+          },
+        );
+
+        // var data = jsonDecode(res.body);
+        if (context.mounted) {
+          print(res.body);
+          httpErrorHandle(
+            response: res,
+            context: context,
+            onSuccess: () {
+              status = jsonDecode(res.body);
+            },
+          );
+        }
+        return status;
+      } else {
+        showSnackBar(
+            context: context, text: "Please check your internet connection!");
+        return "Please check your internet connection!";
+      }
+    } catch (e) {
+      showSnackBar(context: context, text: e.toString());
+      return "Error: $e";
+    }
+  }
 
   // pdates the order with quantity and payment status after payment status
   Future<void> updateOrder({
@@ -174,7 +235,7 @@ class CheckoutServices {
     required BuildContext context,
     required String address,
     required num totalSum,
-    required  List<dynamic> cart,
+    required List<dynamic> cart,
   }) async {
     final String? authToken = await GlobalVariables.getFirebaseAuthToken();
     try {

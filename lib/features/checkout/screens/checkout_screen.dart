@@ -1,12 +1,12 @@
 import 'dart:convert';
 import 'package:ecommerce_major_project/common/widgets/custom_textfield.dart';
-import 'package:ecommerce_major_project/features/auth/services/auth_service.dart';
+import 'package:ecommerce_major_project/features/checkout/screens/status_check.dart';
 import 'package:ecommerce_major_project/features/checkout/widgets/order_dialog.dart';
 import 'package:ecommerce_major_project/models/cart.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
-import 'package:pay/pay.dart';
+// import 'package:pay/pay.dart';
 import 'package:provider/provider.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 
@@ -25,7 +25,10 @@ class CheckoutScreen extends StatefulWidget {
   final List<Cart> mycart;
   final List<dynamic> userProviderCart;
   const CheckoutScreen(
-      {super.key, required this.totalAmount, required this.mycart,required this.userProviderCart});
+      {super.key,
+      required this.totalAmount,
+      required this.mycart,
+      required this.userProviderCart});
 
   @override
   State<CheckoutScreen> createState() => _CheckoutScreenState();
@@ -39,6 +42,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
   String? recentOrderId;
   int totalAmount = 0;
+  int deliveryAmount = 0;
   int currentStep = 0;
   bool addnewAdress = false;
   bool goToPayment = false;
@@ -46,7 +50,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   String addressToBeUsed = "";
   final _razorpay = Razorpay();
   bool goToFinalPayment = false;
-  List<PaymentItem> paymentItems = [];
+  // List<PaymentItem> paymentItems = [];
   final _addressFormKey = GlobalKey<FormState>();
   final CheckoutServices addressServices = CheckoutServices();
   List<String> checkoutSteps = ["Address", "Delivery", "Payment"];
@@ -60,13 +64,13 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   @override
   void initState() {
     super.initState();
-    paymentItems.add(
-      PaymentItem(
-        label: 'Total Amount',
-        amount: widget.totalAmount,
-        status: PaymentItemStatus.final_price,
-      ),
-    );
+    // paymentItems.add(
+    //   PaymentItem(
+    //     label: 'Total Amount',
+    //     amount: widget.totalAmount,
+    //     status: PaymentItemStatus.final_price,
+    //   ),
+    // );
 
     super.initState();
     _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
@@ -84,7 +88,14 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     super.dispose();
   }
 
-  void deliverToThisAddress(String addressFromProvider) {
+  Future<void> calculateDeliveryCharge(String pincode) async {
+    dynamic charges =
+        await addressServices.getDeliveryCharges(context, pincode);
+    deliveryAmount = charges['deliveryCharges'] as int;
+    totalAmount += charges['deliveryCharges'] as int;
+  }
+
+  void deliverToThisAddress(String addressFromProvider) async {
     addressToBeUsed = "";
 
     if (addnewAdress || addressFromProvider == "") {
@@ -93,6 +104,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             "${flatBuildingController.text}, ${areaController.text}, ${cityController.text} - ${pincodeController.text}";
         addressServices.saveUserAddress(
             context: context, address: addressToBeUsed);
+        int indexOfHyphen = addressToBeUsed.lastIndexOf('-');
+        await calculateDeliveryCharge(
+            addressToBeUsed.substring(indexOfHyphen + 1));
         setState(() {
           goToPayment = true;
         });
@@ -101,6 +115,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       }
     } else {
       addressToBeUsed = addressFromProvider;
+      int indexOfHyphen = addressToBeUsed.lastIndexOf('-');
+      await calculateDeliveryCharge(
+          addressToBeUsed.substring(indexOfHyphen + 1));
       setState(() {
         goToPayment = true;
       });
@@ -195,16 +212,29 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                           Container(
                             padding: EdgeInsets.only(left: mq.width * .025),
                             child: Text(
-                              "Total Payable Amount: ${indianRupeesFormat.format(double.parse(widget.totalAmount))}",
+                              "Total Payable Amount: ${indianRupeesFormat.format(double.parse(totalAmount.toString()))}",
                               style: const TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 17),
                               maxLines: 2,
                             ),
                           ),
+                          Container(
+                            padding: EdgeInsets.only(left: mq.width * .025),
+                            child: Text(
+                              "Delivery Charges: ${indianRupeesFormat.format(double.parse(deliveryAmount.toString()))}",
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.w300, fontSize: 14),
+                              maxLines: 2,
+                            ),
+                          ),
                           SizedBox(height: mq.height * .02),
                           CustomButton(
-                              text: paymentProcess ? "Processing.." : "Pay now",
+                              text:
+                                  paymentProcess ? "Processing..." : "Pay now",
                               onTap: () async {
+                                if (paymentProcess) {
+                                  return;
+                                }
                                 setState(() {
                                   goToFinalPayment = true;
                                   paymentProcess = true;
@@ -220,7 +250,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                     context: context,
                                     address: user.address,
                                     cart: widget.userProviderCart,
-                                    totalSum: num.parse(widget.totalAmount),
+                                    totalSum: totalAmount,
                                   );
 
                                   if (response?.statusCode == 200) {
@@ -258,7 +288,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                   });
                                 }
                               },
-                              color: const Color.fromARGB(255, 108, 255, 255)),
+                              color: paymentProcess
+                                  ? const Color.fromARGB(255, 108, 255, 255)
+                                      .withOpacity(0.5)
+                                  : const Color.fromARGB(255, 108, 255, 255)),
                           SizedBox(height: mq.height * .02),
                           Container(
                               alignment: Alignment.centerLeft,
@@ -273,13 +306,15 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               scrollDirection: Axis.vertical,
                               physics: const BouncingScrollPhysics(),
                               shrinkWrap: true,
-                              itemCount: user.cart.length,
+                              itemCount: widget.mycart.length,
                               itemBuilder: (context, index) {
                                 return OrderSummaryProduct(
                                   index: index,
                                   product: widget.mycart[index].product,
                                   color: widget.mycart[index].color,
                                   size: widget.mycart[index].size,
+                                  productQuantity:
+                                      widget.mycart[index].quantity,
                                 );
                               },
                               separatorBuilder: (context, index) {
@@ -432,18 +467,13 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
   void _handlePaymentSuccess(PaymentSuccessResponse response) {
     if (recentOrderId != null) {
-      final AuthService authService = AuthService();
-              authService.getUserData(context);
-      OrderDialog.showOrderStatusDialog(
-        context,
-        isPaymentSuccess: true,
-        title: "Order has been placed!",
-        subtitle:
-            "Transaction ID : ${DateTime.now().millisecondsSinceEpoch}\nTime: ${DateTime.now().hour} : ${DateTime.now().minute} : ${DateTime.now().second}\nPayment ID : ${response.paymentId}\nOrder ID : ${response.orderId}\nSignature : ${response.signature}",
-      );
-      recentOrderId = null;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+          return CheckStatus(orderId: recentOrderId!);
+        }));
+      });
+      //recentOrderId = null;
     } else {
-      print("Order Id from mongo returned null");
       OrderDialog.showOrderStatusDialog(
         context,
         subtitle: "Your payment will be refunded soon!",

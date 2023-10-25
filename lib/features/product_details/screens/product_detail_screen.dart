@@ -1,6 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
 import 'package:ecommerce_major_project/common/widgets/color_loader_2.dart';
+import 'package:ecommerce_major_project/features/checkout/screens/checkout_screen.dart';
+import 'package:ecommerce_major_project/features/product_details/widgets/buyButtons.dart';
 import 'package:ecommerce_major_project/features/product_details/widgets/delivery_location.dart';
 import 'package:ecommerce_major_project/features/product_details/widgets/details_widget.dart';
 import 'package:ecommerce_major_project/features/product_details/widgets/icon_details.dart';
@@ -9,6 +11,7 @@ import 'package:ecommerce_major_project/features/product_details/widgets/ratings
 import 'package:ecommerce_major_project/features/product_details/widgets/similar_products.dart';
 import 'package:ecommerce_major_project/features/product_details/widgets/size_and_Color.dart';
 import 'package:ecommerce_major_project/features/product_details/widgets/top_image.dart';
+import 'package:ecommerce_major_project/models/cart.dart';
 import 'package:ecommerce_major_project/providers/tab_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_adaptive_scaffold/flutter_adaptive_scaffold.dart';
@@ -47,7 +50,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   int counterTwoStars = 0;
   int counterOneStars = 0;
 
-  String pincode = '395001';
   Product? product;
   List<Product>? _similarProducts;
   bool isProductLoading = true;
@@ -120,8 +122,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       .toList();
 
   void navigateToSearchScreen(String query) {
-    //make sure to pass the arguments here!
-
     Navigator.pushNamed(context, SearchScreen.routeName, arguments: query);
   }
 
@@ -158,6 +158,43 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     }
   }
 
+  void buyNow() {
+    if (selectedSize == -1) {
+      showSnackBar(
+        context: context,
+        text: "Please select a size!",
+      );
+    } else if (isProductOutOfStock) {
+      showSnackBar(context: context, text: "Product is out of stock!");
+      return;
+    } else {
+      debugPrint("Triggered buynow <====");
+      debugPrint("Product is  : ${product!.name}");
+      List<Cart> buyNowCart = [
+        Cart(
+            product: product!,
+            quantity: 1,
+            color: product!.varients[selectedColor]['color'],
+            size: product!.varients[selectedColor]['sizes'][selectedSize]
+                ['size'])
+      ];
+      List<dynamic> buyNowUserCart = [
+        {
+          'product': product!.id,
+          'quantity': 1,
+          'color': product!.varients[selectedColor]['color'],
+          'size': product!.varients[selectedColor]['sizes'][selectedSize]
+              ['size']
+        }
+      ];
+      Navigator.pushNamed(context, CheckoutScreen.routeName, arguments: [
+        product!.varients[selectedColor]['price'].toString(),
+        buyNowCart,
+        buyNowUserCart
+      ]);
+    }
+  }
+
   void setColor(int color) {
     if (selectedColor != color) {
       setState(() {
@@ -168,19 +205,18 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   }
 
   void setSize(int size) {
-    if(selectedSize!=size){
-    setState(() {
-      selectedSize = size;
-      isProductOutOfStock = product!.varients[selectedColor]['sizes']
-              [selectedSize]['quantity'] ==
-          0;
-    });
+    if (selectedSize != size) {
+      setState(() {
+        selectedSize = size;
+        isProductOutOfStock = product!.varients[selectedColor]['sizes']
+                [selectedSize]['quantity'] ==
+            0;
+      });
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final tabProvider = Provider.of<TabProvider>(context);
     return AdaptiveLayout(
       //     primaryNavigation: SlotLayout(
       //   config: <Breakpoint, SlotLayoutConfig>{
@@ -279,61 +315,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                 selectedSize: selectedSize,
                                 setColor: setColor,
                                 setSize: setSize),
-
-                            DeliveyLocation(pincode: pincode),
+                            const DeliveyLocation(),
                             SizedBox(height: mq.width * .07),
-                            Center(
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  addToCart();
-                                },
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.yellow.shade800,
-                                    minimumSize:
-                                        Size(mq.width * .95, mq.height * .06),
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(18))),
-                                child: const Text(
-                                  "Add to Cart",
-                                  style: TextStyle(fontSize: 16),
-                                ),
-                              ),
+                            BuyButtons(
+                              addToCart: addToCart,
+                              buyNow: buyNow,
                             ),
-                            SizedBox(height: mq.width * .02),
-                            // Center(
-                            //   child: ElevatedButton(
-                            //     onPressed: () {
-                            //       if (isProductOutOfStock) {
-                            //         showSnackBar(
-                            //             context: context,
-                            //             text: "Product is out of stock!");
-                            //         return;
-                            //       } else {
-                            //         // addToCart();
-                            //         showSnackBar(
-                            //             context: context,
-                            //             text: "Need to redirect",
-                            //             onTapFunction: () {
-                            //               Navigator.pushNamed(
-                            //                   context, CartScreen.routeName);
-                            //             },
-                            //             actionLabel: "View");
-                            //       }
-                            //     },
-                            //     style: ElevatedButton.styleFrom(
-                            //         backgroundColor: Colors.orange.shade800,
-                            //         minimumSize:
-                            //             Size(mq.width * .95, mq.height * .06),
-                            //         shape: RoundedRectangleBorder(
-                            //             borderRadius:
-                            //                 BorderRadius.circular(18))),
-                            //     child: const Text(
-                            //       "Buy Now",
-                            //       style: TextStyle(fontSize: 16),
-                            //     ),
-                            //   ),
-                            // ),
                             SizedBox(height: mq.width * .03),
                             const Divider(thickness: 1),
                             SizedBox(height: mq.width * .02),
@@ -404,73 +391,18 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       isProductOutOfStock: isProductOutOfStock),
                   SizedBox(height: mq.width * .03),
                   const Divider(thickness: 2),
-                  SizedBox(height: mq.width * .03),
-                  DeliveyLocation(pincode: pincode),
+                  SizedBox(height: mq.width * .01),
+                  SizeAndColor(
+                      product: product!,
+                      selectedColor: selectedColor,
+                      selectedSize: selectedSize,
+                      setColor: setColor,
+                      setSize: setSize),
+                  const DeliveyLocation(),
                   SizedBox(height: mq.width * .07),
-                  Center(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        if (isProductOutOfStock) {
-                          showSnackBar(
-                              context: context,
-                              text: "Product is out of stock!");
-                          return;
-                        } else {
-                          addToCart();
-                          showSnackBar(
-                              context: context,
-                              text: "Added to Cart",
-                              onTapFunction: () {
-                                tabProvider.setTab(2);
-                                Navigator.of(context)
-                                    .popUntil((route) => route.isFirst);
-                              },
-                              actionLabel: "View");
-                        }
-                      },
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.yellow.shade800,
-                          minimumSize: Size(mq.width * .95, mq.height * .06),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(18))),
-                      child: const Text(
-                        "Add to Cart",
-                        style: TextStyle(fontSize: 16),
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: mq.width * .02),
-                  Center(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        if (isProductOutOfStock) {
-                          showSnackBar(
-                              context: context,
-                              text: "Product is out of stock!");
-                          return;
-                        } else {
-                          // addToCart();
-                          showSnackBar(
-                              context: context,
-                              text: "Need to redirect",
-                              onTapFunction: () {
-                                tabProvider.setTab(2);
-                                Navigator.of(context)
-                                    .popUntil((route) => route.isFirst);
-                              },
-                              actionLabel: "View");
-                        }
-                      },
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.orange.shade800,
-                          minimumSize: Size(mq.width * .95, mq.height * .06),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(18))),
-                      child: const Text(
-                        "Buy Now",
-                        style: TextStyle(fontSize: 16),
-                      ),
-                    ),
+                  BuyButtons(
+                    addToCart: addToCart,
+                    buyNow: buyNow,
                   ),
                   SizedBox(height: mq.width * .03),
                   const Divider(thickness: 1),
@@ -495,8 +427,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   ),
                   SizedBox(height: mq.width * .03),
                   SimilarProducts(
-                      products: _similarProducts,
-                      isProductOutOfStock: isProductOutOfStock),
+                    products: _similarProducts,
+                    isProductOutOfStock: isProductOutOfStock,
+                  ),
                   SizedBox(height: mq.width * .35),
                 ]),
               )),

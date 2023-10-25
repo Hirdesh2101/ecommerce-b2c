@@ -34,10 +34,10 @@ class _CartProductState extends State<CartProduct> {
     for (var variant in variants) {
       if (variant['color'] == widget.color) {
         price = variant['price'];
-      }
-      for (var size in variant['sizes']) {
-        if (size['size'] == widget.size) {
-          quantity = size['quantity'];
+        for (var size in variant['sizes']) {
+          if (size['size'] == widget.size) {
+            quantity = size['quantity'];
+          }
         }
       }
     }
@@ -127,7 +127,8 @@ class _CartProductState extends State<CartProduct> {
                       style: const TextStyle(fontSize: 13),
                     ),
                   ),
-                  Container(padding: EdgeInsets.only(left: mq.width * .025),
+                  Container(
+                    padding: EdgeInsets.only(left: mq.width * .025),
                     width: mq.width * .57,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -141,12 +142,12 @@ class _CartProductState extends State<CartProduct> {
                           margin: EdgeInsets.only(left: mq.width * .01),
                           width: mq.width * .025,
                           height: mq.width * .025,
-                            decoration: BoxDecoration(
-                              color: Color(int.parse('0xFF'
-                                  '${widget.color.substring(1)}')),
-                              shape: BoxShape.circle,
-                            ),
+                          decoration: BoxDecoration(
+                            color: Color(int.parse('0xFF'
+                                '${widget.color.substring(1)}')),
+                            shape: BoxShape.circle,
                           ),
+                        ),
                         Container(
                             padding: EdgeInsets.only(left: mq.width * .025),
                             child: Text(

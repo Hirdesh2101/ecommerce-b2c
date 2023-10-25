@@ -37,11 +37,96 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
     decimalDigits: 0,
     symbol: '₹ ',
   );
+  List<Step> steps = [];
 
   @override
   void initState() {
+    currentStep = getCurrentStep(widget.order.status);
+    steps = widget.order.status.contains('ORDER_RETURN')
+        ? List.from([
+            Step(
+              title: const Text("ORDER_RETURN_REQUESTED"),
+              content: const Text("Your order is yet to be delivered"),
+              isActive: currentStep > 0,
+              state: currentStep > 0 ? StepState.complete : StepState.indexed,
+            ),
+            Step(
+              title: const Text("ORDER_RETURN_ACCEPTED"),
+              content: const Text("Your order is yet to be delivered"),
+              isActive: currentStep > 0,
+              state: currentStep > 0 ? StepState.complete : StepState.indexed,
+            ),
+            Step(
+              title: const Text("ORDER_RETURN_REJECTED"),
+              content: const Text("Your order is yet to be delivered"),
+              isActive: currentStep > 0,
+              state: currentStep > 0 ? StepState.complete : StepState.indexed,
+            ),
+            Step(
+              title: const Text("ORDER_RETURN_PENDING"),
+              content: const Text("Your order is yet to be delivered"),
+              isActive: currentStep > 0,
+              state: currentStep > 0 ? StepState.complete : StepState.indexed,
+            ),
+            Step(
+              title: const Text("ORDER_RETURN_COMPLETE"),
+              content: const Text("Your order is yet to be delivered"),
+              isActive: currentStep > 0,
+              state: currentStep > 0 ? StepState.complete : StepState.indexed,
+            ),
+          ])
+        : widget.order.status.contains('ORDER_CANCELLED')
+            ? List.from([
+                Step(
+                  title: const Text("ORDER_CANCELLED"),
+                  content: const Text("Your order is yet to be delivered"),
+                  isActive: currentStep > 0,
+                  state:
+                      currentStep > 0 ? StepState.complete : StepState.indexed,
+                ),
+              ])
+            : List.from([
+                Step(
+                  title: const Text("ORDER_RECEIVED"),
+                  content: const Text("Your order is yet to be delivered"),
+                  isActive: currentStep > 0,
+                  state:
+                      currentStep > 0 ? StepState.complete : StepState.indexed,
+                ),
+                Step(
+                  // title: Text("Shipping"),
+                  title: const Text("ORDER_PACKING"),
+                  content: const Text("Your are order has been shipped"),
+                  isActive: currentStep > 1,
+                  state:
+                      currentStep > 1 ? StepState.complete : StepState.indexed,
+                ),
+                Step(
+                  title: const Text("ORDER_IN_TRANSIT"),
+                  content:
+                      const Text("Your order has been delievered successfully"),
+                  isActive: currentStep > 2,
+                  state:
+                      currentStep > 2 ? StepState.complete : StepState.indexed,
+                ),
+                Step(
+                  // title: Text("Completed"),
+                  title: const Text("ORDER_OUT_FOR_DELIVERY"),
+                  content: const Text("Your order is completed."),
+                  isActive: currentStep >= 3,
+                  state:
+                      currentStep >= 3 ? StepState.complete : StepState.indexed,
+                ),
+                Step(
+                  // title: Text("Completed"),
+                  title: const Text("ORDER_DELIVERED"),
+                  content: const Text("Your order is completed."),
+                  isActive: currentStep >= 3,
+                  state:
+                      currentStep >= 3 ? StepState.complete : StepState.indexed,
+                ),
+              ]);
     super.initState();
-    currentStep = widget.order.status;
   }
 
   void navigateToSearchScreen(String query) {
@@ -56,11 +141,11 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
         status: status + 1,
         order: widget.order,
         onSuccess: () {
-          setState(() {
-            if (currentStep <= 2) {
-              currentStep += 1;
-            }
-          });
+          // setState(() {
+          //   if (currentStep <= 2) {
+          //     currentStep += 1;
+          //   }
+          // });
         });
   }
 
@@ -107,7 +192,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                   children: [
                     for (int i = 0; i < widget.order.products.length; i++)
                       Padding(
-                        padding: const EdgeInsets.only(top:8.0),
+                        padding: const EdgeInsets.only(top: 8.0),
                         child: InkWell(
                           onTap: () {
                             Navigator.pushNamed(
@@ -132,7 +217,8 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      widget.order.products[i]['product']['name'],
+                                      widget.order.products[i]['product']
+                                          ['name'],
                                       style: const TextStyle(
                                         fontSize: 15,
                                         fontWeight: FontWeight.w500,
@@ -141,12 +227,14 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                       overflow: TextOverflow.ellipsis,
                                     ),
                                     Row(
-                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
                                       children: [
                                         const Text(
                                           "Color:",
                                           style: TextStyle(
-                                              color: Colors.black, fontSize: 11),
+                                              color: Colors.black,
+                                              fontSize: 11),
                                           maxLines: 2,
                                         ),
                                         Container(
@@ -170,7 +258,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                                   fontSize: 11),
                                               maxLines: 2,
                                             )),
-                                             Container(
+                                        Container(
                                             padding: EdgeInsets.only(
                                                 left: mq.width * .025),
                                             child: Text(
@@ -216,44 +304,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                       return const SizedBox();
                     },
                     currentStep: currentStep,
-                    steps: <Step>[
-                      Step(
-                        title: const Text("Pending"),
-                        content:
-                            const Text("Your order is yet to be delivered"),
-                        isActive: currentStep > 0,
-                        state: currentStep > 0
-                            ? StepState.complete
-                            : StepState.indexed,
-                      ),
-                      Step(
-                        // title: Text("Shipping"),
-                        title: const Text("Completed"),
-                        content: const Text("Your are order has been shipped"),
-                        isActive: currentStep > 1,
-                        state: currentStep > 1
-                            ? StepState.complete
-                            : StepState.indexed,
-                      ),
-                      Step(
-                        title: const Text("Received"),
-                        content: const Text(
-                            "Your order has been delievered successfully"),
-                        isActive: currentStep > 2,
-                        state: currentStep > 2
-                            ? StepState.complete
-                            : StepState.indexed,
-                      ),
-                      Step(
-                        // title: Text("Completed"),
-                        title: const Text("Delivered"),
-                        content: const Text("Your order is completed."),
-                        isActive: currentStep >= 3,
-                        state: currentStep >= 3
-                            ? StepState.complete
-                            : StepState.indexed,
-                      ),
-                    ]),
+                    steps: steps),
               ),
               SizedBox(height: mq.width * .025),
               user.type == "admin"
@@ -321,8 +372,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                           Text("Order ID        : ${widget.order.id}"),
                           Text(
                               "Order Total   : ${indianRupeesFormat.format(widget.order.totalPrice)}"),
-                          Text(
-                              "Status            : ${getStatus(widget.order.status)}")
+                          Text("Status            : ${widget.order.status}")
                         ],
                       ),
                     )
@@ -335,27 +385,44 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
     );
   }
 
-  String getStatus(int status) {
-    String setStatus = "";
+  int getCurrentStep(String status) {
+    int setStatus = 0;
     switch (status) {
-      case 0:
-        setStatus = "Pending";
+      case 'ORDER_RECEIVED':
+        setStatus = 0;
         break;
-
-      case 1:
-        setStatus = "Completed";
+      case 'ORDER_CANCELLED':
+        setStatus = 0;
         break;
-
-      case 2:
-        setStatus = "Received";
+      case 'ORDER_PACKING':
+        setStatus = 1;
         break;
-
-      case 3:
-        setStatus = "Delivered";
+      case 'ORDER_IN_TRANSIT':
+        setStatus = 2;
         break;
-
+      case 'ORDER_OUT_FOR_DELIVERY':
+        setStatus = 3;
+        break;
+      case 'ORDER_DELIVERED':
+        setStatus = 4;
+        break;
+      case 'ORDER_RETURN_REQUESTED':
+        setStatus = 0;
+        break;
+      case 'ORDER_RETURN_ACCEPTED':
+        setStatus = 1;
+        break;
+      case 'ORDER_RETURN_REJECTED':
+        setStatus = 1;
+        break;
+      case 'ORDER_RETURN_COMPLETE':
+        setStatus = 3;
+        break;
+      case 'ORDER_RETURN_PENDING':
+        setStatus = 2;
+        break;
       default:
-        setStatus = "Status unknown";
+        setStatus = 0;
         break;
     }
     return setStatus;

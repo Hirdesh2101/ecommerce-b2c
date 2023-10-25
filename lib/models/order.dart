@@ -6,7 +6,7 @@ class Order {
   final String address;
   final String userId;
   final int orderedAt;
-  final int status;
+  final String status;
   final num totalPrice;
   final String paymentStatus;
 
@@ -30,7 +30,7 @@ class Order {
       'orderedAt': orderedAt,
       'status': status,
       'totalPrice': totalPrice,
-       'paymentStatus': paymentStatus
+      'paymentStatus': paymentStatus
     };
   }
 
@@ -47,7 +47,7 @@ class Order {
       paymentStatus: map['paymentStatus'] as String,
       userId: map['userId'] as String,
       orderedAt: map['orderedAt'] as int,
-      status: map['status'] as int,
+      status: map['status'] as String,
       totalPrice: map['totalPrice'] as num,
     );
   }
