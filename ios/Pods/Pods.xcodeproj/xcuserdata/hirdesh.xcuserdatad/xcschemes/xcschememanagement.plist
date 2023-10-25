@@ -174,11 +174,6 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>pay_ios.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
 		<key>razorpay-pod.xcscheme</key>
 		<dict>
 			<key>isShown</key>

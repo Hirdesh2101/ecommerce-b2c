@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 import 'package:ecommerce_major_project/main.dart';
 import 'package:ecommerce_major_project/models/product.dart';
-import 'package:ecommerce_major_project/providers/user_provider.dart';
 import 'package:ecommerce_major_project/features/cart/services/cart_services.dart';
 import 'package:ecommerce_major_project/features/product_details/services/product_detail_services.dart';
 
@@ -12,7 +10,8 @@ class OrderSummaryProduct extends StatefulWidget {
   final Product product;
   final String color;
   final String size;
-  const OrderSummaryProduct({required this.index, super.key,required this.product,required this.color,required this.size});
+  final num productQuantity;
+  const OrderSummaryProduct({required this.index, super.key,required this.product,required this.color,required this.size,required this.productQuantity});
 
   @override
   State<OrderSummaryProduct> createState() => _OrderSummaryProductState();
@@ -43,8 +42,6 @@ class _OrderSummaryProductState extends State<OrderSummaryProduct> {
   Widget build(BuildContext context) {
     // fetching the particular product
     //final productCart = context.watch<UserProvider>().user.cart[widget.index];
-    final productQuantity =
-        context.watch<UserProvider>().user.cart[widget.index]['quantity'];
     //final product = Product.fromJson(productCart['product']);
     // final quantity = productCart['quantity'];
 
@@ -98,7 +95,7 @@ class _OrderSummaryProductState extends State<OrderSummaryProduct> {
               width: mq.width * .57,
               padding: EdgeInsets.only(left: mq.width * .025),
               child: Text(
-                "Quantity x$productQuantity",
+                "Quantity x${widget.productQuantity}",
                 style: const TextStyle(fontSize: 13),
               ),
             ),
