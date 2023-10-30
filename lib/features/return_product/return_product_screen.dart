@@ -28,6 +28,7 @@ class _ReturnProductScreenState extends State<ReturnProductScreen> {
       images = result;
     });
   }
+
   @override
   void dispose() {
     descriptionController.dispose();
@@ -38,8 +39,8 @@ class _ReturnProductScreenState extends State<ReturnProductScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: SafeArea(
-          child: SingleChildScrollView(
-              child: Form(
+      child: SingleChildScrollView(
+        child: Form(
           key: _returnProuctFormKey,
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: mq.width * .03),
@@ -111,7 +112,8 @@ class _ReturnProductScreenState extends State<ReturnProductScreen> {
                     onPressed: () {},
                     style: ElevatedButton.styleFrom(
                         // alignment: Alignment.center,
-                        backgroundColor: const Color.fromARGB(255, 255, 88, 88)),
+                        backgroundColor:
+                            const Color.fromARGB(255, 255, 88, 88)),
                     child: const Text(
                       "Return Product",
                       style: TextStyle(color: Colors.white),
@@ -119,8 +121,8 @@ class _ReturnProductScreenState extends State<ReturnProductScreen> {
               ],
             ),
           ),
-              ),
-            ),
-        ));
+        ),
+      ),
+    ));
   }
 }
