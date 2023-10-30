@@ -44,13 +44,20 @@ class _TopCategoriesState extends State<TopCategories>
 
   @override
   void initState() {
-    super.initState();
     fetchCategory();
+    fetchAdvertisement();
+    super.initState();
   }
 
   void navigateToCategoryPage(BuildContext context, String category) {
     Navigator.pushNamed(context, CategoryDealsScreen.routeName,
         arguments: category);
+  }
+
+  fetchAdvertisement() async {
+    await homeServices.fetchAdvertisement(
+      context: context,
+    );
   }
 
   fetchCategory() async {
@@ -337,7 +344,7 @@ class _TopCategoriesState extends State<TopCategories>
                                                               .format(product
                                                                       .varients[0]
                                                                   [
-                                                                  'markedprice']),
+                                                                  'markedPrice']),
                                                           style: TextStyle(
                                                             fontSize: 14,
                                                             color: Colors
@@ -354,7 +361,7 @@ class _TopCategoriesState extends State<TopCategories>
                                                         ),
                                                         TextSpan(
                                                           text:
-                                                              "${calculatePercentageDiscount(product.varients[0]['price'], product.varients[0]['markedprice'])}% off",
+                                                              "${calculatePercentageDiscount(product.varients[0]['price'], product.varients[0]['markedPrice'])}% off",
                                                           style:
                                                               const TextStyle(
                                                             fontSize: 14,

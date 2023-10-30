@@ -5,16 +5,9 @@ import 'package:ecommerce_major_project/main.dart';
 import 'package:ecommerce_major_project/constants/global_variables.dart';
 import 'package:ecommerce_major_project/features/home/screens/top_categories.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends StatelessWidget {
   static const String routeName = '/home';
   const HomeScreen({super.key});
-
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  
 
   @override
   Widget build(BuildContext context) {
