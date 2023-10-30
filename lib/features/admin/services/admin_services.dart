@@ -39,7 +39,6 @@ class AdminServices {
         brandName: brandName,
         images: imageUrls,
         category: category,
-        //TODO ask for input
         detailDescription: [],
         warranty: '',
         varients: [],
@@ -102,7 +101,6 @@ class AdminServices {
             // }
 
             for (Map<String, dynamic> item in data) {
-              // print(item['name']);
               productList.add(Product.fromJson(item));
             }
           },
