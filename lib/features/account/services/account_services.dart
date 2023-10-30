@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:ecommerce_major_project/models/returns.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -142,6 +143,50 @@ class AccountServices {
           text: "Following Error in fetching Products [home]: $e");
     }
     return orderList;
+  }
+  Future<List<Return>?> fetchMyReturns({required BuildContext context}) async {
+    final String? authToken = await GlobalVariables.getFirebaseAuthToken();
+    List<Return>? returnList = [];
+    try {
+      http.Response res =
+          await http.get(Uri.parse('$uri/api/returns/me'), headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': '$authToken',
+      });
+
+      if (context.mounted) {
+        // print(
+        //     "quantity : \n\n${jsonEncode(jsonDecode(res.body)[0]).runtimeType}");
+        // print("response : \n\n${jsonDecode(res.body)[1]}");
+        httpErrorHandle(
+          response: res,
+          context: context,
+          onSuccess: () {
+            // for (Map<String, dynamic> item in data) {
+            //   // print(item['name']);
+            //   orderList.add(Order.fromJson(item));
+            // }
+            for (int i = 0; i < jsonDecode(res.body).length; i++) {
+              returnList.add(
+                Return.fromJson(
+                  jsonEncode(
+                    jsonDecode(res.body)[i],
+                  ),
+                ),
+              );
+            }
+          },
+        );
+        // print("response  : \n\n${orderList[0]}");
+        // print("price type : \n\n${orderList[0].price.runtimeType}");
+        // print("quantity type : \n\n${orderList[0].quantity.runtimeType}");
+      }
+    } catch (e) {
+      showSnackBar(
+          context: context,
+          text: "Following Error in fetching Products [home]: $e");
+    }
+    return returnList;
   }
 
   void logOut(BuildContext context) async {

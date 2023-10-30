@@ -9,6 +9,7 @@ class Order {
   final String status;
   final num totalPrice;
   final String paymentStatus;
+  final List<dynamic> returnProducts;
 
   Order({
     required this.id,
@@ -18,7 +19,8 @@ class Order {
     required this.orderedAt,
     required this.status,
     required this.totalPrice,
-    required this.paymentStatus
+    required this.paymentStatus,
+    required this.returnProducts,
   });
 
   Map<String, dynamic> toMap() {
@@ -30,7 +32,8 @@ class Order {
       'orderedAt': orderedAt,
       'status': status,
       'totalPrice': totalPrice,
-      'paymentStatus': paymentStatus
+      'paymentStatus': paymentStatus,
+      'returnProducts': returnProducts
     };
   }
 
@@ -39,6 +42,12 @@ class Order {
       id: map['_id'] as String,
       products: List<Map<String, dynamic>>.from(
         map['products']?.map(
+              (x) => Map<String, dynamic>.from(x),
+            ) ??
+            [],
+      ),
+      returnProducts: List<Map<String, dynamic>>.from(
+        map['returnProducts']?.map(
               (x) => Map<String, dynamic>.from(x),
             ) ??
             [],

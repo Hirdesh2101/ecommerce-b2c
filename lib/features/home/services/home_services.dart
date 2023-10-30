@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:ecommerce_major_project/features/cart/providers/cart_provider.dart';
+import 'package:ecommerce_major_project/features/home/providers/ads_provider.dart';
 import 'package:ecommerce_major_project/features/home/providers/category_provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -85,6 +86,34 @@ class HomeServices {
           onSuccess: () {
             categoryProvider.setCategories(data);
             categoryProvider.setTab(data.length);
+          },
+        );
+      }
+    } catch (e) {
+      showSnackBar(
+          context: context,
+          text: "Following Error in fetching Products [home]: $e");
+    }
+  }
+  Future<void> fetchAdvertisement(
+      {required BuildContext context}) async {
+    final String? authToken = await GlobalVariables.getFirebaseAuthToken();
+    final adsProvider = Provider.of<AdsProvider>(context, listen: false);
+    String tokenValue = '$authToken';
+    try {
+      http.Response res = await http
+          .get(Uri.parse('$uri/api/advertisement'), headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': tokenValue,
+      });
+
+      var data = jsonDecode(res.body);
+      if (context.mounted) {
+        httpErrorHandle(
+          response: res,
+          context: context,
+          onSuccess: () {
+            adsProvider.setAds(data);
           },
         );
       }

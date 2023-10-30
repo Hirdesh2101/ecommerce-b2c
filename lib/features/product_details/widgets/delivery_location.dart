@@ -55,8 +55,8 @@ class _DeliveyLocationState extends State<DeliveyLocation> {
   }
 
   Future<void> calculateDeliveryCharge(String pincode) async {
-    dynamic charges = await addressServices.getDeliveryCharges(
-        context,pincode);
+    dynamic charges =
+        await addressServices.getDeliveryCharges(context, pincode);
     setState(() {
       deliveryAmount = charges['deliveryCharges'] as int;
       date = charges['deliveryDate'];
@@ -70,8 +70,8 @@ class _DeliveyLocationState extends State<DeliveyLocation> {
           "${flatBuildingController.text}, ${areaController.text}, ${cityController.text} - ${pincodeController.text}";
       addressServices.saveUserAddress(
           context: context, address: addressToBeUsed);
-           int indexOfHyphen = addressToBeUsed.lastIndexOf('-');
-      calculateDeliveryCharge( addressToBeUsed.substring(indexOfHyphen + 1));
+      int indexOfHyphen = addressToBeUsed.lastIndexOf('-');
+      calculateDeliveryCharge(addressToBeUsed.substring(indexOfHyphen + 1));
       Navigator.of(context).pop();
     }
   }
@@ -192,7 +192,7 @@ class _DeliveyLocationState extends State<DeliveyLocation> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    '${deliveryAmount == 0 ? 'Free Delivery' : "Charges: ${indianRupeesFormat.format(double.parse(deliveryAmount.toString()))}"} | Delivery by ${formatDateTime(DateTime.parse(date))}',
+                    '${deliveryAmount == 0 ? 'Free Delivery' : "Charges: ${indianRupeesFormat.format(double.parse(deliveryAmount.toString()))}"} | Delivery by ${formatDateTime(DateTime.parse(date.toString()))}',
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
                         fontWeight: FontWeight.w600,

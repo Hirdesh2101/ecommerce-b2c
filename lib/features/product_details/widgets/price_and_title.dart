@@ -89,7 +89,7 @@ class TitleAndPrice extends StatelessWidget {
                         child: SizedBox(width: mq.width * .02),
                       ),
                       TextSpan(
-                        text: indianRupeesFormat.format(product.varients[colorVarient]['markedprice']),
+                        text: indianRupeesFormat.format(product.varients[colorVarient]['markedPrice']),
                         style: TextStyle(
                           fontSize: 18,
                           color: Colors.grey.shade700,
@@ -100,7 +100,7 @@ class TitleAndPrice extends StatelessWidget {
                         child: SizedBox(width: mq.width * .02),
                       ),
                       TextSpan(
-                        text: "${calculatePercentageDiscount(product.varients[colorVarient]['price'],product.varients[colorVarient]['markedprice'])}% off",
+                        text: "${calculatePercentageDiscount(product.varients[colorVarient]['price'],product.varients[colorVarient]['markedPrice'])}% off",
                         style: const TextStyle(
                           fontSize: 25,
                           fontWeight: FontWeight.w600,

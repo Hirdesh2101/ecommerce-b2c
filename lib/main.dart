@@ -1,4 +1,5 @@
 import 'package:ecommerce_major_project/features/cart/providers/cart_provider.dart';
+import 'package:ecommerce_major_project/features/home/providers/ads_provider.dart';
 import 'package:ecommerce_major_project/features/home/providers/category_provider.dart';
 import 'package:ecommerce_major_project/features/splash/loading_splash.dart';
 import 'package:ecommerce_major_project/features/splash/splash_screen.dart';
@@ -58,6 +59,9 @@ void main() async {
         ),
         ChangeNotifierProvider(
           create: (context) => CategoryProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => AdsProvider(),
         ),
       ],
       child: MyApp(
