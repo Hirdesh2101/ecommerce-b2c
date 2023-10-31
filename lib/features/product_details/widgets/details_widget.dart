@@ -66,7 +66,7 @@ class DetilsWidget extends StatelessWidget {
         ),
         SizedBox(height: mq.width * .01),
         Text(
-          product.warranty,
+          product.warranty['details'],
           style: const TextStyle(color: Colors.black),
         ),
       ],

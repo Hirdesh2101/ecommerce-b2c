@@ -40,7 +40,8 @@ class AdminServices {
         images: imageUrls,
         category: category,
         detailDescription: [],
-        warranty: '',
+        warranty: {},
+        returnPolicy: {},
         varients: [],
         totalQuantity: 0,
       );

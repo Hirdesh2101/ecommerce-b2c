@@ -30,8 +30,8 @@ class OrderDetailsScreen extends StatefulWidget {
 class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
   int currentStep = 0;
   final AdminServices adminServices = AdminServices();
-  final int allowReturnProductDays = 15;
-  bool allowReturn = false;
+  //final int allowReturnProductDays = 15;
+  //bool allowReturn = false;
   bool viewMoreDetails = true;
   final RefundServices refundServices = RefundServices();
   final indianRupeesFormat = NumberFormat.currency(
@@ -55,11 +55,9 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
     copy = deepCopy(widget.order.products);
     returnCopy = List.from(widget.order.returnProducts);
     for (var returnProduct in returnCopy) {
-      var order = copy.firstWhere(
-          (order) =>
-              order['product']['_id'].toString() ==
-              returnProduct['product'].toString(),
-          orElse: () => null);
+      var order = copy.firstWhere((order) =>
+          order['product']['_id'].toString() ==
+          returnProduct['product'].toString());
       if (order != null) {
         order['quantity'] -= returnProduct['quantity'];
         if (order['quantity'] == 0) {
@@ -68,6 +66,18 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
         }
       }
     }
+    copy = copy.where((product) {
+      if (product['product']['returnPolicy'] != null) {
+        DateTime dateOfPurchase =
+            DateTime.fromMillisecondsSinceEpoch(widget.order.orderedAt);
+        DateTime presentDate = DateTime.fromMillisecondsSinceEpoch(
+            DateTime.now().millisecondsSinceEpoch);
+        int days = daysBetween(dateOfPurchase, presentDate);
+        return days <= product['product']['returnPolicy']['days'];
+      }else{
+      return false;
+      }
+    }).toList();
     currentStep = getCurrentStep(widget.order.status);
     steps = widget.order.status.contains('ORDER_RETURN')
         ? List.from([
@@ -185,15 +195,6 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    DateTime dateOfPurchase =
-        DateTime.fromMillisecondsSinceEpoch(widget.order.orderedAt);
-    DateTime presentDate = DateTime.fromMillisecondsSinceEpoch(
-        DateTime.now().millisecondsSinceEpoch);
-
-    daysBetween(dateOfPurchase, presentDate) <= allowReturnProductDays
-        ? allowReturn = true
-        : allowReturn = false;
-
     final user = Provider.of<UserProvider>(context).user;
     return Scaffold(
       appBar: GlobalVariables.getAppBar(
@@ -338,40 +339,52 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                   ? const SizedBox.shrink()
                   : widget.order.status == "ORDER_DELIVERED" && copy.isNotEmpty
                       ? ElevatedButton(
-                          onPressed: allowReturn
-                              ? () {
-                                  if (widget.order.products.length == 1 &&
-                                      widget.order.products[0]['quantity'] ==
-                                          1) {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (_) => ReturnProductScreen(
-                                                  order: widget.order,
-                                                  selectedProduct:
-                                                      widget.order.products,
-                                                )));
-                                  } else {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (_) => SelectReturnProduct(
-                                                copy: copy,
-                                                order: widget.order)));
-                                  }
-                                }
-                              : () {
-                                  // if you still want to complain flow in didilogflow chatbot
-                                  // you can mail the authorities or anything
-                                  showErrorSnackBar(
-                                      context: context,
-                                      text: "Return product timeline expired");
-                                },
+                          onPressed: () {
+                            if (widget.order.products.length == 1 &&
+                                widget.order.products[0]['quantity'] == 1) {
+                              DateTime dateOfPurchase =
+                                  DateTime.fromMillisecondsSinceEpoch(
+                                      widget.order.orderedAt);
+                              DateTime presentDate =
+                                  DateTime.fromMillisecondsSinceEpoch(
+                                      DateTime.now().millisecondsSinceEpoch);
+                              int days =
+                                  daysBetween(dateOfPurchase, presentDate);
+                              if (days <=
+                                  widget.order.products[0]['returnPolicy']
+                                      ['days']) {
+                                showErrorSnackBar(
+                                    context: context,
+                                    text: "Return product timeline expired");
+                                return;
+                              }
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => ReturnProductScreen(
+                                            order: widget.order,
+                                            selectedProduct:
+                                                widget.order.products,
+                                          )));
+                            } else {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => SelectReturnProduct(
+                                          copy: copy, order: widget.order)));
+                            }
+                          },
+
+                          // if you still want to complain flow in didilogflow chatbot
+                          // you can mail the authorities or anything
+                          // showErrorSnackBar(
+                          //     context: context,
+                          //     text: "Return product timeline expired");
+                          //},
                           style: ElevatedButton.styleFrom(
                               // alignment: Alignment.center,
-                              backgroundColor: allowReturn
-                                  ? const Color.fromARGB(255, 255, 100, 100)
-                                  : const Color.fromARGB(255, 255, 168, 168)),
+                              backgroundColor:
+                                  const Color.fromARGB(255, 255, 100, 100)),
                           child: const Text(
                             "Return Product",
                             style: TextStyle(color: Colors.white),

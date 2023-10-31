@@ -144,7 +144,8 @@ class HomeServices {
       category: '',
       detailDescription: [],
       varients: [],
-      warranty: '',
+      warranty: {},
+      returnPolicy: {},
       totalQuantity: 0,
     );
 

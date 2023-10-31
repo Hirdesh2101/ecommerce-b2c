@@ -1,20 +1,22 @@
 import 'package:ecommerce_major_project/main.dart';
+import 'package:ecommerce_major_project/models/product.dart';
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
 
 class DetailsWithICons extends StatelessWidget {
-  const DetailsWithICons({super.key});
+  const DetailsWithICons({super.key,required this.product});
+  final Product product;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        iconAndText(context, IconlyBold.swap, '7 Days Return',
-            '7 days return of product in case of Defective item, physical damage, wrong item or missing item.',
+        iconAndText(context, IconlyBold.swap, product.returnPolicy['title'],
+            product.returnPolicy['details'],
             color: Colors.red),
-        iconAndText(context, IconlyBold.shield_done, '1 Year Warranty',
-            "1 Year warranty on the item in case of internal manufacturing issue.",
+        iconAndText(context, IconlyBold.shield_done, product.warranty['title'],
+            product.warranty['details'],
             color: Colors.green),
         iconAndText(context, IconlyBold.star, 'Popular',
             'Popular item in this category.',
@@ -35,6 +37,7 @@ class DetailsWithICons extends StatelessWidget {
                 return Container(
                   padding: const EdgeInsets.all(10),
                   child: Column(
+                    mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(
@@ -62,10 +65,13 @@ class DetailsWithICons extends StatelessWidget {
                       SizedBox(height: mq.width * .01),
                       const Divider(thickness: 2),
                       SizedBox(height: mq.width * .03),
-                      Text(
-                        description,
-                        style: const TextStyle(
-                          fontSize: 14,
+                      SizedBox(
+                        height: mq.height * .1,
+                        child: Text(
+                          description,
+                          style: const TextStyle(
+                            fontSize: 14,
+                          ),
                         ),
                       ),
                     ],
