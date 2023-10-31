@@ -97,6 +97,7 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       scrollBehavior: AppScrollBehavior(),
       title: 'Ecommerce App',
+      navigatorKey: GlobalVariables.navigatorKey,
       theme: ThemeData(
         scaffoldBackgroundColor: GlobalVariables.backgroundColor,
         fontFamily: 'Poppins',

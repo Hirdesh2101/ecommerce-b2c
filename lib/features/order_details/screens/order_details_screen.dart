@@ -6,10 +6,8 @@ import 'package:ecommerce_major_project/features/return_product/services/refund_
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-
 import 'package:ecommerce_major_project/common/widgets/custom_button.dart';
 import 'package:ecommerce_major_project/constants/global_variables.dart';
-import 'package:ecommerce_major_project/constants/utils.dart';
 import 'package:ecommerce_major_project/features/admin/services/admin_services.dart';
 import 'package:ecommerce_major_project/features/search/screens/search_screen.dart';
 import 'package:ecommerce_major_project/features/search_delegate/my_search_screen.dart';
@@ -74,95 +72,56 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
             DateTime.now().millisecondsSinceEpoch);
         int days = daysBetween(dateOfPurchase, presentDate);
         return days <= product['product']['returnPolicy']['days'];
-      }else{
-      return false;
+      } else {
+        return false;
       }
     }).toList();
     currentStep = getCurrentStep(widget.order.status);
-    steps = widget.order.status.contains('ORDER_RETURN')
+    steps = widget.order.status.contains('ORDER_CANCELLED')
         ? List.from([
             Step(
-              title: const Text("ORDER_RETURN_REQUESTED"),
-              content: const Text("Your order is yet to be delivered"),
-              isActive: currentStep > 0,
-              state: currentStep > 0 ? StepState.complete : StepState.indexed,
-            ),
-            Step(
-              title: const Text("ORDER_RETURN_ACCEPTED"),
-              content: const Text("Your order is yet to be delivered"),
-              isActive: currentStep > 0,
-              state: currentStep > 0 ? StepState.complete : StepState.indexed,
-            ),
-            Step(
-              title: const Text("ORDER_RETURN_REJECTED"),
-              content: const Text("Your order is yet to be delivered"),
-              isActive: currentStep > 0,
-              state: currentStep > 0 ? StepState.complete : StepState.indexed,
-            ),
-            Step(
-              title: const Text("ORDER_RETURN_PENDING"),
-              content: const Text("Your order is yet to be delivered"),
-              isActive: currentStep > 0,
-              state: currentStep > 0 ? StepState.complete : StepState.indexed,
-            ),
-            Step(
-              title: const Text("ORDER_RETURN_COMPLETE"),
-              content: const Text("Your order is yet to be delivered"),
-              isActive: currentStep > 0,
-              state: currentStep > 0 ? StepState.complete : StepState.indexed,
+              title: const Text("ORDER_CANCELLED"),
+              content: const Text("Your order is cancelled"),
+              isActive: currentStep >= 0,
+              state: currentStep >= 0 ? StepState.complete : StepState.indexed,
             ),
           ])
-        : widget.order.status.contains('ORDER_CANCELLED')
-            ? List.from([
-                Step(
-                  title: const Text("ORDER_CANCELLED"),
-                  content: const Text("Your order is cancelled"),
-                  isActive: currentStep >= 0,
-                  state:
-                      currentStep >= 0 ? StepState.complete : StepState.indexed,
-                ),
-              ])
-            : List.from([
-                Step(
-                  title: const Text("ORDER_RECEIVED"),
-                  content: const Text("Your order is yet to be delivered"),
-                  isActive: currentStep > 0,
-                  state:
-                      currentStep > 0 ? StepState.complete : StepState.indexed,
-                ),
-                Step(
-                  // title: Text("Shipping"),
-                  title: const Text("ORDER_PACKING"),
-                  content: const Text("Your are order has been shipped"),
-                  isActive: currentStep > 1,
-                  state:
-                      currentStep > 1 ? StepState.complete : StepState.indexed,
-                ),
-                Step(
-                  title: const Text("ORDER_IN_TRANSIT"),
-                  content:
-                      const Text("Your order has been delievered successfully"),
-                  isActive: currentStep > 2,
-                  state:
-                      currentStep > 2 ? StepState.complete : StepState.indexed,
-                ),
-                Step(
-                  // title: Text("Completed"),
-                  title: const Text("ORDER_OUT_FOR_DELIVERY"),
-                  content: const Text("Your order is completed."),
-                  isActive: currentStep >= 3,
-                  state:
-                      currentStep >= 3 ? StepState.complete : StepState.indexed,
-                ),
-                Step(
-                  // title: Text("Completed"),
-                  title: const Text("ORDER_DELIVERED"),
-                  content: const Text("Your order is completed."),
-                  isActive: currentStep >= 3,
-                  state:
-                      currentStep >= 3 ? StepState.complete : StepState.indexed,
-                ),
-              ]);
+        : List.from([
+            Step(
+              title: const Text("ORDER_RECEIVED"),
+              content: const Text("Your order is yet to be delivered"),
+              isActive: currentStep > 0,
+              state: currentStep > 0 ? StepState.complete : StepState.indexed,
+            ),
+            Step(
+              // title: Text("Shipping"),
+              title: const Text("ORDER_PACKING"),
+              content: const Text("Your are order has been shipped"),
+              isActive: currentStep > 1,
+              state: currentStep > 1 ? StepState.complete : StepState.indexed,
+            ),
+            Step(
+              title: const Text("ORDER_IN_TRANSIT"),
+              content:
+                  const Text("Your order has been delievered successfully"),
+              isActive: currentStep > 2,
+              state: currentStep > 2 ? StepState.complete : StepState.indexed,
+            ),
+            Step(
+              // title: Text("Completed"),
+              title: const Text("ORDER_OUT_FOR_DELIVERY"),
+              content: const Text("Your order is completed."),
+              isActive: currentStep >= 3,
+              state: currentStep >= 3 ? StepState.complete : StepState.indexed,
+            ),
+            Step(
+              // title: Text("Completed"),
+              title: const Text("ORDER_DELIVERED"),
+              content: const Text("Your order is completed."),
+              isActive: currentStep >= 4,
+              state: currentStep >= 4 ? StepState.complete : StepState.indexed,
+            ),
+          ]);
     super.initState();
   }
 
@@ -342,22 +301,6 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                           onPressed: () {
                             if (widget.order.products.length == 1 &&
                                 widget.order.products[0]['quantity'] == 1) {
-                              DateTime dateOfPurchase =
-                                  DateTime.fromMillisecondsSinceEpoch(
-                                      widget.order.orderedAt);
-                              DateTime presentDate =
-                                  DateTime.fromMillisecondsSinceEpoch(
-                                      DateTime.now().millisecondsSinceEpoch);
-                              int days =
-                                  daysBetween(dateOfPurchase, presentDate);
-                              if (days <=
-                                  widget.order.products[0]['returnPolicy']
-                                      ['days']) {
-                                showErrorSnackBar(
-                                    context: context,
-                                    text: "Return product timeline expired");
-                                return;
-                              }
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -523,21 +466,6 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
         break;
       case 'ORDER_DELIVERED':
         setStatus = 4;
-        break;
-      case 'ORDER_RETURN_REQUESTED':
-        setStatus = 0;
-        break;
-      case 'ORDER_RETURN_ACCEPTED':
-        setStatus = 1;
-        break;
-      case 'ORDER_RETURN_REJECTED':
-        setStatus = 1;
-        break;
-      case 'ORDER_RETURN_COMPLETE':
-        setStatus = 3;
-        break;
-      case 'ORDER_RETURN_PENDING':
-        setStatus = 2;
         break;
       default:
         setStatus = 0;

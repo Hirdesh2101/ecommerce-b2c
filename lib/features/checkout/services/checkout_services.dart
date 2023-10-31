@@ -182,29 +182,22 @@ class CheckoutServices {
   Future<void> updateOrder({
     required BuildContext context,
     required String orderId,
-    required String razorPayOrderId,
-    required String paymentId,
-    required int paymentAt,
-    String? signatureId,
+    required String status,
+    required String paymentStatus,
   }) async {
-    
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
     final String? authToken = await GlobalVariables.getFirebaseAuthToken();
 
     try {
       http.Response res = await http.put(
-        Uri.parse('$uri/api/update-order/$orderId'),
+        Uri.parse('$uri/api/update-order-status'),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
           'Authorization': '$authToken',
         },
         body: jsonEncode({
-          'cart': userProvider.user.cart,
           'orderId': orderId,
-          'razorPayOrderId': razorPayOrderId,
-          'paymentId': paymentId,
-          'orderedAt': paymentAt,
-          'signatureId': signatureId,
+          'status': status,
+          'payment_status': paymentStatus
         }),
       );
 
@@ -214,18 +207,7 @@ class CheckoutServices {
           response: res,
           context: context,
           onSuccess: () {
-            // success on the payment will redirect the user
-            // to the payment successful dialog, order placed
-            // clear the cart
-            // and add the address as the current address if one didn't exist before
-            // add the payment successful dialog here!
-            // the gif and showDialog
-            
-            showSnackBar(context: context, text: "Your order has been placed");
-            User user = userProvider.user.copyWith(
-              cart: [],
-            );
-            userProvider.setUserFromModel(user);
+            //TODO ADD SOMETHING MAYBEs
           },
         );
       }

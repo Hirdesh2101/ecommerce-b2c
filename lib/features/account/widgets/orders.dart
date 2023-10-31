@@ -51,11 +51,10 @@ class _OrdersState extends State<Orders> {
                 onTap: widget.orders == null || widget.orders!.isEmpty
                     ? null
                     : () {
-                        Navigator.pushNamed(context, AllOrdersScreen.routeName,
-                            arguments: widget.orders);
-                        // Navigator.of(context).push(MaterialPageRoute(
-                        //     builder: (context) =>
-                        //         AllOrdersScreen(allOrders: orders)));
+                        Navigator.pushNamed(
+                          context,
+                          AllOrdersScreen.routeName,
+                        );
                       },
                 child: Container(
                   padding: EdgeInsets.only(right: mq.width * 0.04),

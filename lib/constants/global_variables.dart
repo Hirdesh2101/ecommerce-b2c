@@ -18,6 +18,7 @@ class GlobalVariables {
   static const String razorPayOrderApi = "https://api.razorpay.com/v1/orders";
   static const String razorPayTestKey = "rzp_test_7NBmERXaABkUpY";
   static const String razorPaySecretKey = "TO BE UPDATED";
+  static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
   // COLORS
   static const appBarGradient = LinearGradient(

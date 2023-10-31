@@ -122,8 +122,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         goToPayment = true;
       });
     }
-
-    
   }
 
   @override
@@ -260,18 +258,17 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                       recentOrderId = options["description"];
 
                                       _razorpay.open(options);
-                                      
                                     } catch (e) {
                                       recentOrderId = null;
                                       setState(() {
                                         paymentProcess = false;
                                       });
-                                      
-                                     if (context.mounted) {
-                                       ScaffoldMessenger.of(context)
-                                          .showSnackBar(SnackBar(
-                                              content: Text("Error : $e")));
-                                     }
+
+                                      if (context.mounted) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(SnackBar(
+                                                content: Text("Error : $e")));
+                                      }
                                     }
                                   } else {
                                     recentOrderId = null;
@@ -279,7 +276,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                       paymentProcess = false;
                                     });
                                     paymentProcess = false;
-                                    
                                   }
                                 } else {
                                   setState(() {
@@ -484,6 +480,11 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   }
 
   void _handlePaymentError(PaymentFailureResponse response) {
+    CheckoutServices().updateOrder(
+        context: context,
+        orderId: recentOrderId ?? '',
+        status: 'ORDER_CANCELLED',
+        paymentStatus: 'PAYMENT_FAILURE');
     OrderDialog.showOrderStatusDialog(
       context,
       subtitle:
@@ -493,8 +494,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   }
 
   void _handleExternalWallet(ExternalWalletResponse response) {
-    
-
     OrderDialog.showOrderStatusDialog(
       context,
       isPaymentSuccess: true,

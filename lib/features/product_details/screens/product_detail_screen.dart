@@ -150,7 +150,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             final tabProvider =
                 Provider.of<TabProvider>(context, listen: false);
             tabProvider.setTab(2);
-            Navigator.of(context).popUntil((route) => route.isFirst);
+            GlobalVariables.navigatorKey.currentState!.popUntil((route) => route.isFirst);
             //Navigator.pushNamed(context, CartScreen.);
           },
           actionLabel: "View");
