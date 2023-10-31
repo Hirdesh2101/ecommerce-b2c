@@ -18,7 +18,7 @@ class AuthService {
     auth.User currentUser = auth.FirebaseAuth.instance.currentUser!;
     var userProvider = Provider.of<UserProvider>(context, listen: false);
     try {
-      print("<============= signUpUser called ===============>");
+      
       User user = User(
           id: '',
           name: currentUser.displayName ?? "",
@@ -56,9 +56,9 @@ class AuthService {
             });
       }
     } catch (e) {
-      print("Error occured in Signing up user : $e");
+      
       await auth.FirebaseAuth.instance.currentUser!.delete();
-      showSnackBar(context: context, text: "Please try again!");
+      if (context.mounted) showSnackBar(context: context, text: "Please try again!");
     }
   }
 
@@ -67,7 +67,7 @@ class AuthService {
     var userProvider = Provider.of<UserProvider>(context, listen: false);
     final String? authToken = await GlobalVariables.getFirebaseAuthToken();
     try {
-      print("<============= signInUser called ===============>");
+      
 
       if (context.mounted) {
         http.Response userRes = await http.get(
@@ -85,8 +85,8 @@ class AuthService {
         }
       }
     } catch (e) {
-      print("Error occured in Signing in user : $e");
-      showSnackBar(context: context, text: e.toString());
+      
+      if (context.mounted) showSnackBar(context: context, text: e.toString());
     }
   }
 
@@ -189,8 +189,8 @@ class AuthService {
       }
     } catch (e) {
       userProvider.setLoading(false);
-      print("Error occured in signing up user : $e");
-      showSnackBar(context: context, text: e.toString());
+      
+      if (context.mounted) showSnackBar(context: context, text: e.toString());
     }
   }
 }
@@ -218,7 +218,7 @@ class AuthService {
 
 //dont use context across asynchronous gaps
 // if (context.mounted) {
-//   print(res.body);
+//   
 //   httpErrorHandle(
 //     response: res,
 //     context: context,

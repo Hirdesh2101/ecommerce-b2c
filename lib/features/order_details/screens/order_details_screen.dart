@@ -59,7 +59,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
           (order) =>
               order['product']['_id'].toString() ==
               returnProduct['product'].toString(),
-          orElse: null);
+          orElse: () => null);
       if (order != null) {
         order['quantity'] -= returnProduct['quantity'];
         if (order['quantity'] == 0) {

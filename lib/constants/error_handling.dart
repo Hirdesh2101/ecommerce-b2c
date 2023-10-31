@@ -19,14 +19,14 @@ void httpErrorHandle({
     //Client error responses (400 – 499)
     //400 Bad Request
     case < 500 && > 400:
-      print('In 400 error: ${jsonDecode(response.body)['msg']}');
+      
       showSnackBar(context: context, text: jsonDecode(response.body)['msg']);
       break;
 
     //Server error responses (500 – 599)
     //500 Internal Serveer Error
     case < 600 && > 500:
-      print('In 500 error: ${jsonDecode(response.body)['error']}');
+      
       showSnackBar(context: context, text: jsonDecode(response.body)['error']);
       break;
 

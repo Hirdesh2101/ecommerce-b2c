@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:ecommerce_major_project/features/profile/screens/profileScreen.dart';
+import 'package:ecommerce_major_project/features/profile/screens/profilescreen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
@@ -21,7 +21,7 @@ class _BelowAppBarState extends State<BelowAppBar> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<UserProvider>(context).user;
-    print("\n-------------------- ImageURL  : ${user.imageUrl}");
+    
     return Container(
       padding: EdgeInsets.only(
         left: mq.width * .035,
@@ -173,9 +173,6 @@ class _BelowAppBarState extends State<BelowAppBar> {
                                 // function here
                                 // APIs.updateProfilePicture(File(_image!));
 
-                                print(
-                                    "\nImage path =====>${image.path} ---- Mimetype ====> ${image.mimeType}");
-
                                 //hiding bottomsheet
                                 Navigator.pop(context);
                                 // showSnackBar(
@@ -217,8 +214,8 @@ class _BelowAppBarState extends State<BelowAppBar> {
                                 //hiding bottomSheet
                                 Navigator.pop(context);
                               }
-                              print("\n\n\n");
-                              print("Image path =====>${image.path}");
+                              
+                              
                             }
                           },
                           style: ElevatedButton.styleFrom(

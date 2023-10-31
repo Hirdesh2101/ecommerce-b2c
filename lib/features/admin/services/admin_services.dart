@@ -69,7 +69,7 @@ class AdminServices {
         );
       }
     } catch (e) {
-      showSnackBar(context: context, text: e.toString());
+       if (context.mounted) showSnackBar(context: context, text: e.toString());
     }
   }
 
@@ -107,7 +107,7 @@ class AdminServices {
         );
       }
     } catch (e) {
-      showSnackBar(context: context, text: e.toString());
+      if (context.mounted) showSnackBar(context: context, text: e.toString());
     }
     return productList;
   }
@@ -147,7 +147,7 @@ class AdminServices {
         );
       }
     } catch (e) {
-      showSnackBar(context: context, text: e.toString());
+      if (context.mounted) showSnackBar(context: context, text: e.toString());
     }
     return orderList;
   }
@@ -276,7 +276,7 @@ class AdminServices {
         );
       }
     } catch (e) {
-      showSnackBar(context: context, text: e.toString());
+      if (context.mounted) showSnackBar(context: context, text: e.toString());
     }
   }
 
@@ -314,9 +314,11 @@ class AdminServices {
         );
       }
     } catch (e) {
+      if (context.mounted){
       showSnackBar(
           context: context,
           text: "AdminServices getEarnings function error ${e.toString()}");
+      }
     }
   }
 
@@ -357,7 +359,7 @@ class AdminServices {
         );
       }
     } catch (e) {
-      showSnackBar(context: context, text: e.toString());
+      if (context.mounted) showSnackBar(context: context, text: e.toString());
     }
     return {
       "sales": sales,

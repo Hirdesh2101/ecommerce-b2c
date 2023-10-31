@@ -112,8 +112,6 @@ class _OrdersState extends State<Orders> {
                       itemBuilder: (context, index) {
                         // debugPrint(
                         //     " $index value of container width =======> ${mq.height * 0.025}");
-                        print(
-                            "\n -------------------> Fetched ORDERS are ${widget.orders![index].id}");
                         return GestureDetector(
                           onTap: () {
                             Navigator.pushNamed(

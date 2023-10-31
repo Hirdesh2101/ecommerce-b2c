@@ -1,5 +1,4 @@
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:ecommerce_major_project/constants/global_variables.dart';
 import 'package:ecommerce_major_project/features/home/providers/ads_provider.dart';
 import 'package:ecommerce_major_project/main.dart';
 import 'package:flutter/foundation.dart';

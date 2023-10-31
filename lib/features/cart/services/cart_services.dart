@@ -18,7 +18,7 @@ class CartServices {
     required String color,
     required String size,
   }) async {
-    print("========> Inside the remove from cart function");
+    
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     final String? authToken = await GlobalVariables.getFirebaseAuthToken();
     try {
@@ -43,17 +43,17 @@ class CartServices {
           response: res,
           context: context,
           onSuccess: () {
-            print("\nInside on success method..");
+            
             User user =
                 userProvider.user.copyWith(cart: jsonDecode(res.body)['cart']);
             userProvider.setUserFromModel(user);
-            print("\nUser cart now is ${user.cart}");
+            
           },
         );
       }
     } catch (e) {
-      print("\n========>Inside the catch block of remove from cart");
-      showSnackBar(context: context, text: e.toString());
+      
+      if (context.mounted) showSnackBar(context: context, text: e.toString());
     }
   }
 }

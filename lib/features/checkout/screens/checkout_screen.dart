@@ -123,7 +123,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       });
     }
 
-    print("Address to be used:\n==> $addressToBeUsed");
+    
   }
 
   @override
@@ -258,20 +258,20 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                       Map<String, dynamic> options =
                                           jsonDecode(response!.body);
                                       recentOrderId = options["description"];
-                                      print(
-                                          "Mongo Order Id from node: $recentOrderId");
 
                                       _razorpay.open(options);
-                                      print("Razor Pay opened...");
+                                      
                                     } catch (e) {
                                       recentOrderId = null;
                                       setState(() {
                                         paymentProcess = false;
                                       });
-                                      print("Try catch error in payment: $e");
-                                      ScaffoldMessenger.of(context)
+                                      
+                                     if (context.mounted) {
+                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(SnackBar(
                                               content: Text("Error : $e")));
+                                     }
                                     }
                                   } else {
                                     recentOrderId = null;
@@ -279,7 +279,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                       paymentProcess = false;
                                     });
                                     paymentProcess = false;
-                                    print(response?.statusCode);
+                                    
                                   }
                                 } else {
                                   setState(() {
@@ -480,13 +480,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       );
       recentOrderId = null;
       return;
-      //TODO: Need to create a new order and then update the order, later
     }
   }
 
   void _handlePaymentError(PaymentFailureResponse response) {
-    print(
-        "Payment Error ==> Code : ${response.code} \nMessage : ${response.message}  ");
     OrderDialog.showOrderStatusDialog(
       context,
       subtitle:
@@ -496,7 +493,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   }
 
   void _handleExternalWallet(ExternalWalletResponse response) {
-    print("External Wallet : ${response.walletName}");
+    
 
     OrderDialog.showOrderStatusDialog(
       context,

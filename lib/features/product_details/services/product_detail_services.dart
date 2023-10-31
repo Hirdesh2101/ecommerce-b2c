@@ -24,10 +24,10 @@ class ProductDetailServices {
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': tokenValue,
       });
-      print(res);
+      
 
       var data = jsonDecode(res.body);
-      print(data);
+      
       if (context.mounted) {
         httpErrorHandle(
           response: res,
@@ -38,9 +38,11 @@ class ProductDetailServices {
         );
       }
     } catch (e) {
-      showSnackBar(
+      if (context.mounted) {
+        showSnackBar(
           context: context,
           text: "Following Error in fetching Product : $e");
+      }
     }
     return product;
   }
@@ -65,16 +67,18 @@ class ProductDetailServices {
           context: context,
           onSuccess: () {
             for (Map<String, dynamic> item in data) {
-              // print(item['name']);
+              // 
               productList.add(Product.fromJson(item));
             }
           },
         );
       }
     } catch (e) {
-      showSnackBar(
+      if (context.mounted) {
+        showSnackBar(
           context: context,
           text: "Following Error in fetching Simialar Products: $e");
+      }
     }
     return productList;
   }
@@ -86,7 +90,7 @@ class ProductDetailServices {
     required String color,
     required String size
   }) async {
-    print("========> Inside the add to cart function");
+    
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     final String? authToken = await GlobalVariables.getFirebaseAuthToken();
     try {
@@ -113,7 +117,7 @@ class ProductDetailServices {
       // debugPrint(
       //     "\n\nuser token after http post request: ===> ${'$authToken'} ");
 
-      // print("\nPost request sent successfully...");
+      // 
 
       //use context ensuring the mounted property across async functions
       if (context.mounted) {
@@ -121,17 +125,17 @@ class ProductDetailServices {
           response: res,
           context: context,
           onSuccess: () {
-            print("\nInside on success method..");
+            
             User user =
                 userProvider.user.copyWith(cart: jsonDecode(res.body)['cart']);
             userProvider.setUserFromModel(user);
-            print("\nUser cart now is ${user.cart}");
+            
           },
         );
       }
     } catch (e) {
-      print("\n========>Inside the catch block");
-      showSnackBar(context: context, text: e.toString());
+      
+      if (context.mounted)showSnackBar(context: context, text: e.toString());
     }
   }
 
@@ -165,7 +169,7 @@ class ProductDetailServices {
         );
       }
     } catch (e) {
-      showSnackBar(context: context, text: e.toString());
+     if (context.mounted) showSnackBar(context: context, text: e.toString());
     }
   }
 }

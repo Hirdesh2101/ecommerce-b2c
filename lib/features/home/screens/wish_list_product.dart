@@ -67,7 +67,6 @@ class _WishListProductState extends State<WishListProduct> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    //TODO Add new button
                     // ElevatedButton(
                     //   onPressed: () {
                     //     if (widget.product.totalQuantity == 0) {

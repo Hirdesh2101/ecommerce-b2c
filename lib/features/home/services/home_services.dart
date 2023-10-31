@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:ecommerce_major_project/features/cart/providers/cart_provider.dart';
 import 'package:ecommerce_major_project/features/home/providers/ads_provider.dart';
 import 'package:ecommerce_major_project/features/home/providers/category_provider.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
@@ -34,13 +33,13 @@ class HomeServices {
       if (context.mounted) {
         // print(
         //     "quantity : \n\n${jsonEncode(jsonDecode(res.body)[0]).runtimeType}");
-        // print("response : \n\n${jsonDecode(res.body)[1]}");
+        // 
         httpErrorHandle(
           response: res,
           context: context,
           onSuccess: () {
             for (Map<String, dynamic> item in data) {
-              // print(item['name']);
+              // 
               productList.add(Product.fromJson(item));
             }
             //    for (int i = 0; i < jsonDecode(res.body).length; i++) {
@@ -54,14 +53,16 @@ class HomeServices {
             // }
           },
         );
-        // print("response  : \n\n${productList[0]}");
-        // print("price type : \n\n${productList[0].price.runtimeType}");
-        // print("quantity type : \n\n${productList[0].quantity.runtimeType}");
+        // 
+        // 
+        // 
       }
     } catch (e) {
-      showSnackBar(
+     if (context.mounted) {
+       showSnackBar(
           context: context,
           text: "Following Error in fetching Products [home]: $e");
+     }
     }
     return productList;
   }
@@ -90,9 +91,11 @@ class HomeServices {
         );
       }
     } catch (e) {
-      showSnackBar(
+      if (context.mounted) {
+        showSnackBar(
           context: context,
           text: "Following Error in fetching Products [home]: $e");
+      }
     }
   }
   Future<void> fetchAdvertisement(
@@ -118,9 +121,11 @@ class HomeServices {
         );
       }
     } catch (e) {
-      showSnackBar(
+     if (context.mounted) {
+       showSnackBar(
           context: context,
           text: "Following Error in fetching Products [home]: $e");
+     }
     }
   }
 
@@ -156,7 +161,7 @@ class HomeServices {
           context: context,
           onSuccess: () {
             // for (Map<String, dynamic> item in data) {
-            //   // print(item['name']);
+            //   // 
             //   // productList.add(Product.fromJson(item));
             //   product = Product.fromJson(item);
             // }
@@ -167,9 +172,11 @@ class HomeServices {
         );
       }
     } catch (e) {
-      showSnackBar(
+      if (context.mounted) {
+        showSnackBar(
           context: context,
           text: "Following Error in fetching deal-of-the-day : $e");
+      }
     }
     return product;
   }
@@ -205,14 +212,14 @@ class HomeServices {
             // }
 
             for (String item in data) {
-              // print(item['name']);
+              // 
               productNames.add(item);
             }
           },
         );
       }
     } catch (e) {
-      showSnackBar(context: context, text: e.toString());
+     if (context.mounted) showSnackBar(context: context, text: e.toString());
     }
     return productNames;
   }
@@ -235,7 +242,7 @@ class HomeServices {
           context: context,
           onSuccess: () {
             for (Map<String, dynamic> item in data) {
-              // print(item['name']);
+              // 
               productList.add(item['name']);
             }
 
@@ -244,7 +251,7 @@ class HomeServices {
         );
       }
     } catch (e) {
-      showSnackBar(context: context, text: e.toString());
+      if (context.mounted)showSnackBar(context: context, text: e.toString());
     }
     return productList;
   }
@@ -284,13 +291,15 @@ class HomeServices {
             User user =
                 userProvider.user.copyWith(searchHistory: searchHistoryFromDB);
             userProvider.setUserFromModel(user);
-            print("\nUser searchHistory now is ${user.searchHistory}");
+            
           },
         );
       }
     } catch (e) {
-      showSnackBar(
+      if (context.mounted) {
+        showSnackBar(
           context: context, text: "Error in addToHistory ${e.toString()}");
+      }
     }
   }
 
@@ -325,9 +334,11 @@ class HomeServices {
         );
       }
     } catch (e) {
-      showSnackBar(
+      if (context.mounted) {
+        showSnackBar(
           context: context,
           text: "Error in delete search history item ${e.toString()}");
+      }
     }
   }
 
@@ -365,14 +376,14 @@ class HomeServices {
             // }
 
             for (String item in data) {
-              // print(item['name']);
+              // 
               searchHistoryList.add(item);
             }
           },
         );
       }
     } catch (e) {
-      showSnackBar(context: context, text: e.toString());
+      if (context.mounted)showSnackBar(context: context, text: e.toString());
     }
     return searchHistoryList;
   }
@@ -386,7 +397,7 @@ class HomeServices {
     required BuildContext context,
     required Product product,
   }) async {
-    print("========> Inside the add to /api/add-to-wishList function");
+    
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     final String? authToken = await GlobalVariables.getFirebaseAuthToken();
     try {
@@ -398,25 +409,25 @@ class HomeServices {
         },
         body: jsonEncode({'id': product.id}),
       );
-      print("\nwishList   :  ${userProvider.user.wishList} ");
+      
 
       if (context.mounted) {
         httpErrorHandle(
           response: res,
           context: context,
           onSuccess: () {
-            // print("\nInside on success method..");
-            print(res.body);
+            // 
+            
             User user = userProvider.user
                 .copyWith(wishList: jsonDecode(res.body)['wishList']);
             userProvider.setUserFromModel(user);
-            print("\nUser wishList now is ${user.wishList}");
+            
           },
         );
       }
     } catch (e) {
       debugPrint("\n========>Inside the catch block");
-      showSnackBar(context: context, text: e.toString());
+      if (context.mounted)showSnackBar(context: context, text: e.toString());
     }
   }
 
@@ -424,7 +435,7 @@ class HomeServices {
     required BuildContext context,
     required Product product,
   }) async {
-    print("========> Inside the remove from wishlist function");
+    
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     final String? authToken = await GlobalVariables.getFirebaseAuthToken();
     try {
@@ -447,17 +458,17 @@ class HomeServices {
           response: res,
           context: context,
           onSuccess: () {
-            print("\nInside on success method..");
+            
             User user = userProvider.user
                 .copyWith(wishList: jsonDecode(res.body)['wishList']);
             userProvider.setUserFromModel(user);
-            print("\nUser wishList now is ${user.wishList}");
+            
           },
         );
       }
     } catch (e) {
-      print("\n========>Inside the catch block of remove from wishlist");
-      showSnackBar(context: context, text: e.toString());
+      
+      if (context.mounted)showSnackBar(context: context, text: e.toString());
     }
   }
 
@@ -484,8 +495,10 @@ class HomeServices {
         );
       }
     } catch (e) {
-      showSnackBar(
+      if (context.mounted) {
+        showSnackBar(
           context: context, text: "Error in fetchWishList : ${e.toString()}");
+      }
     }
     return wishList;
   }
@@ -507,15 +520,17 @@ class HomeServices {
           context: context,
           onSuccess: () {
             cart = List.from(data['data']);
-            print(cart!.length);
+            
             cartProvider.setCartFromDynamic(data['data']);
 
           },
         );
       }
     } catch (e) {
-      showSnackBar(
+      if (context.mounted) {
+        showSnackBar(
           context: context, text: "Error in Cart : ${e.toString()}");
+      }
     }
     return cart;
   }
@@ -541,7 +556,7 @@ class HomeServices {
 //             'Authorization': '$authToken',
 //           });
 
-//       // print("res.body : ${res.body}");
+//       // 
 //       // List listLength = jsonDecode(res.body);
 //       //jsonEncode => [object] to a JSON string.
 //       //jsonDecode => String to JSON object.
@@ -558,13 +573,13 @@ class HomeServices {
 //                   ),
 //                 ),
 //               );
-//               // print("\n\n\nreq.body JsonDecode${jsonDecode(res.body)}");
+//               // 
 //             }
 //           },
 //         );
 //       }
 
-//       // print("Products length : ${jsonDecode(res.body).length.runtimeType}");
+//       // 
 //     } catch (e) {
 //       showSnackBar(
 //           context: context,

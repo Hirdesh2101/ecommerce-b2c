@@ -50,7 +50,7 @@ class _FiltersAvailableState extends State<FiltersAvailable> {
   @override
   void didChangeDependencies() {
     final filterProvider2 = Provider.of<FilterProvider>(context);
-    print(filterProvider2.filterNumber);
+    
     _character = filterProvider2.filterNumber == 0
         ? null
         : getFilterType(filterProvider2.filterNumber);

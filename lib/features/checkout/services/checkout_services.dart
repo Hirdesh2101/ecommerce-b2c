@@ -38,7 +38,7 @@ class CheckoutServices {
             context: context,
             onSuccess: () {
               // If products are available then it will return true
-              print("Products are in stock. Proceeding...");
+              
               isProductAvailable = true;
             },
           );
@@ -46,12 +46,14 @@ class CheckoutServices {
 
         return isProductAvailable;
       } else {
-        showSnackBar(
+        if (context.mounted) {
+          showSnackBar(
             context: context, text: "Please check your internet connection!");
+        }
         return false;
       }
     } catch (e) {
-      showSnackBar(context: context, text: e.toString());
+      if (context.mounted) showSnackBar(context: context, text: e.toString());
       return false;
     }
   }
@@ -89,7 +91,7 @@ class CheckoutServices {
         );
       }
     } catch (e) {
-      showSnackBar(context: context, text: e.toString());
+      if (context.mounted) showSnackBar(context: context, text: e.toString());
     }
   }
 
@@ -122,12 +124,14 @@ class CheckoutServices {
         }
         return charges;
       } else {
-        showSnackBar(
+       if (context.mounted) {
+         showSnackBar(
             context: context, text: "Please check your internet connection!");
+       }
         return "Please check your internet connection!";
       }
     } catch (e) {
-      showSnackBar(context: context, text: e.toString());
+     if (context.mounted) showSnackBar(context: context, text: e.toString());
       return "Error: $e";
     }
   }
@@ -151,7 +155,7 @@ class CheckoutServices {
 
         // var data = jsonDecode(res.body);
         if (context.mounted) {
-          print(res.body);
+          
           httpErrorHandle(
             response: res,
             context: context,
@@ -162,12 +166,14 @@ class CheckoutServices {
         }
         return status;
       } else {
-        showSnackBar(
+        if (context.mounted) {
+          showSnackBar(
             context: context, text: "Please check your internet connection!");
+        }
         return "Please check your internet connection!";
       }
     } catch (e) {
-      showSnackBar(context: context, text: e.toString());
+      if (context.mounted) showSnackBar(context: context, text: e.toString());
       return "Error: $e";
     }
   }
@@ -181,7 +187,7 @@ class CheckoutServices {
     required int paymentAt,
     String? signatureId,
   }) async {
-    print("Updating order: $orderId");
+    
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     final String? authToken = await GlobalVariables.getFirebaseAuthToken();
 
@@ -214,7 +220,7 @@ class CheckoutServices {
             // and add the address as the current address if one didn't exist before
             // add the payment successful dialog here!
             // the gif and showDialog
-            print("updating order was success!");
+            
             showSnackBar(context: context, text: "Your order has been placed");
             User user = userProvider.user.copyWith(
               cart: [],
@@ -224,8 +230,8 @@ class CheckoutServices {
         );
       }
     } catch (e) {
-      print("Error updating order: $e");
-      showSnackBar(context: context, text: e.toString());
+      
+      if (context.mounted) showSnackBar(context: context, text: e.toString());
     }
   }
 
