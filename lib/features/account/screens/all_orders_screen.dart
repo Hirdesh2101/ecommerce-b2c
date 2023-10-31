@@ -11,10 +11,8 @@ import 'package:ecommerce_major_project/models/order.dart';
 
 class AllOrdersScreen extends StatefulWidget {
   static const String routeName = '/all-orders-screen';
-  final List<Order>? allOrders;
   const AllOrdersScreen({
     Key? key,
-    this.allOrders,
   }) : super(key: key);
   static final indianRupeesFormat = NumberFormat.currency(
     name: "INR",

@@ -1,4 +1,5 @@
 import 'package:ecommerce_major_project/constants/utils.dart';
+import 'package:ecommerce_major_project/features/order_details/screens/return_details_screen.dart';
 import 'package:ecommerce_major_project/main.dart';
 import 'package:ecommerce_major_project/models/returns.dart';
 import 'package:flutter/material.dart';
@@ -58,11 +59,11 @@ class AllReturnsList extends StatelessWidget {
                         child: InkWell(
                           borderRadius: BorderRadius.circular(20),
                           onTap: () {
-                            // Navigator.pushNamed(
-                            //   context,
-                            //   OrderDetailsScreen.routeName,
-                            //   arguments: allOrders![index],
-                            // );
+                            Navigator.pushNamed(
+                              context,
+                              ReturnDetailsScreen.routeName,
+                              arguments: allOrders![index],
+                            );
                             // Navigator.pushNamed(
                             //     context, ProductDetailScreen.routeName,
                             //     arguments: allOrders![index]);

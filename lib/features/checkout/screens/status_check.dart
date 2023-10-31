@@ -38,7 +38,7 @@ class AddFundsCheckStatusState extends State<CheckStatus> {
     });
     timer = Timer.periodic(const Duration(seconds: 15), (Timer t) {
       //if (!isLoading && status['status'] == "PAYMENT_PENDING") {
-        fetchData();
+      fetchData();
       //}
     });
     timer2 = Timer.periodic(const Duration(seconds: 1), (Timer t) {
@@ -83,7 +83,7 @@ class AddFundsCheckStatusState extends State<CheckStatus> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           SizedBox(height: mq.height * .05),
-         isLoading || status['status'] == "PAYMENT_PENDING"
+          isLoading || status['status'] == "PAYMENT_PENDING"
               ? const Text(
                   'Processing Payment...',
                   style: TextStyle(
@@ -112,26 +112,35 @@ class AddFundsCheckStatusState extends State<CheckStatus> {
                       ),
                       textAlign: TextAlign.center,
                     ),
-                     if (!isLoading && status['status'] == "PAYMENT_FAILED") SizedBox(height: mq.height * .05),
-         isLoading || status['status'] == "PAYMENT_PENDING"
+          if (!isLoading &&
+              status['status'] != "PAYMENT_PENDING" &&
+              status['status'] != "PAYMENT_SUCCESS")
+            SizedBox(height: mq.height * .05),
+          isLoading || status['status'] == "PAYMENT_PENDING"
               ? Lottie.asset('assets/transfer_fundsprocess.json',
                   width: mq.width, height: mq.width, fit: BoxFit.cover)
               : status['status'] == "PAYMENT_SUCCESS"
                   ? Lottie.asset('assets/check-okey-done.json',
                       width: mq.width, height: mq.width, fit: BoxFit.cover)
                   : Center(
-                    child: Lottie.asset('assets/transaction-canceled.json',
-                        width: mq.width * 0.8, height: mq.width*0.8, fit: BoxFit.cover),
-                  ),
-          
+                      child: Lottie.asset('assets/transaction-canceled.json',
+                          width: mq.width * 0.8,
+                          height: mq.width * 0.8,
+                          fit: BoxFit.cover),
+                    ),
           if (!isLoading && status['status'] == "PAYMENT_SUCCESS")
             Text(
               "Order ID : ${status['order']['_id']}\nTime: ${DateTime.fromMillisecondsSinceEpoch(status['order']['orderedAt'])} \nPayment ID : ${status['order']['paymentId']}",
               style: const TextStyle(fontSize: 18),
               textAlign: TextAlign.start,
             ),
-               if (!isLoading && status['status'] == "PAYMENT_FAILED") SizedBox(height: mq.height * .05),
-           if (!isLoading && status['status'] == "PAYMENT_FAILED")
+          if (!isLoading &&
+              status['status'] != "PAYMENT_PENDING" &&
+              status['status'] != "PAYMENT_SUCCESS")
+            SizedBox(height: mq.height * .05),
+          if (!isLoading &&
+              status['status'] != "PAYMENT_PENDING" &&
+              status['status'] != "PAYMENT_SUCCESS")
             const Text(
               "SORRY THE ORDER COULD NOT BE PLACED \nA REFUND HAS BEEN ISSUED\n IT GENERALLY TAKES 5 TO 7 DAYS TO PROCESS THE REFUND AMOUNT",
               style: TextStyle(fontSize: 18),

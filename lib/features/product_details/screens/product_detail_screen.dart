@@ -2,14 +2,14 @@
 
 import 'package:ecommerce_major_project/common/widgets/color_loader_2.dart';
 import 'package:ecommerce_major_project/features/checkout/screens/checkout_screen.dart';
-import 'package:ecommerce_major_project/features/product_details/widgets/buyButtons.dart';
+import 'package:ecommerce_major_project/features/product_details/widgets/buybuttons.dart';
 import 'package:ecommerce_major_project/features/product_details/widgets/delivery_location.dart';
 import 'package:ecommerce_major_project/features/product_details/widgets/details_widget.dart';
 import 'package:ecommerce_major_project/features/product_details/widgets/icon_details.dart';
 import 'package:ecommerce_major_project/features/product_details/widgets/price_and_title.dart';
 import 'package:ecommerce_major_project/features/product_details/widgets/ratings_reviews.dart';
 import 'package:ecommerce_major_project/features/product_details/widgets/similar_products.dart';
-import 'package:ecommerce_major_project/features/product_details/widgets/size_and_Color.dart';
+import 'package:ecommerce_major_project/features/product_details/widgets/size_and_color.dart';
 import 'package:ecommerce_major_project/features/product_details/widgets/top_image.dart';
 import 'package:ecommerce_major_project/models/cart.dart';
 import 'package:ecommerce_major_project/providers/tab_provider.dart';
@@ -69,6 +69,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       context: context,
       productId: productId,
     );
+    _similarProducts = await productDetailServices.fetchSimilarProducts(
+      context: context,
+      category: product!.category,
+    );
     if (product != null) {
       double totalRating = 0.0;
 
@@ -98,10 +102,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         avgRating = totalRating / product!.rating!.length;
       }
     }
-    _similarProducts = await productDetailServices.fetchSimilarProducts(
-      context: context,
-      category: product!.category,
-    );
     _similarProducts = _similarProducts!.where((similarProduct) {
       return similarProduct.id != productId;
     }).toList();
@@ -109,7 +109,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     setState(() {
       isProductLoading = false;
     });
-    print("\n\n =======> Product is :  =======> ${product!.name}");
   }
 
   var selectedNavigation = 0;
@@ -151,7 +150,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             final tabProvider =
                 Provider.of<TabProvider>(context, listen: false);
             tabProvider.setTab(2);
-            Navigator.of(context).popUntil((route) => route.isFirst);
+            GlobalVariables.navigatorKey.currentState!.popUntil((route) => route.isFirst);
             //Navigator.pushNamed(context, CartScreen.);
           },
           actionLabel: "View");
@@ -324,7 +323,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             SizedBox(height: mq.width * .03),
                             const Divider(thickness: 1),
                             SizedBox(height: mq.width * .02),
-                            const DetailsWithICons(),
+                            DetailsWithICons(product: product!),
                             SizedBox(height: mq.width * .02),
                             const Divider(thickness: 1),
                             SizedBox(height: mq.width * .03),
@@ -407,7 +406,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   SizedBox(height: mq.width * .03),
                   const Divider(thickness: 1),
                   SizedBox(height: mq.width * .02),
-                  const DetailsWithICons(),
+                   DetailsWithICons(product: product!),
                   SizedBox(height: mq.width * .02),
                   const Divider(thickness: 1),
                   SizedBox(height: mq.width * .03),

@@ -30,8 +30,7 @@ class _TopButtonsState extends State<TopButtons> {
             AccountButton(
                 text: "Your Orders",
                 onTap: () {
-                  Navigator.pushNamed(context, AllOrdersScreen.routeName,
-                          arguments: widget.orders);
+                  Navigator.pushNamed(context, AllOrdersScreen.routeName);
                 }),
             AccountButton(
                 text: "Your Wishlist",

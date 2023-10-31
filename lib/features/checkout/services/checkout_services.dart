@@ -38,7 +38,7 @@ class CheckoutServices {
             context: context,
             onSuccess: () {
               // If products are available then it will return true
-              print("Products are in stock. Proceeding...");
+              
               isProductAvailable = true;
             },
           );
@@ -46,12 +46,14 @@ class CheckoutServices {
 
         return isProductAvailable;
       } else {
-        showSnackBar(
+        if (context.mounted) {
+          showSnackBar(
             context: context, text: "Please check your internet connection!");
+        }
         return false;
       }
     } catch (e) {
-      showSnackBar(context: context, text: e.toString());
+      if (context.mounted) showSnackBar(context: context, text: e.toString());
       return false;
     }
   }
@@ -89,7 +91,7 @@ class CheckoutServices {
         );
       }
     } catch (e) {
-      showSnackBar(context: context, text: e.toString());
+      if (context.mounted) showSnackBar(context: context, text: e.toString());
     }
   }
 
@@ -122,12 +124,14 @@ class CheckoutServices {
         }
         return charges;
       } else {
-        showSnackBar(
+       if (context.mounted) {
+         showSnackBar(
             context: context, text: "Please check your internet connection!");
+       }
         return "Please check your internet connection!";
       }
     } catch (e) {
-      showSnackBar(context: context, text: e.toString());
+     if (context.mounted) showSnackBar(context: context, text: e.toString());
       return "Error: $e";
     }
   }
@@ -151,7 +155,7 @@ class CheckoutServices {
 
         // var data = jsonDecode(res.body);
         if (context.mounted) {
-          print(res.body);
+          
           httpErrorHandle(
             response: res,
             context: context,
@@ -162,12 +166,14 @@ class CheckoutServices {
         }
         return status;
       } else {
-        showSnackBar(
+        if (context.mounted) {
+          showSnackBar(
             context: context, text: "Please check your internet connection!");
+        }
         return "Please check your internet connection!";
       }
     } catch (e) {
-      showSnackBar(context: context, text: e.toString());
+      if (context.mounted) showSnackBar(context: context, text: e.toString());
       return "Error: $e";
     }
   }
@@ -176,29 +182,22 @@ class CheckoutServices {
   Future<void> updateOrder({
     required BuildContext context,
     required String orderId,
-    required String razorPayOrderId,
-    required String paymentId,
-    required int paymentAt,
-    String? signatureId,
+    required String status,
+    required String paymentStatus,
   }) async {
-    print("Updating order: $orderId");
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
     final String? authToken = await GlobalVariables.getFirebaseAuthToken();
 
     try {
       http.Response res = await http.put(
-        Uri.parse('$uri/api/update-order/$orderId'),
+        Uri.parse('$uri/api/update-order-status'),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
           'Authorization': '$authToken',
         },
         body: jsonEncode({
-          'cart': userProvider.user.cart,
           'orderId': orderId,
-          'razorPayOrderId': razorPayOrderId,
-          'paymentId': paymentId,
-          'orderedAt': paymentAt,
-          'signatureId': signatureId,
+          'status': status,
+          'payment_status': paymentStatus
         }),
       );
 
@@ -208,24 +207,13 @@ class CheckoutServices {
           response: res,
           context: context,
           onSuccess: () {
-            // success on the payment will redirect the user
-            // to the payment successful dialog, order placed
-            // clear the cart
-            // and add the address as the current address if one didn't exist before
-            // add the payment successful dialog here!
-            // the gif and showDialog
-            print("updating order was success!");
-            showSnackBar(context: context, text: "Your order has been placed");
-            User user = userProvider.user.copyWith(
-              cart: [],
-            );
-            userProvider.setUserFromModel(user);
+            //TODO ADD SOMETHING MAYBEs
           },
         );
       }
     } catch (e) {
-      print("Error updating order: $e");
-      showSnackBar(context: context, text: e.toString());
+      
+      if (context.mounted) showSnackBar(context: context, text: e.toString());
     }
   }
 

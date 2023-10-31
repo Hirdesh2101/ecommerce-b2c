@@ -1,5 +1,7 @@
 import 'package:ecommerce_major_project/features/account/screens/all_orders_screen.dart';
 import 'package:ecommerce_major_project/features/cart/screens/cart_screen.dart';
+import 'package:ecommerce_major_project/features/order_details/screens/return_details_screen.dart';
+import 'package:ecommerce_major_project/models/returns.dart';
 import 'package:flutter/material.dart';
 
 import 'package:ecommerce_major_project/models/order.dart';
@@ -65,10 +67,9 @@ Route<dynamic> generateRoute(RouteSettings routeSettings) {
 
     // AllOrdersScreen
     case AllOrdersScreen.routeName:
-      var allOrders = routeSettings.arguments as List<Order>?;
       return MaterialPageRoute(
           settings: routeSettings,
-          builder: (_) => AllOrdersScreen(allOrders: allOrders));
+          builder: (_) => const AllOrdersScreen());
 
     // AddressScreen
     case CheckoutScreen.routeName:
@@ -91,7 +92,11 @@ Route<dynamic> generateRoute(RouteSettings routeSettings) {
       return MaterialPageRoute(
           settings: routeSettings,
           builder: (_) => OrderDetailsScreen(order: order));
-
+     case ReturnDetailsScreen.routeName:
+      var returns = routeSettings.arguments as Return;
+      return MaterialPageRoute(
+          settings: routeSettings,
+          builder: (_) => ReturnDetailsScreen(returns: returns));
     // Screen does not exist
     default:
       return MaterialPageRoute(

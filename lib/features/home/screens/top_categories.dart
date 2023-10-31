@@ -81,7 +81,7 @@ class _TopCategoriesState extends State<TopCategories>
     setState(() {
       isProductLoading = false;
     });
-    print("\n\n =======> Product List is :  =======> ${productList![0].name}");
+    
   }
 
   @override

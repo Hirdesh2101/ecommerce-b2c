@@ -51,11 +51,10 @@ class _OrdersState extends State<Orders> {
                 onTap: widget.orders == null || widget.orders!.isEmpty
                     ? null
                     : () {
-                        Navigator.pushNamed(context, AllOrdersScreen.routeName,
-                            arguments: widget.orders);
-                        // Navigator.of(context).push(MaterialPageRoute(
-                        //     builder: (context) =>
-                        //         AllOrdersScreen(allOrders: orders)));
+                        Navigator.pushNamed(
+                          context,
+                          AllOrdersScreen.routeName,
+                        );
                       },
                 child: Container(
                   padding: EdgeInsets.only(right: mq.width * 0.04),
@@ -112,8 +111,6 @@ class _OrdersState extends State<Orders> {
                       itemBuilder: (context, index) {
                         // debugPrint(
                         //     " $index value of container width =======> ${mq.height * 0.025}");
-                        print(
-                            "\n -------------------> Fetched ORDERS are ${widget.orders![index].id}");
                         return GestureDetector(
                           onTap: () {
                             Navigator.pushNamed(
