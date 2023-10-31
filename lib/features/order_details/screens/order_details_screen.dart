@@ -1,6 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:ecommerce_major_project/features/product_details/screens/product_detail_screen.dart';
-import 'package:ecommerce_major_project/features/return_product/return_product_screen.dart';
+import 'package:ecommerce_major_project/features/return_product/screens/return_product_screen.dart';
+import 'package:ecommerce_major_project/features/return_product/screens/select_return_product.dart';
+import 'package:ecommerce_major_project/features/return_product/services/refund_service.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -31,6 +33,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
   final int allowReturnProductDays = 15;
   bool allowReturn = false;
   bool viewMoreDetails = true;
+  final RefundServices refundServices = RefundServices();
   final indianRupeesFormat = NumberFormat.currency(
     name: "INR",
     locale: 'en_IN',
@@ -38,9 +41,33 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
     symbol: '₹ ',
   );
   List<Step> steps = [];
+  List<dynamic> selectedProducts = <dynamic>[];
+  List<dynamic> copy = [];
+  List<dynamic> returnCopy = [];
+
+  List<dynamic> deepCopy(List<dynamic> originalList) {
+    // Create a new list with new instances of the objects in the original list.
+    return originalList.map((element) => Map.from(element)).toList();
+  }
 
   @override
   void initState() {
+    copy = deepCopy(widget.order.products);
+    returnCopy = List.from(widget.order.returnProducts);
+    for (var returnProduct in returnCopy) {
+      var order = copy.firstWhere(
+          (order) =>
+              order['product']['_id'].toString() ==
+              returnProduct['product'].toString(),
+          orElse: null);
+      if (order != null) {
+        order['quantity'] -= returnProduct['quantity'];
+        if (order['quantity'] == 0) {
+          order['quantity'] += returnProduct['quantity'];
+          copy.remove(order);
+        }
+      }
+    }
     currentStep = getCurrentStep(widget.order.status);
     steps = widget.order.status.contains('ORDER_RETURN')
         ? List.from([
@@ -79,10 +106,10 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
             ? List.from([
                 Step(
                   title: const Text("ORDER_CANCELLED"),
-                  content: const Text("Your order is yet to be delivered"),
-                  isActive: currentStep > 0,
+                  content: const Text("Your order is cancelled"),
+                  isActive: currentStep >= 0,
                   state:
-                      currentStep > 0 ? StepState.complete : StepState.indexed,
+                      currentStep >= 0 ? StepState.complete : StepState.indexed,
                 ),
               ])
             : List.from([
@@ -309,34 +336,81 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
               SizedBox(height: mq.width * .025),
               user.type == "admin"
                   ? const SizedBox.shrink()
-                  : ElevatedButton(
-                      onPressed: allowReturn
-                          ? () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (_) =>
-                                          const ReturnProductScreen()));
-                              showSnackBar(
-                                  context: context,
-                                  text: "Return product yet to be implemented");
-                            }
-                          : () {
-                              // if you still want to complain flow in didilogflow chatbot
-                              // you can mail the authorities or anything
-                              showErrorSnackBar(
-                                  context: context,
-                                  text: "Return product timeline expired");
-                            },
-                      style: ElevatedButton.styleFrom(
-                          // alignment: Alignment.center,
-                          backgroundColor: allowReturn
-                              ? const Color.fromARGB(255, 255, 100, 100)
-                              : const Color.fromARGB(255, 255, 168, 168)),
-                      child: const Text(
-                        "Return Product",
-                        style: TextStyle(color: Colors.white),
-                      )),
+                  : widget.order.status == "ORDER_DELIVERED" && copy.isNotEmpty
+                      ? ElevatedButton(
+                          onPressed: allowReturn
+                              ? () {
+                                  if (widget.order.products.length == 1 &&
+                                      widget.order.products[0]['quantity'] ==
+                                          1) {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (_) => ReturnProductScreen(
+                                                  order: widget.order,
+                                                  selectedProduct:
+                                                      widget.order.products,
+                                                )));
+                                  } else {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (_) => SelectReturnProduct(
+                                                copy: copy,
+                                                order: widget.order)));
+                                  }
+                                }
+                              : () {
+                                  // if you still want to complain flow in didilogflow chatbot
+                                  // you can mail the authorities or anything
+                                  showErrorSnackBar(
+                                      context: context,
+                                      text: "Return product timeline expired");
+                                },
+                          style: ElevatedButton.styleFrom(
+                              // alignment: Alignment.center,
+                              backgroundColor: allowReturn
+                                  ? const Color.fromARGB(255, 255, 100, 100)
+                                  : const Color.fromARGB(255, 255, 168, 168)),
+                          child: const Text(
+                            "Return Product",
+                            style: TextStyle(color: Colors.white),
+                          ))
+                      : widget.order.status == "ORDER_RECEIVED" ||
+                              widget.order.status == "ORDER_PACKING"
+                          ? ElevatedButton(
+                              onPressed: () {
+                                showAdaptiveDialog(
+                                    barrierDismissible: true,
+                                    context: context,
+                                    builder: (context) {
+                                      return AlertDialog(
+                                        content: const Text(
+                                            'Are you sure you want to cancel the order?'),
+                                        actions: [
+                                          TextButton(
+                                              onPressed: () {
+                                                refundServices.requestCancel(
+                                                    context: context,
+                                                    order: widget.order);
+                                              },
+                                              child: const Text(
+                                                'Cancel',
+                                                style: TextStyle(
+                                                    color: Colors.red),
+                                              ))
+                                        ],
+                                      );
+                                    });
+                              },
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor:
+                                      const Color.fromARGB(255, 255, 100, 100)),
+                              child: const Text(
+                                "Cancel Order",
+                                style: TextStyle(color: Colors.white),
+                              ))
+                          : const SizedBox.shrink(),
               SizedBox(height: mq.width * .025),
               InkWell(
                 onTap: () {
@@ -366,13 +440,44 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // format date using intl package
-                          Text(
-                              "Order Date   : ${DateFormat('yMMMd').format(DateTime.fromMillisecondsSinceEpoch(widget.order.orderedAt))}"),
-                          Text("Order ID        : ${widget.order.id}"),
-                          Text(
-                              "Order Total   : ${indianRupeesFormat.format(widget.order.totalPrice)}"),
-                          Text("Status            : ${widget.order.status}")
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text('Order Date:'),
+                              Text(DateFormat('yMMMd').format(
+                                  DateTime.fromMillisecondsSinceEpoch(
+                                      widget.order.orderedAt)))
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text('Order ID:'),
+                              Text(widget.order.id)
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text('Order Total:'),
+                              Text(indianRupeesFormat
+                                  .format(widget.order.totalPrice))
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text('Status:'),
+                              Text(widget.order.status)
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text('Payment Status:'),
+                              Text(widget.order.paymentStatus)
+                            ],
+                          ),
                         ],
                       ),
                     )
