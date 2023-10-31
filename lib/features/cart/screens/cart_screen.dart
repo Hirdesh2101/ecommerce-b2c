@@ -56,11 +56,13 @@ class _CartScreenState extends State<CartScreen> {
 
     if (isProductAvailable) {
       //make sure to pass the arguments here!
-      Navigator.pushNamed(context, CheckoutScreen.routeName, arguments: [
-        sum.toString(),
-        cartProvider.getCart,
-        userProvider.user.cart
-      ]);
+      if (context.mounted) {
+        Navigator.pushNamed(context, CheckoutScreen.routeName, arguments: [
+          sum.toString(),
+          cartProvider.getCart,
+          userProvider.user.cart
+        ]);
+      }
     }
     setState(() {
       isLoading = false;

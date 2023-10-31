@@ -101,9 +101,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
   }
 
   void _handlePaymentSuccess(PaymentSuccessResponse response) {
-    print(
-        "\n\nPayment successful : \n\nPayment ID :  ${response.paymentId} \n\n Order ID : ${response.orderId} \n\n Signature : ${response.signature}");
-
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -123,8 +120,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
   }
 
   void _handlePaymentError(PaymentFailureResponse response) {
-    print(
-        "Payment Error ==> Code : ${response.code} \nMessage : ${response.message}  ");
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -144,7 +139,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
   }
 
   void _handleExternalWallet(ExternalWalletResponse response) {
-    print("External Wallet : ${response.walletName}");
+    
 
     showDialog(
       context: context,

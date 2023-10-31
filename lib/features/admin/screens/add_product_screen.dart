@@ -58,7 +58,7 @@ Color
         showLoader = true;
       });
 
-      print("\n\nSHOW LOADER value before: ==> $showLoader");
+      
       adminServices.sellProduct(
         context: context,
         name: productNameController.text,
@@ -73,7 +73,7 @@ Color
       // setState(() {
       //   showLoader = false;
       // });
-      print("\n\nSHOW LOADER value after: ==> $showLoader");
+      
     }
     // print(
     //     " user type : \n\n${Provider.of<UserProvider>(context, listen: false).user.email}");
@@ -271,7 +271,7 @@ Color
 //         showLoader = true;
 //       });
 
-//       print("\n\nSHOW LOADER value before: ==> $showLoader");
+//       
 //       adminServices.sellProduct(
 //         context: context,
 //         name: productNameController.text,
@@ -285,7 +285,7 @@ Color
 //       // setState(() {
 //       //   showLoader = false;
 //       // });
-//       print("\n\nSHOW LOADER value after: ==> $showLoader");
+//       
 //     }
 //     // print(
 //     //     " user type : \n\n${Provider.of<UserProvider>(context, listen: false).user.email}");

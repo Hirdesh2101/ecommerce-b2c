@@ -4,7 +4,7 @@ import 'package:ecommerce_major_project/constants/global_variables.dart';
 import 'package:ecommerce_major_project/constants/utils.dart';
 import 'package:ecommerce_major_project/features/product_details/services/product_detail_services.dart';
 import 'package:ecommerce_major_project/features/product_details/widgets/rating_summary.dart';
-import 'package:ecommerce_major_project/features/product_details/widgets/reviewSummary.dart';
+import 'package:ecommerce_major_project/features/product_details/widgets/reviewsummary.dart';
 import 'package:ecommerce_major_project/main.dart';
 import 'package:ecommerce_major_project/models/product.dart';
 import 'package:flutter/cupertino.dart';
@@ -125,7 +125,7 @@ class _AllRatingsState extends State<AllRatings> {
             date: widget.product.rating![i].createdAt!,
             comment: widget.product.rating![i].review ?? '',
             rating: widget.product.rating![i].rating.toDouble(),
-            onPressed: () => print("More Action "),
+            onPressed: () => {},
             onTap: () => setState(() {
               isMore = !isMore;
             }),

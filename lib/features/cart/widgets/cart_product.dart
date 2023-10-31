@@ -163,7 +163,6 @@ class _CartProductState extends State<CartProduct> {
                     width: mq.width * .57,
 
                     padding: EdgeInsets.only(left: mq.width * .025),
-                    //TODO HERE ALSO NEW MAP
                     child: quantity == 0
                         ? const Text(
                             "Out of Stock",

@@ -48,7 +48,6 @@ class RefundServices {
           response: res,
           context: context,
           onSuccess: () {
-            print("\nInside on success method..");
             showSnackBar(
                 context: context, text: 'Return requested Successfully');
             final tabProvider =
@@ -62,12 +61,12 @@ class RefundServices {
             //     userProvider.user.copyWith(cart: jsonDecode(res.body)['cart']);
             // userProvider.setUserFromModel(user);
 
-            //print("\nUser cart now is ${user.cart}");
+            //
           },
         );
       }
     } catch (e) {
-      showSnackBar(context: context, text: e.toString());
+      if (context.mounted) showSnackBar(context: context, text: e.toString());
     }
   }
 
@@ -94,12 +93,11 @@ class RefundServices {
           response: res,
           context: context,
           onSuccess: () {
-            print("\nInside on success method..");
             showSnackBar(
                 context: context, text: 'Order cancelled Successfully');
             final tabProvider =
                 Provider.of<TabProvider>(context, listen: false);
-            print("\nInside on success method..");
+
             tabProvider.setTab(0);
 
             Navigator.of(context).popUntil((route) => route.isFirst);
@@ -107,8 +105,7 @@ class RefundServices {
         );
       }
     } catch (e) {
-      print("\n========>Inside the catch block of remove from cart");
-      showSnackBar(context: context, text: e.toString());
+      if (context.mounted) showSnackBar(context: context, text: e.toString());
     }
   }
 }

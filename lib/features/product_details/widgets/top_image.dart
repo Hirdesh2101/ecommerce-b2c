@@ -140,7 +140,7 @@ class _TopImageState extends State<TopImage> {
                       context: context,
                       text: "Added to WishList",
                       onTapFunction: () {
-                        Navigator.of(context).push(
+                        GlobalVariables.navigatorKey.currentState!.push(
                           GlobalVariables.createRoute(
                             const WishListScreen(),
                           ),

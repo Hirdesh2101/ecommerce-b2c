@@ -88,7 +88,7 @@ class AccountServices {
         );
       }
     } catch (e) {
-      showSnackBar(context: context, text: e.toString());
+      if (context.mounted) showSnackBar(context: context, text: e.toString());
     }
   }
 
@@ -138,12 +138,15 @@ class AccountServices {
         // print("quantity type : \n\n${orderList[0].quantity.runtimeType}");
       }
     } catch (e) {
-      showSnackBar(
+      if (context.mounted) {
+        showSnackBar(
           context: context,
           text: "Following Error in fetching Products [home]: $e");
+      }
     }
     return orderList;
   }
+
   Future<List<Return>?> fetchMyReturns({required BuildContext context}) async {
     final String? authToken = await GlobalVariables.getFirebaseAuthToken();
     List<Return>? returnList = [];
@@ -182,9 +185,11 @@ class AccountServices {
         // print("quantity type : \n\n${orderList[0].quantity.runtimeType}");
       }
     } catch (e) {
-      showSnackBar(
-          context: context,
-          text: "Following Error in fetching Products [home]: $e");
+      if (context.mounted) {
+        showSnackBar(
+            context: context,
+            text: "Following Error in fetching Products [home]: $e");
+      }
     }
     return returnList;
   }

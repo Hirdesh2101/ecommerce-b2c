@@ -31,19 +31,21 @@ class SearchServices {
           context: context,
           onSuccess: () {
             for (Map<String, dynamic> item in data) {
-              // print(item['name']);
+              // 
               productList.add(Product.fromJson(item));
             }
           },
         );
       }
 
-      // print("Products length : ${jsonDecode(res.body).length}");
+      // 
     } catch (e) {
-      showSnackBar(
+      if (context.mounted) {
+        showSnackBar(
           context: context,
           text:
               "Following Error in fetching Products [Search] : ${e.toString()}");
+      }
     }
     return productList;
   }
@@ -59,24 +61,26 @@ class SearchServices {
             'Authorization': '$authToken',
           });
       var data = jsonDecode(res.body);
-      print(data);
+      
       if (context.mounted) {
         httpErrorHandle(
           response: res,
           context: context,
           onSuccess: () {
             for (Map<String, dynamic> item in data) {
-              // print(item['name']);
+              // 
               productList.add(Product.fromJson(item));
             }
           },
         );
       }
     } catch (e) {
-       showSnackBar(
+       if (context.mounted) {
+         showSnackBar(
           context: context,
           text:
               "Following Error in fetching Products [Search] : ${e.toString()}");
+       }
     }
      return productList;
   }

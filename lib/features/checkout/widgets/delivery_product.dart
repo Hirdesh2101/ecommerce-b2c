@@ -74,7 +74,6 @@ class _OrderSummaryProductState extends State<OrderSummaryProduct> {
               width: mq.width * .57,
               padding: EdgeInsets.only(left: mq.width * .025),
               child: Text(
-                //TODO HERE MODIFY THE PRICE VALUE NEED ME MAKE A NEW MODEL FOR CART PRODUCT
                 indianRupeesFormat.format(price),
                 style: const TextStyle(
                     fontWeight: FontWeight.bold, fontSize: 17),
