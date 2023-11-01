@@ -169,8 +169,8 @@ class _ReturnDetailsScreenState extends State<ReturnDetailsScreen> {
                                           width: mq.width * .025,
                                           height: mq.width * .025,
                                           decoration: BoxDecoration(
-                                            color: Color(int.parse('0xFF'
-                                                '${widget.returns.returnProducts[i]['color'].substring(1)}')),
+                                            color: Color(int.parse(
+                                                '${widget.returns.returnProducts[i]['color']}')),
                                             shape: BoxShape.circle,
                                           ),
                                         ),
@@ -276,10 +276,11 @@ class _ReturnDetailsScreenState extends State<ReturnDetailsScreen> {
                               Text(widget.returns.id)
                             ],
                           ),
-                          Row(
+                          //TODO RETURN TOTAL
+                          const Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const Text('Return Total:'),
+                              Text('Return Total:'),
                               // Text(indianRupeesFormat
                               //     .format(widget.returns.))
                             ],

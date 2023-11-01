@@ -24,6 +24,7 @@ class _ReturnProductScreenState extends State<ReturnProductScreen> {
   final _returnProuctFormKey = GlobalKey<FormState>();
   final TextEditingController descriptionController = TextEditingController();
   RefundServices refundServices = RefundServices();
+  bool isLoading = false;
 
   List<File> images = [];
   bool showLoader = false;
@@ -160,32 +161,51 @@ class _ReturnProductScreenState extends State<ReturnProductScreen> {
                     ),
                     SizedBox(height: mq.height * .03),
                     ElevatedButton(
-                        onPressed: () {
-                          if (descriptionController.text.trim().isEmpty) {
-                            showSnackBar(
-                                context: context,
-                                text: 'Please tell us what went wrong!');
-                            return;
-                          }
-                          if (images.isEmpty) {
-                            showSnackBar(
-                                context: context, text: 'Please add images!');
-                            return;
-                          }
-                          refundServices.requestRefund(
-                              context: context,
-                              order: widget.order,
-                              reason: descriptionController.text.trim(),
-                              images: images,
-                              productArray: widget.selectedProduct);
-                        },
+                        onPressed: isLoading
+                            ? null
+                            : () {
+                                if (descriptionController.text.trim().isEmpty) {
+                                  showSnackBar(
+                                      context: context,
+                                      text: 'Please tell us what went wrong!');
+                                  return;
+                                }
+                                if (images.isEmpty) {
+                                  showSnackBar(
+                                      context: context,
+                                      text: 'Please add images!');
+                                  return;
+                                }
+                                if (images.length < 2) {
+                                  showSnackBar(
+                                      context: context,
+                                      text: 'Please select atlest 2 images!');
+                                  return;
+                                }
+                                setState(() {
+                                  isLoading = true;
+                                });
+                                refundServices
+                                    .requestRefund(
+                                        context: context,
+                                        order: widget.order,
+                                        reason:
+                                            descriptionController.text.trim(),
+                                        images: images,
+                                        productArray: widget.selectedProduct)
+                                    .then((_) {
+                                  setState(() {
+                                    isLoading = false;
+                                  });
+                                });
+                              },
                         style: ElevatedButton.styleFrom(
                             // alignment: Alignment.center,
                             backgroundColor:
                                 const Color.fromARGB(255, 255, 88, 88)),
-                        child: const Text(
-                          "Return Product",
-                          style: TextStyle(color: Colors.white),
+                        child: Text(
+                          isLoading? "Please Wait..":"Return Product",
+                          style: const TextStyle(color: Colors.white),
                         )),
                   ],
                 ),

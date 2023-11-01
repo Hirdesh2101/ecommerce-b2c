@@ -117,8 +117,8 @@ class _SizeAndColorState extends State<SizeAndColor> {
                         onTap:() {widget.setColor(index);},
                         child: Container(
                           decoration: BoxDecoration(
-                            color: Color(int.parse('0xFF'
-                                '${widget.product.varients[index]['color'].substring(1)}')),
+                            color: Color(int.parse(
+                                '${widget.product.varients[index]['color']}')),
                             shape: BoxShape.circle,
                           ),
                         ),

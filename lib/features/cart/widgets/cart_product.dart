@@ -143,8 +143,8 @@ class _CartProductState extends State<CartProduct> {
                           width: mq.width * .025,
                           height: mq.width * .025,
                           decoration: BoxDecoration(
-                            color: Color(int.parse('0xFF'
-                                '${widget.color.substring(1)}')),
+                            color: Color(int.parse(
+                                widget.color)),
                             shape: BoxShape.circle,
                           ),
                         ),

@@ -69,8 +69,8 @@ class HomeServices {
 
   Future<void> fetchCategory(
       {required BuildContext context}) async {
-    final String? authToken = await GlobalVariables.getFirebaseAuthToken();
     final categoryProvider = Provider.of<CategoryProvider>(context, listen: false);
+    final String? authToken = await GlobalVariables.getFirebaseAuthToken();
     String tokenValue = '$authToken';
     try {
       http.Response res = await http
@@ -100,8 +100,8 @@ class HomeServices {
   }
   Future<void> fetchAdvertisement(
       {required BuildContext context}) async {
-    final String? authToken = await GlobalVariables.getFirebaseAuthToken();
     final adsProvider = Provider.of<AdsProvider>(context, listen: false);
+    final String? authToken = await GlobalVariables.getFirebaseAuthToken();
     String tokenValue = '$authToken';
     try {
       http.Response res = await http
