@@ -276,10 +276,11 @@ class _ReturnDetailsScreenState extends State<ReturnDetailsScreen> {
                               Text(widget.returns.id)
                             ],
                           ),
-                          Row(
+                          //TODO RETURN TOTAL
+                          const Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const Text('Return Total:'),
+                              Text('Return Total:'),
                               // Text(indianRupeesFormat
                               //     .format(widget.returns.))
                             ],

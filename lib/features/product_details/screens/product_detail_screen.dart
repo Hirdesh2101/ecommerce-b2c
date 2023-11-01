@@ -62,6 +62,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   }
 
   fetchProduct(String productId) async {
+    var id = Provider.of<UserProvider>(context, listen: false).user.id;
     setState(() {
       isProductLoading = true;
     });
@@ -93,8 +94,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         } else if (product!.rating![i].rating.toInt() == 5) {
           counterFiveStars++;
         }
-        if (product!.rating![i].userId ==
-            Provider.of<UserProvider>(context, listen: false).user.id) {
+        if (product!.rating![i].userId == id) {
           myRating = product!.rating![i].rating;
         }
       }
@@ -150,7 +150,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             final tabProvider =
                 Provider.of<TabProvider>(context, listen: false);
             tabProvider.setTab(2);
-            GlobalVariables.navigatorKey.currentState!.popUntil((route) => route.isFirst);
+            GlobalVariables.navigatorKey.currentState!
+                .popUntil((route) => route.isFirst);
             //Navigator.pushNamed(context, CartScreen.);
           },
           actionLabel: "View");
@@ -406,7 +407,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   SizedBox(height: mq.width * .03),
                   const Divider(thickness: 1),
                   SizedBox(height: mq.width * .02),
-                   DetailsWithICons(product: product!),
+                  DetailsWithICons(product: product!),
                   SizedBox(height: mq.width * .02),
                   const Divider(thickness: 1),
                   SizedBox(height: mq.width * .03),
