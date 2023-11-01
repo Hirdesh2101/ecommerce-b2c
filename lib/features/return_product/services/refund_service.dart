@@ -5,6 +5,8 @@ import 'package:ecommerce_major_project/models/order.dart';
 import 'package:ecommerce_major_project/providers/tab_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
+import 'package:mime/mime.dart';
 import 'package:provider/provider.dart';
 import 'package:ecommerce_major_project/constants/utils.dart';
 import 'package:ecommerce_major_project/constants/error_handling.dart';
@@ -34,11 +36,14 @@ class RefundServices {
       request.fields['productArray'] = productArrayJson;
 
       for (File image in images) {
-        request.files.add(await http.MultipartFile.fromPath(
-          'images',
-          image.path,
-          filename: image.path.split('/').last,
-        ));
+        String? mimeType = lookupMimeType(image.path);
+        if (mimeType != null) {
+          var mimetypeSlit = mimeType.split('/');
+          request.files.add(await http.MultipartFile.fromPath(
+              'images', image.path,
+              filename: image.path.split('/').last,
+              contentType: MediaType(mimetypeSlit[0], mimetypeSlit[1])));
+        }
       }
       var streamedResponse = await request.send();
       var res = await http.Response.fromStream(streamedResponse);
@@ -48,14 +53,14 @@ class RefundServices {
           response: res,
           context: context,
           onSuccess: () {
-            
-            showSnackBar(context: context, text: 'Return requested Successfully');
+            showSnackBar(
+                context: context, text: 'Return requested Successfully');
             final tabProvider =
                 Provider.of<TabProvider>(context, listen: false);
             final AuthService authService = AuthService();
             authService.getUserData(context);
             tabProvider.setTab(0);
-            
+
             Navigator.of(context).popUntil((route) => route.isFirst);
             // User user =
             //     userProvider.user.copyWith(cart: jsonDecode(res.body)['cart']);
@@ -69,6 +74,7 @@ class RefundServices {
       if (context.mounted) showSnackBar(context: context, text: e.toString());
     }
   }
+
   Future<void> requestCancel({
     required BuildContext context,
     required Order order,
@@ -91,19 +97,19 @@ class RefundServices {
         httpErrorHandle(
           response: res,
           context: context,
-          onSuccess: () { 
-            showSnackBar(context: context, text: 'Order cancelled Successfully');
+          onSuccess: () {
+            showSnackBar(
+                context: context, text: 'Order cancelled Successfully');
             final tabProvider =
                 Provider.of<TabProvider>(context, listen: false);
-            
+
             tabProvider.setTab(0);
-            
+
             Navigator.of(context).popUntil((route) => route.isFirst);
           },
         );
       }
     } catch (e) {
-      
       if (context.mounted) showSnackBar(context: context, text: e.toString());
     }
   }
