@@ -87,8 +87,8 @@ class _ReturnProductState extends State<ReturnProduct> {
                     width: mq.width * .025,
                     height: mq.width * .025,
                     decoration: BoxDecoration(
-                      color: Color(int.parse('0xFF'
-                          '${widget.products[widget.index]['color'].substring(1)}')),
+                      color: Color(int.parse(
+                          '${widget.products[widget.index]['color']}')),
                       shape: BoxShape.circle,
                     ),
                   ),

@@ -230,8 +230,8 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                           width: mq.width * .025,
                                           height: mq.width * .025,
                                           decoration: BoxDecoration(
-                                            color: Color(int.parse('0xFF'
-                                                '${widget.order.products[i]['color'].substring(1)}')),
+                                            color: Color(int.parse(
+                                                '${widget.order.products[i]['color']}')),
                                             shape: BoxShape.circle,
                                           ),
                                         ),

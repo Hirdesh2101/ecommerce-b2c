@@ -183,8 +183,8 @@ class AllReturnsList extends StatelessWidget {
                                                         decoration:
                                                             BoxDecoration(
                                                           color: Color(int.parse(
-                                                              '0xFF'
-                                                              '${allOrders![index].returnProducts[j]['color'].substring(1)}')),
+                                                              
+                                                              '${allOrders![index].returnProducts[j]['color']}')),
                                                           shape:
                                                               BoxShape.circle,
                                                         ),

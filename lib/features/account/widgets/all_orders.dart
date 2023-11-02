@@ -198,8 +198,8 @@ class AllOrdersList extends StatelessWidget {
                                                         decoration:
                                                             BoxDecoration(
                                                           color: Color(int.parse(
-                                                              '0xFF'
-                                                              '${allOrders![index].products[j]['color'].substring(1)}')),
+                                                             
+                                                              '${allOrders![index].products[j]['color']}')),
                                                           shape:
                                                               BoxShape.circle,
                                                         ),

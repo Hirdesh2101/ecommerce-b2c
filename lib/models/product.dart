@@ -16,7 +16,7 @@ class Product {
   final String? id;
   final List<Rating>? rating;
   final List<dynamic>? ratinguser;
-  final int totalQuantity;
+  int totalQuantity;
 
   bool isWishlisted = false;
 
@@ -53,7 +53,17 @@ class Product {
         varients = json['varients'] ?? [],
         warranty = json['warranty'] ?? {},
         returnPolicy = json['returnPolicy'] ?? {},
-        totalQuantity = json['totalQuantity'] ?? 0,
+        totalQuantity = json['varients'] != null
+            ? json['varients'].fold(
+                0,
+                (sum, varient) =>
+                    sum +
+                    varient['sizes'].fold(
+                      0,
+                      (sumSizes, size) => sumSizes + size['quantity'],
+                    ),
+              )
+            : 0,
         detailDescription = json['detailDescription'] ?? [],
         ratinguser = json['ratinguser'] ?? [];
 
