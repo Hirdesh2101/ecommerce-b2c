@@ -45,7 +45,7 @@ class _CartScreenState extends State<CartScreen> {
 
   //This function checks the availablity of the products first and then move forward.
   void navigateToAddress(num sum) async {
-    final cartProvider = Provider.of<CartProvider>(context,listen: false);
+    final cartProvider = Provider.of<CartProvider>(context, listen: false);
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     setState(() {
       isLoading = true;
@@ -56,9 +56,12 @@ class _CartScreenState extends State<CartScreen> {
 
     if (isProductAvailable) {
       //make sure to pass the arguments here!
-      if (context.mounted){
-      Navigator.pushNamed(context, CheckoutScreen.routeName,
-          arguments: [sum.toString(),cartProvider.getCart,userProvider.user.cart]);
+      if (context.mounted) {
+        Navigator.pushNamed(context, CheckoutScreen.routeName, arguments: [
+          sum.toString(),
+          cartProvider.getCart,
+          userProvider.user.cart
+        ]);
       }
     }
     setState(() {
@@ -105,56 +108,53 @@ class _CartScreenState extends State<CartScreen> {
           Expanded(
             // height: mq.height * 0.5,
             child: cartProvider.getCart!.isEmpty
-                    ? Column(
-                        children: [
-                          Image.asset("assets/images/no-orderss.png",
-                              height: mq.height * .15),
-                          const Text("No item in cart"),
-                          SizedBox(height: mq.height * 0.02),
-                          ElevatedButton(
-                            onPressed: () {
-                             tabProvider.setTab(0);
-                            },
-                            style: ElevatedButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius:
-                                        BorderRadius.circular(20)),
-                                backgroundColor: Colors.deepPurpleAccent),
-                            child: const Text(
-                              "Keep Exploring",
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-                        ],
-                      )
-                    : ListView.builder(
-                        scrollDirection: Axis.vertical,
-                        // shrinkWrap: true,
-                        itemCount: cartProvider.getCart!.length,
-                        itemBuilder: (context, index) {
-                          // return CartProdcut
-                          return InkWell(
-                            onTap: () {
-                              Navigator.pushNamed(
-                                context,
-                                ProductDetailScreen.routeName,
-                                arguments: cartProvider.getCart![index].product.id,
-                              ).then((value) {
-                                fetchCart();
-                              });
-                            },
-                            child: CartProduct(
-                              index: index,
-                              product:
-                                  cartProvider.getCart![index].product,
-                              size: cartProvider.getCart![index].size,
-                              color: cartProvider.getCart![index].color,
-                              quantity: cartProvider.getCart![index].quantity,
-                              fetchCart: fetchCart
-                            ),
-                          );
+                ? Column(
+                    children: [
+                      Image.asset("assets/images/no-orderss.png",
+                          height: mq.height * .15),
+                      const Text("No item in cart"),
+                      SizedBox(height: mq.height * 0.02),
+                      ElevatedButton(
+                        onPressed: () {
+                          tabProvider.setTab(0);
                         },
+                        style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20)),
+                            backgroundColor: Colors.deepPurpleAccent),
+                        child: const Text(
+                          "Keep Exploring",
+                          style: TextStyle(color: Colors.white),
+                        ),
                       ),
+                    ],
+                  )
+                : ListView.builder(
+                    scrollDirection: Axis.vertical,
+                    // shrinkWrap: true,
+                    itemCount: cartProvider.getCart!.length,
+                    itemBuilder: (context, index) {
+                      // return CartProdcut
+                      return InkWell(
+                        onTap: () {
+                          Navigator.pushNamed(
+                            context,
+                            ProductDetailScreen.routeName,
+                            arguments: cartProvider.getCart![index].product.id,
+                          ).then((value) {
+                            fetchCart();
+                          });
+                        },
+                        child: CartProduct(
+                            index: index,
+                            product: cartProvider.getCart![index].product,
+                            size: cartProvider.getCart![index].size,
+                            color: cartProvider.getCart![index].color,
+                            quantity: cartProvider.getCart![index].quantity,
+                            fetchCart: fetchCart),
+                      );
+                    },
+                  ),
           ),
         ],
       ),
