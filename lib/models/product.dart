@@ -7,8 +7,8 @@ class Product {
   final String name;
   final String description;
   final List<dynamic> detailDescription;
-  final Map<String,dynamic> warranty;
-  final Map<String,dynamic> returnPolicy;
+  final Map<String, dynamic> warranty;
+  final Map<String, dynamic> returnPolicy;
   final String brandName;
   final List<String> images;
   final List<dynamic> varients;
