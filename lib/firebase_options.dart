@@ -25,10 +25,7 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for macos - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return macos;
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -47,30 +44,40 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyCcjWLnOshtyqO-nfPtawf2WAdhulNWqaI',
-    appId: '1:221309136169:web:c63b77eae3441d69ff9b38',
-    messagingSenderId: '221309136169',
-    projectId: 'ecommerce-b2c-a6083',
-    authDomain: 'ecommerce-b2c-a6083.firebaseapp.com',
-    storageBucket: 'ecommerce-b2c-a6083.appspot.com',
-    measurementId: 'G-6KP8HBN4P6',
+    apiKey: 'AIzaSyAFhlyYcslJlJSYdMH_LTSckGJIcK-vxNo',
+    appId: '1:1072371601182:web:f47807f0995a8b3d25830f',
+    messagingSenderId: '1072371601182',
+    projectId: 'ritesh-sarees',
+    authDomain: 'ritesh-sarees.firebaseapp.com',
+    storageBucket: 'ritesh-sarees.appspot.com',
+    measurementId: 'G-T3VFNCNZ97',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDMyH27AJo9U06SYx-ClPbKHTK4pU4DSRk',
-    appId: '1:221309136169:android:ba47a932fe7ba4bcff9b38',
-    messagingSenderId: '221309136169',
-    projectId: 'ecommerce-b2c-a6083',
-    storageBucket: 'ecommerce-b2c-a6083.appspot.com',
+    apiKey: 'AIzaSyC2Jl90_e2-u8w7INtBLhuZLf8DcDrngcE',
+    appId: '1:1072371601182:android:a76b45b51462abba25830f',
+    messagingSenderId: '1072371601182',
+    projectId: 'ritesh-sarees',
+    storageBucket: 'ritesh-sarees.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBRhJKSUXVyaeNdvzzlMghErbnssicK_jY',
-    appId: '1:221309136169:ios:38c68d6b031bd2bcff9b38',
-    messagingSenderId: '221309136169',
-    projectId: 'ecommerce-b2c-a6083',
-    storageBucket: 'ecommerce-b2c-a6083.appspot.com',
-    iosClientId: '221309136169-in79m3455pks3j2illg0hrjod7r8gqaa.apps.googleusercontent.com',
+    apiKey: 'AIzaSyDnxexYHblPFQr9bW_t8ryjZDPBJRWIj2g',
+    appId: '1:1072371601182:ios:1f23e93970eb29d225830f',
+    messagingSenderId: '1072371601182',
+    projectId: 'ritesh-sarees',
+    storageBucket: 'ritesh-sarees.appspot.com',
+    iosClientId: '1072371601182-7aded7eb9u3etk3m1sasv71d1rlas4t2.apps.googleusercontent.com',
+    iosBundleId: 'com.example.ecommerceMajorProject',
+  );
+
+  static const FirebaseOptions macos = FirebaseOptions(
+    apiKey: 'AIzaSyDnxexYHblPFQr9bW_t8ryjZDPBJRWIj2g',
+    appId: '1:1072371601182:ios:1f23e93970eb29d225830f',
+    messagingSenderId: '1072371601182',
+    projectId: 'ritesh-sarees',
+    storageBucket: 'ritesh-sarees.appspot.com',
+    iosClientId: '1072371601182-7aded7eb9u3etk3m1sasv71d1rlas4t2.apps.googleusercontent.com',
     iosBundleId: 'com.example.ecommerceMajorProject',
   );
 }
