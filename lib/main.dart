@@ -7,6 +7,7 @@ import 'package:ecommerce_major_project/firebase_options.dart';
 import 'package:ecommerce_major_project/providers/tab_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
+import 'package:firebase_ui_oauth_apple/firebase_ui_oauth_apple.dart';
 import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -31,8 +32,9 @@ void main() async {
     EmailAuthProvider(),
     GoogleProvider(
         clientId:
-            "221309136169-4gv4udbroog90v8lgdhq0lnj6co82f4i.apps.googleusercontent.com",
+            "1072371601182-171fhmmstseo4mhvitaq4btte1on5rnq.apps.googleusercontent.com",
         iOSPreferPlist: true),
+    AppleProvider(),
     PhoneAuthProvider(),
   ]);
   SharedPreferences prefs = await SharedPreferences.getInstance();
