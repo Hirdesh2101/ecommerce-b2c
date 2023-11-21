@@ -4,13 +4,11 @@ import 'package:ecommerce_major_project/features/return_product/services/refund_
 import 'package:ecommerce_major_project/models/returns.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 import 'package:ecommerce_major_project/constants/global_variables.dart';
 import 'package:ecommerce_major_project/features/admin/services/admin_services.dart';
 import 'package:ecommerce_major_project/features/search/screens/search_screen.dart';
 import 'package:ecommerce_major_project/features/search_delegate/my_search_screen.dart';
 import 'package:ecommerce_major_project/main.dart';
-import 'package:ecommerce_major_project/providers/user_provider.dart';
 
 class ReturnDetailsScreen extends StatefulWidget {
   static const String routeName = "/return-details";
@@ -91,7 +89,6 @@ class _ReturnDetailsScreenState extends State<ReturnDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<UserProvider>(context).user;
     return Scaffold(
       appBar: GlobalVariables.getAppBar(
           title: "Return Details",

@@ -5,15 +5,12 @@ import 'package:ecommerce_major_project/features/return_product/screens/select_r
 import 'package:ecommerce_major_project/features/return_product/services/refund_service.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
-import 'package:ecommerce_major_project/common/widgets/custom_button.dart';
 import 'package:ecommerce_major_project/constants/global_variables.dart';
 import 'package:ecommerce_major_project/features/admin/services/admin_services.dart';
 import 'package:ecommerce_major_project/features/search/screens/search_screen.dart';
 import 'package:ecommerce_major_project/features/search_delegate/my_search_screen.dart';
 import 'package:ecommerce_major_project/main.dart';
 import 'package:ecommerce_major_project/models/order.dart';
-import 'package:ecommerce_major_project/providers/user_provider.dart';
 
 class OrderDetailsScreen extends StatefulWidget {
   static const String routeName = "/order-details";
@@ -154,7 +151,6 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<UserProvider>(context).user;
     return Scaffold(
       appBar: GlobalVariables.getAppBar(
           title: "Order Details",

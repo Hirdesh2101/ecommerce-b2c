@@ -16,7 +16,6 @@ import 'package:ecommerce_major_project/providers/user_provider.dart';
 import 'package:ecommerce_major_project/common/widgets/bottom_bar.dart';
 import 'package:ecommerce_major_project/constants/global_variables.dart';
 import 'package:ecommerce_major_project/features/auth/screens/auth_screen.dart';
-import 'package:ecommerce_major_project/features/admin/screens/admin_screen.dart';
 import 'package:ecommerce_major_project/features/auth/services/auth_service.dart';
 import 'package:ecommerce_major_project/features/home/providers/search_provider.dart';
 import 'package:ecommerce_major_project/features/home/providers/filter_provider.dart';
