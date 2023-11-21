@@ -282,21 +282,22 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                 child: Stepper(
                     elevation: 3,
                     controlsBuilder: (context, details) {
-                      if (user.type == "admin") {
-                        return CustomButton(
-                            text: "Done",
-                            onTap: () =>
-                                changeOrderStatus(details.currentStep));
-                      }
+                      // if (user.type == "admin") {
+                      //   return CustomButton(
+                      //       text: "Done",
+                      //       onTap: () =>
+                      //           changeOrderStatus(details.currentStep));
+                      // }
                       return const SizedBox();
                     },
                     currentStep: currentStep,
                     steps: steps),
               ),
               SizedBox(height: mq.width * .025),
-              user.type == "admin"
-                  ? const SizedBox.shrink()
-                  : widget.order.status == "ORDER_DELIVERED" && copy.isNotEmpty
+              // user.type == "admin"
+              //     ? const SizedBox.shrink()
+              //     : 
+                  widget.order.status == "ORDER_DELIVERED" && copy.isNotEmpty
                       ? ElevatedButton(
                           onPressed: () {
                             if (widget.order.products.length == 1 &&

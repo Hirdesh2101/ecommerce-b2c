@@ -119,9 +119,7 @@ class _MyAppState extends State<MyApp> {
           : Provider.of<UserProvider>(context).isLoading
               ? const LoadingSplashScreen()
               : Provider.of<UserProvider>(context).user.token.isNotEmpty
-                  ? Provider.of<UserProvider>(context).user.type == 'user'
-                      ? const BottomBar()
-                      : const AdminScreen()
+                  ? const BottomBar()
                   : const AuthScreen(),
     );
   }

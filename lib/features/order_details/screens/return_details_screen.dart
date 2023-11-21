@@ -221,12 +221,12 @@ class _ReturnDetailsScreenState extends State<ReturnDetailsScreen> {
                 child: Stepper(
                     elevation: 3,
                     controlsBuilder: (context, details) {
-                      if (user.type == "admin") {
-                        // return CustomButton(
-                        //     text: "Done",
-                        //     onTap: () =>
-                        //         changeOrderStatus(details.currentStep));
-                      }
+                      // if (user.type == "admin") {
+                      //   return CustomButton(
+                      //       text: "Done",
+                      //       onTap: () =>
+                      //           changeOrderStatus(details.currentStep));
+                      // }
                       return const SizedBox();
                     },
                     currentStep: currentStep,
