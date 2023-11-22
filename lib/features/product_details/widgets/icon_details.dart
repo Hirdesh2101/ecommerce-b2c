@@ -1,6 +1,7 @@
 import 'package:ecommerce_major_project/main.dart';
 import 'package:ecommerce_major_project/models/product.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:iconly/iconly.dart';
 
 class DetailsWithICons extends StatelessWidget {
@@ -56,7 +57,7 @@ class DetailsWithICons extends StatelessWidget {
                           ),
                           InkWell(
                             onTap: () {
-                              Navigator.of(context).pop();
+                              context.pop();
                             },
                             child: const Icon(Icons.close_rounded, size: 28),
                           ),

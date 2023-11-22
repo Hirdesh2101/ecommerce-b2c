@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:cloudinary_public/cloudinary_public.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
 import 'package:ecommerce_major_project/constants/error_handling.dart';
 import 'package:ecommerce_major_project/constants/global_variables.dart';
@@ -65,7 +66,7 @@ class AdminServices {
           context: context,
           onSuccess: () {
             showSnackBar(context: context, text: 'Product Added Successfully!');
-            Navigator.pop(context);
+            context.pop();
           },
         );
       }

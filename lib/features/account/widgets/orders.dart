@@ -6,8 +6,7 @@ import 'package:ecommerce_major_project/models/order.dart';
 import 'package:ecommerce_major_project/constants/global_variables.dart';
 import 'package:ecommerce_major_project/common/widgets/color_loader_2.dart';
 import 'package:ecommerce_major_project/features/account/widgets/single_product.dart';
-import 'package:ecommerce_major_project/features/account/screens/all_orders_screen.dart';
-import 'package:ecommerce_major_project/features/order_details/screens/order_details_screen.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class Orders extends StatefulWidget {
@@ -50,11 +49,8 @@ class _OrdersState extends State<Orders> {
               InkWell(
                 onTap: widget.orders == null || widget.orders!.isEmpty
                     ? null
-                    : () {
-                        Navigator.pushNamed(
-                          context,
-                          AllOrdersScreen.routeName,
-                        );
+                    : () async {
+                        context.push('/orders');
                       },
                 child: Container(
                   padding: EdgeInsets.only(right: mq.width * 0.04),
@@ -113,11 +109,7 @@ class _OrdersState extends State<Orders> {
                         //     " $index value of container width =======> ${mq.height * 0.025}");
                         return GestureDetector(
                           onTap: () {
-                            Navigator.pushNamed(
-                              context,
-                              OrderDetailsScreen.routeName,
-                              arguments: widget.orders![index],
-                            );
+                            context.push('/orders',extra: widget.orders![index]);
                           },
                           child: SingleProduct(
                               image: widget.orders![index].products[0]

@@ -10,6 +10,7 @@ import 'package:ecommerce_major_project/models/product.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:go_router/go_router.dart';
 
 class AllRatings extends StatefulWidget {
   const AllRatings({
@@ -195,7 +196,7 @@ class _AllRatingsState extends State<AllRatings> {
                   review: controller.text.trim(),
                 );
               }
-              Navigator.pop(context);
+              context.pop();
             },
             child: const Text(
               "Rate",

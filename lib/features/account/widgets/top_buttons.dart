@@ -1,6 +1,4 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:ecommerce_major_project/features/account/screens/all_orders_screen.dart';
-import 'package:ecommerce_major_project/features/home/screens/wish_list_screen.dart';
 import 'package:ecommerce_major_project/models/order.dart';
 import 'package:ecommerce_major_project/providers/tab_provider.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:ecommerce_major_project/main.dart';
 import 'package:ecommerce_major_project/features/account/widgets/account_button.dart';
 import 'package:ecommerce_major_project/features/account/services/account_services.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class TopButtons extends StatefulWidget {
@@ -30,15 +29,12 @@ class _TopButtonsState extends State<TopButtons> {
             AccountButton(
                 text: "Your Orders",
                 onTap: () {
-                  Navigator.pushNamed(context, AllOrdersScreen.routeName);
+                  context.push('/orders');
                 }),
             AccountButton(
                 text: "Your Wishlist",
                 onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (_) => const WishListScreen()));
+                  context.push('/wishlist');
                 }),
           ],
         ),
@@ -48,7 +44,8 @@ class _TopButtonsState extends State<TopButtons> {
             AccountButton(
                 text: "Cart",
                 onTap: () {
-                 tabProvider.setTab(2);
+                  tabProvider.setTab(2);
+                  context.go('/cart');
                 }),
             AccountButton(
                 text: "Log out",

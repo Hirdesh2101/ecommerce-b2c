@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:ecommerce_major_project/main.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 // String uri = 'https://drab-teal-crayfish-hem.cyclic.app';
@@ -144,7 +145,6 @@ class GlobalVariables {
 
   static AppBar getAppBar({
     required BuildContext context,
-    required dynamic onClickSearchNavigateTo,
     bool? wantBackNavigation = true,
     bool? wantActions = true,
     String? title = "",
@@ -160,7 +160,7 @@ class GlobalVariables {
         child: wantBackNavigation!
             ? IconButton(
                 icon: const Icon(Icons.arrow_back),
-                onPressed: () => Navigator.pop(context))
+                onPressed: () => context.pop())
             : InkWell(
                 onTap: () {
                   tabProvider.setTab(0);
@@ -181,8 +181,7 @@ class GlobalVariables {
                   children: [
                     InkWell(
                       onTap: () {
-                        Navigator.of(context)
-                            .push(createRoute(onClickSearchNavigateTo));
+                        context.push('/search');
                       },
                       child: SvgPicture.asset(
                         "assets/images/search-svg.svg",

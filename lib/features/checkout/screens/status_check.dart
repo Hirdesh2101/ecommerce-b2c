@@ -5,6 +5,7 @@ import 'package:ecommerce_major_project/features/checkout/services/checkout_serv
 import 'package:ecommerce_major_project/main.dart';
 import 'package:ecommerce_major_project/providers/tab_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
@@ -156,7 +157,7 @@ class AddFundsCheckStatusState extends State<CheckStatus> {
                     final AuthService authService = AuthService();
                     authService.getUserData(context);
                     tabProvider.setTab(0);
-                    Navigator.of(context).popUntil((route) => route.isFirst);
+                    context.go('/home');
                   },
                   color: Colors.yellow,
                 )),

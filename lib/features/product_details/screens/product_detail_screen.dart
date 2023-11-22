@@ -1,7 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
 import 'package:ecommerce_major_project/common/widgets/color_loader_2.dart';
-import 'package:ecommerce_major_project/features/checkout/screens/checkout_screen.dart';
 import 'package:ecommerce_major_project/features/product_details/widgets/buybuttons.dart';
 import 'package:ecommerce_major_project/features/product_details/widgets/delivery_location.dart';
 import 'package:ecommerce_major_project/features/product_details/widgets/details_widget.dart';
@@ -15,14 +14,13 @@ import 'package:ecommerce_major_project/models/cart.dart';
 import 'package:ecommerce_major_project/providers/tab_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_adaptive_scaffold/flutter_adaptive_scaffold.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:ecommerce_major_project/main.dart';
 import 'package:ecommerce_major_project/models/product.dart';
 import 'package:ecommerce_major_project/constants/utils.dart';
 import 'package:ecommerce_major_project/providers/user_provider.dart';
 import 'package:ecommerce_major_project/constants/global_variables.dart';
-import 'package:ecommerce_major_project/features/search/screens/search_screen.dart';
-import 'package:ecommerce_major_project/features/search_delegate/my_search_screen.dart';
 import 'package:ecommerce_major_project/features/product_details/services/product_detail_services.dart';
 
 class ProductDetailScreen extends StatefulWidget {
@@ -119,11 +117,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             const NavigationDestination(icon: Icon(Icons.abc), label: 'page'),
       )
       .toList();
-
-  void navigateToSearchScreen(String query) {
-    Navigator.pushNamed(context, SearchScreen.routeName, arguments: query);
-  }
-
   void addToCart() {
     if (selectedSize == -1) {
       showSnackBar(
@@ -150,8 +143,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             final tabProvider =
                 Provider.of<TabProvider>(context, listen: false);
             tabProvider.setTab(2);
-            GlobalVariables.navigatorKey.currentState!
-                .popUntil((route) => route.isFirst);
+            // GlobalVariables.navigatorKey.currentState!
+            //     .popUntil((route) => route.isFirst);
+            //TODO here use global context for redirection
+            context.go('/cart');
             //Navigator.pushNamed(context, CartScreen.);
           },
           actionLabel: "View");
@@ -187,11 +182,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               ['size']
         }
       ];
-      Navigator.pushNamed(context, CheckoutScreen.routeName, arguments: [
-        product!.varients[selectedColor]['price'].toString(),
+      context.push('/checkout',extra: [ product!.varients[selectedColor]['price'].toString(),
         buyNowCart,
-        buyNowUserCart
-      ]);
+        buyNowUserCart]);
     }
   }
 
@@ -282,7 +275,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             builder: (_) => Scaffold(
               appBar: GlobalVariables.getAppBar(
                   context: context,
-                  onClickSearchNavigateTo: const MySearchScreen()),
+                  //onClickSearchNavigateTo: const MySearchScreen()
+                  ),
               body: isProductLoading
                   ? const Center(
                       child: ColorLoader2(),

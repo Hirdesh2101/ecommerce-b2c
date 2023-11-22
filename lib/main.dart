@@ -1,9 +1,8 @@
 import 'package:ecommerce_major_project/features/cart/providers/cart_provider.dart';
 import 'package:ecommerce_major_project/features/home/providers/ads_provider.dart';
 import 'package:ecommerce_major_project/features/home/providers/category_provider.dart';
-import 'package:ecommerce_major_project/features/splash/loading_splash.dart';
-import 'package:ecommerce_major_project/features/splash/splash_screen.dart';
 import 'package:ecommerce_major_project/firebase_options.dart';
+import 'package:ecommerce_major_project/go_router.dart';
 import 'package:ecommerce_major_project/providers/tab_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
@@ -11,11 +10,8 @@ import 'package:firebase_ui_oauth_apple/firebase_ui_oauth_apple.dart';
 import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:ecommerce_major_project/router.dart';
 import 'package:ecommerce_major_project/providers/user_provider.dart';
-import 'package:ecommerce_major_project/common/widgets/bottom_bar.dart';
 import 'package:ecommerce_major_project/constants/global_variables.dart';
-import 'package:ecommerce_major_project/features/auth/screens/auth_screen.dart';
 import 'package:ecommerce_major_project/features/auth/services/auth_service.dart';
 import 'package:ecommerce_major_project/features/home/providers/search_provider.dart';
 import 'package:ecommerce_major_project/features/home/providers/filter_provider.dart';
@@ -93,11 +89,12 @@ class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       scrollBehavior: AppScrollBehavior(),
       title: 'Ecommerce App',
-      navigatorKey: GlobalVariables.navigatorKey,
+      //navigatorKey: GlobalVariables.navigatorKey,
+      routerConfig: routes,
       theme: ThemeData(
         scaffoldBackgroundColor: GlobalVariables.backgroundColor,
         fontFamily: 'Poppins',
@@ -108,18 +105,6 @@ class _MyAppState extends State<MyApp> {
           bodyMedium: TextStyle(fontSize: 14.0, fontFamily: 'Poppins'),
         ),
       ),
-      //
-      //
-      onGenerateRoute: (settings) => generateRoute(settings),
-      //
-      //
-      home: widget.onboarding == null || widget.onboarding == false
-          ? const SplashScreen()
-          : Provider.of<UserProvider>(context).isLoading
-              ? const LoadingSplashScreen()
-              : Provider.of<UserProvider>(context).user.token.isNotEmpty
-                  ? const BottomBar()
-                  : const AuthScreen(),
     );
   }
 }

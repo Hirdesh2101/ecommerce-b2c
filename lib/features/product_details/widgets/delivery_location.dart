@@ -5,6 +5,7 @@ import 'package:ecommerce_major_project/features/checkout/services/checkout_serv
 import 'package:ecommerce_major_project/main.dart';
 import 'package:ecommerce_major_project/providers/user_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -72,7 +73,7 @@ class _DeliveyLocationState extends State<DeliveyLocation> {
           context: context, address: addressToBeUsed);
       int indexOfHyphen = addressToBeUsed.lastIndexOf('-');
       calculateDeliveryCharge(addressToBeUsed.substring(indexOfHyphen + 1));
-      Navigator.of(context).pop();
+      context.pop();
     }
   }
 

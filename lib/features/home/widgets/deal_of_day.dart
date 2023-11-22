@@ -4,7 +4,7 @@ import 'package:ecommerce_major_project/main.dart';
 import 'package:ecommerce_major_project/models/product.dart';
 import 'package:ecommerce_major_project/common/widgets/color_loader_2.dart';
 import 'package:ecommerce_major_project/features/home/services/home_services.dart';
-import 'package:ecommerce_major_project/features/product_details/screens/product_detail_screen.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 class DealOfDay extends StatefulWidget {
@@ -36,8 +36,7 @@ class _DealOfDayState extends State<DealOfDay> {
   }
 
   void navigateToDetailScreen() {
-    Navigator.pushNamed(context, ProductDetailScreen.routeName,
-        arguments: product!.id);
+    context.push('/product/${product!.id}');
   }
 
   @override

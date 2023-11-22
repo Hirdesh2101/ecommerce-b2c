@@ -1,5 +1,6 @@
 import 'package:ecommerce_major_project/providers/tab_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
@@ -48,7 +49,7 @@ class OrderDialog {
           TextButton(
             onPressed: () {
               tabProvider.setTab(0);
-              Navigator.of(context).popUntil((route) => route.isFirst);
+              context.go('/home');
             },
             child: const Text("OK"),
           )

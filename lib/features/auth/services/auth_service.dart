@@ -2,9 +2,9 @@ import 'dart:convert';
 import 'package:ecommerce_major_project/providers/user_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
-import '/common/widgets/bottom_bar.dart';
 import '/constants/global_variables.dart';
 import '/constants/error_handling.dart';
 import '/constants/utils.dart';
@@ -50,8 +50,7 @@ class AuthService {
               //showSnackBar(context: context, text: "Account created success!");
               userProvider.setUser(res.body);
               if (context.mounted) {
-                Navigator.pushNamedAndRemoveUntil(
-                    context, BottomBar.routeName, (route) => false);
+                context.go('/home');
               }
             });
       }
@@ -80,8 +79,7 @@ class AuthService {
             });
         userProvider.setUser(userRes.body);
         if (context.mounted) {
-          Navigator.pushNamedAndRemoveUntil(
-              context, BottomBar.routeName, (route) => false);
+           context.go('/home');
         }
       }
     } catch (e) {

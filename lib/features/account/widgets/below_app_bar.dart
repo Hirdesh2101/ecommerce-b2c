@@ -1,6 +1,6 @@
 import 'dart:io';
-import 'package:ecommerce_major_project/features/profile/screens/profilescreen.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ecommerce_major_project/main.dart';
@@ -32,9 +32,7 @@ class _BelowAppBarState extends State<BelowAppBar> {
       child: InkWell(
 
         onTap: (){
-          Navigator.of(context).push(MaterialPageRoute(builder: (context){
-            return const ProfileScreen();
-          }));
+          context.push('/profile');
         },
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -174,7 +172,7 @@ class _BelowAppBarState extends State<BelowAppBar> {
                                 // APIs.updateProfilePicture(File(_image!));
 
                                 //hiding bottomsheet
-                                Navigator.pop(context);
+                                 context.pop();
                                 // showSnackBar(
                                 //     context: context,
                                 //     text: "Profile Picture updated successfully!");
@@ -212,7 +210,7 @@ class _BelowAppBarState extends State<BelowAppBar> {
                                     imagePicked: File(_image!));
 
                                 //hiding bottomSheet
-                                Navigator.pop(context);
+                                context.pop();
                               }
                               
                               

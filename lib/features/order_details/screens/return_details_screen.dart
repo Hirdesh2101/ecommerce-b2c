@@ -1,13 +1,11 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:ecommerce_major_project/features/product_details/screens/product_detail_screen.dart';
 import 'package:ecommerce_major_project/features/return_product/services/refund_service.dart';
 import 'package:ecommerce_major_project/models/returns.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:ecommerce_major_project/constants/global_variables.dart';
 import 'package:ecommerce_major_project/features/admin/services/admin_services.dart';
-import 'package:ecommerce_major_project/features/search/screens/search_screen.dart';
-import 'package:ecommerce_major_project/features/search_delegate/my_search_screen.dart';
 import 'package:ecommerce_major_project/main.dart';
 
 class ReturnDetailsScreen extends StatefulWidget {
@@ -82,18 +80,14 @@ class _ReturnDetailsScreenState extends State<ReturnDetailsScreen> {
     super.initState();
   }
 
-  void navigateToSearchScreen(String query) {
-    //make sure to pass the arguments here!
-    Navigator.pushNamed(context, SearchScreen.routeName, arguments: query);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: GlobalVariables.getAppBar(
           title: "Return Details",
           context: context,
-          onClickSearchNavigateTo: const MySearchScreen()),
+          //onClickSearchNavigateTo: const MySearchScreen()
+          ),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(mq.width * .025),
@@ -118,12 +112,8 @@ class _ReturnDetailsScreenState extends State<ReturnDetailsScreen> {
                         padding: const EdgeInsets.only(top: 8.0),
                         child: InkWell(
                           onTap: () {
-                            Navigator.pushNamed(
-                              context,
-                              ProductDetailScreen.routeName,
-                              arguments: widget.returns.returnProducts[i]
-                                  ['product']['_id'],
-                            );
+                            context.push('/product/${widget.returns.returnProducts[i]
+                                  ['product']['_id']}');
                           },
                           child: Row(
                             children: [

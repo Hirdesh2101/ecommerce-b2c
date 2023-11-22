@@ -2,15 +2,14 @@ import 'package:ecommerce_major_project/features/home/providers/search_provider.
 import 'package:ecommerce_major_project/features/home/services/home_services.dart';
 import 'package:ecommerce_major_project/main.dart';
 import 'package:flutter/material.dart';
-import 'package:ecommerce_major_project/features/search/screens/search_screen.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 
 class MySearchScreen extends StatefulWidget {
   static const String routeName = "/search-screen-util";
-  final String? searchQueryAlready;
-  const MySearchScreen({this.searchQueryAlready, super.key});
+  const MySearchScreen({super.key});
 
   @override
   State<MySearchScreen> createState() => _MySearchScreenState();
@@ -95,7 +94,8 @@ class _MySearchScreenState extends State<MySearchScreen> {
 
   void navigateToSearchScreen(String query) {
     //make sure to pass the arguments here!
-    Navigator.pushReplacementNamed(context, SearchScreen.routeName, arguments: query);
+    context.pushReplacement('/search?query=$query');
+    //Navigator.pushReplacementNamed(context, SearchScreen.routeName, arguments: query);
   }
 
   /// This has to happen only once per app

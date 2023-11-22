@@ -1,12 +1,7 @@
-import 'package:ecommerce_major_project/common/widgets/bottom_bar.dart';
 import 'package:ecommerce_major_project/common/widgets/custom_button.dart';
-import 'package:ecommerce_major_project/features/admin/screens/admin_screen.dart';
-import 'package:ecommerce_major_project/features/auth/screens/auth_screen.dart';
 import 'package:ecommerce_major_project/features/splash/widgets/splash_content.dart';
 import 'package:ecommerce_major_project/main.dart';
-import 'package:ecommerce_major_project/providers/user_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // This is the best practice
@@ -85,21 +80,21 @@ class _BodyState extends State<Body> {
                             setState(() {
                               opacity = 0.5;
                             });
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (_) =>
-                                        Provider.of<UserProvider>(context)
-                                                .user
-                                                .token
-                                                .isNotEmpty
-                                            ? Provider.of<UserProvider>(context)
-                                                        .user
-                                                        .type ==
-                                                    'user'
-                                                ? const BottomBar()
-                                                : const AdminScreen()
-                                            : const AuthScreen()));
+                            // Navigator.pushReplacement(
+                            //     context,
+                            //     MaterialPageRoute(
+                            //         builder: (_) =>
+                            //             Provider.of<UserProvider>(context)
+                            //                     .user
+                            //                     .token
+                            //                     .isNotEmpty
+                            //                 ? Provider.of<UserProvider>(context)
+                            //                             .user
+                            //                             .type ==
+                            //                         'user'
+                            //                     ? const BottomBar()
+                            //                     : const AdminScreen()
+                            //                 : const AuthScreen()));
                             SharedPreferences prefs =
                                 await SharedPreferences.getInstance();
                             prefs.setBool('Onboarding', true);
