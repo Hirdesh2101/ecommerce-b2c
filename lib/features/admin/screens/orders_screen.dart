@@ -1,6 +1,5 @@
 import 'package:ecommerce_major_project/common/widgets/color_loader_2.dart';
 import 'package:ecommerce_major_project/constants/global_variables.dart';
-import 'package:ecommerce_major_project/features/account/services/account_services.dart';
 import 'package:ecommerce_major_project/features/auth/services/auth_service.dart';
 import 'package:flutter/material.dart';
 

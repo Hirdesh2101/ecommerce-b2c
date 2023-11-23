@@ -69,7 +69,6 @@ class _MyAppState extends State<MyApp> {
     super.initState();
   }
   void onAuthStateChange(bool login) {
-    print(login);
     appService.loginState = login;
   }
   @override

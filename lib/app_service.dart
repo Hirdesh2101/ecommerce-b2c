@@ -10,8 +10,6 @@ import 'package:http/http.dart' as http;
 
 class AppService with ChangeNotifier {
   late final SharedPreferences sharedPreferences;
-  final StreamController<bool> _loginStateChange =
-      StreamController<bool>.broadcast();
   bool _loginState = false;
   bool _initialized = false;
   bool _onboarding = false;
@@ -21,23 +19,18 @@ class AppService with ChangeNotifier {
   bool get loginState => _loginState;
   bool get initialized => _initialized;
   bool get onboarding => _onboarding;
-  Stream<bool> get loginStateChange => _loginStateChange.stream;
 
   set loginState(bool state) {
-    print('state change');
     _loginState = state;
-    _loginStateChange.add(state);
     notifyListeners();
   }
 
   set initialized(bool value) {
-    print('state change2');
     _initialized = value;
     notifyListeners();
   }
 
   set onboarding(bool value) {
-    print('state change3');
     sharedPreferences.setBool('Onboarding', value);
     _onboarding = value;
     notifyListeners();

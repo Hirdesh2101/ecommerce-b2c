@@ -25,7 +25,6 @@ import 'package:ecommerce_major_project/features/search/screens/search_screen.da
 import 'package:ecommerce_major_project/features/checkout/screens/checkout_screen.dart';
 import 'package:ecommerce_major_project/features/home/screens/category_deals_screen.dart';
 import 'package:ecommerce_major_project/features/product_details/screens/product_detail_screen.dart';
-import 'package:provider/provider.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 final _shellNavigatorKey = GlobalKey<NavigatorState>();
@@ -36,6 +35,7 @@ class AppRouter {
   AppRouter(this.appService);
 
   late final GoRouter _goRouter = GoRouter(
+    navigatorKey: _rootNavigatorKey,
     refreshListenable: appService,
     initialLocation: '/home',
     routes: [

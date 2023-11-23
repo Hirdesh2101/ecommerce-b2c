@@ -1,4 +1,3 @@
-import 'package:ecommerce_major_project/features/account/services/account_services.dart';
 import 'package:ecommerce_major_project/features/auth/services/auth_service.dart';
 import 'package:ecommerce_major_project/providers/user_provider.dart';
 import 'package:flutter/material.dart';

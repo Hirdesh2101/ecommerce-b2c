@@ -12,7 +12,7 @@ import 'package:provider/provider.dart';
 //for web http://127.0.0.1:3000
 //for ios http://localhost:3000
 //for external devices: Your pc IP (192.168.1.3). Run ipconfig/all inc cmd to find.
-String uri = 'http://localhost:3000';
+String uri = 'http://ec2-54-145-168-170.compute-1.amazonaws.com:3000';
 
 class GlobalVariables {
   //Razor pay details
@@ -164,6 +164,7 @@ class GlobalVariables {
             : InkWell(
                 onTap: () {
                   tabProvider.setTab(0);
+                  context.go('/home');
                 },
                 child: Image.asset(
                   "assets/images/logo.png",
