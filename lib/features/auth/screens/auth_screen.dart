@@ -6,6 +6,7 @@ import 'package:ecommerce_major_project/main.dart';
 import 'package:ecommerce_major_project/constants/utils.dart';
 import 'package:ecommerce_major_project/constants/global_variables.dart';
 import 'package:ecommerce_major_project/features/auth/services/auth_service.dart';
+import 'package:provider/provider.dart';
 
 //enum signin, signup
 enum Auth { signin, signup }
@@ -21,7 +22,6 @@ class AuthScreen extends StatefulWidget {
 class _AuthScreenState extends State<AuthScreen> {
   //form keys for validation
   final _signInFormKey = GlobalKey<FormState>();
-  final AuthService authService = AuthService();
 
   // controllers of the textfields
   final TextEditingController _nameController = TextEditingController();
@@ -45,11 +45,11 @@ class _AuthScreenState extends State<AuthScreen> {
     super.dispose();
   }
 
-  void signUpUser() {
+  void signUpUser(authService) {
     authService.signUpUser(context: context);
   }
 
-  void signInUser() {
+  void signInUser(authService) {
     authService.signInUser(
       context: context,
     );
@@ -57,6 +57,7 @@ class _AuthScreenState extends State<AuthScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final authService = Provider.of<AuthService>(context);
     mq = MediaQuery.of(context).size;
     myTextTheme = Theme.of(context).textTheme;
 
@@ -100,12 +101,12 @@ class _AuthScreenState extends State<AuthScreen> {
                           actions: [
                             AuthStateChangeAction<SignedIn>((context, state) {
                               if (state.user != null) {
-                                signInUser();
+                                signInUser(authService);
                               }
                             }),
                             AuthStateChangeAction<UserCreated>(
                                 (context, state) {
-                              signUpUser();
+                              signUpUser(authService);
                             }),
                             // SMSCodeRequestedAction(
                             //     (context, action, flowKey, phoneNumber) {

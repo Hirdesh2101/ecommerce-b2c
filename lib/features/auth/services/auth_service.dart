@@ -1,8 +1,9 @@
+import 'dart:async';
 import 'dart:convert';
+import 'package:ecommerce_major_project/providers/tab_provider.dart';
 import 'package:ecommerce_major_project/providers/user_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import '/constants/global_variables.dart';
@@ -11,6 +12,10 @@ import '/constants/utils.dart';
 import '/models/user.dart';
 
 class AuthService {
+  final StreamController<bool> _onAuthStateChange = StreamController.broadcast();
+
+  Stream<bool> get onAuthStateChange => _onAuthStateChange.stream;
+  
   //signing up user
   Future<void> signUpUser({
     required BuildContext context,
@@ -48,10 +53,11 @@ class AuthService {
             context: context,
             onSuccess: () async {
               //showSnackBar(context: context, text: "Account created success!");
+              _onAuthStateChange.sink.add(true);
               userProvider.setUser(res.body);
-              if (context.mounted) {
-                context.go('/home');
-              }
+              // if (context.mounted) {
+              //   context.go('/home');
+              // }
             });
       }
     } catch (e) {
@@ -77,10 +83,11 @@ class AuthService {
               'Content-Type': 'application/json; charset=UTF-8',
               'Authorization': authToken!,
             });
+        _onAuthStateChange.sink.add(true);
         userProvider.setUser(userRes.body);
-        if (context.mounted) {
-           context.go('/home');
-        }
+        // if (context.mounted) {
+        //    context.go('/home');
+        // }
       }
     } catch (e) {
       
@@ -117,68 +124,10 @@ class AuthService {
                 'Content-Type': 'application/json; charset=UTF-8',
                 'Authorization': authToken,
               });
-          // print(
-          //     "==================> User Response Decoded :\n${jsonDecode(userRes.body)['_doc']} <==================");
-
-          // userRes.body return this
-          /*
-                {
-                  "$__": {
-                    "activePaths": {
-                      "paths": {
-                        "password": "init",
-                        "email": "init",
-                        "name": "init",
-                        "address": "init",
-                        "type": "init",
-                        "_id": "init",
-                        "cart": "init",
-                        "__v": "init"
-                      },
-                      "states": {
-                        "require": {},
-                        "default": {},
-                        "init": {
-                          "_id": true,
-                          "name": true,
-                          "email": true,
-                          "password": true,
-                          "address": true,
-                          "type": true,
-                          "cart": true,
-                          "__v": true
-                        }
-                      }
-                    },
-                    "skipId": true
-                  },
-                  "$isNew": false,
-                  "_doc": {
-                    "_id": "6450dab71a92ba1d4664fa6f",
-                    "name": "Rajput Aaryaveersinh",
-                    "email": "akr@gmail.com",
-                    "password": "$2a$08$bOhlBhitog4OvGyDgUdnne8/s8z3LCiTGGGHUgH.UlKlXOpaI8O0m",
-                    "address": "",
-                    "type": "user",
-                    "cart": [],
-                    "__v": 0
-                  },
-                  "name": "Rajput Aaryaveersinh",
-                  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NTBkYWI3MWE5MmJhMWQ0NjY0ZmE2ZiIsImlhdCI6MTY4MzAyMDQ3NX0.Au7GX5n9cnsH2qOkiBYUa5GB30XThWt0e_fKFSVeGrQ"
-                }
-          */
-          // hence it is important to decode the body and set "_doc" as user
-          // but token not working with this method
-          // authorization not possible somehow
-          // its about the auth middleware
-          // userProvider.setUser(jsonEncode(jsonDecode(userRes.body)['_doc']));
 
 
           userProvider.setUser(userRes.body);
           userProvider.setLoading(false);
-
-          // print(
-          //     "==================> User Response :\n${userProvider.user.name} <==================");
         } else {
           userProvider.setLoading(false);
         }
@@ -191,55 +140,16 @@ class AuthService {
       if (context.mounted) showSnackBar(context: context, text: e.toString());
     }
   }
+  void logOut(BuildContext context) async {
+    final tabProvider = Provider.of<TabProvider>(context,listen: false);
+    try {
+      // SharedPreferences prefs = await SharedPreferences.getInstance();
+      // await prefs.setString('Authorization', '');
+      auth.FirebaseAuth.instance.signOut();
+      tabProvider.setTab(0);
+       _onAuthStateChange.sink.add(false);
+    } catch (e) {
+      showSnackBar(context: context, text: "Error in logging out : $e");
+    }
+  }
 }
-
-// else {}
-
-//if not first time user then check the validity of the user
-//making an API for verifying the token
-
-// http.Response res = await http.post(
-//   Uri.parse('$uri/api/signin'),
-//   body: jsonEncode({
-//     'email': email,
-//     'password': password,
-//   }),
-//   headers: <String, String>{
-//     'Content-Type': 'application/json; charset=UTF-8',
-//   },
-// );
-// print(
-//     "<============= after sign in http request ${res.body} ===============>");
-
-// print(
-//     "Response from signup  =====> ${res.body}, status code =====> ${res.statusCode}");
-
-//dont use context across asynchronous gaps
-// if (context.mounted) {
-//   
-//   httpErrorHandle(
-//     response: res,
-//     context: context,
-//     onSuccess: () async {
-//       //using SharedPreferences to store the user token
-//       SharedPreferences prefs = await SharedPreferences.getInstance();
-
-//       //dont use context across asynchronous gaps
-//       //using provider change UI according to user
-//       if (context.mounted) {
-//         Provider.of<UserProvider>(context, listen: false)
-//             .setUser(res.body);
-//       }
-
-//       //remember to use jsonDecode
-//       await prefs.setString(
-//           'Authorization', jsonDecode(res.body)['token']);
-
-//       //dont use context across asynchronous gaps
-//       if (context.mounted) {
-//         Navigator.pushNamedAndRemoveUntil(
-//             context, HomeScreen.routeName, (route) => false);
-//       }
-//     },
-//   );
-// }

@@ -1,11 +1,10 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:ecommerce_major_project/features/auth/services/auth_service.dart';
 import 'package:ecommerce_major_project/models/order.dart';
 import 'package:ecommerce_major_project/providers/tab_provider.dart';
 import 'package:flutter/material.dart';
-
 import 'package:ecommerce_major_project/main.dart';
 import 'package:ecommerce_major_project/features/account/widgets/account_button.dart';
-import 'package:ecommerce_major_project/features/account/services/account_services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
@@ -22,6 +21,7 @@ class _TopButtonsState extends State<TopButtons> {
   @override
   Widget build(BuildContext context) {
     final tabProvider = Provider.of<TabProvider>(context);
+    final authService = Provider.of<AuthService>(context);
     return Column(
       children: [
         Row(
@@ -49,7 +49,7 @@ class _TopButtonsState extends State<TopButtons> {
                 }),
             AccountButton(
                 text: "Log out",
-                onTap: () => AccountServices().logOut(context)),
+                onTap: () => authService.logOut(context)),
           ],
         )
       ],

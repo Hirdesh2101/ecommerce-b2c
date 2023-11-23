@@ -1,9 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:ecommerce_major_project/models/returns.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:cloudinary_public/cloudinary_public.dart';
@@ -194,16 +192,4 @@ class AccountServices {
     return returnList;
   }
 
-  void logOut(BuildContext context) async {
-    try {
-      // SharedPreferences prefs = await SharedPreferences.getInstance();
-      // await prefs.setString('Authorization', '');
-      FirebaseAuth.instance.signOut();
-      if (context.mounted) {
-       context.go('/auth');
-      }
-    } catch (e) {
-      showSnackBar(context: context, text: "Error in logging out : $e");
-    }
-  }
 }
