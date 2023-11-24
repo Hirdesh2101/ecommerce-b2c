@@ -14,6 +14,50 @@
       },
       "oauth_client": [
         {
+          "client_id": "1072371601182-sq1iufu8h2e9ccfr9uo5lv03e0c1gfqq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.ecommerce_major_project",
+            "certificate_hash": "b07eb3a14f99ad36e1ae0639af4984faba7d4c81"
+          }
+        },
+        {
+          "client_id": "1072371601182-171fhmmstseo4mhvitaq4btte1on5rnq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC2Jl90_e2-u8w7INtBLhuZLf8DcDrngcE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1072371601182-171fhmmstseo4mhvitaq4btte1on5rnq.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1072371601182-7aded7eb9u3etk3m1sasv71d1rlas4t2.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.ecommerceMajorProject"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1072371601182:android:2602954eb0c2eff525830f",
+        "android_client_info": {
+          "package_name": "com.example.ritesh_saree"
+        }
+      },
+      "oauth_client": [
+        {
           "client_id": "1072371601182-171fhmmstseo4mhvitaq4btte1on5rnq.apps.googleusercontent.com",
           "client_type": 3
         }

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:ecommerce_major_project/app_service.dart';
 import 'package:ecommerce_major_project/features/cart/providers/cart_provider.dart';
 import 'package:ecommerce_major_project/features/home/providers/ads_provider.dart';
@@ -33,7 +34,7 @@ void main() async {
         clientId:
             "1072371601182-171fhmmstseo4mhvitaq4btte1on5rnq.apps.googleusercontent.com",
         iOSPreferPlist: true),
-    AppleProvider(),
+    if (Platform.isIOS) AppleProvider(),
     PhoneAuthProvider(),
   ]);
   SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -68,9 +69,11 @@ class _MyAppState extends State<MyApp> {
     authSubscription = authService.onAuthStateChange.listen(onAuthStateChange);
     super.initState();
   }
+
   void onAuthStateChange(bool login) {
     appService.loginState = login;
   }
+
   @override
   void dispose() {
     authSubscription.cancel();
@@ -107,29 +110,29 @@ class _MyAppState extends State<MyApp> {
           create: (context) => AdsProvider(),
         ),
       ],
-      child: Builder(
-        builder: (context) {
-          final GoRouter goRouter = Provider.of<AppRouter>(context, listen: false).router;
-          return MaterialApp.router(
-            debugShowCheckedModeBanner: false,
-            scrollBehavior: AppScrollBehavior(),
-            title: 'Ecommerce App',
-            //navigatorKey: GlobalVariables.navigatorKey,
-            routerConfig: goRouter,
-            theme: ThemeData(
-              scaffoldBackgroundColor: GlobalVariables.backgroundColor,
-              fontFamily: 'Poppins',
-              primarySwatch: Colors.blue,
-              textTheme: const TextTheme(
-                displayLarge:
-                    TextStyle(fontSize: 72.0, fontWeight: FontWeight.bold),
-                titleLarge: TextStyle(fontSize: 36.0, fontStyle: FontStyle.italic),
-                bodyMedium: TextStyle(fontSize: 14.0, fontFamily: 'Poppins'),
-              ),
+      child: Builder(builder: (context) {
+        final GoRouter goRouter =
+            Provider.of<AppRouter>(context, listen: false).router;
+        return MaterialApp.router(
+          debugShowCheckedModeBanner: false,
+          scrollBehavior: AppScrollBehavior(),
+          title: 'Ecommerce App',
+          //navigatorKey: GlobalVariables.navigatorKey,
+          routerConfig: goRouter,
+          theme: ThemeData(
+            scaffoldBackgroundColor: GlobalVariables.backgroundColor,
+            fontFamily: 'Poppins',
+            primarySwatch: Colors.blue,
+            textTheme: const TextTheme(
+              displayLarge:
+                  TextStyle(fontSize: 72.0, fontWeight: FontWeight.bold),
+              titleLarge:
+                  TextStyle(fontSize: 36.0, fontStyle: FontStyle.italic),
+              bodyMedium: TextStyle(fontSize: 14.0, fontFamily: 'Poppins'),
             ),
-          );
-        }
-      ),
+          ),
+        );
+      }),
     );
   }
 }
