@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:ecommerce_major_project/main.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 // String uri = 'https://drab-teal-crayfish-hem.cyclic.app';
@@ -11,7 +12,7 @@ import 'package:provider/provider.dart';
 //for web http://127.0.0.1:3000
 //for ios http://localhost:3000
 //for external devices: Your pc IP (192.168.1.3). Run ipconfig/all inc cmd to find.
-String uri = 'http://192.168.29.168:3000';
+String uri = 'http://ec2-54-145-168-170.compute-1.amazonaws.com:3000';
 
 class GlobalVariables {
   //Razor pay details
@@ -144,7 +145,6 @@ class GlobalVariables {
 
   static AppBar getAppBar({
     required BuildContext context,
-    required dynamic onClickSearchNavigateTo,
     bool? wantBackNavigation = true,
     bool? wantActions = true,
     String? title = "",
@@ -160,10 +160,11 @@ class GlobalVariables {
         child: wantBackNavigation!
             ? IconButton(
                 icon: const Icon(Icons.arrow_back),
-                onPressed: () => Navigator.pop(context))
+                onPressed: () => context.pop())
             : InkWell(
                 onTap: () {
                   tabProvider.setTab(0);
+                  context.go('/home');
                 },
                 child: Image.asset(
                   "assets/images/logo.png",
@@ -181,8 +182,7 @@ class GlobalVariables {
                   children: [
                     InkWell(
                       onTap: () {
-                        Navigator.of(context)
-                            .push(createRoute(onClickSearchNavigateTo));
+                        context.push('/search');
                       },
                       child: SvgPicture.asset(
                         "assets/images/search-svg.svg",

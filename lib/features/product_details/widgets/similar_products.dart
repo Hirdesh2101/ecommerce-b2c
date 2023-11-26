@@ -1,9 +1,8 @@
 import 'dart:math';
-
-import 'package:ecommerce_major_project/features/product_details/screens/product_detail_screen.dart';
 import 'package:ecommerce_major_project/main.dart';
 import 'package:ecommerce_major_project/models/product.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
@@ -49,11 +48,7 @@ class SimilarProducts extends StatelessWidget {
                 width: mq.width * .5,
                 child: InkWell(
                   onTap: () {
-                    Navigator.pushReplacementNamed(
-                      context,
-                      ProductDetailScreen.routeName,
-                      arguments: products![index].id,
-                    );
+                    context.pushReplacement('/product/${products![index].id}');
                   },
                   child: Padding(
                     padding: EdgeInsets.symmetric(

@@ -1,11 +1,10 @@
-import 'package:ecommerce_major_project/constants/global_variables.dart';
 import 'package:ecommerce_major_project/constants/utils.dart';
-import 'package:ecommerce_major_project/features/home/screens/wish_list_screen.dart';
 import 'package:ecommerce_major_project/features/home/services/home_services.dart';
 import 'package:ecommerce_major_project/main.dart';
 import 'package:ecommerce_major_project/models/product.dart';
 import 'package:ecommerce_major_project/providers/user_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class TopImage extends StatefulWidget {
@@ -84,7 +83,7 @@ class _TopImageState extends State<TopImage> {
                                                 8, 8, 0, 0),
                                             child: GestureDetector(
                                               onTap: () {
-                                                Navigator.of(context).pop();
+                                                context.pop();
                                               },
                                               child: const Icon(
                                                 Icons.close_rounded,
@@ -140,11 +139,7 @@ class _TopImageState extends State<TopImage> {
                       context: context,
                       text: "Added to WishList",
                       onTapFunction: () {
-                        GlobalVariables.navigatorKey.currentState!.push(
-                          GlobalVariables.createRoute(
-                            const WishListScreen(),
-                          ),
-                        );
+                        context.push('/wishlist');
                       },
                       actionLabel: "View",
                     );

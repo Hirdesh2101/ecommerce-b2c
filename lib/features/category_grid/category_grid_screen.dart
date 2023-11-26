@@ -2,8 +2,7 @@ import 'package:ecommerce_major_project/features/home/providers/category_provide
 import 'package:flutter/material.dart';
 import 'package:ecommerce_major_project/main.dart';
 import 'package:ecommerce_major_project/constants/global_variables.dart';
-import 'package:ecommerce_major_project/features/search_delegate/my_search_screen.dart';
-import 'package:ecommerce_major_project/features/home/screens/category_deals_screen.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class CategoryGridScreen extends StatefulWidget {
@@ -15,8 +14,7 @@ class CategoryGridScreen extends StatefulWidget {
 
 class _CategoryGridScreenState extends State<CategoryGridScreen> {
   void navigateToCategoryPage(BuildContext context, String category) {
-    Navigator.pushNamed(context, CategoryDealsScreen.routeName,
-        arguments: category);
+    context.push('/category/$category');
   }
 
   @override
@@ -28,7 +26,8 @@ class _CategoryGridScreenState extends State<CategoryGridScreen> {
           context: context,
           wantBackNavigation: false,
           title: "All Categories",
-          onClickSearchNavigateTo: const MySearchScreen()),
+          //onClickSearchNavigateTo: const MySearchScreen()
+          ),
       body: GridView.builder(
         scrollDirection: Axis.vertical,
         padding: EdgeInsets.all(mq.height * .01),

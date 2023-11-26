@@ -67,6 +67,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '1072371601182',
     projectId: 'ritesh-sarees',
     storageBucket: 'ritesh-sarees.appspot.com',
+    androidClientId: '1072371601182-sq1iufu8h2e9ccfr9uo5lv03e0c1gfqq.apps.googleusercontent.com',
     iosClientId: '1072371601182-7aded7eb9u3etk3m1sasv71d1rlas4t2.apps.googleusercontent.com',
     iosBundleId: 'com.example.ecommerceMajorProject',
   );
@@ -77,6 +78,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '1072371601182',
     projectId: 'ritesh-sarees',
     storageBucket: 'ritesh-sarees.appspot.com',
+    androidClientId: '1072371601182-sq1iufu8h2e9ccfr9uo5lv03e0c1gfqq.apps.googleusercontent.com',
     iosClientId: '1072371601182-7aded7eb9u3etk3m1sasv71d1rlas4t2.apps.googleusercontent.com',
     iosBundleId: 'com.example.ecommerceMajorProject',
   );

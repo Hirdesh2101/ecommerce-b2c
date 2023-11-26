@@ -1,4 +1,3 @@
-import 'package:ecommerce_major_project/features/search_delegate/my_search_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'package:ecommerce_major_project/main.dart';
@@ -19,7 +18,8 @@ class HomeScreen extends StatelessWidget {
           appBar: GlobalVariables.getAppBar(
               context: context,
               wantBackNavigation: false,
-              onClickSearchNavigateTo: const MySearchScreen()),
+             // onClickSearchNavigateTo: const MySearchScreen()
+              ),
 
           body: const TopCategories(),
           ),

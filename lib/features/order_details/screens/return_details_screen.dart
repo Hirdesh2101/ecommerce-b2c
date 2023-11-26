@@ -1,16 +1,12 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:ecommerce_major_project/features/product_details/screens/product_detail_screen.dart';
 import 'package:ecommerce_major_project/features/return_product/services/refund_service.dart';
 import 'package:ecommerce_major_project/models/returns.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 import 'package:ecommerce_major_project/constants/global_variables.dart';
 import 'package:ecommerce_major_project/features/admin/services/admin_services.dart';
-import 'package:ecommerce_major_project/features/search/screens/search_screen.dart';
-import 'package:ecommerce_major_project/features/search_delegate/my_search_screen.dart';
 import 'package:ecommerce_major_project/main.dart';
-import 'package:ecommerce_major_project/providers/user_provider.dart';
 
 class ReturnDetailsScreen extends StatefulWidget {
   static const String routeName = "/return-details";
@@ -84,19 +80,14 @@ class _ReturnDetailsScreenState extends State<ReturnDetailsScreen> {
     super.initState();
   }
 
-  void navigateToSearchScreen(String query) {
-    //make sure to pass the arguments here!
-    Navigator.pushNamed(context, SearchScreen.routeName, arguments: query);
-  }
-
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<UserProvider>(context).user;
     return Scaffold(
       appBar: GlobalVariables.getAppBar(
           title: "Return Details",
           context: context,
-          onClickSearchNavigateTo: const MySearchScreen()),
+          //onClickSearchNavigateTo: const MySearchScreen()
+          ),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(mq.width * .025),
@@ -121,12 +112,8 @@ class _ReturnDetailsScreenState extends State<ReturnDetailsScreen> {
                         padding: const EdgeInsets.only(top: 8.0),
                         child: InkWell(
                           onTap: () {
-                            Navigator.pushNamed(
-                              context,
-                              ProductDetailScreen.routeName,
-                              arguments: widget.returns.returnProducts[i]
-                                  ['product']['_id'],
-                            );
+                            context.push('/product/${widget.returns.returnProducts[i]
+                                  ['product']['_id']}');
                           },
                           child: Row(
                             children: [
@@ -221,12 +208,12 @@ class _ReturnDetailsScreenState extends State<ReturnDetailsScreen> {
                 child: Stepper(
                     elevation: 3,
                     controlsBuilder: (context, details) {
-                      if (user.type == "admin") {
-                        // return CustomButton(
-                        //     text: "Done",
-                        //     onTap: () =>
-                        //         changeOrderStatus(details.currentStep));
-                      }
+                      // if (user.type == "admin") {
+                      //   return CustomButton(
+                      //       text: "Done",
+                      //       onTap: () =>
+                      //           changeOrderStatus(details.currentStep));
+                      // }
                       return const SizedBox();
                     },
                     currentStep: currentStep,

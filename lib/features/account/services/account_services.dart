@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:ecommerce_major_project/models/returns.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
@@ -11,7 +10,6 @@ import 'package:ecommerce_major_project/constants/utils.dart';
 import 'package:ecommerce_major_project/providers/user_provider.dart';
 import 'package:ecommerce_major_project/constants/error_handling.dart';
 import 'package:ecommerce_major_project/constants/global_variables.dart';
-import 'package:ecommerce_major_project/features/auth/screens/auth_screen.dart';
 
 class AccountServices {
   getAllOrders({required BuildContext context}) async {
@@ -194,17 +192,4 @@ class AccountServices {
     return returnList;
   }
 
-  void logOut(BuildContext context) async {
-    try {
-      // SharedPreferences prefs = await SharedPreferences.getInstance();
-      // await prefs.setString('Authorization', '');
-      FirebaseAuth.instance.signOut();
-      if (context.mounted) {
-        Navigator.pushNamedAndRemoveUntil(
-            context, AuthScreen.routeName, (route) => false);
-      }
-    } catch (e) {
-      showSnackBar(context: context, text: "Error in logging out : $e");
-    }
-  }
 }

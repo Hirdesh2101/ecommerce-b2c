@@ -11,10 +11,8 @@ import 'package:ecommerce_major_project/constants/utils.dart';
 import 'package:ecommerce_major_project/constants/global_variables.dart';
 import 'package:ecommerce_major_project/common/widgets/color_loader_2.dart';
 import 'package:ecommerce_major_project/features/home/services/home_services.dart';
-import 'package:ecommerce_major_project/features/home/screens/wish_list_screen.dart';
-import 'package:ecommerce_major_project/features/home/screens/category_deals_screen.dart';
-import 'package:ecommerce_major_project/features/product_details/screens/product_detail_screen.dart';
 import 'package:ecommerce_major_project/features/product_details/services/product_detail_services.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -50,8 +48,7 @@ class _TopCategoriesState extends State<TopCategories>
   }
 
   void navigateToCategoryPage(BuildContext context, String category) {
-    Navigator.pushNamed(context, CategoryDealsScreen.routeName,
-        arguments: category);
+    context.push('/category/$category');
   }
 
   fetchAdvertisement() async {
@@ -266,11 +263,7 @@ class _TopCategoriesState extends State<TopCategories>
 
                                           return InkWell(
                                             onTap: () {
-                                              Navigator.pushNamed(
-                                                context,
-                                                ProductDetailScreen.routeName,
-                                                arguments: product.id,
-                                              );
+                                              context.push('/product/${product.id}');
                                             },
                                             child: Padding(
                                               padding: EdgeInsets.symmetric(
@@ -432,14 +425,7 @@ class _TopCategoriesState extends State<TopCategories>
                                                                   "Added to WishList",
                                                               onTapFunction:
                                                                   () {
-                                                                Navigator.of(
-                                                                        context)
-                                                                    .push(
-                                                                  GlobalVariables
-                                                                      .createRoute(
-                                                                    const WishListScreen(),
-                                                                  ),
-                                                                );
+                                                                    context.push('/wishlist');
                                                               },
                                                               actionLabel:
                                                                   "View",

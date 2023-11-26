@@ -1,9 +1,9 @@
 import 'package:ecommerce_major_project/constants/utils.dart';
-import 'package:ecommerce_major_project/features/order_details/screens/return_details_screen.dart';
 import 'package:ecommerce_major_project/main.dart';
 import 'package:ecommerce_major_project/models/returns.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 class AllReturnsList extends StatelessWidget {
@@ -59,16 +59,7 @@ class AllReturnsList extends StatelessWidget {
                         child: InkWell(
                           borderRadius: BorderRadius.circular(20),
                           onTap: () {
-                            Navigator.pushNamed(
-                              context,
-                              ReturnDetailsScreen.routeName,
-                              arguments: allOrders![index],
-                            );
-                            // Navigator.pushNamed(
-                            //     context, ProductDetailScreen.routeName,
-                            //     arguments: allOrders![index]);
-                            // Navigator.pushNamed(
-                            //     context, OrderDetailsScreen.routeName);
+                            context.push('/returns',extra: allOrders![index]);
                           },
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),

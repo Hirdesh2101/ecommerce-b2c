@@ -1,19 +1,12 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:ecommerce_major_project/features/product_details/screens/product_detail_screen.dart';
-import 'package:ecommerce_major_project/features/return_product/screens/return_product_screen.dart';
-import 'package:ecommerce_major_project/features/return_product/screens/select_return_product.dart';
 import 'package:ecommerce_major_project/features/return_product/services/refund_service.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
-import 'package:ecommerce_major_project/common/widgets/custom_button.dart';
 import 'package:ecommerce_major_project/constants/global_variables.dart';
 import 'package:ecommerce_major_project/features/admin/services/admin_services.dart';
-import 'package:ecommerce_major_project/features/search/screens/search_screen.dart';
-import 'package:ecommerce_major_project/features/search_delegate/my_search_screen.dart';
 import 'package:ecommerce_major_project/main.dart';
 import 'package:ecommerce_major_project/models/order.dart';
-import 'package:ecommerce_major_project/providers/user_provider.dart';
 
 class OrderDetailsScreen extends StatefulWidget {
   static const String routeName = "/order-details";
@@ -125,10 +118,6 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
     super.initState();
   }
 
-  void navigateToSearchScreen(String query) {
-    //make sure to pass the arguments here!
-    Navigator.pushNamed(context, SearchScreen.routeName, arguments: query);
-  }
 
   // only for admins
   void changeOrderStatus(int status) {
@@ -154,12 +143,12 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<UserProvider>(context).user;
     return Scaffold(
       appBar: GlobalVariables.getAppBar(
-          title: "Order Details",
-          context: context,
-          onClickSearchNavigateTo: const MySearchScreen()),
+        title: "Order Details",
+        context: context,
+        //onClickSearchNavigateTo: const MySearchScreen()
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(mq.width * .025),
@@ -182,12 +171,8 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                         padding: const EdgeInsets.only(top: 8.0),
                         child: InkWell(
                           onTap: () {
-                            Navigator.pushNamed(
-                              context,
-                              ProductDetailScreen.routeName,
-                              arguments: widget.order.products[i]['product']
-                                  ['_id'],
-                            );
+                            context.push(
+                                '/product/${widget.order.products[i]['product']['_id']}');
                           },
                           child: Row(
                             children: [
@@ -282,91 +267,81 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                 child: Stepper(
                     elevation: 3,
                     controlsBuilder: (context, details) {
-                      if (user.type == "admin") {
-                        return CustomButton(
-                            text: "Done",
-                            onTap: () =>
-                                changeOrderStatus(details.currentStep));
-                      }
+                      // if (user.type == "admin") {
+                      //   return CustomButton(
+                      //       text: "Done",
+                      //       onTap: () =>
+                      //           changeOrderStatus(details.currentStep));
+                      // }
                       return const SizedBox();
                     },
                     currentStep: currentStep,
                     steps: steps),
               ),
               SizedBox(height: mq.width * .025),
-              user.type == "admin"
-                  ? const SizedBox.shrink()
-                  : widget.order.status == "ORDER_DELIVERED" && copy.isNotEmpty
+              // user.type == "admin"
+              //     ? const SizedBox.shrink()
+              //     :
+              widget.order.status == "ORDER_DELIVERED" && copy.isNotEmpty
+                  ? ElevatedButton(
+                      onPressed: () {
+                        if (widget.order.products.length == 1 &&
+                            widget.order.products[0]['quantity'] == 1) {
+                          context.push('/newreturn',
+                              extra: [widget.order, widget.order.products]);
+                        } else {
+                          context.push('/newreturn/select',
+                              extra: [copy, widget.order]);
+                        }
+                      },
+                      // if you still want to complain flow in didilogflow chatbot
+                      // you can mail the authorities or anything
+                      // showErrorSnackBar(
+                      //     context: context,
+                      //     text: "Return product timeline expired");
+                      //},
+                      style: ElevatedButton.styleFrom(
+                          // alignment: Alignment.center,
+                          backgroundColor:
+                              const Color.fromARGB(255, 255, 100, 100)),
+                      child: const Text(
+                        "Return Product",
+                        style: TextStyle(color: Colors.white),
+                      ))
+                  : widget.order.status == "ORDER_RECEIVED" ||
+                          widget.order.status == "ORDER_PACKING"
                       ? ElevatedButton(
                           onPressed: () {
-                            if (widget.order.products.length == 1 &&
-                                widget.order.products[0]['quantity'] == 1) {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (_) => ReturnProductScreen(
-                                            order: widget.order,
-                                            selectedProduct:
-                                                widget.order.products,
-                                          )));
-                            } else {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (_) => SelectReturnProduct(
-                                          copy: copy, order: widget.order)));
-                            }
+                            showAdaptiveDialog(
+                                barrierDismissible: true,
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    content: const Text(
+                                        'Are you sure you want to cancel the order?'),
+                                    actions: [
+                                      TextButton(
+                                          onPressed: () {
+                                            refundServices.requestCancel(
+                                                context: context,
+                                                order: widget.order);
+                                          },
+                                          child: const Text(
+                                            'Cancel',
+                                            style: TextStyle(color: Colors.red),
+                                          ))
+                                    ],
+                                  );
+                                });
                           },
-
-                          // if you still want to complain flow in didilogflow chatbot
-                          // you can mail the authorities or anything
-                          // showErrorSnackBar(
-                          //     context: context,
-                          //     text: "Return product timeline expired");
-                          //},
                           style: ElevatedButton.styleFrom(
-                              // alignment: Alignment.center,
                               backgroundColor:
                                   const Color.fromARGB(255, 255, 100, 100)),
                           child: const Text(
-                            "Return Product",
+                            "Cancel Order",
                             style: TextStyle(color: Colors.white),
                           ))
-                      : widget.order.status == "ORDER_RECEIVED" ||
-                              widget.order.status == "ORDER_PACKING"
-                          ? ElevatedButton(
-                              onPressed: () {
-                                showAdaptiveDialog(
-                                    barrierDismissible: true,
-                                    context: context,
-                                    builder: (context) {
-                                      return AlertDialog(
-                                        content: const Text(
-                                            'Are you sure you want to cancel the order?'),
-                                        actions: [
-                                          TextButton(
-                                              onPressed: () {
-                                                refundServices.requestCancel(
-                                                    context: context,
-                                                    order: widget.order);
-                                              },
-                                              child: const Text(
-                                                'Cancel',
-                                                style: TextStyle(
-                                                    color: Colors.red),
-                                              ))
-                                        ],
-                                      );
-                                    });
-                              },
-                              style: ElevatedButton.styleFrom(
-                                  backgroundColor:
-                                      const Color.fromARGB(255, 255, 100, 100)),
-                              child: const Text(
-                                "Cancel Order",
-                                style: TextStyle(color: Colors.white),
-                              ))
-                          : const SizedBox.shrink(),
+                      : const SizedBox.shrink(),
               SizedBox(height: mq.width * .025),
               InkWell(
                 onTap: () {

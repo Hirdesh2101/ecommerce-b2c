@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'package:ecommerce_major_project/common/widgets/custom_textfield.dart';
-import 'package:ecommerce_major_project/features/checkout/screens/status_check.dart';
 import 'package:ecommerce_major_project/features/checkout/widgets/order_dialog.dart';
 import 'package:ecommerce_major_project/models/cart.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 // import 'package:pay/pay.dart';
@@ -16,7 +16,6 @@ import 'package:ecommerce_major_project/constants/global_variables.dart';
 import 'package:ecommerce_major_project/common/widgets/custom_button.dart';
 import 'package:badges/badges.dart' as badges;
 import 'package:ecommerce_major_project/features/checkout/widgets/delivery_product.dart';
-import 'package:ecommerce_major_project/features/search_delegate/my_search_screen.dart';
 import 'package:ecommerce_major_project/features/checkout/services/checkout_services.dart';
 
 class CheckoutScreen extends StatefulWidget {
@@ -134,7 +133,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       child: Scaffold(
         appBar: GlobalVariables.getAppBar(
           context: context,
-          onClickSearchNavigateTo: const MySearchScreen(),
+          //onClickSearchNavigateTo: const MySearchScreen(),
           title: "Checkout",
         ),
         body: SingleChildScrollView(
@@ -464,9 +463,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   void _handlePaymentSuccess(PaymentSuccessResponse response) {
     if (recentOrderId != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-          return CheckStatus(orderId: recentOrderId!);
-        }));
+        context.push('/status/$recentOrderId');
       });
       //recentOrderId = null;
     } else {
@@ -509,7 +506,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         actions: [
           TextButton(
             onPressed: () {
-              Navigator.of(context).pop();
+              context.pop();
             },
             child: const Text("OK"),
           )

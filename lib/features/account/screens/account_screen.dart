@@ -6,7 +6,6 @@ import 'package:ecommerce_major_project/constants/global_variables.dart';
 import 'package:ecommerce_major_project/features/account/widgets/below_app_bar.dart';
 import 'package:ecommerce_major_project/features/account/widgets/orders.dart';
 import 'package:ecommerce_major_project/features/account/widgets/top_buttons.dart';
-import 'package:ecommerce_major_project/features/search_delegate/my_search_screen.dart';
 import 'package:ecommerce_major_project/main.dart';
 
 class AccountScreen extends StatefulWidget {
@@ -43,7 +42,8 @@ class _AccountScreenState extends State<AccountScreen> {
           context: context,
           wantBackNavigation: false,
           title: "Your Account",
-          onClickSearchNavigateTo: const MySearchScreen()),
+          //onClickSearchNavigateTo: const MySearchScreen()
+          ),
       body: Column(
         children: [
           SizedBox(height: mq.width * .025),
