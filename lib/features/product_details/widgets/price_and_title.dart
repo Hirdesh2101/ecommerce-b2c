@@ -16,11 +16,11 @@ class TitleAndPrice extends StatelessWidget {
   final bool isProductOutOfStock;
   final int colorVarient;
   final indianRupeesFormat = NumberFormat.currency(
-           name: "INR",
-           locale: 'en_IN',
-           decimalDigits: 0,
-           symbol: '₹ ',
-        );
+    name: "INR",
+    locale: 'en_IN',
+    decimalDigits: 0,
+    symbol: '₹ ',
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +78,8 @@ class TitleAndPrice extends StatelessWidget {
                   text: TextSpan(
                     children: [
                       TextSpan(
-                        text: indianRupeesFormat.format(product.varients[colorVarient]['price']),
+                        text: indianRupeesFormat
+                            .format(product.varients[colorVarient]['price']),
                         style: const TextStyle(
                           fontSize: 28,
                           color: Colors.black,
@@ -89,7 +90,8 @@ class TitleAndPrice extends StatelessWidget {
                         child: SizedBox(width: mq.width * .02),
                       ),
                       TextSpan(
-                        text: indianRupeesFormat.format(product.varients[colorVarient]['markedPrice']),
+                        text: indianRupeesFormat.format(
+                            product.varients[colorVarient]['markedPrice']),
                         style: TextStyle(
                           fontSize: 18,
                           color: Colors.grey.shade700,
@@ -100,7 +102,8 @@ class TitleAndPrice extends StatelessWidget {
                         child: SizedBox(width: mq.width * .02),
                       ),
                       TextSpan(
-                        text: "${calculatePercentageDiscount(product.varients[colorVarient]['price'],product.varients[colorVarient]['markedPrice'])}% off",
+                        text:
+                            "${calculatePercentageDiscount(product.varients[colorVarient]['price'], product.varients[colorVarient]['markedPrice'])}% off",
                         style: const TextStyle(
                           fontSize: 25,
                           fontWeight: FontWeight.w600,
@@ -118,12 +121,13 @@ class TitleAndPrice extends StatelessWidget {
       ],
     );
   }
-  int calculatePercentageDiscount(num originalPrice, num discountedPrice) {
-  if (originalPrice <= 0 || discountedPrice <= 0) {
-    return 0;
-  }
-  double discount = (originalPrice - discountedPrice) / originalPrice * 100.0;
 
-  return discount.toInt();
-}
+  int calculatePercentageDiscount(num originalPrice, num discountedPrice) {
+    if (originalPrice <= 0 || discountedPrice <= 0) {
+      return 0;
+    }
+    double discount = (originalPrice - discountedPrice) / originalPrice * 100.0;
+
+    return discount.toInt();
+  }
 }
