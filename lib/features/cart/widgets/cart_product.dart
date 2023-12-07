@@ -1,9 +1,12 @@
+import 'package:ecommerce_major_project/features/cart/providers/cart_provider.dart';
+import 'package:ecommerce_major_project/models/cart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:ecommerce_major_project/main.dart';
 import 'package:ecommerce_major_project/models/product.dart';
 import 'package:ecommerce_major_project/features/cart/services/cart_services.dart';
 import 'package:ecommerce_major_project/features/product_details/services/product_detail_services.dart';
+import 'package:provider/provider.dart';
 
 class CartProduct extends StatefulWidget {
   final int index;
@@ -12,6 +15,7 @@ class CartProduct extends StatefulWidget {
   final String color;
   final String size;
   final Function() fetchCart;
+
   const CartProduct(
       {required this.index,
       super.key,
@@ -28,6 +32,7 @@ class CartProduct extends StatefulWidget {
 class _CartProductState extends State<CartProduct> {
   int price = 0;
   int quantity = 0;
+
   @override
   void initState() {
     List<dynamic> variants = widget.product.varients;
@@ -56,13 +61,78 @@ class _CartProductState extends State<CartProduct> {
     widget.fetchCart();
   }
 
+  //changed the fun with alert dialog
   void decreaseQuantity(Product product) async {
-    await cartServices.removeFromCart(
+    List<Cart> cartItems = context.read<CartProvider>().getCart ?? [];
+    int totalCartItemCount = cartItems.length;
+    if (totalCartItemCount == 1) {
+      bool? removeItem = await showDialog<bool>(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text(
+              "Remove Item!",
+              style: TextStyle(fontStyle: FontStyle.normal, fontSize: 25),
+            ),
+            content: const Text(
+                "Are you sure you want to remove the last item from your cart?"),
+            actions: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.deepPurpleAccent),
+                    onPressed: () {
+                      Navigator.pop(context, false); // No was selected
+                    },
+                    child: const Text(
+                      "No",
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.deepPurpleAccent),
+                    onPressed: () {
+                      Navigator.pop(context, true); // Yes was selected
+                    },
+                    child: const Text(
+                      "Yes",
+                      style: TextStyle(
+                        fontSize: 18,
+                      ),
+                    ),
+                  ),
+                ],
+              )
+            ],
+          );
+        },
+      );
+      // If the user selected "Yes," remove the item from the cart
+      if (removeItem != null && removeItem) {
+        await cartServices.removeFromCart(
+          context: context,
+          product: product,
+          color: widget.color,
+          size: widget.size,
+        );
+        widget.fetchCart();
+      }
+    } else {
+      // If there's more than one item, remove the item directly
+      await cartServices.removeFromCart(
         context: context,
         product: product,
         color: widget.color,
-        size: widget.size);
-    widget.fetchCart();
+        size: widget.size,
+      );
+      widget.fetchCart();
+    }
   }
 
   @override
@@ -143,8 +213,7 @@ class _CartProductState extends State<CartProduct> {
                           width: mq.width * .025,
                           height: mq.width * .025,
                           decoration: BoxDecoration(
-                            color: Color(int.parse(
-                                widget.color)),
+                            color: Color(int.parse(widget.color)),
                             shape: BoxShape.circle,
                           ),
                         ),
@@ -161,7 +230,6 @@ class _CartProductState extends State<CartProduct> {
                   ),
                   Container(
                     width: mq.width * .57,
-
                     padding: EdgeInsets.only(left: mq.width * .025),
                     child: quantity == 0
                         ? const Text(
