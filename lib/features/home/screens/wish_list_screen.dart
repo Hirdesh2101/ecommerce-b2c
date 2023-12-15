@@ -84,7 +84,7 @@ class _WishListScreenState extends State<WishListScreen> {
                           ElevatedButton(
                               onPressed: () {
                                 tabProvider.setTab(0);
-                                context.go('/home');
+                                context.go('/');
                               },
                               style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.deepPurpleAccent),

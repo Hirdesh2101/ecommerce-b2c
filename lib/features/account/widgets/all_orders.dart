@@ -40,7 +40,7 @@ class AllOrdersList extends StatelessWidget {
                       ElevatedButton(
                           onPressed: () {
                             tabProvider.setTab(0);
-                            context.go('/home');
+                            context.go('/');
                           },
                           style: ElevatedButton.styleFrom(
                               shape: RoundedRectangleBorder(

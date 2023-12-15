@@ -77,7 +77,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       ElevatedButton(
                           onPressed: () {
                             tabProvider.setTab(0);
-                            context.go('/home');
+                            context.go('/');
                           },
                           style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.deepPurpleAccent),

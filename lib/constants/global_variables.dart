@@ -166,7 +166,7 @@ class GlobalVariables {
             : InkWell(
                 onTap: () {
                   tabProvider.setTab(0);
-                  context.go('/home');
+                  context.go('/');
                 },
                 child: Image.asset(
                   "assets/images/logo.png",
@@ -187,7 +187,9 @@ class GlobalVariables {
                         String currentPath =
                             getCurrentPathWithoutQuery(context);
                         // Build the new path
-                        String newPath = '$currentPath/search';
+                        String newPath = currentPath == '/'
+                            ? '${currentPath}search'
+                            : '$currentPath/search';
                         context.go(newPath);
                       },
                       child: SvgPicture.asset(

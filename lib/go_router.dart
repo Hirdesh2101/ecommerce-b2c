@@ -38,19 +38,19 @@ class AppRouter {
   late final GoRouter _goRouter = GoRouter(
     navigatorKey: _rootNavigatorKey,
     refreshListenable: appService,
-    initialLocation: '/home',
+    initialLocation: '/',
     routes: [
       ShellRoute(
         // navigatorKey: _shellNavigatorKey,
         builder: (context, state, child) {
           // Conditionally wrap the child with BottomBar only for specific routes
-          var includeBottomBar = ['/home', '/category', '/cart', '/account']
+          var includeBottomBar = ['/', '/category', '/cart', '/account']
               .contains(state.uri.path);
           return includeBottomBar ? BottomBar(child: child) : child;
         },
         routes: <RouteBase>[
           GoRoute(
-              path: '/home',
+              path: '/',
               // parentNavigatorKey: _shellNavigatorKey,
               builder: (BuildContext context, GoRouterState state) {
                 return const HomeScreen();
@@ -283,7 +283,7 @@ class AppRouter {
       } else if ((isLogedIn && isGoingToLogin) ||
           (isInitialized && isGoingToInit) ||
           (isOnboarded && isGoingToOnboard)) {
-        return '/home';
+        return '/';
       } else {
         // Else Don't do anything
         return null;

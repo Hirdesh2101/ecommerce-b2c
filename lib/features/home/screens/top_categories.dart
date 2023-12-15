@@ -267,10 +267,11 @@ class _TopCategoriesState extends State<TopCategories>
                                             onTap: () {
                                               // Get the current location
                                               String currentPath =
-                                                  getCurrentPathWithoutQuery(context);
+                                                  getCurrentPathWithoutQuery(
+                                                      context);
                                               // Build the new path
                                               String newPath =
-                                                  '$currentPath/product/${product.id}';
+                                                  '${currentPath}product/${product.id}';
                                               context.go(newPath);
                                             },
                                             child: Padding(
@@ -433,8 +434,16 @@ class _TopCategoriesState extends State<TopCategories>
                                                                   "Added to WishList",
                                                               onTapFunction:
                                                                   () {
+                                                                final tabProvider =
+                                                                    Provider.of<
+                                                                            TabProvider>(
+                                                                        context,
+                                                                        listen:
+                                                                            false);
+                                                                tabProvider
+                                                                    .setTab(3);
                                                                 context.go(
-                                                                    'wishlist');
+                                                                    '/account/wishlist');
                                                               },
                                                               actionLabel:
                                                                   "View",

@@ -157,7 +157,7 @@ class AddFundsCheckStatusState extends State<CheckStatus> {
                     final AuthService authService = AuthService();
                     authService.getUserData(context);
                     tabProvider.setTab(0);
-                    context.go('/home');
+                    context.go('/');
                   },
                   color: Colors.yellow,
                 )),

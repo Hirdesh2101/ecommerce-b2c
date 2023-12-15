@@ -61,7 +61,7 @@ class RefundServices {
             final AuthService authService = AuthService();
             authService.getUserData(context);
             tabProvider.setTab(0);
-            context.go('/home');
+            context.go('/');
             // User user =
             //     userProvider.user.copyWith(cart: jsonDecode(res.body)['cart']);
             // userProvider.setUserFromModel(user);
@@ -104,7 +104,7 @@ class RefundServices {
                 Provider.of<TabProvider>(context, listen: false);
 
             tabProvider.setTab(0);
-            context.go('/home');
+            context.go('/');
           },
         );
       }

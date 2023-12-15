@@ -80,7 +80,7 @@ class _OrdersState extends State<Orders> {
                       SizedBox(height: mq.height * 0.02),
                       ElevatedButton(
                           onPressed: () {
-                            context.go('/home');
+                            context.go('/');
                             tabProvider.setTab(0);
                           },
                           style: ElevatedButton.styleFrom(

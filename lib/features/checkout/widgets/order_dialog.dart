@@ -49,7 +49,7 @@ class OrderDialog {
           TextButton(
             onPressed: () {
               tabProvider.setTab(0);
-              context.go('/home');
+              context.go('/');
             },
             child: const Text("OK"),
           )
