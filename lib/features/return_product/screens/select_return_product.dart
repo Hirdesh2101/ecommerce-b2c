@@ -114,7 +114,7 @@ class _SelectReturnProductState extends State<SelectReturnProduct> {
                         onPressed: selectedProducts.isEmpty
                             ? null
                             : () {
-                              context.push('/newreturn',extra: [widget.order,selectedProducts]);
+                              context.go('newreturn',extra: [widget.order,selectedProducts]);
                               },
                         style: ElevatedButton.styleFrom(
                             // alignment: Alignment.center,

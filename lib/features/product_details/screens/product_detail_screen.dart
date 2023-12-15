@@ -275,6 +275,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             builder: (_) => Scaffold(
               appBar: GlobalVariables.getAppBar(
                   context: context,
+                  //TODO add actions
+                  wantActions: false
                   //onClickSearchNavigateTo: const MySearchScreen()
                   ),
               body: isProductLoading

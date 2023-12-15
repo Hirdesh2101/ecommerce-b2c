@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:ecommerce_major_project/constants/utils.dart';
 import 'package:ecommerce_major_project/features/auth/services/auth_service.dart';
 import 'package:ecommerce_major_project/models/order.dart';
 import 'package:ecommerce_major_project/providers/tab_provider.dart';
@@ -29,12 +30,14 @@ class _TopButtonsState extends State<TopButtons> {
             AccountButton(
                 text: "Your Orders",
                 onTap: () {
-                  context.push('/orders');
+                  String currentPath = getCurrentPathWithoutQuery(context);
+                  context.go('$currentPath/orders');
                 }),
             AccountButton(
                 text: "Your Wishlist",
                 onTap: () {
-                  context.push('/wishlist');
+                  String currentPath = getCurrentPathWithoutQuery(context);
+                  context.go('$currentPath/wishlist');
                 }),
           ],
         ),
@@ -48,8 +51,7 @@ class _TopButtonsState extends State<TopButtons> {
                   context.go('/cart');
                 }),
             AccountButton(
-                text: "Log out",
-                onTap: () => authService.logOut(context)),
+                text: "Log out", onTap: () => authService.logOut(context)),
           ],
         )
       ],

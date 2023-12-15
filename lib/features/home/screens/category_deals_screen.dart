@@ -1,3 +1,4 @@
+import 'package:ecommerce_major_project/constants/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -67,11 +68,11 @@ class _CategoryDealsScreenState extends State<CategoryDealsScreen> {
 
     return Scaffold(
       appBar: GlobalVariables.getAppBar(
-          context: context,
-          wantBackNavigation: true,
-          title: "All results in ${widget.category}",
-          //onClickSearchNavigateTo: const MySearchScreen()
-          ),
+        context: context,
+        wantBackNavigation: true,
+        title: "All results in ${widget.category}",
+        //onClickSearchNavigateTo: const MySearchScreen()
+      ),
       body: productList == null
           ? const ColorLoader2()
           : Column(
@@ -107,7 +108,9 @@ class _CategoryDealsScreenState extends State<CategoryDealsScreen> {
                     // ),
                     InkWell(
                       onTap: () {
-                        context.push('/filter');
+                        String currentPath =
+                            getCurrentPathWithoutQuery(context);
+                        context.go('$currentPath/filter');
                       },
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -156,7 +159,8 @@ class _CategoryDealsScreenState extends State<CategoryDealsScreen> {
                                         //     "Filter  : ${filterProvider.getFilterNumber}"),
                                         GestureDetector(
                                             onTap: () {
-                                              context.push('/product/${productList![index].id}');
+                                              context.push(
+                                                  '/product/${productList![index].id}');
                                             },
                                             child: SearchedProduct(
                                                 product: productList![index])),
@@ -283,7 +287,8 @@ class _CategoryDealsScreenState extends State<CategoryDealsScreen> {
 
   getFilterpriceLtoH(FilterProvider filterProvider) {
     List<Product>? filterOneList = List<Product>.from(productList!);
-    filterOneList.sort((a, b) => a.varients[0]['price'].compareTo(b.varients[0]['price']));
+    filterOneList.sort(
+        (a, b) => a.varients[0]['price'].compareTo(b.varients[0]['price']));
 
     return Expanded(
       child: ListView.builder(
@@ -301,7 +306,7 @@ class _CategoryDealsScreenState extends State<CategoryDealsScreen> {
               // Text("Filter  : ${filterProvider.getFilterNumber}"),
               GestureDetector(
                   onTap: () {
-                     context.push('/product/${filterOneList[index].id}');
+                    context.push('/product/${filterOneList[index].id}');
                   },
                   child: SearchedProduct(product: filterOneList[index])),
               // Divider(
@@ -315,7 +320,8 @@ class _CategoryDealsScreenState extends State<CategoryDealsScreen> {
 
   getFilterpriceHtoL(FilterProvider filterProvider) {
     List<Product>? filterOneList = List<Product>.from(productList!);
-    filterOneList.sort((a, b) => a.varients[0]['price'].compareTo(b.varients[0]['price']));
+    filterOneList.sort(
+        (a, b) => a.varients[0]['price'].compareTo(b.varients[0]['price']));
 
     return Expanded(
       child: ListView.builder(
@@ -332,7 +338,8 @@ class _CategoryDealsScreenState extends State<CategoryDealsScreen> {
             children: [
               // Text("Filter  : ${filterProvider.getFilterNumber}"),
               GestureDetector(
-                  onTap: () { context.push('/product/${filterOneList[index].id}');
+                  onTap: () {
+                    context.push('/product/${filterOneList[index].id}');
                   },
                   child: SearchedProduct(
                       product: filterOneList.reversed.toList()[index])),

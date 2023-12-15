@@ -1,3 +1,4 @@
+import 'package:ecommerce_major_project/constants/utils.dart';
 import 'package:ecommerce_major_project/providers/tab_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +13,7 @@ import 'package:provider/provider.dart';
 //for web http://127.0.0.1:3000
 //for ios http://localhost:3000
 //for external devices: Your pc IP (192.168.1.3). Run ipconfig/all inc cmd to find.
-String uri = 'http://ec2-54-145-168-170.compute-1.amazonaws.com:3000';
+String uri = 'http://ec2-3-110-156-237.ap-south-1.compute.amazonaws.com:3000';
 
 class GlobalVariables {
   //Razor pay details
@@ -158,9 +159,10 @@ class GlobalVariables {
       leading: Padding(
         padding: EdgeInsets.all(mq.width * .025).copyWith(right: 0),
         child: wantBackNavigation!
-            ? IconButton(
-                icon: const Icon(Icons.arrow_back),
-                onPressed: () => context.pop())
+            ? const BackButton()
+            //  IconButton(
+            //     icon: const Icon(Icons.arrow_back),
+            //     onPressed: () => context.pop())
             : InkWell(
                 onTap: () {
                   tabProvider.setTab(0);
@@ -182,7 +184,11 @@ class GlobalVariables {
                   children: [
                     InkWell(
                       onTap: () {
-                        context.push('/search');
+                        String currentPath =
+                            getCurrentPathWithoutQuery(context);
+                        // Build the new path
+                        String newPath = '$currentPath/search';
+                        context.go(newPath);
                       },
                       child: SvgPicture.asset(
                         "assets/images/search-svg.svg",

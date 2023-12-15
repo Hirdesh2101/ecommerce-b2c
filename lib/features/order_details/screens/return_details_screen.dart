@@ -86,6 +86,7 @@ class _ReturnDetailsScreenState extends State<ReturnDetailsScreen> {
       appBar: GlobalVariables.getAppBar(
           title: "Return Details",
           context: context,
+          wantActions: false
           //onClickSearchNavigateTo: const MySearchScreen()
           ),
       body: SingleChildScrollView(

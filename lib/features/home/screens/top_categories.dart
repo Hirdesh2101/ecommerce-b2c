@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:ecommerce_major_project/features/home/providers/category_provider.dart';
 import 'package:ecommerce_major_project/features/home/widgets/carousel_image.dart';
+import 'package:ecommerce_major_project/providers/tab_provider.dart';
 import 'package:ecommerce_major_project/providers/user_provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -48,7 +49,9 @@ class _TopCategoriesState extends State<TopCategories>
   }
 
   void navigateToCategoryPage(BuildContext context, String category) {
-    context.push('/category/$category');
+    final tabProvider = Provider.of<TabProvider>(context, listen: false);
+    tabProvider.setTab(1);
+    context.go('/category/$category');
   }
 
   fetchAdvertisement() async {
@@ -78,7 +81,6 @@ class _TopCategoriesState extends State<TopCategories>
     setState(() {
       isProductLoading = false;
     });
-    
   }
 
   @override
@@ -263,7 +265,13 @@ class _TopCategoriesState extends State<TopCategories>
 
                                           return InkWell(
                                             onTap: () {
-                                              context.push('/product/${product.id}');
+                                              // Get the current location
+                                              String currentPath =
+                                                  getCurrentPathWithoutQuery(context);
+                                              // Build the new path
+                                              String newPath =
+                                                  '$currentPath/product/${product.id}';
+                                              context.go(newPath);
                                             },
                                             child: Padding(
                                               padding: EdgeInsets.symmetric(
@@ -425,7 +433,8 @@ class _TopCategoriesState extends State<TopCategories>
                                                                   "Added to WishList",
                                                               onTapFunction:
                                                                   () {
-                                                                    context.push('/wishlist');
+                                                                context.go(
+                                                                    'wishlist');
                                                               },
                                                               actionLabel:
                                                                   "View",
