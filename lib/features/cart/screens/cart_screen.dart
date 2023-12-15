@@ -49,7 +49,7 @@ class _CartScreenState extends State<CartScreen> {
     if (isProductAvailable) {
       //make sure to pass the arguments here!
       if (context.mounted) {
-        context.push('/checkout', extra: [
+        context.go('checkout', extra: [
           sum.toString(),
           cartProvider.getCart,
           userProvider.user.cart

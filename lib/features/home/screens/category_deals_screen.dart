@@ -107,7 +107,7 @@ class _CategoryDealsScreenState extends State<CategoryDealsScreen> {
                     // ),
                     InkWell(
                       onTap: () {
-                        context.push('/filter');
+                        context.go('filter');
                       },
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -156,7 +156,7 @@ class _CategoryDealsScreenState extends State<CategoryDealsScreen> {
                                         //     "Filter  : ${filterProvider.getFilterNumber}"),
                                         GestureDetector(
                                             onTap: () {
-                                              context.push('/product/${productList![index].id}');
+                                              context.go('product/${productList![index].id}');
                                             },
                                             child: SearchedProduct(
                                                 product: productList![index])),
@@ -269,7 +269,7 @@ class _CategoryDealsScreenState extends State<CategoryDealsScreen> {
               //Text("Filter  : ${filterProvider.getFilterNumber}"),
               GestureDetector(
                   onTap: () {
-                    context.push('/product/${filterOneList[index].id}');
+                    context.go('product/${filterOneList[index].id}');
                   },
                   child: SearchedProduct(product: filterOneList[index])),
               // Divider(
@@ -301,7 +301,7 @@ class _CategoryDealsScreenState extends State<CategoryDealsScreen> {
               // Text("Filter  : ${filterProvider.getFilterNumber}"),
               GestureDetector(
                   onTap: () {
-                     context.push('/product/${filterOneList[index].id}');
+                     context.go('product/${filterOneList[index].id}');
                   },
                   child: SearchedProduct(product: filterOneList[index])),
               // Divider(
@@ -332,7 +332,7 @@ class _CategoryDealsScreenState extends State<CategoryDealsScreen> {
             children: [
               // Text("Filter  : ${filterProvider.getFilterNumber}"),
               GestureDetector(
-                  onTap: () { context.push('/product/${filterOneList[index].id}');
+                  onTap: () { context.go('product/${filterOneList[index].id}');
                   },
                   child: SearchedProduct(
                       product: filterOneList.reversed.toList()[index])),

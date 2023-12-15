@@ -112,7 +112,7 @@ class _ReturnDetailsScreenState extends State<ReturnDetailsScreen> {
                         padding: const EdgeInsets.only(top: 8.0),
                         child: InkWell(
                           onTap: () {
-                            context.push('/product/${widget.returns.returnProducts[i]
+                            context.go('product/${widget.returns.returnProducts[i]
                                   ['product']['_id']}');
                           },
                           child: Row(

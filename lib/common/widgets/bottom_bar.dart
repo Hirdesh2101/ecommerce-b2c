@@ -33,7 +33,7 @@ class _BottomBarState extends State<BottomBar> {
         case 0:
           return context.go('/home');
         case 1:
-          return context.go('/categories');
+          return context.go('/category');
         case 2:
           return context.go('/cart');
         case 3:

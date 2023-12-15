@@ -32,7 +32,7 @@ class _BelowAppBarState extends State<BelowAppBar> {
       child: InkWell(
 
         onTap: (){
-          context.push('/profile');
+          context.go('profile');
         },
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

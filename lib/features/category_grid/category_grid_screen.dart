@@ -14,7 +14,7 @@ class CategoryGridScreen extends StatefulWidget {
 
 class _CategoryGridScreenState extends State<CategoryGridScreen> {
   void navigateToCategoryPage(BuildContext context, String category) {
-    context.push('/category/$category');
+    context.go('category/$category');
   }
 
   @override

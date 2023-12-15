@@ -75,7 +75,7 @@ class AllOrdersList extends StatelessWidget {
                         child: InkWell(
                           borderRadius: BorderRadius.circular(20),
                           onTap: () {
-                            context.push('/orders',extra: allOrders![index]);
+                            context.go('orders',extra: allOrders![index]);
                           },
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),

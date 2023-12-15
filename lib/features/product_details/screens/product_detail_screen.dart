@@ -182,7 +182,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               ['size']
         }
       ];
-      context.push('/checkout',extra: [ product!.varients[selectedColor]['price'].toString(),
+      context.go('checkout',extra: [ product!.varients[selectedColor]['price'].toString(),
         buyNowCart,
         buyNowUserCart]);
     }

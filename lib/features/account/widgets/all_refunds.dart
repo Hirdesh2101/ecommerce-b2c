@@ -59,7 +59,7 @@ class AllReturnsList extends StatelessWidget {
                         child: InkWell(
                           borderRadius: BorderRadius.circular(20),
                           onTap: () {
-                            context.push('/returns',extra: allOrders![index]);
+                            context.go('returns',extra: allOrders![index]);
                           },
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),

@@ -48,6 +48,7 @@ class SimilarProducts extends StatelessWidget {
                 width: mq.width * .5,
                 child: InkWell(
                   onTap: () {
+                    //TODO check here
                     context.pushReplacement('/product/${products![index].id}');
                   },
                   child: Padding(

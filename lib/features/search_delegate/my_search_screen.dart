@@ -94,6 +94,7 @@ class _MySearchScreenState extends State<MySearchScreen> {
 
   void navigateToSearchScreen(String query) {
     //make sure to pass the arguments here!
+    //TODO
     context.pushReplacement('/search?query=$query');
     //Navigator.pushReplacementNamed(context, SearchScreen.routeName, arguments: query);
   }

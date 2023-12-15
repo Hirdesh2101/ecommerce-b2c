@@ -29,12 +29,12 @@ class _TopButtonsState extends State<TopButtons> {
             AccountButton(
                 text: "Your Orders",
                 onTap: () {
-                  context.push('/orders');
+                  context.go('orders');
                 }),
             AccountButton(
                 text: "Your Wishlist",
                 onTap: () {
-                  context.push('/wishlist');
+                  context.go('wishlist');
                 }),
           ],
         ),

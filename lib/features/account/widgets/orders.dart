@@ -50,7 +50,7 @@ class _OrdersState extends State<Orders> {
                 onTap: widget.orders == null || widget.orders!.isEmpty
                     ? null
                     : () async {
-                        context.push('/orders');
+                        context.go('orders');
                       },
                 child: Container(
                   padding: EdgeInsets.only(right: mq.width * 0.04),
@@ -109,7 +109,7 @@ class _OrdersState extends State<Orders> {
                         //     " $index value of container width =======> ${mq.height * 0.025}");
                         return GestureDetector(
                           onTap: () {
-                            context.push('/orders',extra: widget.orders![index]);
+                            context.go('orders',extra: widget.orders![index]);
                           },
                           child: SingleProduct(
                               image: widget.orders![index].products[0]
