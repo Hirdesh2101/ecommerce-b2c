@@ -182,7 +182,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               ['size']
         }
       ];
-      context.go('checkout',extra: [ product!.varients[selectedColor]['price'].toString(),
+      context.push('/checkout',extra: [ product!.varients[selectedColor]['price'].toString(),
         buyNowCart,
         buyNowUserCart]);
     }
@@ -275,6 +275,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             builder: (_) => Scaffold(
               appBar: GlobalVariables.getAppBar(
                   context: context,
+                  //TODO add actions
+                  wantActions: false
                   //onClickSearchNavigateTo: const MySearchScreen()
                   ),
               body: isProductLoading

@@ -45,6 +45,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
       showLoader = false;
     });
   }
+
   void fetchReturns() async {
     setState(() {
       showLoader = true;
@@ -59,10 +60,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: GlobalVariables.getAppBar(
-          title: "All Orders & Returns",
-          context: context,
-         // onClickSearchNavigateTo: const MySearchScreen()
-          ),
+          title: "All Orders & Returns", context: context, wantActions: false),
       body: DefaultTabController(
         length: 2,
         child: Column(

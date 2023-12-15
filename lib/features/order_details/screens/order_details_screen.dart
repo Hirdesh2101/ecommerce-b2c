@@ -147,6 +147,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
       appBar: GlobalVariables.getAppBar(
         title: "Order Details",
         context: context,
+        wantActions: false
         //onClickSearchNavigateTo: const MySearchScreen()
       ),
       body: SingleChildScrollView(
@@ -171,8 +172,8 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                         padding: const EdgeInsets.only(top: 8.0),
                         child: InkWell(
                           onTap: () {
-                            context.go(
-                                'product/${widget.order.products[i]['product']['_id']}');
+                            context.push(
+                                '/product/${widget.order.products[i]['product']['_id']}');
                           },
                           child: Row(
                             children: [

@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:ecommerce_major_project/constants/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -21,7 +22,7 @@ class _BelowAppBarState extends State<BelowAppBar> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<UserProvider>(context).user;
-    
+
     return Container(
       padding: EdgeInsets.only(
         left: mq.width * .035,
@@ -30,9 +31,9 @@ class _BelowAppBarState extends State<BelowAppBar> {
       ),
       // decoration: const BoxDecoration(gradient: GlobalVariables.appBarGradient),
       child: InkWell(
-
-        onTap: (){
-          context.go('profile');
+        onTap: () {
+          String currentPath = getCurrentPathWithoutQuery(context);
+          context.go('$currentPath/profile');
         },
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -60,7 +61,8 @@ class _BelowAppBarState extends State<BelowAppBar> {
                   //display profile picture
                   child: CircleAvatar(
                     radius: 28,
-                    backgroundImage: user.imageUrl == null || user.imageUrl == ""
+                    backgroundImage: user.imageUrl == null ||
+                            user.imageUrl == ""
                         ? const NetworkImage(
                             "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnWaCAfSN08VMtSjYBj0QKSfHk4-fjJZCOxgHLPuBSAw&s")
                         : NetworkImage(user.imageUrl!),
@@ -172,7 +174,7 @@ class _BelowAppBarState extends State<BelowAppBar> {
                                 // APIs.updateProfilePicture(File(_image!));
 
                                 //hiding bottomsheet
-                                 context.pop();
+                                context.pop();
                                 // showSnackBar(
                                 //     context: context,
                                 //     text: "Profile Picture updated successfully!");
@@ -212,8 +214,6 @@ class _BelowAppBarState extends State<BelowAppBar> {
                                 //hiding bottomSheet
                                 context.pop();
                               }
-                              
-                              
                             }
                           },
                           style: ElevatedButton.styleFrom(

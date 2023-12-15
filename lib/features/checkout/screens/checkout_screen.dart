@@ -133,7 +133,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       child: Scaffold(
         appBar: GlobalVariables.getAppBar(
           context: context,
-          //onClickSearchNavigateTo: const MySearchScreen(),
+          wantActions: false,
           title: "Checkout",
         ),
         body: SingleChildScrollView(

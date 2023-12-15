@@ -1,3 +1,4 @@
+import 'package:ecommerce_major_project/constants/utils.dart';
 import 'package:ecommerce_major_project/providers/tab_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -158,7 +159,7 @@ class GlobalVariables {
       leading: Padding(
         padding: EdgeInsets.all(mq.width * .025).copyWith(right: 0),
         child: wantBackNavigation!
-            ?  const BackButton()
+            ? const BackButton()
             //  IconButton(
             //     icon: const Icon(Icons.arrow_back),
             //     onPressed: () => context.pop())
@@ -183,7 +184,11 @@ class GlobalVariables {
                   children: [
                     InkWell(
                       onTap: () {
-                        context.go('search');
+                        String currentPath =
+                            getCurrentPathWithoutQuery(context);
+                        // Build the new path
+                        String newPath = '$currentPath/search';
+                        context.go(newPath);
                       },
                       child: SvgPicture.asset(
                         "assets/images/search-svg.svg",

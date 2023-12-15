@@ -86,6 +86,7 @@ class _ReturnDetailsScreenState extends State<ReturnDetailsScreen> {
       appBar: GlobalVariables.getAppBar(
           title: "Return Details",
           context: context,
+          wantActions: false
           //onClickSearchNavigateTo: const MySearchScreen()
           ),
       body: SingleChildScrollView(
@@ -112,7 +113,7 @@ class _ReturnDetailsScreenState extends State<ReturnDetailsScreen> {
                         padding: const EdgeInsets.only(top: 8.0),
                         child: InkWell(
                           onTap: () {
-                            context.go('product/${widget.returns.returnProducts[i]
+                            context.push('/product/${widget.returns.returnProducts[i]
                                   ['product']['_id']}');
                           },
                           child: Row(

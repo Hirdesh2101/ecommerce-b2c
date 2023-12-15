@@ -1,5 +1,6 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'dart:io';
 
 import 'package:internet_connection_checker/internet_connection_checker.dart';
@@ -7,6 +8,19 @@ import 'package:internet_connection_checker/internet_connection_checker.dart';
 Future<bool> checkNetworkConnectivity() async {
   bool result = await InternetConnectionChecker().hasConnection;
   return result;
+}
+
+String getCurrentPathWithoutQuery(BuildContext context) {
+  String currentPath = GoRouterState.of(context).uri.toString();
+  Uri uri = Uri.parse(currentPath);
+  // Rebuild the URI without query parameters
+  return Uri(
+    // scheme: uri.scheme,
+    // userInfo: uri.userInfo,
+    // host: uri.host,
+    // port: uri.port,
+    path: uri.path,
+  ).toString();
 }
 
 void showSnackBar({

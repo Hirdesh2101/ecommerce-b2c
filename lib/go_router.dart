@@ -44,10 +44,9 @@ class AppRouter {
         // navigatorKey: _shellNavigatorKey,
         builder: (context, state, child) {
           // Conditionally wrap the child with BottomBar only for specific routes
-          // var includeBottomBar = ['/home', '/categories', '/cart', '/account'].contains(state.uri.toString());
-          // print(includeBottomBar);
-          //return includeBottomBar ? BottomBar(child: child) : child;
-          return BottomBar(child: child);
+          var includeBottomBar = ['/home', '/category', '/cart', '/account']
+              .contains(state.uri.path);
+          return includeBottomBar ? BottomBar(child: child) : child;
         },
         routes: <RouteBase>[
           GoRoute(
@@ -69,33 +68,11 @@ class AppRouter {
                   },
                 ),
                 GoRoute(
-                    path: 'product/:id',
-                    builder: (context, state) => ProductDetailScreen(
-                          productId: state.pathParameters['id']!,
-                        ),
-                    routes: [
-                      GoRoute(
-                          path: 'checkout',
-                          builder: (context, state) {
-                            var extras = state.extra! as List;
-                            var totalAmount = extras[0];
-                            var cart = extras[1];
-                            var userProviderCart = extras[2];
-                            return CheckoutScreen(
-                              totalAmount: totalAmount,
-                              mycart: cart,
-                              userProviderCart: userProviderCart,
-                            );
-                          },
-                          routes: [
-                            GoRoute(
-                              path: 'status/:orderid',
-                              builder: (context, state) => CheckStatus(
-                                orderId: state.pathParameters['orderid']!,
-                              ),
-                            ),
-                          ]),
-                    ]),
+                  path: 'product/:id',
+                  builder: (context, state) => ProductDetailScreen(
+                    productId: state.pathParameters['id']!,
+                  ),
+                ),
               ]),
           GoRoute(
               path: '/category',
@@ -136,34 +113,6 @@ class AppRouter {
                         path: 'filter',
                         builder: (context, state) => const FilterScreen(),
                       ),
-                      GoRoute(
-                          path: 'product/:id',
-                          builder: (context, state) => ProductDetailScreen(
-                                productId: state.pathParameters['id']!,
-                              ),
-                          routes: [
-                            GoRoute(
-                                path: 'checkout',
-                                builder: (context, state) {
-                                  var extras = state.extra! as List;
-                                  var totalAmount = extras[0];
-                                  var cart = extras[1];
-                                  var userProviderCart = extras[2];
-                                  return CheckoutScreen(
-                                    totalAmount: totalAmount,
-                                    mycart: cart,
-                                    userProviderCart: userProviderCart,
-                                  );
-                                },
-                                routes: [
-                                  GoRoute(
-                                    path: 'status/:orderid',
-                                    builder: (context, state) => CheckStatus(
-                                      orderId: state.pathParameters['orderid']!,
-                                    ),
-                                  ),
-                                ]),
-                          ]),
                     ]),
               ]),
           GoRoute(
@@ -185,54 +134,19 @@ class AppRouter {
                   },
                 ),
                 GoRoute(
-                    path: 'product/:id',
-                    builder: (context, state) => ProductDetailScreen(
-                          productId: state.pathParameters['id']!,
-                        ),
-                    routes: [
-                      GoRoute(
-                          path: 'checkout',
-                          builder: (context, state) {
-                            var extras = state.extra! as List;
-                            var totalAmount = extras[0];
-                            var cart = extras[1];
-                            var userProviderCart = extras[2];
-                            return CheckoutScreen(
-                              totalAmount: totalAmount,
-                              mycart: cart,
-                              userProviderCart: userProviderCart,
-                            );
-                          },
-                          routes: [
-                            GoRoute(
-                              path: 'status/:orderid',
-                              builder: (context, state) => CheckStatus(
-                                orderId: state.pathParameters['orderid']!,
-                              ),
-                            ),
-                          ]),
-                    ]),
-                GoRoute(
-                    path: 'checkout',
-                    builder: (context, state) {
-                      var extras = state.extra! as List;
-                      var totalAmount = extras[0];
-                      var cart = extras[1];
-                      var userProviderCart = extras[2];
-                      return CheckoutScreen(
-                        totalAmount: totalAmount,
-                        mycart: cart,
-                        userProviderCart: userProviderCart,
-                      );
-                    },
-                    routes: [
-                      GoRoute(
-                        path: 'status/:orderid',
-                        builder: (context, state) => CheckStatus(
-                          orderId: state.pathParameters['orderid']!,
-                        ),
-                      ),
-                    ]),
+                  path: 'checkout',
+                  builder: (context, state) {
+                    var extras = state.extra! as List;
+                    var totalAmount = extras[0];
+                    var cart = extras[1];
+                    var userProviderCart = extras[2];
+                    return CheckoutScreen(
+                      totalAmount: totalAmount,
+                      mycart: cart,
+                      userProviderCart: userProviderCart,
+                    );
+                  },
+                ),
               ]),
           GoRoute(
               path: '/account',
@@ -257,77 +171,29 @@ class AppRouter {
                   },
                 ),
                 GoRoute(
-                    path: 'wishlist',
-                    builder: (context, state) => const WishListScreen(),
-                    routes: [
-                      GoRoute(
-                          path: 'product/:id',
-                          builder: (context, state) => ProductDetailScreen(
-                                productId: state.pathParameters['id']!,
-                              ),
-                          routes: [
-                            GoRoute(
-                                path: 'checkout',
-                                builder: (context, state) {
-                                  var extras = state.extra! as List;
-                                  var totalAmount = extras[0];
-                                  var cart = extras[1];
-                                  var userProviderCart = extras[2];
-                                  return CheckoutScreen(
-                                    totalAmount: totalAmount,
-                                    mycart: cart,
-                                    userProviderCart: userProviderCart,
-                                  );
-                                },
-                                routes: [
-                                  GoRoute(
-                                    path: 'status/:orderid',
-                                    builder: (context, state) => CheckStatus(
-                                      orderId: state.pathParameters['orderid']!,
-                                    ),
-                                  ),
-                                ]),
-                          ]),
-                    ]),
+                  path: 'wishlist',
+                  builder: (context, state) => const WishListScreen(),
+                ),
                 GoRoute(
                     path: 'orders',
                     builder: (context, state) {
-                      var extras = state.extra as Order?;
-                      if (extras != null) {
-                        return OrderDetailsScreen(order: extras);
-                      } else {
-                        return const AllOrdersScreen();
-                      }
+                      return const AllOrdersScreen();
                     },
                     routes: [
                       GoRoute(
-                          path: 'product/:id',
-                          builder: (context, state) => ProductDetailScreen(
-                                productId: state.pathParameters['id']!,
-                              ),
-                          routes: [
-                            GoRoute(
-                                path: 'checkout',
-                                builder: (context, state) {
-                                  var extras = state.extra! as List;
-                                  var totalAmount = extras[0];
-                                  var cart = extras[1];
-                                  var userProviderCart = extras[2];
-                                  return CheckoutScreen(
-                                    totalAmount: totalAmount,
-                                    mycart: cart,
-                                    userProviderCart: userProviderCart,
-                                  );
-                                },
-                                routes: [
-                                  GoRoute(
-                                    path: 'status/:orderid',
-                                    builder: (context, state) => CheckStatus(
-                                      orderId: state.pathParameters['orderid']!,
-                                    ),
-                                  ),
-                                ]),
-                          ]),
+                        path: 'returns',
+                        builder: (context, state) {
+                          var extras = state.extra! as Return;
+                          return ReturnDetailsScreen(returns: extras);
+                        },
+                      ),
+                      GoRoute(
+                        path: 'details',
+                        builder: (context, state) {
+                          var extras = state.extra as Order?;
+                          return OrderDetailsScreen(order: extras!);
+                        },
+                      ),
                       GoRoute(
                           path: 'newreturn',
                           builder: (context, state) {
@@ -349,42 +215,6 @@ class AppRouter {
                                 }),
                           ]),
                     ]),
-                GoRoute(
-                    path: 'returns',
-                    builder: (context, state) {
-                      var extras = state.extra! as Return;
-                      return ReturnDetailsScreen(returns: extras);
-                    },
-                    routes: [
-                      GoRoute(
-                          path: 'product/:id',
-                          builder: (context, state) => ProductDetailScreen(
-                                productId: state.pathParameters['id']!,
-                              ),
-                          routes: [
-                            GoRoute(
-                                path: 'checkout',
-                                builder: (context, state) {
-                                  var extras = state.extra! as List;
-                                  var totalAmount = extras[0];
-                                  var cart = extras[1];
-                                  var userProviderCart = extras[2];
-                                  return CheckoutScreen(
-                                    totalAmount: totalAmount,
-                                    mycart: cart,
-                                    userProviderCart: userProviderCart,
-                                  );
-                                },
-                                routes: [
-                                  GoRoute(
-                                    path: 'status/:orderid',
-                                    builder: (context, state) => CheckStatus(
-                                      orderId: state.pathParameters['orderid']!,
-                                    ),
-                                  ),
-                                ]),
-                          ]),
-                    ]),
               ]),
         ],
       ),
@@ -399,6 +229,32 @@ class AppRouter {
       GoRoute(
         path: '/auth',
         builder: (context, state) => const AuthScreen(),
+      ),
+      GoRoute(
+        path: '/product/:id',
+        builder: (context, state) => ProductDetailScreen(
+          productId: state.pathParameters['id']!,
+        ),
+      ),
+      GoRoute(
+        path: '/checkout',
+        builder: (context, state) {
+          var extras = state.extra! as List;
+          var totalAmount = extras[0];
+          var cart = extras[1];
+          var userProviderCart = extras[2];
+          return CheckoutScreen(
+            totalAmount: totalAmount,
+            mycart: cart,
+            userProviderCart: userProviderCart,
+          );
+        },
+      ),
+      GoRoute(
+        path: '/status/:orderid',
+        builder: (context, state) => CheckStatus(
+          orderId: state.pathParameters['orderid']!,
+        ),
       ),
     ],
     //errorBuilder: (context, state) => ErrorPage(error: state.error.toString()),

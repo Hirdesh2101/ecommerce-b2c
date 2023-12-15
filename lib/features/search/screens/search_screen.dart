@@ -1,3 +1,4 @@
+import 'package:ecommerce_major_project/constants/utils.dart';
 import 'package:ecommerce_major_project/providers/tab_provider.dart';
 import 'package:flutter/material.dart';
 
@@ -97,8 +98,8 @@ class _SearchScreenState extends State<SearchScreen> {
                           itemBuilder: (context, index) {
                             return GestureDetector(
                                 onTap: () {
-                                  context
-                                      .push('/product/${products![index].id}');
+                                  context.push(
+                                      '/product/${products![index].id}');
                                 },
                                 child:
                                     SearchedProduct(product: products![index]));

@@ -1,3 +1,4 @@
+import 'package:ecommerce_major_project/constants/utils.dart';
 import 'package:ecommerce_major_project/features/home/providers/search_provider.dart';
 import 'package:ecommerce_major_project/features/home/services/home_services.dart';
 import 'package:ecommerce_major_project/main.dart';
@@ -94,8 +95,10 @@ class _MySearchScreenState extends State<MySearchScreen> {
 
   void navigateToSearchScreen(String query) {
     //make sure to pass the arguments here!
-    //TODO
-    context.pushReplacement('/search?query=$query');
+    String currentPath = getCurrentPathWithoutQuery(context);
+    // Build the new path
+    String newPath = '$currentPath?query=$query';
+    context.go(newPath);
     //Navigator.pushReplacementNamed(context, SearchScreen.routeName, arguments: query);
   }
 

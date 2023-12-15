@@ -49,7 +49,6 @@ class _TopCategoriesState extends State<TopCategories>
   }
 
   void navigateToCategoryPage(BuildContext context, String category) {
-    
     final tabProvider = Provider.of<TabProvider>(context, listen: false);
     tabProvider.setTab(1);
     context.go('/category/$category');
@@ -82,7 +81,6 @@ class _TopCategoriesState extends State<TopCategories>
     setState(() {
       isProductLoading = false;
     });
-    
   }
 
   @override
@@ -268,11 +266,12 @@ class _TopCategoriesState extends State<TopCategories>
                                           return InkWell(
                                             onTap: () {
                                               // Get the current location
-    String currentPath = GoRouterState.of(context).uri.toString();
-
-    // Build the new path
-    String newPath = '$currentPath/product/$productId';
-                                              context.go('/home/product/${product.id}');
+                                              String currentPath =
+                                                  getCurrentPathWithoutQuery(context);
+                                              // Build the new path
+                                              String newPath =
+                                                  '$currentPath/product/${product.id}';
+                                              context.go(newPath);
                                             },
                                             child: Padding(
                                               padding: EdgeInsets.symmetric(
@@ -434,7 +433,8 @@ class _TopCategoriesState extends State<TopCategories>
                                                                   "Added to WishList",
                                                               onTapFunction:
                                                                   () {
-                                                                    context.go('wishlist');
+                                                                context.go(
+                                                                    'wishlist');
                                                               },
                                                               actionLabel:
                                                                   "View",
