@@ -6,7 +6,6 @@ import 'package:ecommerce_major_project/features/category_grid/category_grid_scr
 import 'package:ecommerce_major_project/features/checkout/screens/status_check.dart';
 import 'package:ecommerce_major_project/features/home/screens/filters_screen.dart';
 import 'package:ecommerce_major_project/features/home/screens/wish_list_screen.dart';
-import 'package:ecommerce_major_project/features/home/widgets/myGridWidgetItems.dart';
 import 'package:ecommerce_major_project/features/order_details/screens/order_details_screen.dart';
 import 'package:ecommerce_major_project/features/order_details/screens/return_details_screen.dart';
 import 'package:ecommerce_major_project/features/profile/screens/profilescreen.dart';
