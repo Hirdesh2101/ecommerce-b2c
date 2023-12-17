@@ -113,6 +113,7 @@ dependencies:
     google_sign_in: ^6.1.5
     firebase_ui_oauth_google: ^1.2.11
     firebase_ui_oauth_apple: ^1.2.14
+    device_preview: ^1.1.0
 
 flutter_launcher_icons:
     android: "launcher_icon"
