@@ -6,7 +6,6 @@ import 'package:ecommerce_major_project/models/returns.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:ecommerce_major_project/constants/global_variables.dart';
-import 'package:ecommerce_major_project/features/search_delegate/my_search_screen.dart';
 import 'package:ecommerce_major_project/models/order.dart';
 
 class AllOrdersScreen extends StatefulWidget {
@@ -46,6 +45,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
       showLoader = false;
     });
   }
+
   void fetchReturns() async {
     setState(() {
       showLoader = true;
@@ -60,9 +60,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: GlobalVariables.getAppBar(
-          title: "All Orders & Returns",
-          context: context,
-          onClickSearchNavigateTo: const MySearchScreen()),
+          title: "All Orders & Returns", context: context, wantActions: false),
       body: DefaultTabController(
         length: 2,
         child: Column(

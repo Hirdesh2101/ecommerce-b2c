@@ -1,3 +1,4 @@
+import 'package:ecommerce_major_project/constants/utils.dart';
 import 'package:ecommerce_major_project/providers/tab_provider.dart';
 import 'package:flutter/material.dart';
 
@@ -8,8 +9,7 @@ import 'package:ecommerce_major_project/common/widgets/color_loader_2.dart';
 import 'package:ecommerce_major_project/features/home/widgets/address_box.dart';
 import 'package:ecommerce_major_project/features/search/widgets/searched_product.dart';
 import 'package:ecommerce_major_project/features/search/services/search_services.dart';
-import 'package:ecommerce_major_project/features/search_delegate/my_search_screen.dart';
-import 'package:ecommerce_major_project/features/product_details/screens/product_detail_screen.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -31,10 +31,11 @@ class _SearchScreenState extends State<SearchScreen> {
     fetchSearchedProduct();
   }
 
-  void navigateToSearchScreen(String query) {
-    //make sure to pass the arguments here!
-    Navigator.pushNamed(context, SearchScreen.routeName, arguments: query);
-  }
+  // void navigateToSearchScreen(String query) {
+  //   //make sure to pass the arguments here!
+
+  //   Navigator.pushNamed(context, SearchScreen.routeName, arguments: query);
+  // }
 
   //fetching the searched product with the search query
   fetchSearchedProduct() async {
@@ -48,16 +49,17 @@ class _SearchScreenState extends State<SearchScreen> {
     final tabProvider = Provider.of<TabProvider>(context);
     return Scaffold(
       appBar: GlobalVariables.getAppBar(
-          context: context,
-          wantBackNavigation: true,
-          title: "All results for ${widget.searchQuery}",
-          onClickSearchNavigateTo:
-              MySearchScreen(searchQueryAlready: widget.searchQuery)),
+        context: context,
+        wantBackNavigation: true,
+        title: "All results for ${widget.searchQuery}",
+        // onClickSearchNavigateTo:
+        //     MySearchScreen(searchQueryAlready: widget.searchQuery)
+      ),
       body: products == null
           ? const ColorLoader2()
           : products!.isEmpty
               ? Center(
-                child: Column(
+                  child: Column(
                     //mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Image.asset(
@@ -74,9 +76,8 @@ class _SearchScreenState extends State<SearchScreen> {
                       SizedBox(height: mq.height * .01),
                       ElevatedButton(
                           onPressed: () {
-                           tabProvider.setTab(0);
-                                Navigator.of(context)
-                                    .popUntil((route) => route.isFirst);
+                            tabProvider.setTab(0);
+                            context.go('/');
                           },
                           style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.deepPurpleAccent),
@@ -86,7 +87,7 @@ class _SearchScreenState extends State<SearchScreen> {
                           ))
                     ],
                   ),
-              )
+                )
               : Column(
                   children: [
                     const AddressBox(),
@@ -97,9 +98,8 @@ class _SearchScreenState extends State<SearchScreen> {
                           itemBuilder: (context, index) {
                             return GestureDetector(
                                 onTap: () {
-                                  Navigator.pushNamed(
-                                      context, ProductDetailScreen.routeName,
-                                      arguments: products![index].id);
+                                  context.push(
+                                      '/product/${products![index].id}');
                                 },
                                 child:
                                     SearchedProduct(product: products![index]));

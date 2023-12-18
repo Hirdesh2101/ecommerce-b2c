@@ -2,14 +2,13 @@
 import 'package:ecommerce_major_project/common/widgets/color_loader_2.dart';
 import 'package:ecommerce_major_project/constants/global_variables.dart';
 import 'package:ecommerce_major_project/features/home/services/home_services.dart';
-import 'package:ecommerce_major_project/features/product_details/screens/product_detail_screen.dart';
-import 'package:ecommerce_major_project/features/search_delegate/my_search_screen.dart';
 import 'package:ecommerce_major_project/models/product.dart';
 import 'package:ecommerce_major_project/providers/tab_provider.dart';
 import 'package:ecommerce_major_project/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:ecommerce_major_project/main.dart';
 import 'package:ecommerce_major_project/features/home/screens/wish_list_product.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class WishListScreen extends StatefulWidget {
@@ -50,9 +49,11 @@ class _WishListScreenState extends State<WishListScreen> {
     final userProvider = Provider.of<UserProvider>(context);
     return Scaffold(
       appBar: GlobalVariables.getAppBar(
-          context: context,
-          title: "Your Wishlist",
-          onClickSearchNavigateTo: const MySearchScreen()),
+        context: context,
+        title: "Your Wishlist",
+        wantActions: false
+        //onClickSearchNavigateTo: const MySearchScreen()
+      ),
       body: ListView(
         padding: EdgeInsets.zero,
         children: [
@@ -83,8 +84,7 @@ class _WishListScreenState extends State<WishListScreen> {
                           ElevatedButton(
                               onPressed: () {
                                 tabProvider.setTab(0);
-                                Navigator.of(context)
-                                    .popUntil((route) => route.isFirst);
+                                context.go('/');
                               },
                               style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.deepPurpleAccent),
@@ -102,12 +102,11 @@ class _WishListScreenState extends State<WishListScreen> {
                                 index++)
                               InkWell(
                                   onTap: () {
-                                    Navigator.pushNamed(
-                                      context,
-                                      ProductDetailScreen.routeName,
-                                      arguments: wishList![index].id,
-                                    ).then((value) {
-                                      if(userProvider.user.wishList!.length!=wishList!.length){
+                                    context
+                                        .push('/product/${wishList![index].id}')
+                                        .then((value) {
+                                      if (userProvider.user.wishList!.length !=
+                                          wishList!.length) {
                                         fetchWishlist();
                                       }
                                     });

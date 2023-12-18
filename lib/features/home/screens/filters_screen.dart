@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import 'package:ecommerce_major_project/features/home/providers/filter_provider.dart';
@@ -29,7 +30,7 @@ class _FilterScreenState extends State<FilterScreen> {
         elevation: 1,
         actions: [
           TextButton(
-              onPressed: () => Navigator.of(context).pop(),
+              onPressed: () =>context.pop(),
               child: const Text("Close"))
         ],
       ),
@@ -110,7 +111,7 @@ class _FiltersAvailableState extends State<FiltersAvailable> {
             TextButton(
                 onPressed: () {
                   filterProvider.setFilterNumber(0);
-                  Navigator.pop(context);
+                  context.pop();
                 },
                 child: Text(
                   "\nClear",
@@ -128,7 +129,7 @@ class _FiltersAvailableState extends State<FiltersAvailable> {
                   } else if (_character == FilterType.priceHtoL) {
                     filterProvider.setFilterNumber(3);
                   }
-                  Navigator.pop(context);
+                 context.pop();
                 },
                 child: Text(
                   "\nSubmit",

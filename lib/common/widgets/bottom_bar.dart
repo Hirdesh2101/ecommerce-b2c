@@ -1,58 +1,55 @@
 import 'package:ecommerce_major_project/providers/tab_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:badges/badges.dart' as badges;
 
 import 'package:ecommerce_major_project/main.dart';
 import 'package:ecommerce_major_project/providers/user_provider.dart';
 import 'package:ecommerce_major_project/constants/global_variables.dart';
-import 'package:ecommerce_major_project/features/cart/screens/cart_screen.dart';
-import 'package:ecommerce_major_project/features/home/screens/home_screen.dart';
-import 'package:ecommerce_major_project/features/account/screens/account_screen.dart';
-import 'package:ecommerce_major_project/features/category_grid/category_grid_screen.dart';
 
 class BottomBar extends StatefulWidget {
   static const String routeName = "/actual-home";
-  const BottomBar({super.key});
+  const BottomBar({super.key, required this.child});
+  final Widget child;
 
   @override
   State<BottomBar> createState() => _BottomBarState();
 }
 
 class _BottomBarState extends State<BottomBar> {
-  //int _page = 0;
   double bottomBarWidth = 42;
   double bottomBarBorderWidth = 5;
-
-  List<Widget> pages = [
-    const HomeScreen(),
-    const CategoryGridScreen(),
-    const CartScreen(),
-    const AccountScreen(),
-  ];
-
-  // void updatePage(int page) {
-    
-  // }
 
   @override
   Widget build(BuildContext context) {
     mq = MediaQuery.of(context).size;
     myTextTheme = Theme.of(context).textTheme;
-    final tabProvider = Provider.of<TabProvider>(context);
+    final tabProvider = Provider.of<TabProvider>(context, listen: false);
     final userCartLen = context.watch<UserProvider>().user.cart.length;
+    void onTap(int value) {
+      tabProvider.setTab(value);
+      switch (value) {
+        case 0:
+          return context.go('/');
+        case 1:
+          return context.go('/category');
+        case 2:
+          return context.go('/cart');
+        case 3:
+          return context.go('/account');
+      }
+    }
 
     return Scaffold(
-      body: pages[tabProvider.tab],
+      body: widget.child,
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: tabProvider.tab,
         selectedItemColor: GlobalVariables.selectedNavBarColor,
         unselectedItemColor: GlobalVariables.unselectedNavBarColor,
         backgroundColor: GlobalVariables.backgroundColor,
         iconSize: 28,
-        onTap: (val){
-          tabProvider.setTab(val);
-        },
+        onTap: onTap,
         items: [
           //HOME PAGE
           BottomNavigationBarItem(

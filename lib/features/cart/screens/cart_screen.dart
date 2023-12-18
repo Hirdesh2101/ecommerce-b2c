@@ -1,7 +1,7 @@
+import 'package:ecommerce_major_project/constants/utils.dart';
 import 'package:ecommerce_major_project/features/checkout/services/checkout_services.dart';
 import 'package:ecommerce_major_project/features/cart/providers/cart_provider.dart';
 import 'package:ecommerce_major_project/features/home/services/home_services.dart';
-import 'package:ecommerce_major_project/features/product_details/screens/product_detail_screen.dart';
 import 'package:ecommerce_major_project/providers/tab_provider.dart';
 import 'package:ecommerce_major_project/providers/user_provider.dart';
 import 'package:flutter/material.dart';
@@ -11,9 +11,7 @@ import 'package:ecommerce_major_project/common/widgets/custom_button.dart';
 import 'package:ecommerce_major_project/features/home/widgets/address_box.dart';
 import 'package:ecommerce_major_project/features/cart/widgets/cart_product.dart';
 import 'package:ecommerce_major_project/features/cart/widgets/cart_subtotal.dart';
-import 'package:ecommerce_major_project/features/search/screens/search_screen.dart';
-import 'package:ecommerce_major_project/features/checkout/screens/checkout_screen.dart';
-import 'package:ecommerce_major_project/features/search_delegate/my_search_screen.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class CartScreen extends StatefulWidget {
@@ -38,11 +36,6 @@ class _CartScreenState extends State<CartScreen> {
     await homeServices.fetchCart(context);
   }
 
-  void navigateToSearchScreen(String query) {
-    //make sure to pass the arguments here!
-    Navigator.pushNamed(context, SearchScreen.routeName, arguments: query);
-  }
-
   //This function checks the availablity of the products first and then move forward.
   void navigateToAddress(num sum) async {
     final cartProvider = Provider.of<CartProvider>(context, listen: false);
@@ -57,7 +50,8 @@ class _CartScreenState extends State<CartScreen> {
     if (isProductAvailable) {
       //make sure to pass the arguments here!
       if (context.mounted) {
-        Navigator.pushNamed(context, CheckoutScreen.routeName, arguments: [
+        String currentPath = getCurrentPathWithoutQuery(context);
+        context.go('$currentPath/checkout', extra: [
           sum.toString(),
           cartProvider.getCart,
           userProvider.user.cart
@@ -75,10 +69,11 @@ class _CartScreenState extends State<CartScreen> {
     final cartProvider = Provider.of<CartProvider>(context);
     return Scaffold(
       appBar: GlobalVariables.getAppBar(
-          context: context,
-          wantBackNavigation: false,
-          title: "Your Cart",
-          onClickSearchNavigateTo: const MySearchScreen()),
+        context: context,
+        wantBackNavigation: false,
+        title: "Your Cart",
+        //onClickSearchNavigateTo: const MySearchScreen()
+      ),
       body: Column(
         children: [
           SizedBox(height: mq.height * 0.01),
@@ -137,11 +132,10 @@ class _CartScreenState extends State<CartScreen> {
                       // return CartProdcut
                       return InkWell(
                         onTap: () {
-                          Navigator.pushNamed(
-                            context,
-                            ProductDetailScreen.routeName,
-                            arguments: cartProvider.getCart![index].product.id,
-                          ).then((value) {
+                          context
+                              .push(
+                                  '/product/${cartProvider.getCart![index].product.id}')
+                              .then((value) {
                             fetchCart();
                           });
                         },

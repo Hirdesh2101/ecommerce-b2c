@@ -1,10 +1,9 @@
-import 'package:ecommerce_major_project/features/account/services/account_services.dart';
+import 'package:ecommerce_major_project/features/auth/services/auth_service.dart';
 import 'package:ecommerce_major_project/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:ecommerce_major_project/constants/global_variables.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart' as ui;
 import 'package:firebase_auth/firebase_auth.dart' as auth;
-import 'package:ecommerce_major_project/features/search_delegate/my_search_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:ecommerce_major_project/main.dart';
 
@@ -23,7 +22,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
       appBar: GlobalVariables.getAppBar(
           context: context,
           title: "Your Profile",
-          onClickSearchNavigateTo: const MySearchScreen()),
+          //onClickSearchNavigateTo: const MySearchScreen()
+          ),
       body: ui.ProfileScreen(
         avatar: Center(
           child: Stack(
@@ -67,7 +67,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
         actions: [
           ui.SignedOutAction((context) {
-            AccountServices().logOut(context);
+            AuthService().logOut(context);
           }),
         ],
       ),

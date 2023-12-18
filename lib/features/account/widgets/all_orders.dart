@@ -1,15 +1,15 @@
 import 'package:ecommerce_major_project/constants/utils.dart';
-import 'package:ecommerce_major_project/features/order_details/screens/order_details_screen.dart';
 import 'package:ecommerce_major_project/main.dart';
 import 'package:ecommerce_major_project/models/order.dart';
 import 'package:ecommerce_major_project/providers/tab_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class AllOrdersList extends StatelessWidget {
-  const AllOrdersList({super.key,required this.allOrders});
+  const AllOrdersList({super.key, required this.allOrders});
   final List<Order>? allOrders;
   static final indianRupeesFormat = NumberFormat.currency(
     name: "INR",
@@ -40,7 +40,7 @@ class AllOrdersList extends StatelessWidget {
                       ElevatedButton(
                           onPressed: () {
                             tabProvider.setTab(0);
-                            Navigator.of(context).pop();
+                            context.go('/');
                           },
                           style: ElevatedButton.styleFrom(
                               shape: RoundedRectangleBorder(
@@ -75,16 +75,9 @@ class AllOrdersList extends StatelessWidget {
                         child: InkWell(
                           borderRadius: BorderRadius.circular(20),
                           onTap: () {
-                            Navigator.pushNamed(
-                              context,
-                              OrderDetailsScreen.routeName,
-                              arguments: allOrders![index],
-                            );
-                            // Navigator.pushNamed(
-                            //     context, ProductDetailScreen.routeName,
-                            //     arguments: allOrders![index]);
-                            // Navigator.pushNamed(
-                            //     context, OrderDetailsScreen.routeName);
+                            String currentPath =
+                                getCurrentPathWithoutQuery(context);
+                            context.go('$currentPath/details', extra: allOrders![index]);
                           },
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
@@ -119,7 +112,7 @@ class AllOrdersList extends StatelessWidget {
                                           onTap: () async {
                                             await Clipboard.setData(
                                                     ClipboardData(
-                                                        text:allOrders![index]
+                                                        text: allOrders![index]
                                                             .id))
                                                 .then((_) => showSnackBar(
                                                     context: context,
@@ -133,9 +126,7 @@ class AllOrdersList extends StatelessWidget {
                                 Column(
                                   children: [
                                     for (int j = 0;
-                                        j <
-                                            allOrders![index].products
-                                                .length;
+                                        j < allOrders![index].products.length;
                                         j++)
                                       Container(
                                         margin: EdgeInsets.symmetric(
@@ -145,9 +136,8 @@ class AllOrdersList extends StatelessWidget {
                                           children: [
                                             // image
                                             Image.network(
-                                              allOrders![index]
-                                                      .products[j]['product']
-                                                  ['images'][0],
+                                              allOrders![index].products[j]
+                                                  ['product']['images'][0],
                                               // allOrders![index].products[index].images[0],
                                               fit: BoxFit.contain,
                                               height: mq.width * .25,
@@ -198,7 +188,6 @@ class AllOrdersList extends StatelessWidget {
                                                         decoration:
                                                             BoxDecoration(
                                                           color: Color(int.parse(
-                                                             
                                                               '${allOrders![index].products[j]['color']}')),
                                                           shape:
                                                               BoxShape.circle,

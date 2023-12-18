@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:ecommerce_major_project/features/home/providers/category_provider.dart';
 import 'package:ecommerce_major_project/features/home/widgets/carousel_image.dart';
+import 'package:ecommerce_major_project/providers/tab_provider.dart';
 import 'package:ecommerce_major_project/providers/user_provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -11,10 +12,8 @@ import 'package:ecommerce_major_project/constants/utils.dart';
 import 'package:ecommerce_major_project/constants/global_variables.dart';
 import 'package:ecommerce_major_project/common/widgets/color_loader_2.dart';
 import 'package:ecommerce_major_project/features/home/services/home_services.dart';
-import 'package:ecommerce_major_project/features/home/screens/wish_list_screen.dart';
-import 'package:ecommerce_major_project/features/home/screens/category_deals_screen.dart';
-import 'package:ecommerce_major_project/features/product_details/screens/product_detail_screen.dart';
 import 'package:ecommerce_major_project/features/product_details/services/product_detail_services.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -50,8 +49,9 @@ class _TopCategoriesState extends State<TopCategories>
   }
 
   void navigateToCategoryPage(BuildContext context, String category) {
-    Navigator.pushNamed(context, CategoryDealsScreen.routeName,
-        arguments: category);
+    final tabProvider = Provider.of<TabProvider>(context, listen: false);
+    tabProvider.setTab(1);
+    context.go('/category/$category');
   }
 
   fetchAdvertisement() async {
@@ -81,7 +81,6 @@ class _TopCategoriesState extends State<TopCategories>
     setState(() {
       isProductLoading = false;
     });
-    
   }
 
   @override
@@ -266,11 +265,14 @@ class _TopCategoriesState extends State<TopCategories>
 
                                           return InkWell(
                                             onTap: () {
-                                              Navigator.pushNamed(
-                                                context,
-                                                ProductDetailScreen.routeName,
-                                                arguments: product.id,
-                                              );
+                                              // Get the current location
+                                              String currentPath =
+                                                  getCurrentPathWithoutQuery(
+                                                      context);
+                                              // Build the new path
+                                              String newPath =
+                                                  '${currentPath}product/${product.id}';
+                                              context.go(newPath);
                                             },
                                             child: Padding(
                                               padding: EdgeInsets.symmetric(
@@ -432,14 +434,16 @@ class _TopCategoriesState extends State<TopCategories>
                                                                   "Added to WishList",
                                                               onTapFunction:
                                                                   () {
-                                                                Navigator.of(
-                                                                        context)
-                                                                    .push(
-                                                                  GlobalVariables
-                                                                      .createRoute(
-                                                                    const WishListScreen(),
-                                                                  ),
-                                                                );
+                                                                final tabProvider =
+                                                                    Provider.of<
+                                                                            TabProvider>(
+                                                                        context,
+                                                                        listen:
+                                                                            false);
+                                                                tabProvider
+                                                                    .setTab(3);
+                                                                context.go(
+                                                                    '/account/wishlist');
                                                               },
                                                               actionLabel:
                                                                   "View",

@@ -1,6 +1,7 @@
 import 'dart:io';
-import 'package:ecommerce_major_project/features/profile/screens/profilescreen.dart';
+import 'package:ecommerce_major_project/constants/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ecommerce_major_project/main.dart';
@@ -21,7 +22,7 @@ class _BelowAppBarState extends State<BelowAppBar> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<UserProvider>(context).user;
-    
+
     return Container(
       padding: EdgeInsets.only(
         left: mq.width * .035,
@@ -30,11 +31,9 @@ class _BelowAppBarState extends State<BelowAppBar> {
       ),
       // decoration: const BoxDecoration(gradient: GlobalVariables.appBarGradient),
       child: InkWell(
-
-        onTap: (){
-          Navigator.of(context).push(MaterialPageRoute(builder: (context){
-            return const ProfileScreen();
-          }));
+        onTap: () {
+          String currentPath = getCurrentPathWithoutQuery(context);
+          context.go('$currentPath/profile');
         },
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -62,7 +61,8 @@ class _BelowAppBarState extends State<BelowAppBar> {
                   //display profile picture
                   child: CircleAvatar(
                     radius: 28,
-                    backgroundImage: user.imageUrl == null || user.imageUrl == ""
+                    backgroundImage: user.imageUrl == null ||
+                            user.imageUrl == ""
                         ? const NetworkImage(
                             "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnWaCAfSN08VMtSjYBj0QKSfHk4-fjJZCOxgHLPuBSAw&s")
                         : NetworkImage(user.imageUrl!),
@@ -174,7 +174,7 @@ class _BelowAppBarState extends State<BelowAppBar> {
                                 // APIs.updateProfilePicture(File(_image!));
 
                                 //hiding bottomsheet
-                                Navigator.pop(context);
+                                context.pop();
                                 // showSnackBar(
                                 //     context: context,
                                 //     text: "Profile Picture updated successfully!");
@@ -212,10 +212,8 @@ class _BelowAppBarState extends State<BelowAppBar> {
                                     imagePicked: File(_image!));
 
                                 //hiding bottomSheet
-                                Navigator.pop(context);
+                                context.pop();
                               }
-                              
-                              
                             }
                           },
                           style: ElevatedButton.styleFrom(

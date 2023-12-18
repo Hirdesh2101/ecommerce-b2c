@@ -1,9 +1,11 @@
+import 'package:ecommerce_major_project/constants/utils.dart';
 import 'package:ecommerce_major_project/providers/tab_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:ecommerce_major_project/main.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 // String uri = 'https://drab-teal-crayfish-hem.cyclic.app';
@@ -144,7 +146,6 @@ class GlobalVariables {
 
   static AppBar getAppBar({
     required BuildContext context,
-    required dynamic onClickSearchNavigateTo,
     bool? wantBackNavigation = true,
     bool? wantActions = true,
     String? title = "",
@@ -158,12 +159,14 @@ class GlobalVariables {
       leading: Padding(
         padding: EdgeInsets.all(mq.width * .025).copyWith(right: 0),
         child: wantBackNavigation!
-            ? IconButton(
-                icon: const Icon(Icons.arrow_back),
-                onPressed: () => Navigator.pop(context))
+            ? const BackButton()
+            //  IconButton(
+            //     icon: const Icon(Icons.arrow_back),
+            //     onPressed: () => context.pop())
             : InkWell(
                 onTap: () {
                   tabProvider.setTab(0);
+                  context.go('/');
                 },
                 child: Image.asset(
                   "assets/images/logo.png",
@@ -181,8 +184,13 @@ class GlobalVariables {
                   children: [
                     InkWell(
                       onTap: () {
-                        Navigator.of(context)
-                            .push(createRoute(onClickSearchNavigateTo));
+                        String currentPath =
+                            getCurrentPathWithoutQuery(context);
+                        // Build the new path
+                        String newPath = currentPath == '/'
+                            ? '${currentPath}search'
+                            : '$currentPath/search';
+                        context.go(newPath);
                       },
                       child: SvgPicture.asset(
                         "assets/images/search-svg.svg",

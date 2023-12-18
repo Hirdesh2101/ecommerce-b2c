@@ -4,6 +4,7 @@ import 'package:ecommerce_major_project/features/auth/services/auth_service.dart
 import 'package:ecommerce_major_project/models/order.dart';
 import 'package:ecommerce_major_project/providers/tab_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:mime/mime.dart';
@@ -60,8 +61,7 @@ class ReturnServices {
             final AuthService authService = AuthService();
             authService.getUserData(context);
             tabProvider.setTab(0);
-
-            Navigator.of(context).popUntil((route) => route.isFirst);
+            context.go('/');
             // User user =
             //     userProvider.user.copyWith(cart: jsonDecode(res.body)['cart']);
             // userProvider.setUserFromModel(user);
@@ -104,8 +104,7 @@ class ReturnServices {
                 Provider.of<TabProvider>(context, listen: false);
 
             tabProvider.setTab(0);
-
-            Navigator.of(context).popUntil((route) => route.isFirst);
+            context.go('/');
           },
         );
       }

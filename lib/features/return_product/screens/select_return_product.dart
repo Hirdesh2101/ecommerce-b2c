@@ -1,10 +1,9 @@
 import 'package:ecommerce_major_project/constants/global_variables.dart';
 import 'package:ecommerce_major_project/features/return_product/widgets/return_product.dart';
-import 'package:ecommerce_major_project/features/return_product/screens/return_product_screen.dart';
-import 'package:ecommerce_major_project/features/search_delegate/my_search_screen.dart';
 import 'package:ecommerce_major_project/models/order.dart';
 import 'package:flutter/material.dart';
 import 'package:ecommerce_major_project/main.dart';
+import 'package:go_router/go_router.dart';
 
 class SelectReturnProduct extends StatefulWidget {
   const SelectReturnProduct({super.key, required this.order,required this.copy});
@@ -24,7 +23,8 @@ class _SelectReturnProductState extends State<SelectReturnProduct> {
         appBar: GlobalVariables.getAppBar(
             title: "Return Product",
             context: context,
-            onClickSearchNavigateTo: const MySearchScreen()),
+            //onClickSearchNavigateTo: const MySearchScreen()
+            ),
         body: SafeArea(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: mq.width * 0.01),
@@ -114,13 +114,7 @@ class _SelectReturnProductState extends State<SelectReturnProduct> {
                         onPressed: selectedProducts.isEmpty
                             ? null
                             : () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (_) => ReturnProductScreen(
-                                              order: widget.order,
-                                              selectedProduct: selectedProducts,
-                                            )));
+                              context.go('newreturn',extra: [widget.order,selectedProducts]);
                               },
                         style: ElevatedButton.styleFrom(
                             // alignment: Alignment.center,
