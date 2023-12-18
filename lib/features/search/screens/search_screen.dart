@@ -1,7 +1,6 @@
 import 'package:ecommerce_major_project/constants/utils.dart';
 import 'package:ecommerce_major_project/providers/tab_provider.dart';
 import 'package:flutter/material.dart';
-
 import 'package:ecommerce_major_project/main.dart';
 import 'package:ecommerce_major_project/models/product.dart';
 import 'package:ecommerce_major_project/constants/global_variables.dart';
@@ -12,9 +11,13 @@ import 'package:ecommerce_major_project/features/search/services/search_services
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+import '../../../providers/user_provider.dart';
+import '../../home/widgets/myGridWidgetItems.dart';
+
 class SearchScreen extends StatefulWidget {
   static const String routeName = "/search-screen";
   final String searchQuery;
+
   const SearchScreen({required this.searchQuery, super.key});
 
   @override
@@ -90,21 +93,60 @@ class _SearchScreenState extends State<SearchScreen> {
                 )
               : Column(
                   children: [
+                    SizedBox(height: mq.width * .025),
                     const AddressBox(),
                     SizedBox(height: mq.width * .025),
                     Expanded(
-                      child: ListView.builder(
-                          itemCount: products!.length,
-                          itemBuilder: (context, index) {
-                            return GestureDetector(
-                                onTap: () {
-                                  context.push(
-                                      '/product/${products![index].id}');
-                                },
-                                child:
-                                    SearchedProduct(product: products![index]));
-                          }),
-                    )
+                      child: GridView.builder(
+                        shrinkWrap: true,
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                              childAspectRatio: 0.65,
+                          crossAxisCount: 2,
+                          mainAxisSpacing: 0.0,
+                          crossAxisSpacing: 8.0,
+                        ),
+                        itemCount: products!.length,
+                        itemBuilder: (context, index) {
+                          final user = context
+                              .watch<UserProvider>()
+                              .user;
+                          List<dynamic> wishList =
+                          user.wishList != null
+                              ? user.wishList!
+                              : [];
+                          bool isProductWishListed = false;
+
+                          for (int i = 0;
+                          i < wishList.length;
+                          i++) {
+                            // final productWishList = wishList[i];
+                            // final productFromJson =
+                            //     Product.fromJson(
+                            //         productWishList['product']);
+                            // final productId = productFromJson.id;
+                            if (wishList[i]['product'] ==
+                                products![index].id) {
+                              isProductWishListed = true;
+                              break;
+                            }
+                          }
+                          return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: InkWell(
+                              borderRadius: BorderRadius.circular(8),
+                              onTap: () {
+                                context.push('/product/${products![index].id}');
+                              },
+                              child: GridWidgetItems(
+                                product: products![index],
+                                isProductWishListed: isProductWishListed,
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
                   ],
                 ),
     );
