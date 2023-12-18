@@ -8,8 +8,8 @@ import 'package:intl/intl.dart';
 
 class AllReturnsList extends StatelessWidget {
   const AllReturnsList({super.key, required this.allOrders});
-  final List<Return>? allOrders;static 
-  final indianRupeesFormat = NumberFormat.currency(
+  final List<Return>? allOrders;
+  static final indianRupeesFormat = NumberFormat.currency(
     name: "INR",
     locale: 'en_IN',
     decimalDigits: 0,
@@ -49,7 +49,7 @@ class AllReturnsList extends StatelessWidget {
                         top: mq.height * .01,
                       ),
                       child: Card(
-                        color:  Colors.red.shade100,
+                        color: Colors.red.shade100,
                         margin:
                             EdgeInsets.symmetric(horizontal: mq.width * .02),
                         elevation: 3,
@@ -85,7 +85,8 @@ class AllReturnsList extends StatelessWidget {
                                       Container(
                                         padding: const EdgeInsets.all(5),
                                         decoration: BoxDecoration(
-                                            color: const Color.fromARGB(255, 255, 100, 100),
+                                            color: const Color.fromARGB(
+                                                255, 255, 100, 100),
                                             borderRadius:
                                                 BorderRadius.circular(10)),
 
@@ -119,7 +120,7 @@ class AllReturnsList extends StatelessWidget {
                                     for (int j = 0;
                                         j <
                                             allOrders![index]
-                                                .returnProducts
+                                                .returnedProducts
                                                 .length;
                                         j++)
                                       Container(
@@ -131,7 +132,7 @@ class AllReturnsList extends StatelessWidget {
                                             // image
                                             Image.network(
                                               allOrders![index]
-                                                      .returnProducts[j]
+                                                      .returnedProducts[j]
                                                   ['product']['images'][0],
                                               // allOrders![index].returnProducts[index].images[0],
                                               fit: BoxFit.contain,
@@ -148,7 +149,7 @@ class AllReturnsList extends StatelessWidget {
                                                       top: mq.width * .0125),
                                                   child: Text(
                                                     allOrders![index]
-                                                            .returnProducts[j]
+                                                            .returnedProducts[j]
                                                         ['product']['name'],
                                                     overflow:
                                                         TextOverflow.ellipsis,
@@ -183,8 +184,7 @@ class AllReturnsList extends StatelessWidget {
                                                         decoration:
                                                             BoxDecoration(
                                                           color: Color(int.parse(
-                                                              
-                                                              '${allOrders![index].returnProducts[j]['color']}')),
+                                                              '${allOrders![index].returnedProducts[j]['color']}')),
                                                           shape:
                                                               BoxShape.circle,
                                                         ),
@@ -196,7 +196,7 @@ class AllReturnsList extends StatelessWidget {
                                                                       mq.width *
                                                                           .025),
                                                           child: Text(
-                                                            "Size: ${allOrders![index].returnProducts[j]['size']}",
+                                                            "Size: ${allOrders![index].returnedProducts[j]['size']}",
                                                             style: const TextStyle(
                                                                 color: Colors
                                                                     .black,
@@ -210,7 +210,7 @@ class AllReturnsList extends StatelessWidget {
                                                                       mq.width *
                                                                           .025),
                                                           child: Text(
-                                                            "Quantity: x${allOrders![index].returnProducts[j]['quantity']}",
+                                                            "Quantity: x${allOrders![index].returnedProducts[j]['quantity']}",
                                                             style: const TextStyle(
                                                                 color: Colors
                                                                     .black,
@@ -226,8 +226,7 @@ class AllReturnsList extends StatelessWidget {
                                                       left: mq.width * .025,
                                                       top: mq.width * .0125),
                                                   child: Text(
-                                                      "Item Value  : ${indianRupeesFormat.format(allOrders![index].returnProducts[j]['price'])}",
-                                                    
+                                                      "Item Value  : ${indianRupeesFormat.format(allOrders![index].returnedProducts[j]['price'])}",
                                                       style: const TextStyle(
                                                           fontWeight:
                                                               FontWeight.bold,
@@ -239,7 +238,7 @@ class AllReturnsList extends StatelessWidget {
                                                     left: mq.width * .025,
                                                   ),
                                                   child: Text(
-                                                      "Ordered At  : ${DateFormat('yMMMd').format(DateTime.parse(allOrders![index].createdAt))}",
+                                                      "Ordered At  : ${DateFormat('yMMMd').format(DateTime.parse(allOrders![index].returnedAt))}",
                                                       style: const TextStyle(
                                                           fontWeight:
                                                               FontWeight.bold,

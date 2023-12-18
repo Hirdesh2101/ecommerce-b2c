@@ -23,7 +23,7 @@ class ReturnProductScreen extends StatefulWidget {
 class _ReturnProductScreenState extends State<ReturnProductScreen> {
   final _returnProuctFormKey = GlobalKey<FormState>();
   final TextEditingController descriptionController = TextEditingController();
-  RefundServices refundServices = RefundServices();
+  ReturnServices refundServices = ReturnServices();
   bool isLoading = false;
 
   List<File> images = [];
@@ -186,7 +186,7 @@ class _ReturnProductScreenState extends State<ReturnProductScreen> {
                                   isLoading = true;
                                 });
                                 refundServices
-                                    .requestRefund(
+                                    .requestReturn(
                                         context: context,
                                         order: widget.order,
                                         reason:
@@ -204,7 +204,7 @@ class _ReturnProductScreenState extends State<ReturnProductScreen> {
                             backgroundColor:
                                 const Color.fromARGB(255, 255, 88, 88)),
                         child: Text(
-                          isLoading? "Please Wait..":"Return Product",
+                          isLoading ? "Please Wait.." : "Return Product",
                           style: const TextStyle(color: Colors.white),
                         )),
                   ],

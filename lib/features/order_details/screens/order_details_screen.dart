@@ -31,7 +31,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
   //final int allowReturnProductDays = 15;
   //bool allowReturn = false;
   bool viewMoreDetails = true;
-  final RefundServices refundServices = RefundServices();
+  final ReturnServices refundServices = ReturnServices();
   final indianRupeesFormat = NumberFormat.currency(
     name: "INR",
     locale: 'en_IN',
@@ -65,7 +65,8 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
       }
     }
     copy = copy.where((product) {
-      if (product['product']['returnPolicy'] != null) {
+      if (product['product']['returnPolicy'] != null &&
+          product['product']['returnPolicy']['days'] != null) {
         DateTime dateOfPurchase =
             DateTime.fromMillisecondsSinceEpoch(widget.order.orderedAt);
         DateTime presentDate = DateTime.fromMillisecondsSinceEpoch(
