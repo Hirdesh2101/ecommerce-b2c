@@ -14,6 +14,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "1072371601182-3lcu0s7q40mgq59u0r7un9cu6l6v51t5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.ecommerce_major_project",
+            "certificate_hash": "28876157fcad75498f68e7b49593c1f1237ae1d0"
+          }
+        },
+        {
+          "client_id": "1072371601182-qdi3h9cqcdc67uf3casbedvhr08qcsjb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.ecommerce_major_project",
+            "certificate_hash": "13a641376e1468fca422fb8ddb2800825882ee45"
+          }
+        },
+        {
           "client_id": "1072371601182-sq1iufu8h2e9ccfr9uo5lv03e0c1gfqq.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -57,6 +73,14 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "1072371601182-131klfj8j8qorqq1rg8dua4v9oa8kmbv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.ritesh_saree",
+            "certificate_hash": "28876157fcad75498f68e7b49593c1f1237ae1d0"
+          }
+        },
         {
           "client_id": "1072371601182-171fhmmstseo4mhvitaq4btte1on5rnq.apps.googleusercontent.com",
           "client_type": 3

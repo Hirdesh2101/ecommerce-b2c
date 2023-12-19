@@ -13,8 +13,8 @@ import 'package:ecommerce_major_project/constants/utils.dart';
 import 'package:ecommerce_major_project/constants/error_handling.dart';
 import 'package:ecommerce_major_project/constants/global_variables.dart';
 
-class RefundServices {
-  Future<void> requestRefund({
+class ReturnServices {
+  Future<void> requestReturn({
     required BuildContext context,
     required Order order,
     required String reason,
@@ -24,7 +24,7 @@ class RefundServices {
     // final userProvider = Provider.of<UserProvider>(context, listen: false);
     final String? authToken = await GlobalVariables.getFirebaseAuthToken();
     try {
-      var url = Uri.parse('$uri/api/request-refund');
+      var url = Uri.parse('$uri/api/request-return');
       var request = http.MultipartRequest('POST', url);
       request.headers.addAll({
         'Authorization': '$authToken',

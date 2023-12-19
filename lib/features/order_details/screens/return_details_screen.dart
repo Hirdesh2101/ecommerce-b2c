@@ -25,7 +25,7 @@ class _ReturnDetailsScreenState extends State<ReturnDetailsScreen> {
   //final int allowReturnProductDays = 15;
   //bool allowReturn = false;
   bool viewMoreDetails = true;
-  final RefundServices refundServices = RefundServices();
+  final ReturnServices refundServices = ReturnServices();
   final indianRupeesFormat = NumberFormat.currency(
     name: "INR",
     locale: 'en_IN',
@@ -37,45 +37,47 @@ class _ReturnDetailsScreenState extends State<ReturnDetailsScreen> {
   @override
   void initState() {
     currentStep = getCurrentStep(widget.returns.returnStatus);
-    steps = widget.returns.returnStatus.contains('ORDER_RETURN_REJECTED') ? List.from([
-      Step(
-        title: const Text("ORDER_RETURN_REQUESTED"),
-        content: const Text("Your return is currently requested."),
-        isActive: currentStep > 0,
-        state: currentStep > 0 ? StepState.complete : StepState.indexed,
-      ),
-      Step(
-        title: const Text("ORDER_RETURN_REJECTED"),
-        content: const Text("Your return request is rejected."),
-        isActive: currentStep >= 1,
-        state: currentStep >= 1 ? StepState.complete : StepState.indexed,
-      ),
-    ]): List.from([
-      Step(
-        title: const Text("ORDER_RETURN_REQUESTED"),
-        content: const Text("Your return is currently requested."),
-        isActive: currentStep > 0,
-        state: currentStep > 0 ? StepState.complete : StepState.indexed,
-      ),
-      Step(
-        title: const Text("ORDER_RETURN_ACCEPTED"),
-        content: const Text("Your return request is accepted."),
-        isActive: currentStep >= 1,
-        state: currentStep >= 1 ? StepState.complete : StepState.indexed,
-      ),
-      Step(
-        title: const Text("ORDER_RETURN_PENDING"),
-        content: const Text("Your return is in process."),
-        isActive: currentStep >= 2,
-        state: currentStep > 2 ? StepState.complete : StepState.indexed,
-      ),
-      Step(
-        title: const Text("ORDER_RETURN_COMPLETE"),
-        content: const Text("Your return is completed."),
-        isActive: currentStep >= 3,
-        state: currentStep >= 3 ? StepState.complete : StepState.indexed,
-      ),
-    ]);
+    steps = widget.returns.returnStatus.contains('ORDER_RETURN_REJECTED')
+        ? List.from([
+            Step(
+              title: const Text("ORDER_RETURN_REQUESTED"),
+              content: const Text("Your return is currently requested."),
+              isActive: currentStep > 0,
+              state: currentStep > 0 ? StepState.complete : StepState.indexed,
+            ),
+            Step(
+              title: const Text("ORDER_RETURN_REJECTED"),
+              content: const Text("Your return request is rejected."),
+              isActive: currentStep >= 1,
+              state: currentStep >= 1 ? StepState.complete : StepState.indexed,
+            ),
+          ])
+        : List.from([
+            Step(
+              title: const Text("ORDER_RETURN_REQUESTED"),
+              content: const Text("Your return is currently requested."),
+              isActive: currentStep > 0,
+              state: currentStep > 0 ? StepState.complete : StepState.indexed,
+            ),
+            Step(
+              title: const Text("ORDER_RETURN_ACCEPTED"),
+              content: const Text("Your return request is accepted."),
+              isActive: currentStep >= 1,
+              state: currentStep >= 1 ? StepState.complete : StepState.indexed,
+            ),
+            Step(
+              title: const Text("ORDER_RETURN_PENDING"),
+              content: const Text("Your return is in process."),
+              isActive: currentStep >= 2,
+              state: currentStep > 2 ? StepState.complete : StepState.indexed,
+            ),
+            Step(
+              title: const Text("ORDER_RETURN_COMPLETE"),
+              content: const Text("Your return is completed."),
+              isActive: currentStep >= 3,
+              state: currentStep >= 3 ? StepState.complete : StepState.indexed,
+            ),
+          ]);
 
     super.initState();
   }
@@ -84,9 +86,7 @@ class _ReturnDetailsScreenState extends State<ReturnDetailsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: GlobalVariables.getAppBar(
-          title: "Return Details",
-          context: context,
-          wantActions: false
+          title: "Return Details", context: context, wantActions: false
           //onClickSearchNavigateTo: const MySearchScreen()
           ),
       body: SingleChildScrollView(
@@ -107,19 +107,19 @@ class _ReturnDetailsScreenState extends State<ReturnDetailsScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     for (int i = 0;
-                        i < widget.returns.returnProducts.length;
+                        i < widget.returns.returnedProducts.length;
                         i++)
                       Padding(
                         padding: const EdgeInsets.only(top: 8.0),
                         child: InkWell(
                           onTap: () {
-                            context.push('/product/${widget.returns.returnProducts[i]
-                                  ['product']['_id']}');
+                            context.push(
+                                '/product/${widget.returns.returnedProducts[i]['product']['_id']}');
                           },
                           child: Row(
                             children: [
                               Image.network(
-                                  widget.returns.returnProducts[i]['product']
+                                  widget.returns.returnedProducts[i]['product']
                                       ['images'][0],
                                   height: mq.width * .25,
                                   width: mq.width * .25),
@@ -131,7 +131,7 @@ class _ReturnDetailsScreenState extends State<ReturnDetailsScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      widget.returns.returnProducts[i]
+                                      widget.returns.returnedProducts[i]
                                           ['product']['name'],
                                       style: const TextStyle(
                                         fontSize: 15,
@@ -158,7 +158,7 @@ class _ReturnDetailsScreenState extends State<ReturnDetailsScreen> {
                                           height: mq.width * .025,
                                           decoration: BoxDecoration(
                                             color: Color(int.parse(
-                                                '${widget.returns.returnProducts[i]['color']}')),
+                                                '${widget.returns.returnedProducts[i]['color']}')),
                                             shape: BoxShape.circle,
                                           ),
                                         ),
@@ -166,7 +166,7 @@ class _ReturnDetailsScreenState extends State<ReturnDetailsScreen> {
                                             padding: EdgeInsets.only(
                                                 left: mq.width * .025),
                                             child: Text(
-                                              "Size: ${widget.returns.returnProducts[i]['size']}",
+                                              "Size: ${widget.returns.returnedProducts[i]['size']}",
                                               style: const TextStyle(
                                                   color: Colors.black,
                                                   fontSize: 11),
@@ -176,7 +176,7 @@ class _ReturnDetailsScreenState extends State<ReturnDetailsScreen> {
                                             padding: EdgeInsets.only(
                                                 left: mq.width * .025),
                                             child: Text(
-                                              "Quantity: x${widget.returns.returnProducts[i]['quantity']}",
+                                              "Quantity: x${widget.returns.returnedProducts[i]['quantity']}",
                                               style: const TextStyle(
                                                   color: Colors.black,
                                                   fontSize: 11),
@@ -254,7 +254,7 @@ class _ReturnDetailsScreenState extends State<ReturnDetailsScreen> {
                             children: [
                               const Text('Return Date:'),
                               Text(DateFormat('yMMMd').format(
-                                  DateTime.parse(widget.returns.createdAt)))
+                                  DateTime.parse(widget.returns.returnedAt)))
                             ],
                           ),
                           Row(
