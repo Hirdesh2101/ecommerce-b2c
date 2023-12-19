@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:ecommerce_major_project/features/home/providers/category_provider.dart';
 import 'package:ecommerce_major_project/features/home/widgets/carousel_image.dart';
+import 'package:ecommerce_major_project/features/home/widgets/myGridWidgetItems.dart';
 import 'package:ecommerce_major_project/providers/tab_provider.dart';
 import 'package:ecommerce_major_project/providers/user_provider.dart';
 import 'package:flutter/foundation.dart';
@@ -8,24 +9,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ecommerce_major_project/main.dart';
 import 'package:ecommerce_major_project/models/product.dart';
-import 'package:ecommerce_major_project/constants/utils.dart';
 import 'package:ecommerce_major_project/constants/global_variables.dart';
 import 'package:ecommerce_major_project/common/widgets/color_loader_2.dart';
 import 'package:ecommerce_major_project/features/home/services/home_services.dart';
 import 'package:ecommerce_major_project/features/product_details/services/product_detail_services.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+import '../../../constants/utils.dart';
+
 class TopCategories extends StatefulWidget {
   const TopCategories({super.key});
+
   @override
   State<TopCategories> createState() => _TopCategoriesState();
 }
 
 class _TopCategoriesState extends State<TopCategories>
     with TickerProviderStateMixin {
+
   // tabbar variables
   int activeTabIndex = 0;
   final indianRupeesFormat = NumberFormat.currency(
@@ -207,272 +210,86 @@ class _TopCategoriesState extends State<TopCategories>
                             ),
                           ),
                           SliverPadding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 0,
-                            ),
-                            sliver: isProductLoading
-                                ? const SliverToBoxAdapter(
-                                    child: ColorLoader2(),
-                                  )
-                                : productList!.isEmpty
-                                    ? const SliverToBoxAdapter(
-                                        child: Center(
-                                          child: Text("No item to fetch"),
-                                        ),
-                                      )
-                                    : SliverGrid(
-                                        gridDelegate:
-                                            const SliverGridDelegateWithFixedCrossAxisCount(
-                                          crossAxisCount: kIsWeb ? 4 : 2,
-                                          childAspectRatio: kIsWeb ? 1.1 : 0.69,
-                                          mainAxisSpacing: 5,
-                                          crossAxisSpacing: 0,
-                                        ),
-                                        delegate: SliverChildBuilderDelegate(
-                                            childCount:
-                                                min(productList!.length, 8),
-                                            (context, index) {
-                                          Product product = productList![index];
-                                          bool isProductOutOfStock =
-                                              productList![index]
-                                                      .totalQuantity ==
-                                                  0;
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 0,
+                              ),
+                              sliver: isProductLoading
+                                  ? const SliverToBoxAdapter(
+                                      child: ColorLoader2(),
+                                    )
+                                  : productList!.isEmpty
+                                      ? const SliverToBoxAdapter(
+                                          child: Center(
+                                            child: Text("No item to fetch"),
+                                          ),
+                                        )
+                                      : SliverGrid(
+                                          gridDelegate:
+                                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                            crossAxisCount: kIsWeb ? 4 : 2,
+                                            childAspectRatio:
+                                                kIsWeb ? 1.1 : 0.69,
+                                            mainAxisSpacing: 5,
+                                            crossAxisSpacing: 0,
+                                          ),
+                                          delegate:
+                                          SliverChildBuilderDelegate(
+                                              childCount:
+                                                  min(productList!.length, 8),
+                                              (context, index) {
+                                            Product product =
+                                                productList![index];
+                                            bool isProductOutOfStock =
+                                                productList![index]
+                                                        .totalQuantity ==
+                                                    0;
 
-                                          final user = context
-                                              .watch<UserProvider>()
-                                              .user;
-                                          List<dynamic> wishList =
-                                              user.wishList != null
-                                                  ? user.wishList!
-                                                  : [];
-                                          bool isProductWishListed = false;
+                                            final user = context
+                                                .watch<UserProvider>()
+                                                .user;
+                                            List<dynamic> wishList =
+                                                user.wishList != null
+                                                    ? user.wishList!
+                                                    : [];
+                                            bool isProductWishListed = false;
 
-                                          for (int i = 0;
-                                              i < wishList.length;
-                                              i++) {
-                                            // final productWishList = wishList[i];
-                                            // final productFromJson =
-                                            //     Product.fromJson(
-                                            //         productWishList['product']);
-                                            // final productId = productFromJson.id;
+                                            for (int i = 0;
+                                                i < wishList.length;
+                                                i++) {
+                                              // final productWishList = wishList[i];
+                                              // final productFromJson =
+                                              //     Product.fromJson(
+                                              //         productWishList['product']);
+                                              // final productId = productFromJson.id;
 
-                                            if (wishList[i]['product'] ==
-                                                product.id) {
-                                              isProductWishListed = true;
-                                              break;
+                                              if (wishList[i]['product'] ==
+                                                  product.id) {
+                                                isProductWishListed = true;
+                                                break;
+                                              }
                                             }
-                                          }
 
-                                          return InkWell(
-                                            onTap: () {
-                                              // Get the current location
-                                              String currentPath =
-                                                  getCurrentPathWithoutQuery(
-                                                      context);
-                                              // Build the new path
-                                              String newPath =
-                                                  '${currentPath}product/${product.id}';
-                                              context.go(newPath);
-                                            },
-                                            child: Padding(
-                                              padding: EdgeInsets.symmetric(
-                                                horizontal: mq.width * .025,
-                                                vertical: mq.width * .012,
+                                            return Padding(
+                                              padding: const EdgeInsets.all(8.0),
+                                              child: InkWell(
+                                                borderRadius: BorderRadius.circular(8),
+                                                onTap: () {
+                                                  // Get the current location
+                                                  String currentPath =
+                                                  getCurrentPathWithoutQuery(context);
+                                                  // Build the new path
+                                                  String newPath =
+                                                      '${currentPath}product/${product.id}';
+                                                  context.go(newPath);
+                                                },
+                                                child: GridWidgetItems(
+                                                    product: productList![index], isProductWishListed: isProductWishListed),
                                               ),
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  // navigate to product details screen
-                                                  SizedBox(
-                                                    height: mq.height * .2,
-                                                    width: mq.width * .4,
-                                                    child: Image.network(
-                                                      product.images[0],
-                                                      fit: BoxFit.contain,
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                      height: mq.height * .005),
-                                                  Text(
-                                                    product.brandName,
-                                                    maxLines: 1,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    style: GoogleFonts.lato(
-                                                      color: Colors.black54,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                      height: mq.height * .005),
-                                                  Text(
-                                                    product.name,
-                                                    maxLines: 1,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    style: GoogleFonts.lato(
-                                                        fontSize: 13),
-                                                  ),
-                                                  SizedBox(
-                                                      height: mq.height * .005),
-                                                  RichText(
-                                                    maxLines: 1,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    text: TextSpan(
-                                                      children: [
-                                                        TextSpan(
-                                                          text: indianRupeesFormat
-                                                              .format(product
-                                                                      .varients[
-                                                                  0]['price']),
-                                                          style:
-                                                              const TextStyle(
-                                                            fontSize: 14,
-                                                            color: Colors.black,
-                                                            fontWeight:
-                                                                FontWeight.w600,
-                                                          ),
-                                                        ),
-                                                        WidgetSpan(
-                                                          child: SizedBox(
-                                                              width: mq.width *
-                                                                  .02),
-                                                        ),
-                                                        TextSpan(
-                                                          text: indianRupeesFormat
-                                                              .format(product
-                                                                      .varients[0]
-                                                                  [
-                                                                  'markedPrice']),
-                                                          style: TextStyle(
-                                                            fontSize: 14,
-                                                            color: Colors
-                                                                .grey.shade700,
-                                                            decoration:
-                                                                TextDecoration
-                                                                    .lineThrough,
-                                                          ),
-                                                        ),
-                                                        WidgetSpan(
-                                                          child: SizedBox(
-                                                              width: mq.width *
-                                                                  .02),
-                                                        ),
-                                                        TextSpan(
-                                                          text:
-                                                              "${calculatePercentageDiscount(product.varients[0]['price'], product.varients[0]['markedPrice'])}% off",
-                                                          style:
-                                                              const TextStyle(
-                                                            fontSize: 14,
-                                                            fontWeight:
-                                                                FontWeight.w600,
-                                                            color: Colors.green,
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: [
-                                                      Text(
-                                                        isProductOutOfStock
-                                                            ? 'Out of Stock'
-                                                            : productList![index]
-                                                                        .totalQuantity <
-                                                                    5
-                                                                ? 'Only ${productList![index].totalQuantity} left'
-                                                                : 'In Stock',
-                                                        maxLines: 1,
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                        style: GoogleFonts.lato(
-                                                          fontSize: 13,
-                                                          fontWeight:
-                                                              FontWeight.w600,
-                                                          color:
-                                                              isProductOutOfStock
-                                                                  ? Colors.red
-                                                                  : productList![index]
-                                                                              .totalQuantity <
-                                                                          5
-                                                                      ? Colors
-                                                                          .amber
-                                                                      : Colors
-                                                                          .green,
-                                                        ),
-                                                      ),
-                                                      InkWell(
-                                                        onTap: () {
-                                                          if (isProductWishListed) {
-                                                            HomeServices()
-                                                                .removeFromWishList(
-                                                                    context:
-                                                                        context,
-                                                                    product:
-                                                                        product);
-                                                            showSnackBar(
-                                                              context: context,
-                                                              text:
-                                                                  "Removed from WishList",
-                                                            );
-                                                          } else {
-                                                            HomeServices()
-                                                                .addToWishList(
-                                                                    context:
-                                                                        context,
-                                                                    product:
-                                                                        product);
-                                                            showSnackBar(
-                                                              context: context,
-                                                              text:
-                                                                  "Added to WishList",
-                                                              onTapFunction:
-                                                                  () {
-                                                                final tabProvider =
-                                                                    Provider.of<
-                                                                            TabProvider>(
-                                                                        context,
-                                                                        listen:
-                                                                            false);
-                                                                tabProvider
-                                                                    .setTab(3);
-                                                                context.go(
-                                                                    '/account/wishlist');
-                                                              },
-                                                              actionLabel:
-                                                                  "View",
-                                                            );
-                                                          }
-                                                        },
-                                                        child: Icon(
-                                                          isProductWishListed
-                                                              ? Icons
-                                                                  .favorite_rounded
-                                                              : Icons
-                                                                  .favorite_border_rounded,
-                                                          size: 26,
-                                                          color:
-                                                              isProductWishListed
-                                                                  ? Colors.pink
-                                                                  : Colors
-                                                                      .black,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          );
-                                        }),
-                                      ),
-                          ),
+                                            );
+                                          }
+                                          )
+                              )
+                          )
                         ],
                       ),
                     ),
