@@ -4,7 +4,6 @@ import 'package:ecommerce_major_project/features/splash/widgets/splash_content.d
 import 'package:ecommerce_major_project/main.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 // This is the best practice
 

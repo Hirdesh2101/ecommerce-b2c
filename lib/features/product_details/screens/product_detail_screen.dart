@@ -26,8 +26,10 @@ import 'package:ecommerce_major_project/features/product_details/services/produc
 class ProductDetailScreen extends StatefulWidget {
   static const routeName = '/product-details';
   final String productId;
-
-  const ProductDetailScreen({Key? key, required this.productId})
+  final String? color;
+  final String? size;
+  const ProductDetailScreen(
+      {Key? key, required this.productId, this.color, this.size})
       : super(key: key);
 
   @override
@@ -55,6 +57,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
   @override
   void initState() {
+    // if (widget.color != null && widget.size != null) {
+    //   debugPrint("Color is ${widget.color}");
+    //   debugPrint("Size is ${widget.size}");
+    //   selectedColor = int.parse(widget.color!, radix: 16);
+    //   selectedSize = int.parse(widget.size!, radix: 16);
+    // }
     fetchProduct(widget.productId);
     super.initState();
   }
@@ -98,6 +106,22 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       }
       if (totalRating != 0) {
         avgRating = totalRating / product!.rating!.length;
+      }
+
+      List<dynamic> variants = product!.varients;
+      for (int variant = 0; variant < variants.length; variant++) {
+        if (variants[variant]['color'] == widget.color) {
+          for (int size = 0; size < variants[variant]['sizes'].length; size++) {
+            if (variants[variant]['sizes'][size]['size'] == widget.size) {
+              selectedColor = variant;
+              selectedSize = size;
+              isProductOutOfStock =
+                  variants[variant]['sizes'][size]['quantity'] == 0;
+              break;
+            }
+          }
+          break;
+        }
       }
     }
     _similarProducts = _similarProducts!.where((similarProduct) {
@@ -162,6 +186,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     } else if (isProductOutOfStock) {
       showSnackBar(context: context, text: "Product is out of stock!");
       return;
+    } else if (product!.isProductDiscontinued) {
+      showSnackBar(context: context, text: "Product is discontinued!");
+      return;
     } else {
       debugPrint("Triggered buynow <====");
       debugPrint("Product is  : ${product!.name}");
@@ -182,9 +209,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               ['size']
         }
       ];
-      context.push('/checkout',extra: [ product!.varients[selectedColor]['price'].toString(),
+      context.push('/checkout', extra: [
+        product!.varients[selectedColor]['price'].toString(),
         buyNowCart,
-        buyNowUserCart]);
+        buyNowUserCart
+      ]);
     }
   }
 
@@ -274,9 +303,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             key: const Key('details-Small'),
             builder: (_) => Scaffold(
               appBar: GlobalVariables.getAppBar(
-                  context: context,
-                  //onClickSearchNavigateTo: const MySearchScreen()
-                  ),
+                context: context,
+                //onClickSearchNavigateTo: const MySearchScreen()
+              ),
               body: isProductLoading
                   ? const Center(
                       child: ColorLoader2(),
@@ -309,15 +338,22 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                 selectedSize: selectedSize,
                                 setColor: setColor,
                                 setSize: setSize),
-                            const DeliveyLocation(),
-                            SizedBox(height: mq.width * .07),
-                            BuyButtons(
-                              addToCart: addToCart,
-                              buyNow: buyNow,
+                            Visibility(
+                              visible: !product!.isProductDiscontinued,
+                              child: Column(
+                                children: [
+                                  const DeliveyLocation(),
+                                  SizedBox(height: mq.width * .07),
+                                  BuyButtons(
+                                    addToCart: addToCart,
+                                    buyNow: buyNow,
+                                  ),
+                                  SizedBox(height: mq.width * .03),
+                                  const Divider(thickness: 1),
+                                  SizedBox(height: mq.width * .02),
+                                ],
+                              ),
                             ),
-                            SizedBox(height: mq.width * .03),
-                            const Divider(thickness: 1),
-                            SizedBox(height: mq.width * .02),
                             DetailsWithICons(product: product!),
                             SizedBox(height: mq.width * .02),
                             const Divider(thickness: 1),

@@ -50,6 +50,7 @@ class OrderDialog {
             onPressed: () {
               tabProvider.setTab(0);
               context.go('/home');
+              Navigator.of(context).pop();
             },
             child: const Text("OK"),
           )

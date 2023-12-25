@@ -31,57 +31,60 @@ class SearchServices {
           context: context,
           onSuccess: () {
             for (Map<String, dynamic> item in data) {
-              // 
+              //
               productList.add(Product.fromJson(item));
             }
           },
         );
       }
 
-      // 
+      //
     } catch (e) {
       if (context.mounted) {
         showSnackBar(
-          context: context,
-          text:
-              "Following Error in fetching Products [Search] : ${e.toString()}");
+            context: context,
+            text:
+                "Following Error in fetching Products [Search] : ${e.toString()}");
       }
     }
     return productList;
   }
+
   Future<List<Product>> searchProducts(
-      {required BuildContext context,required String query}) async {
+      {required BuildContext context, required String query}) async {
     final String? authToken = await GlobalVariables.getFirebaseAuthToken();
     List<Product> productList = [];
     try {
-      http.Response res = await http.get(
-          Uri.parse("$uri/api/search-products?key=$query"),
-          headers: {
-            'Content-Type': 'application/json; charset=UTF-8',
-            'Authorization': '$authToken',
-          });
+      http.Response res = await http
+          .get(Uri.parse("$uri/api/search-products?key=$query"), headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': '$authToken',
+      });
       var data = jsonDecode(res.body);
-      
+      Product product;
+
       if (context.mounted) {
         httpErrorHandle(
           response: res,
           context: context,
           onSuccess: () {
             for (Map<String, dynamic> item in data) {
-              // 
-              productList.add(Product.fromJson(item));
+              product = Product.fromJson(item);
+              if (!product.isProductDiscontinued) {
+                productList.add(Product.fromJson(item));
+              }
             }
           },
         );
       }
     } catch (e) {
-       if (context.mounted) {
-         showSnackBar(
-          context: context,
-          text:
-              "Following Error in fetching Products [Search] : ${e.toString()}");
-       }
+      if (context.mounted) {
+        showSnackBar(
+            context: context,
+            text:
+                "Following Error in fetching Products [Search] : ${e.toString()}");
+      }
     }
-     return productList;
+    return productList;
   }
 }

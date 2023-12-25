@@ -17,6 +17,7 @@ class Product {
   final List<Rating>? rating;
   final List<dynamic>? ratinguser;
   int totalQuantity;
+  bool isProductDiscontinued = false;
 
   bool isWishlisted = false;
 
@@ -32,6 +33,7 @@ class Product {
     required this.varients,
     required this.totalQuantity,
     this.id,
+    this.isProductDiscontinued = false,
     this.rating,
     this.ratinguser,
   });
@@ -43,6 +45,7 @@ class Product {
         brandName = json['brandName'] ?? "",
         images = List<String>.from(json['images']),
         category = json['category'] ?? "",
+        isProductDiscontinued = json['isProductDiscontinued'] ?? false,
         rating = json['ratings'] != null
             ? List<Rating>.from(
                 json['ratings']?.map(

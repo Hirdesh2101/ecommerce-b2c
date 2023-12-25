@@ -130,34 +130,36 @@ class _DeliveyLocationState extends State<DeliveyLocation> {
                             padding: const EdgeInsets.fromLTRB(10, 20, 10, 30),
                             child: Form(
                               key: _addressFormKey,
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  CustomTextField(
-                                      controller: flatBuildingController,
-                                      hintText: "Flat, House No."),
-                                  SizedBox(height: mq.height * .01),
-                                  CustomTextField(
-                                      controller: areaController,
-                                      hintText: "Area, Street"),
-                                  SizedBox(height: mq.height * .01),
-                                  CustomTextField(
-                                      controller: pincodeController,
-                                      hintText: "Pincode",
-                                      inputType: TextInputType.number),
-                                  SizedBox(height: mq.height * .01),
-                                  CustomTextField(
-                                      controller: cityController,
-                                      hintText: "Town/City"),
-                                  SizedBox(height: mq.height * .04),
-                                  CustomButton(
-                                    text: "Save Address",
-                                    onTap: () {
-                                      saveUserAddress();
-                                    },
-                                    color: Colors.amber[400],
-                                  ),
-                                ],
+                              child: SingleChildScrollView(
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    CustomTextField(
+                                        controller: flatBuildingController,
+                                        hintText: "Flat, House No."),
+                                    SizedBox(height: mq.height * .01),
+                                    CustomTextField(
+                                        controller: areaController,
+                                        hintText: "Area, Street"),
+                                    SizedBox(height: mq.height * .01),
+                                    CustomTextField(
+                                        controller: pincodeController,
+                                        hintText: "Pincode",
+                                        inputType: TextInputType.number),
+                                    SizedBox(height: mq.height * .01),
+                                    CustomTextField(
+                                        controller: cityController,
+                                        hintText: "Town/City"),
+                                    SizedBox(height: mq.height * .04),
+                                    CustomButton(
+                                      text: "Save Address",
+                                      onTap: () {
+                                        saveUserAddress();
+                                      },
+                                      color: Colors.amber[400],
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),

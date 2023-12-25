@@ -22,8 +22,7 @@ class CheckStatus extends StatefulWidget {
 
 class AddFundsCheckStatusState extends State<CheckStatus> {
   Timer? timer;
-  Timer? timer2;
-  int seconds = 15;
+  // Timer? timer2;
   bool isLoading = true;
   dynamic status;
   CheckoutServices checkoutServices = CheckoutServices();
@@ -37,27 +36,38 @@ class AddFundsCheckStatusState extends State<CheckStatus> {
         isLoading = false;
       });
     });
-    timer = Timer.periodic(const Duration(seconds: 15), (Timer t) {
+    timer = Timer.periodic(const Duration(seconds: 10), (Timer t) {
       //if (!isLoading && status['status'] == "PAYMENT_PENDING") {
+      if (status['status'] == "PAYMENT_PENDING") {
+        fetchData();
+        debugPrint("Timer");
+      }
+      if (status['status'] == "PAYMENT_PENDING") {
+        timer?.cancel();
+        setState(() {
+          status['status'] = null;
+        });
+      }
       fetchData();
+
       //}
     });
-    timer2 = Timer.periodic(const Duration(seconds: 1), (Timer t) {
-      setState(() {
-        if (seconds == 0) {
-          seconds = 15;
-        } else {
-          seconds--;
-        }
-      });
-    });
+    // timer2 = Timer.periodic(const Duration(seconds: 1), (Timer t) {
+    //   setState(() {
+    //     if (seconds == 0) {
+    //       seconds = 15;
+    //     } else {
+    //       seconds--;
+    //     }
+    //   });
+    // });
     super.initState();
   }
 
   @override
   void dispose() {
     timer?.cancel();
-    timer2?.cancel();
+    // timer2?.cancel();
     super.dispose();
   }
 

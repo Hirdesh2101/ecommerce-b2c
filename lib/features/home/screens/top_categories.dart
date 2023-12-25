@@ -78,7 +78,6 @@ class _TopCategoriesState extends State<TopCategories>
     setState(() {
       isProductLoading = false;
     });
-    
   }
 
   @override
@@ -231,6 +230,11 @@ class _TopCategoriesState extends State<TopCategories>
                                                 min(productList!.length, 8),
                                             (context, index) {
                                           Product product = productList![index];
+                                          int discount =
+                                              calculatePercentageDiscount(
+                                                  product.varients[0]['price'],
+                                                  product.varients[0]
+                                                      ['markedPrice']);
                                           bool isProductOutOfStock =
                                               productList![index]
                                                       .totalQuantity ==
@@ -263,7 +267,8 @@ class _TopCategoriesState extends State<TopCategories>
 
                                           return InkWell(
                                             onTap: () {
-                                              context.push('/product/${product.id}');
+                                              context.push(
+                                                  '/product/${product.id}');
                                             },
                                             child: Padding(
                                               padding: EdgeInsets.symmetric(
@@ -332,37 +337,41 @@ class _TopCategoriesState extends State<TopCategories>
                                                               width: mq.width *
                                                                   .02),
                                                         ),
-                                                        TextSpan(
-                                                          text: indianRupeesFormat
-                                                              .format(product
-                                                                      .varients[0]
-                                                                  [
-                                                                  'markedPrice']),
-                                                          style: TextStyle(
-                                                            fontSize: 14,
-                                                            color: Colors
-                                                                .grey.shade700,
-                                                            decoration:
-                                                                TextDecoration
-                                                                    .lineThrough,
+                                                        if (discount > 0)
+                                                          TextSpan(
+                                                            text: indianRupeesFormat
+                                                                .format(product
+                                                                        .varients[0]
+                                                                    [
+                                                                    'markedPrice']),
+                                                            style: TextStyle(
+                                                              fontSize: 14,
+                                                              color: Colors.grey
+                                                                  .shade700,
+                                                              decoration:
+                                                                  TextDecoration
+                                                                      .lineThrough,
+                                                            ),
                                                           ),
-                                                        ),
                                                         WidgetSpan(
                                                           child: SizedBox(
                                                               width: mq.width *
                                                                   .02),
                                                         ),
-                                                        TextSpan(
-                                                          text:
-                                                              "${calculatePercentageDiscount(product.varients[0]['price'], product.varients[0]['markedPrice'])}% off",
-                                                          style:
-                                                              const TextStyle(
-                                                            fontSize: 14,
-                                                            fontWeight:
-                                                                FontWeight.w600,
-                                                            color: Colors.green,
+                                                        if (discount > 0)
+                                                          TextSpan(
+                                                            text:
+                                                                "$discount% off",
+                                                            style:
+                                                                const TextStyle(
+                                                              fontSize: 14,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w600,
+                                                              color:
+                                                                  Colors.green,
+                                                            ),
                                                           ),
-                                                        ),
                                                       ],
                                                     ),
                                                   ),
@@ -425,7 +434,8 @@ class _TopCategoriesState extends State<TopCategories>
                                                                   "Added to WishList",
                                                               onTapFunction:
                                                                   () {
-                                                                    context.push('/wishlist');
+                                                                context.push(
+                                                                    '/wishlist');
                                                               },
                                                               actionLabel:
                                                                   "View",
@@ -467,7 +477,7 @@ class _TopCategoriesState extends State<TopCategories>
     );
   }
 
-  int calculatePercentageDiscount(num originalPrice, num discountedPrice) {
+  int calculatePercentageDiscount(num discountedPrice, num originalPrice) {
     if (originalPrice <= 0 || discountedPrice <= 0) {
       return 0;
     }
