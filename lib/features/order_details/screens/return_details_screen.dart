@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:ecommerce_major_project/features/product_details/screens/product_detail_screen.dart';
 import 'package:ecommerce_major_project/features/return_product/services/refund_service.dart';
 import 'package:ecommerce_major_project/models/returns.dart';
 import 'package:flutter/material.dart';
@@ -176,7 +177,7 @@ class _ReturnDetailsScreenState extends State<ReturnDetailsScreen> {
                                             padding: EdgeInsets.only(
                                                 left: mq.width * .025),
                                             child: Text(
-                                              "Quantity: x${widget.returns.returnedProducts[i]['quantity']}",
+                                              "Quantity: ${widget.returns.returnedProducts[i]['quantity']}",
                                               style: const TextStyle(
                                                   color: Colors.black,
                                                   fontSize: 11),

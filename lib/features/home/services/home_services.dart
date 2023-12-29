@@ -32,13 +32,13 @@ class HomeServices {
       if (context.mounted) {
         // print(
         //     "quantity : \n\n${jsonEncode(jsonDecode(res.body)[0]).runtimeType}");
-        // 
+        //
         httpErrorHandle(
           response: res,
           context: context,
           onSuccess: () {
             for (Map<String, dynamic> item in data) {
-              // 
+              //
               productList.add(Product.fromJson(item));
             }
             //    for (int i = 0; i < jsonDecode(res.body).length; i++) {
@@ -52,28 +52,28 @@ class HomeServices {
             // }
           },
         );
-        // 
-        // 
-        // 
+        //
+        //
+        //
       }
     } catch (e) {
-     if (context.mounted) {
-       showSnackBar(
-          context: context,
-          text: "Following Error in fetching Products [home]: $e");
-     }
+      if (context.mounted) {
+        showSnackBar(
+            context: context,
+            text: "Following Error in fetching Products [home]: $e");
+      }
     }
     return productList;
   }
 
-  Future<void> fetchCategory(
-      {required BuildContext context}) async {
-    final categoryProvider = Provider.of<CategoryProvider>(context, listen: false);
+  Future<void> fetchCategory({required BuildContext context}) async {
+    final categoryProvider =
+        Provider.of<CategoryProvider>(context, listen: false);
     final String? authToken = await GlobalVariables.getFirebaseAuthToken();
     String tokenValue = '$authToken';
     try {
-      http.Response res = await http
-          .get(Uri.parse('$uri/api/category'), headers: {
+      http.Response res =
+          await http.get(Uri.parse('$uri/api/category'), headers: {
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': tokenValue,
       });
@@ -92,19 +92,19 @@ class HomeServices {
     } catch (e) {
       if (context.mounted) {
         showSnackBar(
-          context: context,
-          text: "Following Error in fetching Products [home]: $e");
+            context: context,
+            text: "Following Error in fetching Products [home]: $e");
       }
     }
   }
-  Future<void> fetchAdvertisement(
-      {required BuildContext context}) async {
+
+  Future<void> fetchAdvertisement({required BuildContext context}) async {
     final adsProvider = Provider.of<AdsProvider>(context, listen: false);
     final String? authToken = await GlobalVariables.getFirebaseAuthToken();
     String tokenValue = '$authToken';
     try {
-      http.Response res = await http
-          .get(Uri.parse('$uri/api/advertisement'), headers: {
+      http.Response res =
+          await http.get(Uri.parse('$uri/api/advertisement'), headers: {
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': tokenValue,
       });
@@ -120,11 +120,11 @@ class HomeServices {
         );
       }
     } catch (e) {
-     if (context.mounted) {
-       showSnackBar(
-          context: context,
-          text: "Following Error in fetching Products [home]: $e");
-     }
+      if (context.mounted) {
+        showSnackBar(
+            context: context,
+            text: "Following Error in fetching Products [home]: $e");
+      }
     }
   }
 
@@ -161,7 +161,7 @@ class HomeServices {
           context: context,
           onSuccess: () {
             // for (Map<String, dynamic> item in data) {
-            //   // 
+            //   //
             //   // productList.add(Product.fromJson(item));
             //   product = Product.fromJson(item);
             // }
@@ -174,8 +174,8 @@ class HomeServices {
     } catch (e) {
       if (context.mounted) {
         showSnackBar(
-          context: context,
-          text: "Following Error in fetching deal-of-the-day : $e");
+            context: context,
+            text: "Following Error in fetching deal-of-the-day : $e");
       }
     }
     return product;
@@ -212,14 +212,14 @@ class HomeServices {
             // }
 
             for (String item in data) {
-              // 
+              //
               productNames.add(item);
             }
           },
         );
       }
     } catch (e) {
-     if (context.mounted) showSnackBar(context: context, text: e.toString());
+      if (context.mounted) showSnackBar(context: context, text: e.toString());
     }
     return productNames;
   }
@@ -242,7 +242,7 @@ class HomeServices {
           context: context,
           onSuccess: () {
             for (Map<String, dynamic> item in data) {
-              // 
+              //
               productList.add(item['name']);
             }
 
@@ -251,7 +251,7 @@ class HomeServices {
         );
       }
     } catch (e) {
-      if (context.mounted)showSnackBar(context: context, text: e.toString());
+      if (context.mounted) showSnackBar(context: context, text: e.toString());
     }
     return productList;
   }
@@ -291,14 +291,13 @@ class HomeServices {
             User user =
                 userProvider.user.copyWith(searchHistory: searchHistoryFromDB);
             userProvider.setUserFromModel(user);
-            
           },
         );
       }
     } catch (e) {
       if (context.mounted) {
         showSnackBar(
-          context: context, text: "Error in addToHistory ${e.toString()}");
+            context: context, text: "Error in addToHistory ${e.toString()}");
       }
     }
   }
@@ -336,8 +335,8 @@ class HomeServices {
     } catch (e) {
       if (context.mounted) {
         showSnackBar(
-          context: context,
-          text: "Error in delete search history item ${e.toString()}");
+            context: context,
+            text: "Error in delete search history item ${e.toString()}");
       }
     }
   }
@@ -376,14 +375,14 @@ class HomeServices {
             // }
 
             for (String item in data) {
-              // 
+              //
               searchHistoryList.add(item);
             }
           },
         );
       }
     } catch (e) {
-      if (context.mounted)showSnackBar(context: context, text: e.toString());
+      if (context.mounted) showSnackBar(context: context, text: e.toString());
     }
     return searchHistoryList;
   }
@@ -397,7 +396,6 @@ class HomeServices {
     required BuildContext context,
     required Product product,
   }) async {
-    
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     final String? authToken = await GlobalVariables.getFirebaseAuthToken();
     try {
@@ -409,25 +407,23 @@ class HomeServices {
         },
         body: jsonEncode({'id': product.id}),
       );
-      
 
       if (context.mounted) {
         httpErrorHandle(
           response: res,
           context: context,
           onSuccess: () {
-            // 
-            
+            //
+
             User user = userProvider.user
                 .copyWith(wishList: jsonDecode(res.body)['wishList']);
             userProvider.setUserFromModel(user);
-            
           },
         );
       }
     } catch (e) {
       debugPrint("\n========>Inside the catch block");
-      if (context.mounted)showSnackBar(context: context, text: e.toString());
+      if (context.mounted) showSnackBar(context: context, text: e.toString());
     }
   }
 
@@ -435,7 +431,6 @@ class HomeServices {
     required BuildContext context,
     required Product product,
   }) async {
-    
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     final String? authToken = await GlobalVariables.getFirebaseAuthToken();
     try {
@@ -458,17 +453,14 @@ class HomeServices {
           response: res,
           context: context,
           onSuccess: () {
-            
             User user = userProvider.user
                 .copyWith(wishList: jsonDecode(res.body)['wishList']);
             userProvider.setUserFromModel(user);
-            
           },
         );
       }
     } catch (e) {
-      
-      if (context.mounted)showSnackBar(context: context, text: e.toString());
+      if (context.mounted) showSnackBar(context: context, text: e.toString());
     }
   }
 
@@ -488,7 +480,7 @@ class HomeServices {
           response: res,
           context: context,
           onSuccess: () {
-            for (int i=0;i<data.length;i++) {
+            for (int i = 0; i < data.length; i++) {
               wishList.add(Product.fromJson(data[i]));
             }
           },
@@ -497,15 +489,16 @@ class HomeServices {
     } catch (e) {
       if (context.mounted) {
         showSnackBar(
-          context: context, text: "Error in fetchWishList : ${e.toString()}");
+            context: context, text: "Error in fetchWishList : ${e.toString()}");
       }
     }
     return wishList;
   }
-  Future<List<Map<String,dynamic>>?> fetchCart(BuildContext context) async {
+
+  Future<List<Map<String, dynamic>>?> fetchCart(BuildContext context) async {
     var cartProvider = Provider.of<CartProvider>(context, listen: false);
     final String? authToken = await GlobalVariables.getFirebaseAuthToken();
-    List<Map<String,dynamic>>? cart = [];
+    List<Map<String, dynamic>>? cart = [];
     try {
       http.Response res =
           await http.get(Uri.parse('$uri/api/get-cart'), headers: {
@@ -520,22 +513,19 @@ class HomeServices {
           context: context,
           onSuccess: () {
             cart = List.from(data['data']);
-            
-            cartProvider.setCartFromDynamic(data['data']);
 
+            cartProvider.setCartFromDynamic(data['data']);
           },
         );
       }
     } catch (e) {
       if (context.mounted) {
-        showSnackBar(
-          context: context, text: "Error in Cart : ${e.toString()}");
+        showSnackBar(context: context, text: "Error in Cart : ${e.toString()}");
       }
     }
     return cart;
   }
 }
-
 
 //
 //
@@ -556,7 +546,7 @@ class HomeServices {
 //             'Authorization': '$authToken',
 //           });
 
-//       // 
+//       //
 //       // List listLength = jsonDecode(res.body);
 //       //jsonEncode => [object] to a JSON string.
 //       //jsonDecode => String to JSON object.
@@ -573,13 +563,13 @@ class HomeServices {
 //                   ),
 //                 ),
 //               );
-//               // 
+//               //
 //             }
 //           },
 //         );
 //       }
 
-//       // 
+//       //
 //     } catch (e) {
 //       showSnackBar(
 //           context: context,

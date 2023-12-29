@@ -123,34 +123,37 @@ class _TopImageState extends State<TopImage> {
           top: mq.height * 0.02,
           child: Column(
             children: [
-              InkWell(
-                onTap: () {
-                  if (isProductWishListed) {
-                    HomeServices().removeFromWishList(
-                        context: context, product: widget.product);
-                    showSnackBar(
-                      context: context,
-                      text: "Removed from WishList",
-                    );
-                  } else {
-                    HomeServices().addToWishList(
-                        context: context, product: widget.product);
-                    showSnackBar(
-                      context: context,
-                      text: "Added to WishList",
-                      onTapFunction: () {
-                        context.push('/account/wishlist');
-                      },
-                      actionLabel: "View",
-                    );
-                  }
-                },
-                child: Icon(
-                  isProductWishListed
-                      ? Icons.favorite_rounded
-                      : Icons.favorite_border_rounded,
-                  size: 26,
-                  color: isProductWishListed ? Colors.pink : Colors.black,
+              Visibility(
+                visible: !widget.product.isProductDiscontinued,
+                child: InkWell(
+                  onTap: () {
+                    if (isProductWishListed) {
+                      HomeServices().removeFromWishList(
+                          context: context, product: widget.product);
+                      showSnackBar(
+                        context: context,
+                        text: "Removed from WishList",
+                      );
+                    } else {
+                      HomeServices().addToWishList(
+                          context: context, product: widget.product);
+                      showSnackBar(
+                        context: context,
+                        text: "Added to WishList",
+                        onTapFunction: () {
+                          context.push('/account/wishlist');
+                        },
+                        actionLabel: "View",
+                      );
+                    }
+                  },
+                  child: Icon(
+                    isProductWishListed
+                        ? Icons.favorite_rounded
+                        : Icons.favorite_border_rounded,
+                    size: 26,
+                    color: isProductWishListed ? Colors.pink : Colors.black,
+                  ),
                 ),
               ),
               IconButton(

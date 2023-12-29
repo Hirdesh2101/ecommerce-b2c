@@ -15,6 +15,7 @@ class TitleAndPrice extends StatelessWidget {
   final double avgRating;
   final bool isProductOutOfStock;
   final int colorVarient;
+
   final indianRupeesFormat = NumberFormat.currency(
     name: "INR",
     locale: 'en_IN',
@@ -24,6 +25,9 @@ class TitleAndPrice extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    int discount = calculatePercentageDiscount(
+        product.varients[colorVarient]['price'],
+        product.varients[colorVarient]['markedPrice']);
     return Column(
       children: [
         Row(
@@ -89,27 +93,28 @@ class TitleAndPrice extends StatelessWidget {
                       WidgetSpan(
                         child: SizedBox(width: mq.width * .02),
                       ),
-                      TextSpan(
-                        text: indianRupeesFormat.format(
-                            product.varients[colorVarient]['markedPrice']),
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.grey.shade700,
-                          decoration: TextDecoration.lineThrough,
+                      if (discount > 0)
+                        TextSpan(
+                          text: indianRupeesFormat.format(
+                              product.varients[colorVarient]['markedPrice']),
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.grey.shade700,
+                            decoration: TextDecoration.lineThrough,
+                          ),
                         ),
-                      ),
                       WidgetSpan(
                         child: SizedBox(width: mq.width * .02),
                       ),
-                      TextSpan(
-                        text:
-                            "${calculatePercentageDiscount(product.varients[colorVarient]['price'], product.varients[colorVarient]['markedPrice'])}% off",
-                        style: const TextStyle(
-                          fontSize: 25,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.green,
+                      if (discount > 0)
+                        TextSpan(
+                          text: "$discount% off",
+                          style: const TextStyle(
+                            fontSize: 25,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.green,
+                          ),
                         ),
-                      ),
                     ],
                   ),
                 ),
@@ -122,7 +127,7 @@ class TitleAndPrice extends StatelessWidget {
     );
   }
 
-  int calculatePercentageDiscount(num originalPrice, num discountedPrice) {
+  int calculatePercentageDiscount(num discountedPrice, num originalPrice) {
     if (originalPrice <= 0 || discountedPrice <= 0) {
       return 0;
     }

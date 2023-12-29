@@ -40,7 +40,7 @@ class _BelowAppBarState extends State<BelowAppBar> {
           children: [
             RichText(
               text: TextSpan(
-                  text: "Hello, ",
+                  text: "Hello,",
                   style: const TextStyle(fontSize: 22, color: Colors.black),
                   children: [
                     TextSpan(

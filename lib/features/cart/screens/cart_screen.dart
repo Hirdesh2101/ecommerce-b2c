@@ -2,6 +2,7 @@ import 'package:ecommerce_major_project/constants/utils.dart';
 import 'package:ecommerce_major_project/features/checkout/services/checkout_services.dart';
 import 'package:ecommerce_major_project/features/cart/providers/cart_provider.dart';
 import 'package:ecommerce_major_project/features/home/services/home_services.dart';
+import 'package:ecommerce_major_project/features/product_details/screens/product_detail_screen.dart';
 import 'package:ecommerce_major_project/providers/tab_provider.dart';
 import 'package:ecommerce_major_project/providers/user_provider.dart';
 import 'package:flutter/material.dart';
@@ -112,6 +113,7 @@ class _CartScreenState extends State<CartScreen> {
                       ElevatedButton(
                         onPressed: () {
                           tabProvider.setTab(0);
+                          context.go('/home');
                         },
                         style: ElevatedButton.styleFrom(
                             shape: RoundedRectangleBorder(
@@ -132,10 +134,18 @@ class _CartScreenState extends State<CartScreen> {
                       // return CartProdcut
                       return InkWell(
                         onTap: () {
-                          context
-                              .push(
-                                  '/product/${cartProvider.getCart![index].product.id}')
-                              .then((value) {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (value) {
+                                return ProductDetailScreen(
+                                  productId:
+                                      cartProvider.getCart![index].product.id!,
+                                  color: cartProvider.getCart![index].color,
+                                  size: cartProvider.getCart![index].size,
+                                );
+                              },
+                            ),
+                          ).then((value) {
                             fetchCart();
                           });
                         },
