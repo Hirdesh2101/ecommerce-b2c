@@ -38,18 +38,16 @@ class AddFundsCheckStatusState extends State<CheckStatus> {
     });
     timer = Timer.periodic(const Duration(seconds: 10), (Timer t) {
       //if (!isLoading && status['status'] == "PAYMENT_PENDING") {
-      if (status['status'] == "PAYMENT_PENDING") {
+      if (status['status'] == "PAYMENT_INITIATED") {
         fetchData();
         debugPrint("Timer");
       }
-      if (status['status'] == "PAYMENT_PENDING") {
+      if (status['status'] == "PAYMENT_INITIATED") {
         timer?.cancel();
         setState(() {
           status['status'] = null;
         });
       }
-      fetchData();
-
       //}
     });
     // timer2 = Timer.periodic(const Duration(seconds: 1), (Timer t) {
@@ -94,7 +92,7 @@ class AddFundsCheckStatusState extends State<CheckStatus> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           SizedBox(height: mq.height * .05),
-          isLoading || status['status'] == "PAYMENT_PENDING"
+          isLoading || status['status'] == "PAYMENT_INITIATED"
               ? const Text(
                   'Processing Payment...',
                   style: TextStyle(
@@ -124,10 +122,10 @@ class AddFundsCheckStatusState extends State<CheckStatus> {
                       textAlign: TextAlign.center,
                     ),
           if (!isLoading &&
-              status['status'] != "PAYMENT_PENDING" &&
+              status['status'] != "PAYMENY_INITIATED" &&
               status['status'] != "PAYMENT_SUCCESS")
             SizedBox(height: mq.height * .05),
-          isLoading || status['status'] == "PAYMENT_PENDING"
+          isLoading || status['status'] == "PAYMENT_INITIATED"
               ? Lottie.asset('assets/transfer_fundsprocess.json',
                   width: mq.width, height: mq.width, fit: BoxFit.cover)
               : status['status'] == "PAYMENT_SUCCESS"
@@ -146,11 +144,11 @@ class AddFundsCheckStatusState extends State<CheckStatus> {
               textAlign: TextAlign.start,
             ),
           if (!isLoading &&
-              status['status'] != "PAYMENT_PENDING" &&
+              status['status'] != "PAYMENT_INITIATED" &&
               status['status'] != "PAYMENT_SUCCESS")
             SizedBox(height: mq.height * .05),
           if (!isLoading &&
-              status['status'] != "PAYMENT_PENDING" &&
+              status['status'] != "PAYMENT_INITIATED" &&
               status['status'] != "PAYMENT_SUCCESS")
             const Text(
               "SORRY THE ORDER COULD NOT BE PLACED \nA REFUND HAS BEEN ISSUED\n IT GENERALLY TAKES 5 TO 7 DAYS TO PROCESS THE REFUND AMOUNT",
@@ -158,7 +156,7 @@ class AddFundsCheckStatusState extends State<CheckStatus> {
               textAlign: TextAlign.center,
             ),
           SizedBox(height: mq.height * .05),
-          if (!isLoading && status['status'] != "PAYMENT_PENDING")
+          if (!isLoading && status['status'] != "PAYMENT_INITIATED")
             Container(
                 margin: const EdgeInsets.symmetric(horizontal: 20),
                 child: CustomButton(
