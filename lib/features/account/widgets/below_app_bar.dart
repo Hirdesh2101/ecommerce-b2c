@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:ecommerce_major_project/constants/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -31,7 +32,8 @@ class _BelowAppBarState extends State<BelowAppBar> {
       // decoration: const BoxDecoration(gradient: GlobalVariables.appBarGradient),
       child: InkWell(
         onTap: () {
-          context.push('/profile');
+          String currentPath = getCurrentPathWithoutQuery(context);
+          context.go('$currentPath/profile');
         },
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

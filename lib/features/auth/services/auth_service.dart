@@ -56,7 +56,7 @@ class AuthService {
               _onAuthStateChange.sink.add(true);
               userProvider.setUser(res.body);
               // if (context.mounted) {
-              //   context.go('/home');
+              //   context.go('/');
               // }
             });
       }
@@ -86,7 +86,7 @@ class AuthService {
         _onAuthStateChange.sink.add(true);
         userProvider.setUser(userRes.body);
         // if (context.mounted) {
-        //    context.go('/home');
+        //    context.go('/');
         // }
       }
     } catch (e) {

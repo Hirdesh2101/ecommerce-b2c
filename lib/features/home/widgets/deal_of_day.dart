@@ -36,7 +36,7 @@ class _DealOfDayState extends State<DealOfDay> {
   }
 
   void navigateToDetailScreen() {
-    context.push('/product/${product!.id}');
+    context.go('product/${product!.id}');
   }
 
   @override

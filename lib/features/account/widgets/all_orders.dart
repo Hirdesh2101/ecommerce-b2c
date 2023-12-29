@@ -40,7 +40,7 @@ class AllOrdersList extends StatelessWidget {
                       ElevatedButton(
                           onPressed: () {
                             tabProvider.setTab(0);
-                            context.go('/home');
+                            context.go('/');
                           },
                           style: ElevatedButton.styleFrom(
                               shape: RoundedRectangleBorder(
@@ -75,7 +75,10 @@ class AllOrdersList extends StatelessWidget {
                         child: InkWell(
                           borderRadius: BorderRadius.circular(20),
                           onTap: () {
-                            context.push('/orders', extra: allOrders![index]);
+                            String currentPath =
+                                getCurrentPathWithoutQuery(context);
+                            context.go('$currentPath/details',
+                                extra: allOrders![index]);
                           },
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),

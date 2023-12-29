@@ -303,9 +303,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             key: const Key('details-Small'),
             builder: (_) => Scaffold(
               appBar: GlobalVariables.getAppBar(
-                context: context,
-                //onClickSearchNavigateTo: const MySearchScreen()
-              ),
+                  context: context,
+                  //TODO add actions
+                  wantActions: false
+                  //onClickSearchNavigateTo: const MySearchScreen()
+                  ),
               body: isProductLoading
                   ? const Center(
                       child: ColorLoader2(),

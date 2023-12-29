@@ -28,6 +28,7 @@ import 'package:ecommerce_major_project/features/product_details/screens/product
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 final _shellNavigatorKey = GlobalKey<NavigatorState>();
+
 class AppRouter {
   late final AppService appService;
   GoRouter get router => _goRouter;
@@ -37,42 +38,184 @@ class AppRouter {
   late final GoRouter _goRouter = GoRouter(
     navigatorKey: _rootNavigatorKey,
     refreshListenable: appService,
-    initialLocation: '/home',
+    initialLocation: '/',
     routes: [
       ShellRoute(
         // navigatorKey: _shellNavigatorKey,
         builder: (context, state, child) {
-          return BottomBar(child: child);
+          // Conditionally wrap the child with BottomBar only for specific routes
+          var includeBottomBar = ['/', '/category', '/cart', '/account']
+              .contains(state.uri.path);
+          return includeBottomBar ? BottomBar(child: child) : child;
         },
         routes: <RouteBase>[
           GoRoute(
-            path: '/home',
-            // parentNavigatorKey: _shellNavigatorKey,
-            builder: (BuildContext context, GoRouterState state) {
-              return const HomeScreen();
-            },
-          ),
+              path: '/',
+              // parentNavigatorKey: _shellNavigatorKey,
+              builder: (BuildContext context, GoRouterState state) {
+                return const HomeScreen();
+              },
+              routes: [
+                GoRoute(
+                  path: 'search',
+                  builder: (context, state) {
+                    final query = state.uri.queryParameters['query'];
+                    if (query != null) {
+                      return SearchScreen(searchQuery: query);
+                    } else {
+                      return const MySearchScreen();
+                    }
+                  },
+                ),
+                GoRoute(
+                  path: 'product/:id',
+                  builder: (context, state) => ProductDetailScreen(
+                    productId: state.pathParameters['id']!,
+                  ),
+                ),
+              ]),
           GoRoute(
-            path: '/categories',
-            // parentNavigatorKey: _shellNavigatorKey,
-            builder: (BuildContext context, GoRouterState state) {
-              return const CategoryGridScreen();
-            },
-          ),
+              path: '/category',
+              // parentNavigatorKey: _shellNavigatorKey,
+              builder: (BuildContext context, GoRouterState state) {
+                return const CategoryGridScreen();
+              },
+              routes: [
+                GoRoute(
+                  path: 'search',
+                  builder: (context, state) {
+                    final query = state.uri.queryParameters['query'];
+                    if (query != null) {
+                      return SearchScreen(searchQuery: query);
+                    } else {
+                      return const MySearchScreen();
+                    }
+                  },
+                ),
+                GoRoute(
+                    path: ':category',
+                    builder: (context, state) => CategoryDealsScreen(
+                          category: state.pathParameters['category']!,
+                        ),
+                    routes: [
+                      GoRoute(
+                        path: 'search',
+                        builder: (context, state) {
+                          final query = state.uri.queryParameters['query'];
+                          if (query != null) {
+                            return SearchScreen(searchQuery: query);
+                          } else {
+                            return const MySearchScreen();
+                          }
+                        },
+                      ),
+                      GoRoute(
+                        path: 'filter',
+                        builder: (context, state) => const FilterScreen(),
+                      ),
+                    ]),
+              ]),
           GoRoute(
-            path: '/cart',
-            // parentNavigatorKey: _shellNavigatorKey,
-            builder: (BuildContext context, GoRouterState state) {
-              return const CartScreen();
-            },
-          ),
+              path: '/cart',
+              // parentNavigatorKey: _shellNavigatorKey,
+              builder: (BuildContext context, GoRouterState state) {
+                return const CartScreen();
+              },
+              routes: [
+                GoRoute(
+                  path: 'search',
+                  builder: (context, state) {
+                    final query = state.uri.queryParameters['query'];
+                    if (query != null) {
+                      return SearchScreen(searchQuery: query);
+                    } else {
+                      return const MySearchScreen();
+                    }
+                  },
+                ),
+                GoRoute(
+                  path: 'checkout',
+                  builder: (context, state) {
+                    var extras = state.extra! as List;
+                    var totalAmount = extras[0];
+                    var cart = extras[1];
+                    var userProviderCart = extras[2];
+                    return CheckoutScreen(
+                      totalAmount: totalAmount,
+                      mycart: cart,
+                      userProviderCart: userProviderCart,
+                    );
+                  },
+                ),
+              ]),
           GoRoute(
-            path: '/account',
-            // parentNavigatorKey: _shellNavigatorKey,
-            builder: (BuildContext context, GoRouterState state) {
-              return const AccountScreen();
-            },
-          ),
+              path: '/account',
+              // parentNavigatorKey: _shellNavigatorKey,
+              builder: (BuildContext context, GoRouterState state) {
+                return const AccountScreen();
+              },
+              routes: [
+                GoRoute(
+                  path: 'profile',
+                  builder: (context, state) => const ProfileScreen(),
+                ),
+                GoRoute(
+                  path: 'search',
+                  builder: (context, state) {
+                    final query = state.uri.queryParameters['query'];
+                    if (query != null) {
+                      return SearchScreen(searchQuery: query);
+                    } else {
+                      return const MySearchScreen();
+                    }
+                  },
+                ),
+                GoRoute(
+                  path: 'wishlist',
+                  builder: (context, state) => const WishListScreen(),
+                ),
+                GoRoute(
+                    path: 'orders',
+                    builder: (context, state) {
+                      return const AllOrdersScreen();
+                    },
+                    routes: [
+                      GoRoute(
+                        path: 'returns',
+                        builder: (context, state) {
+                          var extras = state.extra! as Return;
+                          return ReturnDetailsScreen(returns: extras);
+                        },
+                      ),
+                      GoRoute(
+                        path: 'details',
+                        builder: (context, state) {
+                          var extras = state.extra as Order?;
+                          return OrderDetailsScreen(order: extras!);
+                        },
+                      ),
+                      GoRoute(
+                          path: 'newreturn',
+                          builder: (context, state) {
+                            var extras = state.extra! as List;
+                            var order = extras[0];
+                            var products = extras[1];
+                            return ReturnProductScreen(
+                                order: order, selectedProduct: products);
+                          },
+                          routes: [
+                            GoRoute(
+                                path: 'select',
+                                builder: (context, state) {
+                                  var extras = state.extra! as List;
+                                  var copy = extras[0];
+                                  var order = extras[1];
+                                  return SelectReturnProduct(
+                                      copy: copy, order: order);
+                                }),
+                          ]),
+                    ]),
+              ]),
         ],
       ),
       GoRoute(
@@ -88,95 +231,34 @@ class AppRouter {
         builder: (context, state) => const AuthScreen(),
       ),
       GoRoute(
-        path: '/wishlist',
-        builder: (context, state) => const WishListScreen(),
-      ),
-      GoRoute(
         path: '/product/:id',
         builder: (context, state) => ProductDetailScreen(
           productId: state.pathParameters['id']!,
         ),
       ),
       GoRoute(
-        path: '/category/:category',
-        builder: (context, state) => CategoryDealsScreen(
-          category: state.pathParameters['category']!,
-        ),
-      ),
-      GoRoute(
-        path: '/filter',
-        builder: (context, state) => const FilterScreen(),
-      ),
-      GoRoute(
-        path: '/profile',
-        builder: (context, state) => const ProfileScreen(),
-      ),
-      GoRoute(
-        path: '/search',
+        path: '/checkout',
         builder: (context, state) {
-          final query = state.uri.queryParameters['query'];
-          if (query != null) {
-            return SearchScreen(searchQuery: query);
-          } else {
-            return const MySearchScreen();
-          }
+          var extras = state.extra! as List;
+          var totalAmount = extras[0];
+          var cart = extras[1];
+          var userProviderCart = extras[2];
+          return CheckoutScreen(
+            totalAmount: totalAmount,
+            mycart: cart,
+            userProviderCart: userProviderCart,
+          );
         },
       ),
-      GoRoute(
-          path: '/checkout',
-          builder: (context, state) {
-            var extras = state.extra! as List;
-            var totalAmount = extras[0];
-            var cart = extras[1];
-            var userProviderCart = extras[2];
-            return CheckoutScreen(
-              totalAmount: totalAmount,
-              mycart: cart,
-              userProviderCart: userProviderCart,
-            );
-          }),
       GoRoute(
         path: '/status/:orderid',
         builder: (context, state) => CheckStatus(
           orderId: state.pathParameters['orderid']!,
         ),
       ),
-      GoRoute(
-          path: '/orders',
-          builder: (context, state) {
-            var extras = state.extra as Order?;
-            if (extras != null) {
-              return OrderDetailsScreen(order: extras);
-            } else {
-              return const AllOrdersScreen();
-            }
-          }),
-      GoRoute(
-          path: '/returns',
-          builder: (context, state) {
-            var extras = state.extra! as Return;
-            return ReturnDetailsScreen(returns: extras);
-          }),
-      GoRoute(
-          path: '/newreturn',
-          builder: (context, state) {
-            var extras = state.extra! as List;
-            var order = extras[0];
-            var products = extras[1];
-            return ReturnProductScreen(order: order, selectedProduct: products);
-          }),
-      GoRoute(
-          path: '/newreturn/select',
-          builder: (context, state) {
-            var extras = state.extra! as List;
-            var copy = extras[0];
-            var order = extras[1];
-            return SelectReturnProduct(copy: copy, order: order);
-          }),
     ],
     //errorBuilder: (context, state) => ErrorPage(error: state.error.toString()),
     redirect: (context, state) {
-      
       final isLogedIn = appService.loginState;
       final isInitialized = appService.initialized;
       final isOnboarded = appService.onboarding;
@@ -201,7 +283,7 @@ class AppRouter {
       } else if ((isLogedIn && isGoingToLogin) ||
           (isInitialized && isGoingToInit) ||
           (isOnboarded && isGoingToOnboard)) {
-        return '/home';
+        return '/';
       } else {
         // Else Don't do anything
         return null;

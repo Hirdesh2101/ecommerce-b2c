@@ -25,7 +25,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
   //final int allowReturnProductDays = 15;
   //bool allowReturn = false;
   bool viewMoreDetails = true;
-  final RefundServices refundServices = RefundServices();
+  final ReturnServices refundServices = ReturnServices();
   final indianRupeesFormat = NumberFormat.currency(
     name: "INR",
     locale: 'en_IN',
@@ -148,6 +148,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
       appBar: GlobalVariables.getAppBar(
         title: "Order Details",
         context: context,
+        wantActions: false
         //onClickSearchNavigateTo: const MySearchScreen()
       ),
       body: SingleChildScrollView(
@@ -298,10 +299,10 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                       onPressed: () {
                         if (widget.order.products.length == 1 &&
                             widget.order.products[0]['quantity'] == 1) {
-                          context.push('/newreturn',
+                          context.go('newreturn',
                               extra: [widget.order, widget.order.products]);
                         } else {
-                          context.push('/newreturn/select',
+                          context.go('newreturn/select',
                               extra: [copy, widget.order]);
                         }
                       },

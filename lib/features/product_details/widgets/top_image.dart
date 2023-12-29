@@ -141,7 +141,7 @@ class _TopImageState extends State<TopImage> {
                         context: context,
                         text: "Added to WishList",
                         onTapFunction: () {
-                          context.push('/wishlist');
+                          context.push('/account/wishlist');
                         },
                         actionLabel: "View",
                       );

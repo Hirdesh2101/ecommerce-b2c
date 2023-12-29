@@ -1,3 +1,4 @@
+import 'package:ecommerce_major_project/constants/utils.dart';
 import 'package:ecommerce_major_project/providers/tab_provider.dart';
 import 'package:flutter/material.dart';
 
@@ -50,7 +51,9 @@ class _OrdersState extends State<Orders> {
                 onTap: widget.orders == null || widget.orders!.isEmpty
                     ? null
                     : () async {
-                        context.push('/orders');
+                        String currentPath =
+                            getCurrentPathWithoutQuery(context);
+                        context.go('$currentPath/orders');
                       },
                 child: Container(
                   padding: EdgeInsets.only(right: mq.width * 0.04),
@@ -77,6 +80,7 @@ class _OrdersState extends State<Orders> {
                       SizedBox(height: mq.height * 0.02),
                       ElevatedButton(
                           onPressed: () {
+                            context.go('/');
                             tabProvider.setTab(0);
                           },
                           style: ElevatedButton.styleFrom(
@@ -109,7 +113,10 @@ class _OrdersState extends State<Orders> {
                         //     " $index value of container width =======> ${mq.height * 0.025}");
                         return GestureDetector(
                           onTap: () {
-                            context.push('/orders',extra: widget.orders![index]);
+                            String currentPath =
+                                getCurrentPathWithoutQuery(context);
+                            context.go('$currentPath/orders',
+                                extra: widget.orders![index]);
                           },
                           child: SingleProduct(
                               image: widget.orders![index].products[0]

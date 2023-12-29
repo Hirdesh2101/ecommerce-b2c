@@ -16,7 +16,6 @@ import 'package:ecommerce_major_project/constants/global_variables.dart';
 
 class HomeServices {
   // fetch products category wise
-
   Future<List<Product>> fetchCategoryProducts(
       {required BuildContext context, required String category}) async {
     final String? authToken = await GlobalVariables.getFirebaseAuthToken();
