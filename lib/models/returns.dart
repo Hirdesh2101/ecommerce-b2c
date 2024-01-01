@@ -2,18 +2,18 @@ import 'dart:convert';
 
 class Return {
   final String id;
-  final List<dynamic> returnProducts;
+  final List<dynamic> returnedProducts;
   final String refundStatus;
   final String returnStatus;
-  final String createdAt;
+  final String returnedAt;
   final String orderId;
 
   Return({
     required this.id,
     required this.refundStatus,
-    required this.returnProducts,
+    required this.returnedProducts,
     required this.returnStatus,
-    required this.createdAt,
+    required this.returnedAt,
     required this.orderId,
   });
 
@@ -21,9 +21,9 @@ class Return {
     return <String, dynamic>{
       'id': id,
       'refundStatus': refundStatus,
-      'returnProducts': returnProducts,
+      'returnedProducts': returnedProducts,
       'returnStatus': returnStatus,
-      'createdAt': createdAt,
+      'returnedAt': returnedAt,
       'orderId': orderId,
     };
   }
@@ -31,15 +31,15 @@ class Return {
   factory Return.fromMap(Map<String, dynamic> map) {
     return Return(
       id: map['_id'] as String,
-      returnProducts: List<Map<String, dynamic>>.from(
-        map['returnProducts']?.map(
+      returnedProducts: List<Map<String, dynamic>>.from(
+        map['returnedProducts']?.map(
               (x) => Map<String, dynamic>.from(x),
             ) ??
             [],
       ),
       refundStatus: map['refundStatus'] as String,
       returnStatus: map['returnStatus'] as String,
-      createdAt: map['createdAt'] as String,
+      returnedAt: map['returnedAt'] as String,
       orderId: map['orderId'] as String,
     );
   }

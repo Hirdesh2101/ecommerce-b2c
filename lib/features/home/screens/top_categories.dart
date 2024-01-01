@@ -1,13 +1,13 @@
 import 'dart:math';
 import 'package:ecommerce_major_project/features/home/providers/category_provider.dart';
 import 'package:ecommerce_major_project/features/home/widgets/carousel_image.dart';
+import 'package:ecommerce_major_project/providers/tab_provider.dart';
 import 'package:ecommerce_major_project/providers/user_provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ecommerce_major_project/main.dart';
 import 'package:ecommerce_major_project/models/product.dart';
-import 'package:ecommerce_major_project/constants/utils.dart';
 import 'package:ecommerce_major_project/constants/global_variables.dart';
 import 'package:ecommerce_major_project/common/widgets/color_loader_2.dart';
 import 'package:ecommerce_major_project/features/home/services/home_services.dart';
@@ -17,8 +17,11 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+import '../../../constants/utils.dart';
+
 class TopCategories extends StatefulWidget {
   const TopCategories({super.key});
+
   @override
   State<TopCategories> createState() => _TopCategoriesState();
 }
@@ -48,7 +51,9 @@ class _TopCategoriesState extends State<TopCategories>
   }
 
   void navigateToCategoryPage(BuildContext context, String category) {
-    context.push('/category/$category');
+    final tabProvider = Provider.of<TabProvider>(context, listen: false);
+    tabProvider.setTab(1);
+    context.go('/category/$category');
   }
 
   fetchAdvertisement() async {

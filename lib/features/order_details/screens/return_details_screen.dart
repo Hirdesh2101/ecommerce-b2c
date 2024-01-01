@@ -25,7 +25,7 @@ class _ReturnDetailsScreenState extends State<ReturnDetailsScreen> {
   //final int allowReturnProductDays = 15;
   //bool allowReturn = false;
   bool viewMoreDetails = true;
-  final RefundServices refundServices = RefundServices();
+  final ReturnServices refundServices = ReturnServices();
   final indianRupeesFormat = NumberFormat.currency(
     name: "INR",
     locale: 'en_IN',
@@ -86,10 +86,9 @@ class _ReturnDetailsScreenState extends State<ReturnDetailsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: GlobalVariables.getAppBar(
-        title: "Return Details",
-        context: context,
-        //onClickSearchNavigateTo: const MySearchScreen()
-      ),
+          title: "Return Details", context: context, wantActions: false
+          //onClickSearchNavigateTo: const MySearchScreen()
+          ),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(mq.width * .025),
@@ -108,7 +107,7 @@ class _ReturnDetailsScreenState extends State<ReturnDetailsScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     for (int i = 0;
-                        i < widget.returns.returnProducts.length;
+                        i < widget.returns.returnedProducts.length;
                         i++)
                       Padding(
                         padding: const EdgeInsets.only(top: 8.0),
@@ -118,21 +117,24 @@ class _ReturnDetailsScreenState extends State<ReturnDetailsScreen> {
                               MaterialPageRoute(
                                 builder: (context) {
                                   return ProductDetailScreen(
-                                    productId: widget.returns.returnProducts[i]
-                                        ['product']['_id'],
-                                    color: widget.returns.returnProducts[i]
+                                    productId: widget.returns
+                                        .returnedProducts[i]['product']['_id'],
+                                    color: widget.returns.returnedProducts[i]
                                         ['color'],
-                                    size: widget.returns.returnProducts[i]
+                                    size: widget.returns.returnedProducts[i]
                                         ['size'],
                                   );
                                 },
                               ),
                             );
+                            // @hirdesh change this to pass the above arguments.
+                            // context.push(
+                            //     '/product/${widget.returns.returnedProducts[i]['product']['_id']}');
                           },
                           child: Row(
                             children: [
                               Image.network(
-                                  widget.returns.returnProducts[i]['product']
+                                  widget.returns.returnedProducts[i]['product']
                                       ['images'][0],
                                   height: mq.width * .25,
                                   width: mq.width * .25),
@@ -144,7 +146,7 @@ class _ReturnDetailsScreenState extends State<ReturnDetailsScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      widget.returns.returnProducts[i]
+                                      widget.returns.returnedProducts[i]
                                           ['product']['name'],
                                       style: const TextStyle(
                                         fontSize: 15,
@@ -171,7 +173,7 @@ class _ReturnDetailsScreenState extends State<ReturnDetailsScreen> {
                                           height: mq.width * .025,
                                           decoration: BoxDecoration(
                                             color: Color(int.parse(
-                                                '${widget.returns.returnProducts[i]['color']}')),
+                                                '${widget.returns.returnedProducts[i]['color']}')),
                                             shape: BoxShape.circle,
                                           ),
                                         ),
@@ -179,7 +181,7 @@ class _ReturnDetailsScreenState extends State<ReturnDetailsScreen> {
                                             padding: EdgeInsets.only(
                                                 left: mq.width * .025),
                                             child: Text(
-                                              "Size: ${widget.returns.returnProducts[i]['size']}",
+                                              "Size: ${widget.returns.returnedProducts[i]['size']}",
                                               style: const TextStyle(
                                                   color: Colors.black,
                                                   fontSize: 11),
@@ -189,7 +191,7 @@ class _ReturnDetailsScreenState extends State<ReturnDetailsScreen> {
                                             padding: EdgeInsets.only(
                                                 left: mq.width * .025),
                                             child: Text(
-                                              "Quantity: ${widget.returns.returnProducts[i]['quantity']}",
+                                              "Quantity: ${widget.returns.returnedProducts[i]['quantity']}",
                                               style: const TextStyle(
                                                   color: Colors.black,
                                                   fontSize: 11),
@@ -267,7 +269,7 @@ class _ReturnDetailsScreenState extends State<ReturnDetailsScreen> {
                             children: [
                               const Text('Return Date:'),
                               Text(DateFormat('yMMMd').format(
-                                  DateTime.parse(widget.returns.createdAt)))
+                                  DateTime.parse(widget.returns.returnedAt)))
                             ],
                           ),
                           Row(

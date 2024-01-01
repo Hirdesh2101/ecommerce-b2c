@@ -31,9 +31,9 @@ class _BottomBarState extends State<BottomBar> {
       tabProvider.setTab(value);
       switch (value) {
         case 0:
-          return context.go('/home');
+          return context.go('/');
         case 1:
-          return context.go('/categories');
+          return context.go('/category');
         case 2:
           return context.go('/cart');
         case 3:

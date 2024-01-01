@@ -51,6 +51,7 @@ class _WishListScreenState extends State<WishListScreen> {
       appBar: GlobalVariables.getAppBar(
         context: context,
         title: "Your Wishlist",
+        wantActions: false
         //onClickSearchNavigateTo: const MySearchScreen()
       ),
       body: ListView(
@@ -83,7 +84,7 @@ class _WishListScreenState extends State<WishListScreen> {
                           ElevatedButton(
                               onPressed: () {
                                 tabProvider.setTab(0);
-                                context.go('/home');
+                                context.go('/');
                               },
                               style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.deepPurpleAccent),

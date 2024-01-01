@@ -59,7 +59,10 @@ class AllReturnsList extends StatelessWidget {
                         child: InkWell(
                           borderRadius: BorderRadius.circular(20),
                           onTap: () {
-                            context.push('/returns', extra: allOrders![index]);
+                            String currentPath =
+                                getCurrentPathWithoutQuery(context);
+                            context.go('$currentPath/returns',
+                                extra: allOrders![index]);
                           },
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
@@ -111,7 +114,7 @@ class AllReturnsList extends StatelessWidget {
                                     for (int j = 0;
                                         j <
                                             allOrders![index]
-                                                .returnProducts
+                                                .returnedProducts
                                                 .length;
                                         j++)
                                       Container(
@@ -123,7 +126,7 @@ class AllReturnsList extends StatelessWidget {
                                             // image
                                             Image.network(
                                               allOrders![index]
-                                                      .returnProducts[j]
+                                                      .returnedProducts[j]
                                                   ['product']['images'][0],
                                               // allOrders![index].returnProducts[index].images[0],
                                               fit: BoxFit.contain,
@@ -140,7 +143,7 @@ class AllReturnsList extends StatelessWidget {
                                                       top: mq.width * .0125),
                                                   child: Text(
                                                     allOrders![index]
-                                                            .returnProducts[j]
+                                                            .returnedProducts[j]
                                                         ['product']['name'],
                                                     overflow:
                                                         TextOverflow.ellipsis,
@@ -175,7 +178,7 @@ class AllReturnsList extends StatelessWidget {
                                                         decoration:
                                                             BoxDecoration(
                                                           color: Color(int.parse(
-                                                              '${allOrders![index].returnProducts[j]['color']}')),
+                                                              '${allOrders![index].returnedProducts[j]['color']}')),
                                                           shape:
                                                               BoxShape.circle,
                                                         ),
@@ -187,7 +190,7 @@ class AllReturnsList extends StatelessWidget {
                                                                       mq.width *
                                                                           .025),
                                                           child: Text(
-                                                            "Size: ${allOrders![index].returnProducts[j]['size']}",
+                                                            "Size: ${allOrders![index].returnedProducts[j]['size']}",
                                                             style: const TextStyle(
                                                                 color: Colors
                                                                     .black,
@@ -201,7 +204,7 @@ class AllReturnsList extends StatelessWidget {
                                                                       mq.width *
                                                                           .025),
                                                           child: Text(
-                                                            "Quantity: ${allOrders![index].returnProducts[j]['quantity']}",
+                                                            "Quantity: ${allOrders![index].returnedProducts[j]['quantity']}",
                                                             style: const TextStyle(
                                                                 color: Colors
                                                                     .black,
@@ -217,7 +220,7 @@ class AllReturnsList extends StatelessWidget {
                                                       left: mq.width * .025,
                                                       top: mq.width * .0125),
                                                   child: Text(
-                                                      "Item Value  : ${indianRupeesFormat.format(allOrders![index].returnProducts[j]['price'])}",
+                                                      "Item Value  : ${indianRupeesFormat.format(allOrders![index].returnedProducts[j]['price'])}",
                                                       style: const TextStyle(
                                                           fontWeight:
                                                               FontWeight.bold,
@@ -229,7 +232,7 @@ class AllReturnsList extends StatelessWidget {
                                                     left: mq.width * .025,
                                                   ),
                                                   child: Text(
-                                                      "Ordered At  : ${DateFormat('yMMMd').format(DateTime.parse(allOrders![index].createdAt))}",
+                                                      "Ordered At  : ${DateFormat('yMMMd').format(DateTime.parse(allOrders![index].returnedAt))}",
                                                       style: const TextStyle(
                                                           fontWeight:
                                                               FontWeight.bold,

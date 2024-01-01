@@ -1,3 +1,4 @@
+import 'package:ecommerce_major_project/constants/utils.dart';
 import 'package:ecommerce_major_project/features/checkout/services/checkout_services.dart';
 import 'package:ecommerce_major_project/features/cart/providers/cart_provider.dart';
 import 'package:ecommerce_major_project/features/home/services/home_services.dart';
@@ -50,7 +51,8 @@ class _CartScreenState extends State<CartScreen> {
     if (isProductAvailable) {
       //make sure to pass the arguments here!
       if (context.mounted) {
-        context.push('/checkout', extra: [
+        String currentPath = getCurrentPathWithoutQuery(context);
+        context.go('$currentPath/checkout', extra: [
           sum.toString(),
           cartProvider.getCart,
           userProvider.user.cart

@@ -114,6 +114,7 @@ dependencies:
     firebase_ui_oauth_google: ^1.2.11
     firebase_ui_oauth_apple: ^1.2.14
 
+
 flutter_launcher_icons:
     android: "launcher_icon"
     ios: true
