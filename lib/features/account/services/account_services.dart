@@ -99,6 +99,8 @@ class AccountServices {
 //
 //
   Future<List<Order>?> fetchMyOrders({required BuildContext context}) async {
+    debugPrint("Fetching orders");
+
     final String? authToken = await GlobalVariables.getFirebaseAuthToken();
     List<Order>? orderList = [];
     try {
@@ -138,10 +140,11 @@ class AccountServices {
     } catch (e) {
       if (context.mounted) {
         showSnackBar(
-          context: context,
-          text: "Following Error in fetching Products [home]: $e");
+            context: context,
+            text: "Following Error in fetching Orders [home]: $e");
       }
     }
+    debugPrint("Fetching orders complete");
     return orderList;
   }
 
@@ -186,10 +189,9 @@ class AccountServices {
       if (context.mounted) {
         showSnackBar(
             context: context,
-            text: "Following Error in fetching Products [home]: $e");
+            text: "Following Error in fetching Returns [home]: $e");
       }
     }
     return returnList;
   }
-
 }

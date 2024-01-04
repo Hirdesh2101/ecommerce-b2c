@@ -28,7 +28,6 @@ class TopCategories extends StatefulWidget {
 
 class _TopCategoriesState extends State<TopCategories>
     with TickerProviderStateMixin {
-
   // tabbar variables
   int activeTabIndex = 0;
   final indianRupeesFormat = NumberFormat.currency(
@@ -232,17 +231,12 @@ class _TopCategoriesState extends State<TopCategories>
                                             mainAxisSpacing: 5,
                                             crossAxisSpacing: 0,
                                           ),
-                                          delegate:
-                                          SliverChildBuilderDelegate(
+                                          delegate: SliverChildBuilderDelegate(
                                               childCount:
                                                   min(productList!.length, 8),
                                               (context, index) {
                                             Product product =
                                                 productList![index];
-                                            bool isProductOutOfStock =
-                                                productList![index]
-                                                        .totalQuantity ==
-                                                    0;
 
                                             final user = context
                                                 .watch<UserProvider>()
@@ -270,26 +264,29 @@ class _TopCategoriesState extends State<TopCategories>
                                             }
 
                                             return Padding(
-                                              padding: const EdgeInsets.all(8.0),
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
                                               child: InkWell(
-                                                borderRadius: BorderRadius.circular(8),
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
                                                 onTap: () {
                                                   // Get the current location
                                                   String currentPath =
-                                                  getCurrentPathWithoutQuery(context);
+                                                      getCurrentPathWithoutQuery(
+                                                          context);
                                                   // Build the new path
                                                   String newPath =
                                                       '${currentPath}product/${product.id}';
                                                   context.go(newPath);
                                                 },
                                                 child: GridWidgetItems(
-                                                    product: productList![index], isProductWishListed: isProductWishListed),
+                                                    product:
+                                                        productList![index],
+                                                    isProductWishListed:
+                                                        isProductWishListed),
                                               ),
                                             );
-                                          }
-                                          )
-                              )
-                          )
+                                          })))
                         ],
                       ),
                     ),
