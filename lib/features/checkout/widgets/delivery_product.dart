@@ -11,7 +11,13 @@ class OrderSummaryProduct extends StatefulWidget {
   final String color;
   final String size;
   final num productQuantity;
-  const OrderSummaryProduct({required this.index, super.key,required this.product,required this.color,required this.size,required this.productQuantity});
+  const OrderSummaryProduct(
+      {required this.index,
+      super.key,
+      required this.product,
+      required this.color,
+      required this.size,
+      required this.productQuantity});
 
   @override
   State<OrderSummaryProduct> createState() => _OrderSummaryProductState();
@@ -60,8 +66,8 @@ class _OrderSummaryProductState extends State<OrderSummaryProduct> {
           children: [
             Container(
               width: mq.width * .57,
-              padding: EdgeInsets.only(
-                  left: mq.width * .025, top: mq.width * .0125),
+              padding:
+                  EdgeInsets.only(left: mq.width * .025, top: mq.width * .0125),
               child: Text(
                 widget.product.name,
                 textAlign: TextAlign.left,
@@ -75,8 +81,8 @@ class _OrderSummaryProductState extends State<OrderSummaryProduct> {
               padding: EdgeInsets.only(left: mq.width * .025),
               child: Text(
                 indianRupeesFormat.format(price),
-                style: const TextStyle(
-                    fontWeight: FontWeight.bold, fontSize: 17),
+                style:
+                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
                 maxLines: 2,
               ),
             ),
@@ -91,10 +97,41 @@ class _OrderSummaryProductState extends State<OrderSummaryProduct> {
               ),
             ),
             Container(
+              padding: EdgeInsets.only(left: mq.width * .025),
+              width: mq.width * .57,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  const Text(
+                    "Color:",
+                    style: TextStyle(color: Colors.black, fontSize: 11),
+                    maxLines: 2,
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(left: mq.width * .01),
+                    width: mq.width * .025,
+                    height: mq.width * .025,
+                    decoration: BoxDecoration(
+                      color: Color(int.parse(widget.color)),
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                  Container(
+                      padding: EdgeInsets.only(left: mq.width * .025),
+                      child: Text(
+                        "Size: ${widget.size}",
+                        style:
+                            const TextStyle(color: Colors.black, fontSize: 11),
+                        maxLines: 2,
+                      )),
+                ],
+              ),
+            ),
+            Container(
               width: mq.width * .57,
               padding: EdgeInsets.only(left: mq.width * .025),
               child: Text(
-                "Quantity x${widget.productQuantity}",
+                "Quantity: ${widget.productQuantity}",
                 style: const TextStyle(fontSize: 13),
               ),
             ),

@@ -361,12 +361,6 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                                     extra: [orderModel]);
                                               }
                                             },
-                                            // if you still want to complain flow in didilogflow chatbot
-                                            // you can mail the authorities or anything
-                                            // showErrorSnackBar(
-                                            //     context: context,
-                                            //     text: "Return product timeline expired");
-                                            //},
                                             style: ElevatedButton.styleFrom(
                                                 // alignment: Alignment.center,
                                                 backgroundColor:
@@ -1051,9 +1045,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                     });
                                   }),
                                 ),
-                                const SizedBox(height: 15),
-                                const Divider(thickness: 1),
-                                const SizedBox(height: 10),
+                                const SizedBox(height: 30),
                                 Text(
                                   'Products Ordered',
                                   style: GoogleFonts.lato(
@@ -1165,7 +1157,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                                                       mq.width *
                                                                           .025),
                                                               child: Text(
-                                                                "Quantity: x${orderModel.products[i]['quantity']}",
+                                                                "Quantity: ${orderModel.products[i]['quantity']}",
                                                                 style: const TextStyle(
                                                                     color: Colors
                                                                         .black,

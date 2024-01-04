@@ -77,7 +77,8 @@ class AllOrdersList extends StatelessWidget {
                           onTap: () {
                             String currentPath =
                                 getCurrentPathWithoutQuery(context);
-                            context.go('$currentPath/details', extra: allOrders![index]);
+                            context.go('$currentPath/details',
+                                extra: allOrders![index]);
                           },
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
@@ -214,7 +215,7 @@ class AllOrdersList extends StatelessWidget {
                                                                       mq.width *
                                                                           .025),
                                                           child: Text(
-                                                            "Quantity: x${allOrders![index].products[j]['quantity']}",
+                                                            "Quantity: ${allOrders![index].products[j]['quantity']}",
                                                             style: const TextStyle(
                                                                 color: Colors
                                                                     .black,

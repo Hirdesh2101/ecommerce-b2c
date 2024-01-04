@@ -1,20 +1,19 @@
 import 'package:ecommerce_major_project/constants/utils.dart';
-import 'package:ecommerce_major_project/features/home/widgets/myGridWidgetItems.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+
 import 'package:ecommerce_major_project/main.dart';
 import 'package:ecommerce_major_project/models/product.dart';
 import 'package:ecommerce_major_project/constants/global_variables.dart';
 import 'package:ecommerce_major_project/common/widgets/color_loader_2.dart';
 import 'package:ecommerce_major_project/features/home/services/home_services.dart';
 import 'package:ecommerce_major_project/features/home/providers/filter_provider.dart';
-import '../../../providers/user_provider.dart';
+import 'package:ecommerce_major_project/features/search/widgets/searched_product.dart';
 
 class CategoryDealsScreen extends StatefulWidget {
   static const String routeName = '/category-deals';
   final String category;
-
   const CategoryDealsScreen({
     Key? key,
     required this.category,
@@ -139,15 +138,9 @@ class _CategoryDealsScreenState extends State<CategoryDealsScreen> {
                         : filterProvider.filterNumber == 3
                             ? getFilterpriceHtoL(filterProvider)
                             : Expanded(
-                                child: GridView.builder(
-                                  shrinkWrap: true,
-                                  gridDelegate:
-                                      const SliverGridDelegateWithFixedCrossAxisCount(
-                                    childAspectRatio: 0.65,
-                                    crossAxisCount: 2,
-                                    mainAxisSpacing: 0.0,
-                                    crossAxisSpacing: 8.0,
-                                  ),
+                                child: ListView.builder(
+                                  scrollDirection: Axis.vertical,
+                                  physics: const BouncingScrollPhysics(),
                                   itemCount: productList!.length,
                                   itemBuilder: (context, index) {
                                     //var map = productList!;
@@ -160,45 +153,17 @@ class _CategoryDealsScreenState extends State<CategoryDealsScreen> {
                                     //     "product list now..............${productList![index].name}, ");
                                     // var sortedByKeyMap = Map.fromEntries(map.entries.toList()
                                     //   ..sort((e1, e2) => e1.key.compareTo(e2.key)));
-                                    final user =
-                                        context.watch<UserProvider>().user;
-                                    List<dynamic> wishList =
-                                        user.wishList != null
-                                            ? user.wishList!
-                                            : [];
-                                    bool isProductWishListed = false;
-
-                                    for (int i = 0; i < wishList.length; i++) {
-                                      // final productWishList = wishList[i];
-                                      // final productFromJson =
-                                      //     Product.fromJson(
-                                      //         productWishList['product']);
-                                      // final productId = productFromJson.id;
-
-                                      if (wishList[i]['product'] ==
-                                          productList![index].id) {
-                                        isProductWishListed = true;
-                                        break;
-                                      }
-                                    }
                                     return Column(
                                       children: [
                                         // Text(
                                         //     "Filter  : ${filterProvider.getFilterNumber}"),
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: InkWell(
-                                            borderRadius:BorderRadius.circular(8),
-                                              onTap: () {
-                                                context.push(
-                                                    '/product/${productList![index].id}');
-                                              },
-                                              child: GridWidgetItems(
-                                                product: productList![index],
-                                                isProductWishListed:
-                                                    isProductWishListed,
-                                              )),
-                                        ),
+                                        GestureDetector(
+                                            onTap: () {
+                                              context.push(
+                                                  '/product/${productList![index].id}');
+                                            },
+                                            child: SearchedProduct(
+                                                product: productList![index])),
                                         // Divider(
                                         //     color: Colors.grey, thickness: mq.height * .001)
                                       ],
@@ -293,14 +258,9 @@ class _CategoryDealsScreenState extends State<CategoryDealsScreen> {
     filterOneList.sort((a, b) => a.name.compareTo(b.name));
 
     return Expanded(
-      child: GridView.builder(
-        shrinkWrap: true,
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          childAspectRatio: 0.65,
-          crossAxisCount: 2,
-          mainAxisSpacing: 0.0,
-          crossAxisSpacing: 8.0,
-        ),
+      child: ListView.builder(
+        scrollDirection: Axis.vertical,
+        physics: const BouncingScrollPhysics(),
         itemCount: filterOneList.length,
         itemBuilder: (context, index) {
           // productList!
@@ -308,37 +268,14 @@ class _CategoryDealsScreenState extends State<CategoryDealsScreen> {
 
           // var sortedByKeyMap = Map.fromEntries(map.entries.toList()
           //   ..sort((e1, e2) => e1.key.compareTo(e2.key)));
-          final user = context.watch<UserProvider>().user;
-          List<dynamic> wishList = user.wishList != null ? user.wishList! : [];
-          bool isProductWishListed = false;
-
-          for (int i = 0; i < wishList.length; i++) {
-            // final productWishList = wishList[i];
-            // final productFromJson =
-            //     Product.fromJson(
-            //         productWishList['product']);
-            // final productId = productFromJson.id;
-
-            if (wishList[i]['product'] == filterOneList[index].id) {
-              isProductWishListed = true;
-              break;
-            }
-          }
           return Column(
             children: [
               //Text("Filter  : ${filterProvider.getFilterNumber}"),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: InkWell(
-                    borderRadius:BorderRadius.circular(8),
-                    onTap: () {
-                      context.push('/product/${filterOneList[index].id}');
-                    },
-                    child: GridWidgetItems(
-                      product: filterOneList[index],
-                      isProductWishListed: isProductWishListed,
-                    )),
-              ),
+              GestureDetector(
+                  onTap: () {
+                    context.push('/product/${filterOneList[index].id}');
+                  },
+                  child: SearchedProduct(product: filterOneList[index])),
               // Divider(
               //     color: Colors.grey, thickness: mq.height * .001)
             ],
@@ -352,15 +289,11 @@ class _CategoryDealsScreenState extends State<CategoryDealsScreen> {
     List<Product>? filterOneList = List<Product>.from(productList!);
     filterOneList.sort(
         (a, b) => a.varients[0]['price'].compareTo(b.varients[0]['price']));
+
     return Expanded(
-      child: GridView.builder(
-        shrinkWrap: true,
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          childAspectRatio: 0.65,
-          crossAxisCount: 2,
-          mainAxisSpacing: 0.0,
-          crossAxisSpacing: 8.0,
-        ),
+      child: ListView.builder(
+        scrollDirection: Axis.vertical,
+        physics: const BouncingScrollPhysics(),
         itemCount: filterOneList.length,
         itemBuilder: (context, index) {
           // productList!
@@ -368,37 +301,14 @@ class _CategoryDealsScreenState extends State<CategoryDealsScreen> {
 
           // var sortedByKeyMap = Map.fromEntries(map.entries.toList()
           //   ..sort((e1, e2) => e1.key.compareTo(e2.key)));
-          final user = context.watch<UserProvider>().user;
-          List<dynamic> wishList = user.wishList != null ? user.wishList! : [];
-          bool isProductWishListed = false;
-
-          for (int i = 0; i < wishList.length; i++) {
-            // final productWishList = wishList[i];
-            // final productFromJson =
-            //     Product.fromJson(
-            //         productWishList['product']);
-            // final productId = productFromJson.id;
-
-            if (wishList[i]['product'] == filterOneList[index].id) {
-              isProductWishListed = true;
-              break;
-            }
-          }
           return Column(
             children: [
               // Text("Filter  : ${filterProvider.getFilterNumber}"),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: InkWell(
-                    borderRadius:BorderRadius.circular(8),
-                    onTap: () {
-                      context.push('/product/${filterOneList[index].id}');
-                    },
-                    child: GridWidgetItems(
-                      product: filterOneList[index],
-                      isProductWishListed: isProductWishListed,
-                    )),
-              ),
+              GestureDetector(
+                  onTap: () {
+                    context.push('/product/${filterOneList[index].id}');
+                  },
+                  child: SearchedProduct(product: filterOneList[index])),
               // Divider(
               //     color: Colors.grey, thickness: mq.height * .001)
             ],
@@ -412,15 +322,11 @@ class _CategoryDealsScreenState extends State<CategoryDealsScreen> {
     List<Product>? filterOneList = List<Product>.from(productList!);
     filterOneList.sort(
         (a, b) => a.varients[0]['price'].compareTo(b.varients[0]['price']));
+
     return Expanded(
-      child: GridView.builder(
-        shrinkWrap: true,
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          childAspectRatio: 0.65,
-          crossAxisCount: 2,
-          mainAxisSpacing: 0.0,
-          crossAxisSpacing: 8.0,
-        ),
+      child: ListView.builder(
+        scrollDirection: Axis.vertical,
+        physics: const BouncingScrollPhysics(),
         itemCount: filterOneList.length,
         itemBuilder: (context, index) {
           // productList!
@@ -428,37 +334,15 @@ class _CategoryDealsScreenState extends State<CategoryDealsScreen> {
 
           // var sortedByKeyMap = Map.fromEntries(map.entries.toList()
           //   ..sort((e1, e2) => e1.key.compareTo(e2.key)));
-          final user = context.watch<UserProvider>().user;
-          List<dynamic> wishList = user.wishList != null ? user.wishList! : [];
-          bool isProductWishListed = false;
-
-          for (int i = 0; i < wishList.length; i++) {
-            // final productWishList = wishList[i];
-            // final productFromJson =
-            //     Product.fromJson(
-            //         productWishList['product']);
-            // final productId = productFromJson.id;
-
-            if (wishList[i]['product'] == filterOneList[index].id) {
-              isProductWishListed = true;
-              break;
-            }
-          }
           return Column(
             children: [
               // Text("Filter  : ${filterProvider.getFilterNumber}"),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: InkWell(
-                    borderRadius:BorderRadius.circular(8),
-                    onTap: () {
-                      context.push('/product/${filterOneList[index].id}');
-                    },
-                    child: GridWidgetItems(
-                      product: filterOneList.reversed.toList()[index],
-                      isProductWishListed: isProductWishListed,
-                    )),
-              ),
+              GestureDetector(
+                  onTap: () {
+                    context.push('/product/${filterOneList[index].id}');
+                  },
+                  child: SearchedProduct(
+                      product: filterOneList.reversed.toList()[index])),
               // Divider(
               //     color: Colors.grey, thickness: mq.height * .001)
             ],
@@ -468,6 +352,12 @@ class _CategoryDealsScreenState extends State<CategoryDealsScreen> {
     );
   }
 }
+
+
+
+
+
+
 
 /*
 class CategoryDealsScreen extends StatefulWidget {
@@ -596,6 +486,7 @@ class _CategoryDealsScreenState extends State<CategoryDealsScreen> {
 
 
 */
+
 
 /*
 

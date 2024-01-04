@@ -1,8 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:ecommerce_major_project/features/product_details/screens/product_detail_screen.dart';
 import 'package:ecommerce_major_project/features/return_product/services/refund_service.dart';
 import 'package:ecommerce_major_project/models/returns.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:ecommerce_major_project/constants/global_variables.dart';
 import 'package:ecommerce_major_project/features/admin/services/admin_services.dart';
@@ -113,8 +113,23 @@ class _ReturnDetailsScreenState extends State<ReturnDetailsScreen> {
                         padding: const EdgeInsets.only(top: 8.0),
                         child: InkWell(
                           onTap: () {
-                            context.push(
-                                '/product/${widget.returns.returnedProducts[i]['product']['_id']}');
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) {
+                                  return ProductDetailScreen(
+                                    productId: widget.returns
+                                        .returnedProducts[i]['product']['_id'],
+                                    color: widget.returns.returnedProducts[i]
+                                        ['color'],
+                                    size: widget.returns.returnedProducts[i]
+                                        ['size'],
+                                  );
+                                },
+                              ),
+                            );
+                            // @hirdesh change this to pass the above arguments.
+                            // context.push(
+                            //     '/product/${widget.returns.returnedProducts[i]['product']['_id']}');
                           },
                           child: Row(
                             children: [
@@ -176,7 +191,7 @@ class _ReturnDetailsScreenState extends State<ReturnDetailsScreen> {
                                             padding: EdgeInsets.only(
                                                 left: mq.width * .025),
                                             child: Text(
-                                              "Quantity: x${widget.returns.returnedProducts[i]['quantity']}",
+                                              "Quantity: ${widget.returns.returnedProducts[i]['quantity']}",
                                               style: const TextStyle(
                                                   color: Colors.black,
                                                   fontSize: 11),
