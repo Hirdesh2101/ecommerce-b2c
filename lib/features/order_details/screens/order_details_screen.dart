@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:ecommerce_major_project/features/product_details/screens/product_detail_screen.dart';
 import 'package:ecommerce_major_project/features/return_product/services/refund_service.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -90,7 +91,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
             Step(
               // title: Text("Shipping"),
               title: const Text("ORDER_PACKING"),
-              content: const Text("Your are order has been shipped"),
+              content: const Text("Your order has been shipped"),
               isActive: currentStep > 1,
               state: currentStep > 1 ? StepState.complete : StepState.indexed,
             ),
@@ -118,7 +119,6 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
           ]);
     super.initState();
   }
-
 
   // only for admins
   void changeOrderStatus(int status) {
@@ -173,8 +173,18 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                         padding: const EdgeInsets.only(top: 8.0),
                         child: InkWell(
                           onTap: () {
-                            context.push(
-                                '/product/${widget.order.products[i]['product']['_id']}');
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) {
+                                  return ProductDetailScreen(
+                                    productId: widget.order.products[i]
+                                        ['product']['_id'],
+                                    color: widget.order.products[i]['color'],
+                                    size: widget.order.products[i]['size'],
+                                  );
+                                },
+                              ),
+                            );
                           },
                           child: Row(
                             children: [
@@ -236,7 +246,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                             padding: EdgeInsets.only(
                                                 left: mq.width * .025),
                                             child: Text(
-                                              "Quantity: x${widget.order.products[i]['quantity']}",
+                                              "Quantity: ${widget.order.products[i]['quantity']}",
                                               style: const TextStyle(
                                                   color: Colors.black,
                                                   fontSize: 11),
@@ -324,13 +334,24 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                     actions: [
                                       TextButton(
                                           onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: const Text(
+                                            'No',
+                                            style:
+                                                TextStyle(color: Colors.teal),
+                                          )),
+                                      TextButton(
+                                          onPressed: () {
                                             refundServices.requestCancel(
                                                 context: context,
                                                 order: widget.order);
+                                            Navigator.of(context).pop();
                                           },
                                           child: const Text(
-                                            'Cancel',
-                                            style: TextStyle(color: Colors.red),
+                                            'Yes',
+                                            style: TextStyle(
+                                                color: Colors.redAccent),
                                           ))
                                     ],
                                   );

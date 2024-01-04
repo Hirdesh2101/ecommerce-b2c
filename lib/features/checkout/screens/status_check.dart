@@ -22,8 +22,7 @@ class CheckStatus extends StatefulWidget {
 
 class AddFundsCheckStatusState extends State<CheckStatus> {
   Timer? timer;
-  Timer? timer2;
-  int seconds = 15;
+  // Timer? timer2;
   bool isLoading = true;
   dynamic status;
   CheckoutServices checkoutServices = CheckoutServices();
@@ -37,27 +36,36 @@ class AddFundsCheckStatusState extends State<CheckStatus> {
         isLoading = false;
       });
     });
-    timer = Timer.periodic(const Duration(seconds: 15), (Timer t) {
+    timer = Timer.periodic(const Duration(seconds: 10), (Timer t) {
       //if (!isLoading && status['status'] == "PAYMENT_PENDING") {
-      fetchData();
+      if (status['status'] == "PAYMENT_INITIATED") {
+        fetchData();
+        debugPrint("Timer");
+      }
+      if (status['status'] == "PAYMENT_INITIATED") {
+        timer?.cancel();
+        setState(() {
+          status['status'] = null;
+        });
+      }
       //}
     });
-    timer2 = Timer.periodic(const Duration(seconds: 1), (Timer t) {
-      setState(() {
-        if (seconds == 0) {
-          seconds = 15;
-        } else {
-          seconds--;
-        }
-      });
-    });
+    // timer2 = Timer.periodic(const Duration(seconds: 1), (Timer t) {
+    //   setState(() {
+    //     if (seconds == 0) {
+    //       seconds = 15;
+    //     } else {
+    //       seconds--;
+    //     }
+    //   });
+    // });
     super.initState();
   }
 
   @override
   void dispose() {
     timer?.cancel();
-    timer2?.cancel();
+    // timer2?.cancel();
     super.dispose();
   }
 
@@ -84,7 +92,7 @@ class AddFundsCheckStatusState extends State<CheckStatus> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           SizedBox(height: mq.height * .05),
-          isLoading || status['status'] == "PAYMENT_PENDING"
+          isLoading || status['status'] == "PAYMENT_INITIATED"
               ? const Text(
                   'Processing Payment...',
                   style: TextStyle(
@@ -114,10 +122,10 @@ class AddFundsCheckStatusState extends State<CheckStatus> {
                       textAlign: TextAlign.center,
                     ),
           if (!isLoading &&
-              status['status'] != "PAYMENT_PENDING" &&
+              status['status'] != "PAYMENY_INITIATED" &&
               status['status'] != "PAYMENT_SUCCESS")
             SizedBox(height: mq.height * .05),
-          isLoading || status['status'] == "PAYMENT_PENDING"
+          isLoading || status['status'] == "PAYMENT_INITIATED"
               ? Lottie.asset('assets/transfer_fundsprocess.json',
                   width: mq.width, height: mq.width, fit: BoxFit.cover)
               : status['status'] == "PAYMENT_SUCCESS"
@@ -136,11 +144,11 @@ class AddFundsCheckStatusState extends State<CheckStatus> {
               textAlign: TextAlign.start,
             ),
           if (!isLoading &&
-              status['status'] != "PAYMENT_PENDING" &&
+              status['status'] != "PAYMENT_INITIATED" &&
               status['status'] != "PAYMENT_SUCCESS")
             SizedBox(height: mq.height * .05),
           if (!isLoading &&
-              status['status'] != "PAYMENT_PENDING" &&
+              status['status'] != "PAYMENT_INITIATED" &&
               status['status'] != "PAYMENT_SUCCESS")
             const Text(
               "SORRY THE ORDER COULD NOT BE PLACED \nA REFUND HAS BEEN ISSUED\n IT GENERALLY TAKES 5 TO 7 DAYS TO PROCESS THE REFUND AMOUNT",
@@ -148,7 +156,7 @@ class AddFundsCheckStatusState extends State<CheckStatus> {
               textAlign: TextAlign.center,
             ),
           SizedBox(height: mq.height * .05),
-          if (!isLoading && status['status'] != "PAYMENT_PENDING")
+          if (!isLoading && status['status'] != "PAYMENT_INITIATED")
             Container(
                 margin: const EdgeInsets.symmetric(horizontal: 20),
                 child: CustomButton(

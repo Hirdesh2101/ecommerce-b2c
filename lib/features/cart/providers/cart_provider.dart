@@ -24,6 +24,7 @@ class CartProvider extends ChangeNotifier {
     _updateSum();
     notifyListeners();
   }
+
   void _updateSum() {
     num newSum = 0;
     for (var cartItem in _cart) {

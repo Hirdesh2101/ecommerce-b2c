@@ -59,8 +59,10 @@ class AllReturnsList extends StatelessWidget {
                         child: InkWell(
                           borderRadius: BorderRadius.circular(20),
                           onTap: () {
-          String currentPath = getCurrentPathWithoutQuery(context);
-                            context.go('$currentPath/returns',extra: allOrders![index]);
+                            String currentPath =
+                                getCurrentPathWithoutQuery(context);
+                            context.go('$currentPath/returns',
+                                extra: allOrders![index]);
                           },
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
@@ -202,7 +204,7 @@ class AllReturnsList extends StatelessWidget {
                                                                       mq.width *
                                                                           .025),
                                                           child: Text(
-                                                            "Quantity: x${allOrders![index].returnedProducts[j]['quantity']}",
+                                                            "Quantity: ${allOrders![index].returnedProducts[j]['quantity']}",
                                                             style: const TextStyle(
                                                                 color: Colors
                                                                     .black,

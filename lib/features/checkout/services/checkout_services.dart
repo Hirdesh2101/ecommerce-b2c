@@ -38,7 +38,7 @@ class CheckoutServices {
             context: context,
             onSuccess: () {
               // If products are available then it will return true
-              
+
               isProductAvailable = true;
             },
           );
@@ -48,7 +48,7 @@ class CheckoutServices {
       } else {
         if (context.mounted) {
           showSnackBar(
-            context: context, text: "Please check your internet connection!");
+              context: context, text: "Please check your internet connection!");
         }
         return false;
       }
@@ -124,14 +124,14 @@ class CheckoutServices {
         }
         return charges;
       } else {
-       if (context.mounted) {
-         showSnackBar(
-            context: context, text: "Please check your internet connection!");
-       }
+        if (context.mounted) {
+          showSnackBar(
+              context: context, text: "Please check your internet connection!");
+        }
         return "Please check your internet connection!";
       }
     } catch (e) {
-     if (context.mounted) showSnackBar(context: context, text: e.toString());
+      if (context.mounted) showSnackBar(context: context, text: e.toString());
       return "Error: $e";
     }
   }
@@ -155,7 +155,6 @@ class CheckoutServices {
 
         // var data = jsonDecode(res.body);
         if (context.mounted) {
-          
           httpErrorHandle(
             response: res,
             context: context,
@@ -168,7 +167,7 @@ class CheckoutServices {
       } else {
         if (context.mounted) {
           showSnackBar(
-            context: context, text: "Please check your internet connection!");
+              context: context, text: "Please check your internet connection!");
         }
         return "Please check your internet connection!";
       }
@@ -212,7 +211,6 @@ class CheckoutServices {
         );
       }
     } catch (e) {
-      
       if (context.mounted) showSnackBar(context: context, text: e.toString());
     }
   }
@@ -245,19 +243,7 @@ class CheckoutServices {
         httpErrorHandle(
           response: res,
           context: context,
-          onSuccess: () {
-            // success on the payment will redirect the user
-            // to the payment successful dialog, order placed
-            // clear the cart
-            // and add the address as the current address if one didn't exist before
-            // add the payment successful dialog here!
-            // the gif and showDialog
-            // showSnackBar(context: context, text: "Your order has been placed");
-            // User user = userProvider.user.copyWith(
-            //   cart: [],
-            // );
-            // userProvider.setUserFromModel(user);
-          },
+          onSuccess: () {},
         );
 
         if (res.statusCode == 200) {

@@ -31,7 +31,6 @@ class Cart {
       quantity: map['quantity'] as int,
       color: map['color'] as String,
       size: map['size'] as String,
-     
     );
   }
 

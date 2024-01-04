@@ -54,6 +54,10 @@ class _CartProductState extends State<CartProduct> {
         color: widget.color,
         size: widget.size);
     widget.fetchCart();
+    // setState(() {
+    //   quantity--;
+    //   widget.quantity++;
+    // });
   }
 
   void decreaseQuantity(Product product) async {
@@ -63,6 +67,10 @@ class _CartProductState extends State<CartProduct> {
         color: widget.color,
         size: widget.size);
     widget.fetchCart();
+    // setState(() {
+    //   quantity++;
+    //   widget.quantity--;
+    // });
   }
 
   @override
@@ -143,8 +151,7 @@ class _CartProductState extends State<CartProduct> {
                           width: mq.width * .025,
                           height: mq.width * .025,
                           decoration: BoxDecoration(
-                            color: Color(int.parse(
-                                widget.color)),
+                            color: Color(int.parse(widget.color)),
                             shape: BoxShape.circle,
                           ),
                         ),
@@ -161,7 +168,6 @@ class _CartProductState extends State<CartProduct> {
                   ),
                   Container(
                     width: mq.width * .57,
-
                     padding: EdgeInsets.only(left: mq.width * .025),
                     child: quantity == 0
                         ? const Text(
