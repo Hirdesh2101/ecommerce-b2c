@@ -93,8 +93,7 @@ class OrderServices {
         return isSuccess;
       }
 
-      if (orderHistoryModel.orderId == null ||
-          orderHistoryModel.id == orderHistoryModel.stepName) {
+      if (orderHistoryModel.orderId == null) {
         if (context.mounted) {
           showSnackBar(context: context, text: "Unknown error occurred!");
         }
@@ -155,6 +154,7 @@ class OrderServices {
           .collection('orders')
           .doc(orderModel.id)
           .collection('history')
+          .orderBy("stepRequestedAt")
           .get();
     } catch (e) {
       debugPrint('Error fetching order history: $e');

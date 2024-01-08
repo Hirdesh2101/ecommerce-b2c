@@ -13,7 +13,7 @@ import 'package:provider/provider.dart';
 //for web http://127.0.0.1:3000
 //for ios http://localhost:3000
 //for external devices: Your pc IP (192.168.1.3). Run ipconfig /all inc cmd to find.
-String uri = 'http://192.168.29.168:3000';
+String uri = 'http://192.168.1.18:3000';
 
 class GlobalVariables {
   //Razor pay details

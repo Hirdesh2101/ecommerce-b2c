@@ -477,11 +477,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   }
 
   void _handlePaymentError(PaymentFailureResponse response) {
-    CheckoutServices().updateOrder(
-        context: context,
-        orderId: recentOrderId ?? '',
-        status: 'ORDER_CANCELLED',
-        paymentStatus: 'PAYMENT_FAILURE');
+    CheckoutServices().updateOrderWhenCancelled(
+      context: context,
+      orderId: recentOrderId ?? '',
+    );
     OrderDialog.showOrderStatusDialog(
       context,
       subtitle:

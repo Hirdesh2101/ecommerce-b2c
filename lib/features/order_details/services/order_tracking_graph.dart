@@ -26,9 +26,9 @@ class OrderTrackingGraph {
     if (orderHistoryList.isEmpty) {
       print("Order history list is empty");
       return null;
-    } else if (orderHistoryList[0].stepName == 'ORDER_RECEIVED') {
+    } else if (orderHistoryList[0].stepName == 'PAYMENT_STATUS_CHECK') {
       OrderTrackingDataStructure? orderTrackingDataStructure =
-          _traverseOrderGraph(orderHistoryList, 0, orderReceivedNode);
+          _traverseOrderGraph(orderHistoryList, 0, paymentStatusCheckNode);
 
       if (orderTrackingDataStructure == null) {
         return null;
@@ -127,16 +127,12 @@ class OrderTrackingGraph {
   }
 
   ///This is the starting node of the graph.
+  OrderTrackingDataStructure paymentStatusCheckNode =
+      OrderTrackingDataStructure(
+    currentNode: "PAYMENT_STATUS_CHECK",
+  );
   OrderTrackingDataStructure orderReceivedNode = OrderTrackingDataStructure(
     currentNode: "ORDER_RECEIVED",
-  );
-  OrderTrackingDataStructure paymentStatusCheckNodeAccepted =
-      OrderTrackingDataStructure(
-    currentNode: "PAYMENT_STATUS_CHECK",
-  );
-  OrderTrackingDataStructure paymentStatusCheckNodeDeclined =
-      OrderTrackingDataStructure(
-    currentNode: "PAYMENT_STATUS_CHECK",
   );
   OrderTrackingDataStructure orderPackingNode = OrderTrackingDataStructure(
     currentNode: "ORDER_PACKING",
@@ -195,11 +191,11 @@ class OrderTrackingGraph {
   ///Creates the graph of order tracking.
   ///You can visualize the graph here: https://lucid.app/lucidspark/6bc152d6-c265-4c69-a2a6-dd61bfad9bf8/edit?viewport_loc=-2901%2C-303%2C3677%2C1683%2C0_0&invitationId=inv_3a4d33da-1ab9-49b0-b929-c8b145e9b29a
   void _createOrderGraph() {
-    orderReceivedNode.acceptedNode = paymentStatusCheckNodeAccepted;
-    orderReceivedNode.declinedNode = paymentStatusCheckNodeDeclined;
+    paymentStatusCheckNode.acceptedNode = orderReceivedNode;
+    paymentStatusCheckNode.declinedNode = orderCancelledNode;
 
-    paymentStatusCheckNodeAccepted.acceptedNode = orderPackingNode;
-    paymentStatusCheckNodeAccepted.declinedNode = orderCancelledNode;
+    orderReceivedNode.acceptedNode = orderPackingNode;
+    orderReceivedNode.declinedNode = refundRequestedNodeOrder;
 
     orderPackingNode.acceptedNode = orderInTransitNode;
     orderPackingNode.declinedNode = refundRequestedNodeOrder;
@@ -212,9 +208,6 @@ class OrderTrackingGraph {
     refundRequestedNodeOrder.declinedNode = manualRefundRequiredNodeOrder;
 
     manualRefundRequiredNodeOrder.acceptedNode = orderCancelledNode;
-
-    paymentStatusCheckNodeDeclined.acceptedNode = refundRequestedNodeOrder;
-    paymentStatusCheckNodeDeclined.declinedNode = orderCancelledNode;
   }
 
   ///Creates the graph of return tracking.
@@ -242,14 +235,6 @@ class OrderTrackingGraph {
 
   //It has all the models created for the order tracking. This will be used in graph.
   final Map<String, OrderHistoryModel> orderPreTrackingDefinedModels = {
-    "ORDER_RECEIVED": OrderHistoryModel(
-      stepName: "ORDER_RECEIVED",
-      stepStatus: "Waiting for Seller to respond",
-      actionRequiredBy: "Seller",
-      acceptActionName: "Accepted",
-      declineActionName: "Declined",
-      stepRequestedAt: DateTime.now(),
-    ),
     "PAYMENT_STATUS_CHECK": OrderHistoryModel(
       stepName: "PAYMENT_STATUS_CHECK",
       stepStatus: "Automatic check",
@@ -258,6 +243,14 @@ class OrderTrackingGraph {
       declineActionName: "Failed",
       trackingDetails: {"Payment ID": ""},
       isTrackingDetailsRequired: true,
+      stepRequestedAt: DateTime.now(),
+    ),
+    "ORDER_RECEIVED": OrderHistoryModel(
+      stepName: "ORDER_RECEIVED",
+      stepStatus: "Waiting for Seller to respond",
+      actionRequiredBy: "Seller",
+      acceptActionName: "Accepted",
+      declineActionName: "Declined",
       stepRequestedAt: DateTime.now(),
     ),
     "ORDER_PACKING": OrderHistoryModel(
@@ -275,7 +268,7 @@ class OrderTrackingGraph {
       stepStatus: "On the way",
       actionRequiredBy: "Seller",
       acceptActionName: "Completed",
-      trackingDetails: {"Tracking ID": ""},
+      trackingDetails: {"Tracking Link/ID": ""},
       isTrackingDetailsRequired: true,
       stepRequestedAt: DateTime.now(),
     ),
@@ -284,7 +277,7 @@ class OrderTrackingGraph {
       stepStatus: "Order out for delivery",
       actionRequiredBy: "Seller",
       acceptActionName: "Completed",
-      trackingDetails: {"Tracking ID": ""},
+      trackingDetails: {"Tracking Link/ID": ""},
       isTrackingDetailsRequired: true,
       stepRequestedAt: DateTime.now(),
     ),

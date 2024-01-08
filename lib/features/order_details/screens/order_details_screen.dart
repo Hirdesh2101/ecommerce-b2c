@@ -51,23 +51,12 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
     try {
       isSuccess = await OrderServices().fetchOrderHistory(context, orderModel);
 
-      if (isSuccess && orderModel.orderHistoryList.isEmpty) {
-        OrderHistoryModel orderHistoryModel = OrderTrackingGraph()
-            .orderPreTrackingDefinedModels["ORDER_RECEIVED"]!;
-        orderHistoryModel.orderId = orderModel.id;
-        orderHistoryModel.userId = orderModel.userId;
-
+      if (!isSuccess || orderModel.orderHistoryList.isEmpty) {
         if (context.mounted) {
-          isSuccess = await OrderServices().updateOrderHistory(
-              context, orderHistoryModel,
-              orderModel: orderModel);
-        }
-
-        if (isSuccess) {
-          orderModel.orderHistoryList.add(orderHistoryModel);
-        } else {
-          print(
-              "Failed while adding new order history model but got success in fetching");
+          showSnackBar(
+            context: context,
+            text: "Unknown error occurred! Refresh or check manually",
+          );
         }
       }
 

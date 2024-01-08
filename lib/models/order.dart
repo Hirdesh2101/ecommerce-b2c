@@ -36,7 +36,6 @@ class Order {
     this.razorPayOrder = '',
     this.paymentId = '',
   }) {
-
     updateTotalQuantities();
     orderedAtDateTime ??= DateTime.fromMillisecondsSinceEpoch(orderedAt);
   }
@@ -104,7 +103,7 @@ class Order {
 ///This model is for fetching order history. Visit the link to get more details:
 ///https://lucid.app/lucidspark/6bc152d6-c265-4c69-a2a6-dd61bfad9bf8/edit?invitationId=inv_3a4d33da-1ab9-49b0-b929-c8b145e9b29a&page=0_0#
 class OrderHistoryModel {
-  ///Id = Timestamp of when order was requested in milliSecondsEpoch
+  ///Id = step name
   String id = "";
   String? orderId;
   String? userId;
@@ -150,16 +149,8 @@ class OrderHistoryModel {
     this.stepRequestedAt,
     this.stepCompletedAt,
   }) {
-    if (id == stepName) {
-      if (stepRequestedAt != null) {
-        id = stepRequestedAt!.millisecondsSinceEpoch.toString();
-      }
-    } else if (id == "") {
-      if (stepRequestedAt != null) {
-        id = stepRequestedAt!.millisecondsSinceEpoch.toString();
-      } else {
-        id = stepName;
-      }
+    if (id == "") {
+      id = stepName;
     }
 
     if (stepStatus.isEmpty) {
@@ -188,7 +179,6 @@ class OrderHistoryModel {
       stepStatusColor = {"green": "0xFF009688"};
       stepCompletedAt ??= DateTime.now();
     } else if (tempStepStatus.contains("decline") ||
-        tempStepStatus.contains("unsuccess") ||
         tempStepStatus.contains("incomplete") ||
         tempStepStatus.contains("fail") ||
         tempStepStatus.contains("reject") ||
