@@ -177,26 +177,23 @@ class CheckoutServices {
     }
   }
 
-  // pdates the order with quantity and payment status after payment status
-  Future<void> updateOrder({
+  // updates the order with quantity and payment status after payment status
+  Future<void> updateOrderWhenCancelled({
     required BuildContext context,
     required String orderId,
-    required String status,
-    required String paymentStatus,
   }) async {
     final String? authToken = await GlobalVariables.getFirebaseAuthToken();
 
     try {
-      http.Response res = await http.put(
-        Uri.parse('$uri/api/update-order-status'),
+      print("Cancelling order as payment is cancelled");
+      http.Response res = await http.post(
+        Uri.parse('$uri/api/update-order-when-payment-cancelled'),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
           'Authorization': '$authToken',
         },
         body: jsonEncode({
           'orderId': orderId,
-          'status': status,
-          'payment_status': paymentStatus
         }),
       );
 

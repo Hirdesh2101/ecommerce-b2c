@@ -83,7 +83,7 @@ class ReturnServices {
     try {
       http.Response res = await http.post(
         Uri.parse(
-          '$uri/api/cancel-order',
+          '$uri/api/cancel-order-by-user',
         ),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
@@ -100,6 +100,7 @@ class ReturnServices {
           onSuccess: () {
             showSnackBar(
                 context: context, text: 'Order cancelled Successfully');
+            Navigator.of(context).pop();
             final tabProvider =
                 Provider.of<TabProvider>(context, listen: false);
 

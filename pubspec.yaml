@@ -91,7 +91,7 @@ dependencies:
     image_picker: ^1.0.4
 
     # for app icon
-    
+
     # awesome_notifications: ^0.7.4+1
 
     # for chat bot
@@ -113,7 +113,7 @@ dependencies:
     google_sign_in: ^6.1.5
     firebase_ui_oauth_google: ^1.2.11
     firebase_ui_oauth_apple: ^1.2.14
-
+    cloud_firestore: ^4.11.0
 
 flutter_launcher_icons:
     android: "launcher_icon"

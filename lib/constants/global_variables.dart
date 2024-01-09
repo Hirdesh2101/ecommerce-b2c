@@ -12,8 +12,8 @@ import 'package:provider/provider.dart';
 //for android http://10.0.2.2:3000
 //for web http://127.0.0.1:3000
 //for ios http://localhost:3000
-//for external devices: Your pc IP (10.0.2.2:3000). Run ipconfig/all inc cmd to find.
-String uri = 'http://10.0.2.2:3000';
+//for external devices: Your pc IP (192.168.1.3). Run ipconfig /all inc cmd to find.
+String uri = 'http://192.168.1.18:3000';
 
 class GlobalVariables {
   //Razor pay details
@@ -21,6 +21,9 @@ class GlobalVariables {
   static const String razorPayTestKey = "rzp_test_7NBmERXaABkUpY";
   static const String razorPaySecretKey = "TO BE UPDATED";
   static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
+  static String companyCopyright = "© Stavan Co.";
+  static String rupeeSymbol = '₹';
 
   // COLORS
   static const appBarGradient = LinearGradient(
@@ -71,6 +74,21 @@ class GlobalVariables {
     'https://images-na.ssl-images-amazon.com/images/G/31/Symbol/2020/00NEW/1242_450Banners/PL31_copy._CB432483346_.jpg',
     'https://images-na.ssl-images-amazon.com/images/G/31/img21/shoes/September/SSW/pc-header._CB641971330_.jpg',
   ];
+
+  static Map<int, String> monthMapping = {
+    1: 'Jan',
+    2: 'Feb',
+    3: 'Mar',
+    4: 'Apr',
+    5: 'May',
+    6: 'Jun',
+    7: 'Jul',
+    8: 'Aug',
+    9: 'Sep',
+    10: 'Oct',
+    11: 'Nov',
+    12: 'Dec',
+  };
   // static const List<Map<String, String>> categoryImages = [
   //   {
   //     'title': 'Mobiles',
