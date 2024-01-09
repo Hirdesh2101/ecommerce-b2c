@@ -125,6 +125,64 @@ class OrderServices {
     }
   }
 
+  Future<bool> fetchOrder(
+      BuildContext context, order_model.Order orderModel) async {
+    debugPrint("Fetching order with ID: ${orderModel.id}");
+    bool isSuccess = false;
+
+    bool isInternetConnected = await checkNetworkConnectivity();
+    if (!isInternetConnected) {
+      debugPrint("No internet connection");
+      if (context.mounted) {
+        showSnackBar(
+          context: context,
+          text: 'Please check your internet connection!',
+        );
+      }
+      return isSuccess;
+    }
+
+    final String? authToken = await GlobalVariables.getFirebaseAuthToken();
+    try {
+      http.Response res = await http.put(
+        Uri.parse('$uri/api/fetch-order-details'),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': '$authToken',
+        },
+        body: jsonEncode({
+          'orderId': orderModel.id,
+        }),
+      );
+
+      if (context.mounted) {
+        httpErrorHandle(
+          response: res,
+          context: context,
+          onSuccess: () {
+            isSuccess = true;
+            order_model.Order newOrderModel =
+                order_model.Order.fromJson(res.body);
+            orderModel.status = newOrderModel.status;
+            orderModel.razorPayOrder = newOrderModel.razorPayOrder;
+            orderModel.paymentAt = newOrderModel.paymentAt;
+            orderModel.paymentId = newOrderModel.paymentId;
+            orderModel.paymentStatus = newOrderModel.paymentStatus;
+          },
+        );
+      }
+    } catch (e) {
+      debugPrint('Error fetching order: $e');
+      if (context.mounted) {
+        showSnackBar(
+            context: context, text: "Error fetching order details: $e");
+      }
+      isSuccess = false;
+    }
+
+    return isSuccess;
+  }
+
   ///Fetches the order history of a patricular order model from firebase add to
   ///order model's list
   Future<bool> fetchOrderHistory(

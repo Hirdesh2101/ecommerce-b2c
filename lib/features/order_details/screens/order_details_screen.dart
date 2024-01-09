@@ -40,6 +40,38 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
     symbol: '₹ ',
   );
 
+  Future<bool> _loadOrder() async {
+    setState(() {
+      showProgress = true;
+    });
+
+    bool isSuccess = false;
+
+    try {
+      isSuccess = await OrderServices().fetchOrder(context, orderModel);
+
+      if (!isSuccess) {
+        if (context.mounted) {
+          showSnackBar(
+            context: context,
+            text: "Unknown error occurred! Refresh or check manually",
+          );
+        }
+      } else {
+        isSuccess = await _loadOrderHistory();
+      }
+    } catch (e) {
+      print("Error loading order: $e");
+      isSuccess = false;
+    }
+
+    setState(() {
+      showProgress = false;
+    });
+
+    return isSuccess;
+  }
+
   ///Fetches the order history for the order
   Future<bool> _loadOrderHistory() async {
     setState(() {
@@ -155,7 +187,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                 )
               : RefreshIndicator(
                   onRefresh: () async {
-                    await _loadOrderHistory();
+                    await _loadOrder();
                   },
                   child: Container(
                     padding: const EdgeInsets.only(
@@ -351,60 +383,63 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                               }
                                             },
                                             style: ElevatedButton.styleFrom(
-                                                // alignment: Alignment.center,
-                                                backgroundColor:
-                                                    const Color.fromARGB(
-                                                        255, 255, 100, 100)),
+                                              backgroundColor:
+                                                  const Color.fromARGB(
+                                                      255, 255, 100, 100),
+                                            ),
                                             child: const Text(
                                               "Return Product",
                                               style: TextStyle(
                                                   color: Colors.white),
-                                            ))
-                                        : orderModel.status ==
+                                            ),
+                                          )
+                                        : (orderModel.status ==
                                                     "ORDER_RECEIVED" ||
                                                 orderModel.status ==
-                                                    "ORDER_PACKING"
+                                                    "ORDER_PACKING")
                                             ? ElevatedButton(
                                                 onPressed: () {
                                                   showAdaptiveDialog(
-                                                      barrierDismissible: true,
-                                                      context: context,
-                                                      builder: (context) {
-                                                        return AlertDialog(
-                                                          content: const Text(
-                                                              'Are you sure you want to cancel the order?'),
-                                                          actions: [
-                                                            TextButton(
-                                                                onPressed: () {
-                                                                  refundServices.requestCancel(
-                                                                      context:
-                                                                          context,
-                                                                      order: widget
-                                                                          .order);
-                                                                },
-                                                                child:
-                                                                    const Text(
-                                                                  'Cancel',
-                                                                  style: TextStyle(
-                                                                      color: Colors
-                                                                          .red),
-                                                                ))
-                                                          ],
-                                                        );
-                                                      });
+                                                    barrierDismissible: true,
+                                                    context: context,
+                                                    builder: (context) {
+                                                      return AlertDialog(
+                                                        content: const Text(
+                                                            'Are you sure you want to cancel the order?'),
+                                                        actions: [
+                                                          TextButton(
+                                                            onPressed: () {
+                                                              refundServices
+                                                                  .requestCancel(
+                                                                context:
+                                                                    context,
+                                                                order: widget
+                                                                    .order,
+                                                              );
+                                                            },
+                                                            child: const Text(
+                                                              'Yes',
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .red),
+                                                            ),
+                                                          )
+                                                        ],
+                                                      );
+                                                    },
+                                                  );
                                                 },
                                                 style: ElevatedButton.styleFrom(
-                                                    backgroundColor:
-                                                        const Color.fromARGB(
-                                                            255,
-                                                            255,
-                                                            100,
-                                                            100)),
+                                                  backgroundColor:
+                                                      const Color.fromARGB(
+                                                          255, 255, 100, 100),
+                                                ),
                                                 child: const Text(
                                                   "Cancel Order",
                                                   style: TextStyle(
                                                       color: Colors.white),
-                                                ))
+                                                ),
+                                              )
                                             : const SizedBox.shrink()
                                   ],
                                 ),

@@ -8,10 +8,10 @@ class Order {
   final int orderedAt;
   String status;
   final int totalPrice;
-  final String paymentStatus;
+  String paymentStatus;
   int paymentAt = 0;
-  final String razorPayOrder;
-  final String paymentId;
+  String razorPayOrder;
+  String paymentId;
   final List<dynamic> returnProducts;
 
   DateTime? orderedAtDateTime;
@@ -88,9 +88,9 @@ class Order {
       orderedAt: map['orderedAt'] as int,
       status: map['status'] as String,
       totalPrice: map['totalPrice'] as int,
-      paymentAt: map['paymentAt'] as int,
+      paymentAt: map['paymentAt'] != null ? map['paymentAt'] as int : 0,
       razorPayOrder: map['razorPayOrder'] as String,
-      paymentId: map['paymentId'] as String,
+      paymentId: map['paymentId'] != null ? map['paymentId'] as String : "",
     );
   }
 
