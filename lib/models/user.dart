@@ -5,8 +5,8 @@ import 'dart:convert';
 class User {
   final String id;
   final String name;
-  final String email;
-  final String phoneNumber;
+  final String? email;
+  final String? phoneNumber;
   final String address;
   final String type;
   final String token;

@@ -1,9 +1,12 @@
 import 'package:ecommerce_major_project/constants/global_variables.dart';
 import 'package:ecommerce_major_project/constants/utils.dart';
+import 'package:ecommerce_major_project/features/billing/services/bill_pdf_syncfusion_api.dart';
 import 'package:ecommerce_major_project/features/order_details/widgets/custom_widgets.dart';
 import 'package:ecommerce_major_project/models/order.dart';
+import 'package:ecommerce_major_project/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class OrderScreenWidgets {
   ///Shows the details for the payment status and all IDs of razorpay.
@@ -19,8 +22,8 @@ class OrderScreenWidgets {
 
     for (int i = 0; i < orderModel.products.length; i++) {
       //TODO: CHange below to marked price
-      itemSubtotal += (orderModel.orderedQuantity) *
-          (orderModel.products[i]['price'] as int);
+      itemSubtotal += (orderModel.products[i]['quantity'] as int) *
+          (orderModel.products[i]['markedPrice'] as int);
     }
     discountPrice = itemSubtotal - orderModel.totalPrice;
     discountPcnt = ((discountPrice * 100) ~/ itemSubtotal);
@@ -137,7 +140,7 @@ class OrderScreenWidgets {
                               ),
                               Expanded(
                                 child: Text(
-                                  '${orderModel.products[index]['quantity']} x ${orderModel.products[index]['price']}',
+                                  '${orderModel.products[index]['quantity']} x ${orderModel.products[index]['markedPrice']}',
                                   textAlign: TextAlign.end,
                                   style: GoogleFonts.lato(
                                     fontSize: 12,
@@ -147,7 +150,7 @@ class OrderScreenWidgets {
                               ),
                               Expanded(
                                 child: Text(
-                                  '${GlobalVariables.rupeeSymbol}${orderModel.products[index]['quantity'] * orderModel.products[index]['price']}',
+                                  '${GlobalVariables.rupeeSymbol}${orderModel.products[index]['quantity'] * orderModel.products[index]['markedPrice']}',
                                   textAlign: TextAlign.end,
                                   style: GoogleFonts.lato(
                                     fontSize: 14,
@@ -321,7 +324,15 @@ class OrderScreenWidgets {
                         Expanded(
                           flex: 5,
                           child: InkWell(
-                            onTap: () async {},
+                            onTap: () async {
+                              await BillPdfSyncfusionApi(
+                                customerModel: Provider.of<UserProvider>(
+                                        context,
+                                        listen: false)
+                                    .user,
+                                orderModel: orderModel,
+                              ).generateBillPdf();
+                            },
                             child: Container(
                               decoration: const BoxDecoration(
                                 color: Color(0xFF3861F6),

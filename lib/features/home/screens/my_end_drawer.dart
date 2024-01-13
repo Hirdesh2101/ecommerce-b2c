@@ -62,7 +62,7 @@ class _MyEndDrawerState extends State<MyEndDrawer> {
               //current logged in userName
               accountName: Text(myUser.name),
               //current logged in userEmail
-              accountEmail: Text(myUser.email),
+              accountEmail: Text(myUser.email!),
               currentAccountPicture: Container(
                 decoration: BoxDecoration(
                     shape: BoxShape.circle, color: Colors.deepOrange[900]),
