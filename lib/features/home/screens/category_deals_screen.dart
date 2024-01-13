@@ -2,7 +2,6 @@ import 'package:ecommerce_major_project/constants/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-
 import 'package:ecommerce_major_project/main.dart';
 import 'package:ecommerce_major_project/models/product.dart';
 import 'package:ecommerce_major_project/constants/global_variables.dart';
