@@ -1,24 +1,35 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
-import 'package:ecommerce_major_project/models/user.dart';
+import 'package:ecommerce_major_project/common/widgets/color_loader_2.dart';
+import 'package:ecommerce_major_project/features/product_details/widgets/buybuttons.dart';
+import 'package:ecommerce_major_project/features/product_details/widgets/delivery_location.dart';
+import 'package:ecommerce_major_project/features/product_details/widgets/details_widget.dart';
+import 'package:ecommerce_major_project/features/product_details/widgets/icon_details.dart';
+import 'package:ecommerce_major_project/features/product_details/widgets/price_and_title.dart';
+import 'package:ecommerce_major_project/features/product_details/widgets/ratings_reviews.dart';
+import 'package:ecommerce_major_project/features/product_details/widgets/similar_products.dart';
+import 'package:ecommerce_major_project/features/product_details/widgets/size_and_color.dart';
+import 'package:ecommerce_major_project/features/product_details/widgets/top_image.dart';
+import 'package:ecommerce_major_project/models/cart.dart';
+import 'package:ecommerce_major_project/providers/tab_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_adaptive_scaffold/flutter_adaptive_scaffold.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-
 import 'package:ecommerce_major_project/main.dart';
 import 'package:ecommerce_major_project/models/product.dart';
 import 'package:ecommerce_major_project/constants/utils.dart';
 import 'package:ecommerce_major_project/providers/user_provider.dart';
 import 'package:ecommerce_major_project/constants/global_variables.dart';
-import 'package:ecommerce_major_project/features/search/screens/search_screen.dart';
-import 'package:ecommerce_major_project/features/search_delegate/my_search_screen.dart';
 import 'package:ecommerce_major_project/features/product_details/services/product_detail_services.dart';
 
 class ProductDetailScreen extends StatefulWidget {
   static const routeName = '/product-details';
-  final Product product;
-
-  const ProductDetailScreen({Key? key, required this.product})
+  final String productId;
+  final String? color;
+  final String? size;
+  const ProductDetailScreen(
+      {Key? key, required this.productId, this.color, this.size})
       : super(key: key);
 
   @override
@@ -30,305 +41,433 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
   num myRating = 0.0;
   double avgRating = 0.0;
-  int currentIndex = 0;
+  int selectedSize = -1;
+  int selectedColor = 0;
+
+  int counterFiveStars = 0;
+  int counterFourStars = 0;
+  int counterThreeStars = 0;
+  int counterTwoStars = 0;
+  int counterOneStars = 0;
+
+  Product? product;
+  List<Product>? _similarProducts;
+  bool isProductLoading = true;
+  bool isProductOutOfStock = false;
 
   @override
   void initState() {
+    // if (widget.color != null && widget.size != null) {
+    //   debugPrint("Color is ${widget.color}");
+    //   debugPrint("Size is ${widget.size}");
+    //   selectedColor = int.parse(widget.color!, radix: 16);
+    //   selectedSize = int.parse(widget.size!, radix: 16);
+    // }
+    fetchProduct(widget.productId);
     super.initState();
-    double totalRating = 0.0;
+  }
 
-    for (int i = 0; i < widget.product.rating!.length; i++) {
-      totalRating += widget.product.rating![i].rating;
-      //showing our own rating in the product details page
-      //overall rating will be avgRating but
-      //when we see a particular product we will be able to see
-      //our given rating, i.e.  myRating
-      if (widget.product.rating![i].userId ==
-          Provider.of<UserProvider>(context, listen: false).user.id) {
-        myRating = widget.product.rating![i].rating;
+  fetchProduct(String productId) async {
+    var id = Provider.of<UserProvider>(context, listen: false).user.id;
+    setState(() {
+      isProductLoading = true;
+    });
+    product = await productDetailServices.getProductById(
+      context: context,
+      productId: productId,
+    );
+    _similarProducts = await productDetailServices.fetchSimilarProducts(
+      context: context,
+      category: product!.category,
+    );
+    if (product != null) {
+      double totalRating = 0.0;
+
+      for (int i = 0; i < product!.rating!.length; i++) {
+        totalRating += product!.rating![i].rating;
+        //showing our own rating in the product! details page
+        //overall rating will be avgRating but
+        //when we see a particular product! we will be able to see
+        //our given rating, i.e.  myRating
+        if (product!.rating![i].rating.toInt() == 1) {
+          counterOneStars++;
+        } else if (product!.rating![i].rating.toInt() == 2) {
+          counterTwoStars++;
+        } else if (product!.rating![i].rating.toInt() == 3) {
+          counterThreeStars++;
+        } else if (product!.rating![i].rating.toInt() == 4) {
+          counterFourStars++;
+        } else if (product!.rating![i].rating.toInt() == 5) {
+          counterFiveStars++;
+        }
+        if (product!.rating![i].userId == id) {
+          myRating = product!.rating![i].rating;
+        }
+      }
+      if (totalRating != 0) {
+        avgRating = totalRating / product!.rating!.length;
+      }
+
+      List<dynamic> variants = product!.varients;
+      for (int variant = 0; variant < variants.length; variant++) {
+        if (variants[variant]['color'] == widget.color) {
+          for (int size = 0; size < variants[variant]['sizes'].length; size++) {
+            if (variants[variant]['sizes'][size]['size'] == widget.size) {
+              selectedColor = variant;
+              selectedSize = size;
+              isProductOutOfStock =
+                  variants[variant]['sizes'][size]['quantity'] == 0;
+              break;
+            }
+          }
+          break;
+        }
       }
     }
-    if (totalRating != 0) {
-      avgRating = totalRating / widget.product.rating!.length;
+    _similarProducts = _similarProducts!.where((similarProduct) {
+      return similarProduct.id != productId;
+    }).toList();
+
+    setState(() {
+      isProductLoading = false;
+    });
+  }
+
+  var selectedNavigation = 0;
+  static const tabs = ['', '', ''];
+  final destinations = tabs
+      .map(
+        (page) =>
+            const NavigationDestination(icon: Icon(Icons.abc), label: 'page'),
+      )
+      .toList();
+  void addToCart() {
+    if (selectedSize == -1) {
+      showSnackBar(
+        context: context,
+        text: "Please select a size!",
+      );
+    } else if (isProductOutOfStock) {
+      showSnackBar(context: context, text: "Product is out of stock!");
+      return;
+    } else {
+      debugPrint("Triggered add to cart <====");
+      debugPrint("Product is  : ${product!.name}");
+      productDetailServices.addToCart(
+          context: context,
+          product: product!,
+          color: product!.varients[selectedColor]['color'],
+          size: product!.varients[selectedColor]['sizes'][selectedSize]
+              ['size']);
+      debugPrint("Execution finished add to cart <====");
+      showSnackBar(
+          context: context,
+          text: "Added to Cart",
+          onTapFunction: () {
+            final tabProvider =
+                Provider.of<TabProvider>(context, listen: false);
+            tabProvider.setTab(2);
+            // GlobalVariables.navigatorKey.currentState!
+            //     .popUntil((route) => route.isFirst);
+            //TODO here use global context for redirection
+            context.go('/cart');
+            //Navigator.pushNamed(context, CartScreen.);
+          },
+          actionLabel: "View");
     }
   }
 
-  void navigateToSearchScreen(String query) {
-    //make sure to pass the arguments here!
-
-    Navigator.pushNamed(context, SearchScreen.routeName, arguments: query);
+  void buyNow() {
+    if (selectedSize == -1) {
+      showSnackBar(
+        context: context,
+        text: "Please select a size!",
+      );
+    } else if (isProductOutOfStock) {
+      showSnackBar(context: context, text: "Product is out of stock!");
+      return;
+    } else if (product!.isProductDiscontinued) {
+      showSnackBar(context: context, text: "Product is discontinued!");
+      return;
+    } else {
+      debugPrint("Triggered buynow <====");
+      debugPrint("Product is  : ${product!.name}");
+      List<Cart> buyNowCart = [
+        Cart(
+            product: product!,
+            quantity: 1,
+            color: product!.varients[selectedColor]['color'],
+            size: product!.varients[selectedColor]['sizes'][selectedSize]
+                ['size'])
+      ];
+      List<dynamic> buyNowUserCart = [
+        {
+          'product': product!.id,
+          'quantity': 1,
+          'color': product!.varients[selectedColor]['color'],
+          'size': product!.varients[selectedColor]['sizes'][selectedSize]
+              ['size']
+        }
+      ];
+      context.push('/checkout', extra: [
+        product!.varients[selectedColor]['price'].toString(),
+        buyNowCart,
+        buyNowUserCart
+      ]);
+    }
   }
 
-  void addToCart() {
-    print("Triggered add to cart <====");
-    print("Product is  : ${widget.product.name}");
-    productDetailServices.addToCart(context: context, product: widget.product);
-    print("Execution finished add to cart <====");
+  void setColor(int color) {
+    if (selectedColor != color) {
+      setState(() {
+        selectedColor = color;
+        selectedSize = -1;
+      });
+    }
+  }
+
+  void setSize(int size) {
+    if (selectedSize != size) {
+      setState(() {
+        selectedSize = size;
+        isProductOutOfStock = product!.varients[selectedColor]['sizes']
+                [selectedSize]['quantity'] ==
+            0;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    bool isProductAvailable = widget.product.quantity == 0;
-    return Scaffold(
-      appBar: GlobalVariables.getAppBar(
-          context: context, onClickSearchNavigateTo: MySearchScreen()),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: mq.width * .03)
-              .copyWith(top: 10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Stack(
-                alignment: AlignmentDirectional.topEnd,
-                children: [
-                  Column(
-                    children: [
-                      SizedBox(
-                        height: mq.height * .3,
-                        child: PageView.builder(
-                            physics: BouncingScrollPhysics(),
-                            onPageChanged: (value) {
-                              setState(() {
-                                currentIndex = value;
-                              });
-                            },
-                            itemCount: widget.product.images.length,
-                            // physics: PageScrollPhysics(),
-                            scrollDirection: Axis.horizontal,
-                            itemBuilder: (context, index) {
-                              // print("............index = $index");
-                              return Builder(
-                                builder: (context) => Container(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: mq.height * .05),
-                                  child: Image.network(
-                                      widget.product.images[index],
-                                      fit: BoxFit.contain,
-                                      height: mq.width * .3),
-                                ),
-                              );
-                            }),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: List.generate(
-                          widget.product.images.length,
-                          (index) => buildDot(index: index),
+    return AdaptiveLayout(
+      //     primaryNavigation: SlotLayout(
+      //   config: <Breakpoint, SlotLayoutConfig>{
+      //     Breakpoints.medium: SlotLayout.from(
+      //       //inAnimation: AdaptiveScaffold.leftOutIn,
+      //       key: const Key('Primary Navigation Medium'),
+      //       builder: (_) => AdaptiveScaffold.standardNavigationRail(
+      //         selectedIndex: selectedNavigation,
+      //         onDestinationSelected: (int newIndex) {
+      //           setState(() {
+      //             selectedNavigation = newIndex;
+      //           });
+      //         },
+      //         leading: const Icon(Icons.menu),
+      //         destinations: destinations
+      //             .map((_) => AdaptiveScaffold.toRailDestination(_))
+      //             .toList(),
+      //         // backgroundColor: navRailTheme.backgroundColor,
+      //         // selectedIconTheme: navRailTheme.selectedIconTheme,
+      //         // unselectedIconTheme: navRailTheme.unselectedIconTheme,
+      //         // selectedLabelTextStyle: navRailTheme.selectedLabelTextStyle,
+      //         // unSelectedLabelTextStyle: navRailTheme.unselectedLabelTextStyle,
+      //       ),
+      //     ),
+      //     Breakpoints.large: SlotLayout.from(
+      //       key: const Key('Primary Navigation Large'),
+      //       //inAnimation: AdaptiveScaffold.leftOutIn,
+      //       builder: (_) => AdaptiveScaffold.standardBottomNavigationBar(
+      //         // selectedIndex: selectedNavigation,
+      //         // onDestinationSelected: (int newIndex) {
+      //         //   setState(() {
+      //         //     selectedNavigation = newIndex;
+      //         //   });
+      //         // },
+      //         // //extended: true,
+      //         // leading: const Row(
+      //         //   mainAxisAlignment: MainAxisAlignment.spaceAround,
+      //         //   children: <Widget>[
+      //         //     Text(
+      //         //       'REPLY',
+      //         //       style: TextStyle(color: Color.fromARGB(255, 255, 201, 197)),
+      //         //     ),
+      //         //     Icon(Icons.menu_open)
+      //         //   ],
+      //         // ),
+      //         destinations: destinations
+      //             // .map((_) => AdaptiveScaffold.to(_))
+      //             // .toList(),
+      //         // trailing: trailingNavRail,
+      //         // backgroundColor: navRailTheme.backgroundColor,
+      //         // selectedIconTheme: navRailTheme.selectedIconTheme,
+      //         // unselectedIconTheme: navRailTheme.unselectedIconTheme,
+      //         // selectedLabelTextStyle: navRailTheme.selectedLabelTextStyle,
+      //         // unSelectedLabelTextStyle: navRailTheme.unselectedLabelTextStyle,
+      //       ),
+      //     ),
+      //   },
+      // ),
+      body: SlotLayout(
+        config: <Breakpoint, SlotLayoutConfig>{
+          Breakpoints.smallAndUp: SlotLayout.from(
+            key: const Key('details-Small'),
+            builder: (_) => Scaffold(
+              appBar: GlobalVariables.getAppBar(
+                  context: context,
+                  //TODO add actions
+                  wantActions: false
+                  //onClickSearchNavigateTo: const MySearchScreen()
+                  ),
+              body: isProductLoading
+                  ? const Center(
+                      child: ColorLoader2(),
+                    )
+                  : SingleChildScrollView(
+                      child: Padding(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: mq.width * .03)
+                                .copyWith(top: 10),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            TopImage(
+                              product: product!,
+                              height: mq.height * .52,
+                            ),
+                            SizedBox(height: mq.height * .02),
+                            TitleAndPrice(
+                                product: product!,
+                                colorVarient: selectedColor,
+                                avgRating: avgRating,
+                                isProductOutOfStock: isProductOutOfStock),
+                            SizedBox(height: mq.width * .03),
+                            const Divider(thickness: 2),
+                            SizedBox(height: mq.width * .01),
+                            SizeAndColor(
+                                product: product!,
+                                selectedColor: selectedColor,
+                                selectedSize: selectedSize,
+                                setColor: setColor,
+                                setSize: setSize),
+                            Visibility(
+                              visible: !product!.isProductDiscontinued,
+                              child: Column(
+                                children: [
+                                  const DeliveyLocation(),
+                                  SizedBox(height: mq.width * .07),
+                                  BuyButtons(
+                                    addToCart: addToCart,
+                                    buyNow: buyNow,
+                                  ),
+                                  SizedBox(height: mq.width * .03),
+                                  const Divider(thickness: 1),
+                                  SizedBox(height: mq.width * .02),
+                                ],
+                              ),
+                            ),
+                            DetailsWithICons(product: product!),
+                            SizedBox(height: mq.width * .02),
+                            const Divider(thickness: 1),
+                            SizedBox(height: mq.width * .03),
+                            DetilsWidget(product: product!),
+                            SizedBox(height: mq.width * .02),
+                            const Divider(thickness: 1),
+                            SizedBox(height: mq.width * .03),
+                            AllRatings(
+                              counterFiveStars: counterFiveStars,
+                              counterFourStars: counterFourStars,
+                              counterThreeStars: counterThreeStars,
+                              counterTwoStars: counterTwoStars,
+                              counterOneStars: counterOneStars,
+                              avgRating: avgRating,
+                              myRating: myRating,
+                              product: product!,
+                            ),
+                            SizedBox(height: mq.width * .03),
+                            SimilarProducts(
+                              products: _similarProducts,
+                              isProductOutOfStock: isProductOutOfStock,
+                            ),
+                            SizedBox(height: mq.width * .35),
+                          ],
                         ),
                       ),
-                    ],
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      showSnackBar(
-                          context: context,
-                          text:
-                              "Share feature yet to be implemented using deep links");
-                    },
-                    icon: const Icon(Icons.share),
-                  )
-                ],
-              ),
-              SizedBox(height: mq.height * .02),
-
-              Text(
-                widget.product.name,
-                style:
-                    const TextStyle(fontSize: 17, fontWeight: FontWeight.w200),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
-              SizedBox(height: mq.height * .01),
-              // const Text("About the Product",
-              //     style: TextStyle(fontWeight: FontWeight.w700)),
-              Text(widget.product.description,
-                  style: TextStyle(color: Colors.grey.shade500),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis),
-
-              // SizedBox(height: mq.height * .01),
-              Row(
-                // mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      Text("${avgRating.toStringAsFixed(2)} ",
-                          style: const TextStyle(fontWeight: FontWeight.bold)),
-                      Icon(Icons.star, color: Colors.yellow.shade600),
-                      // SizedBox(width: mq.width * .01),
-                      Text(
-                        "(1.8K Reviews)",
-                        style: TextStyle(color: Colors.grey.shade600),
-                      ),
-                    ],
-                  ),
-                  TextButton(
-                      style: TextButton.styleFrom(
-                          backgroundColor: Colors.grey.shade100,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10))),
-                      child: Text("Rate the Product",
-                          style: TextStyle(
-                              color: Colors.grey.shade800,
-                              fontSize: 12,
-                              fontWeight: FontWeight.w600)),
-                      onPressed: () {
-                        showDialog(
-                            context: context,
-                            builder: (context) {
-                              return rateProductDialog();
-                            });
-                      }),
-                ],
-              ),
-              // SizedBox(height: mq.height * .01),
-              // Divider(
-              //   endIndent: mq.width * .01,
-              //   indent: mq.width * .01,
-              //   thickness: 2,
-              //   color: Colors.grey[300],
-              // ),
-              // SizedBox(height: mq.height * .01),
-              isProductAvailable
-                  ? const Text(
-                      "Out of Stock",
-                      style: TextStyle(
-                          color: Colors.redAccent, fontWeight: FontWeight.w600),
-                    )
-                  : const Text("In Stock",
-                      style: TextStyle(color: Colors.teal)),
-              // Container(height: 5, color: Colors.grey[200]),
-              SizedBox(height: mq.height * .01),
-              // ElevatedButton(
-              //   onPressed: () {},
-              //   style: ElevatedButton.styleFrom(
-              //       minimumSize: Size(double.infinity, mq.height * .08),
-              //       backgroundColor: Colors.yellow.shade500),
-              //   child: const Text("Buy Now",
-              //       style: TextStyle(color: Colors.black)),
-              // ),
-              SizedBox(height: mq.width * .025),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(4),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: Colors.black, width: 1),
-                      // color: Color.fromARGB(255, 147, 147, 147),
                     ),
-                    child: Text(
-                      "₹ ${widget.product.price.toStringAsFixed(2)}  ",
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                          fontSize: 20,
-                          // color: Colors.,
-                          fontWeight: FontWeight.w500),
-                    ),
-                  ),
-                  SizedBox(width: mq.width * .05),
-                  ElevatedButton(
-                    onPressed: isProductAvailable
-                        ? () {
-                            showSnackBar(
-                                context: context, text: "Product out of stock");
-                          }
-                        : () {
-                            showSnackBar(
-                                context: context, text: "Added to cart");
-                            addToCart();
-                          },
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.orange.shade800,
-                        minimumSize: Size(mq.width * .45, mq.height * .06),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(22))),
-                    child: const Text("Add to Cart"),
-                  ),
-                ],
-              ),
-
-              // TextButton(
-              //     onPressed: () async {
-              // ProductDetailServices productDetailServices =
-              //     ProductDetailServices();
-
-              // List<User>? userList = [];
-
-              // userList = await productDetailServices.getUserImage(
-              //     context: context, product: widget.product);
-
-              // print("\n\nUserlist is :  ${userList}");
-              // },
-              // child: const Text("Get user image from rating")),
-
-              SizedBox(height: mq.width * .03),
-            ],
+            ),
           ),
-        ),
-      ),
-    );
-  }
-
-  AlertDialog rateProductDialog() {
-    return AlertDialog(
-      title: const Text(
-        "Drag your finger to rate",
-        style: TextStyle(fontSize: 12, fontStyle: FontStyle.normal),
-      ),
-      content: RatingBar.builder(
-        itemSize: 30,
-        glow: true,
-        glowColor: Colors.yellow.shade900,
-        //rating given by user
-        initialRating: double.parse(myRating.toString()),
-        minRating: 1,
-        direction: Axis.horizontal,
-        allowHalfRating: true,
-        itemPadding: EdgeInsets.symmetric(horizontal: mq.width * .0125),
-        itemCount: 5,
-        itemBuilder: (context, _) {
-          return const Icon(Icons.star, color: GlobalVariables.secondaryColor);
-        },
-        //changes here
-        onRatingUpdate: (rating) {
-          productDetailServices.rateProduct(
-            context: context,
-            product: widget.product,
-            rating: rating,
-          );
+          Breakpoints.large: SlotLayout.from(
+            key: const Key('Body Medium'),
+            builder: (_) => Scaffold(
+              body: SingleChildScrollView(
+                  child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: mq.width * .03)
+                    .copyWith(top: 10),
+                child: Column(children: [
+                  TopImage(
+                    product: product!,
+                    height: mq.height * .95,
+                  ),
+                  SizedBox(height: mq.height * .02),
+                ]),
+              )),
+            ),
+          ),
         },
       ),
-      // contentPadding: EdgeInsets.zero,
-      actionsPadding: EdgeInsets.zero,
-      actionsAlignment: MainAxisAlignment.center,
-      actions: [
-        TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: const Text(
-              "Rate",
-              style: TextStyle(color: Colors.black),
-            ))
-      ],
-    );
-  }
-
-  AnimatedContainer buildDot({int? index}) {
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 200),
-      margin: const EdgeInsets.only(right: 5),
-      height: 6,
-      width: currentIndex == index ? 20 : 6,
-      decoration: BoxDecoration(
-        color: currentIndex == index
-            ? const Color(0xFFFF7643)
-            : const Color(0xFFD8D8D8),
-        borderRadius: BorderRadius.circular(3),
+      secondaryBody: SlotLayout(
+        config: <Breakpoint, SlotLayoutConfig>{
+          Breakpoints.large: SlotLayout.from(
+            key: const Key('Body Medium'),
+            builder: (_) => Scaffold(
+              body: SingleChildScrollView(
+                  child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: mq.width * .03)
+                    .copyWith(top: 10),
+                child: Column(children: [
+                  SizedBox(height: mq.height * .02),
+                  TitleAndPrice(
+                      product: product!,
+                      colorVarient: selectedColor,
+                      avgRating: avgRating,
+                      isProductOutOfStock: isProductOutOfStock),
+                  SizedBox(height: mq.width * .03),
+                  const Divider(thickness: 2),
+                  SizedBox(height: mq.width * .01),
+                  SizeAndColor(
+                      product: product!,
+                      selectedColor: selectedColor,
+                      selectedSize: selectedSize,
+                      setColor: setColor,
+                      setSize: setSize),
+                  const DeliveyLocation(),
+                  SizedBox(height: mq.width * .07),
+                  BuyButtons(
+                    addToCart: addToCart,
+                    buyNow: buyNow,
+                  ),
+                  SizedBox(height: mq.width * .03),
+                  const Divider(thickness: 1),
+                  SizedBox(height: mq.width * .02),
+                  DetailsWithICons(product: product!),
+                  SizedBox(height: mq.width * .02),
+                  const Divider(thickness: 1),
+                  SizedBox(height: mq.width * .03),
+                  DetilsWidget(product: product!),
+                  SizedBox(height: mq.width * .02),
+                  const Divider(thickness: 1),
+                  SizedBox(height: mq.width * .03),
+                  AllRatings(
+                    counterFiveStars: counterFiveStars,
+                    counterFourStars: counterFourStars,
+                    counterThreeStars: counterThreeStars,
+                    counterTwoStars: counterTwoStars,
+                    counterOneStars: counterOneStars,
+                    avgRating: avgRating,
+                    myRating: myRating,
+                    product: product!,
+                  ),
+                  SizedBox(height: mq.width * .03),
+                  SimilarProducts(
+                    products: _similarProducts,
+                    isProductOutOfStock: isProductOutOfStock,
+                  ),
+                  SizedBox(height: mq.width * .35),
+                ]),
+              )),
+            ),
+          )
+        },
       ),
     );
   }

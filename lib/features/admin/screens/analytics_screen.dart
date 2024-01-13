@@ -1,5 +1,5 @@
 import 'package:ecommerce_major_project/constants/global_variables.dart';
-import 'package:ecommerce_major_project/features/account/services/account_services.dart';
+import 'package:ecommerce_major_project/features/auth/services/auth_service.dart';
 import 'package:flutter/material.dart';
 
 import 'package:ecommerce_major_project/main.dart';
@@ -7,6 +7,7 @@ import 'package:ecommerce_major_project/features/admin/models/sales.dart';
 import 'package:ecommerce_major_project/common/widgets/color_loader_2.dart';
 import 'package:ecommerce_major_project/features/admin/services/admin_services.dart';
 import 'package:ecommerce_major_project/features/admin/widgets/sales_graph/sales_graph.dart';
+import 'package:provider/provider.dart';
 
 class AnalyticsScreen extends StatefulWidget {
   const AnalyticsScreen({super.key});
@@ -44,6 +45,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final authService = Provider.of<AuthService>(context);
     // print("Earnings list<Sales> is \n\n${earnings![0].earning}");
     // return Center(child: ColorLoader3());
     return Scaffold(
@@ -106,13 +108,13 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                 ),
       floatingActionButton: FloatingActionButton.extended(
         elevation: 10,
-        icon: Icon(Icons.logout_outlined),
+        icon: const Icon(Icons.logout_outlined),
         onPressed: () {
-          AccountServices().logOut(context);
+          authService.logOut(context);
         },
         backgroundColor: Colors.deepPurple.shade600,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-        label: Text("LogOut", style: TextStyle(fontSize: 12)),
+        label: const Text("LogOut", style: TextStyle(fontSize: 12)),
       ),
     );
   }

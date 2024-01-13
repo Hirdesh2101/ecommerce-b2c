@@ -1,16 +1,16 @@
+import 'package:ecommerce_major_project/constants/utils.dart';
 import 'package:ecommerce_major_project/features/home/providers/search_provider.dart';
 import 'package:ecommerce_major_project/features/home/services/home_services.dart';
 import 'package:ecommerce_major_project/main.dart';
-import 'package:ecommerce_major_project/providers/user_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:ecommerce_major_project/features/search/screens/search_screen.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 
 class MySearchScreen extends StatefulWidget {
-  String? searchQueryAlready;
-  MySearchScreen({this.searchQueryAlready, super.key});
+  static const String routeName = "/search-screen-util";
+  const MySearchScreen({super.key});
 
   @override
   State<MySearchScreen> createState() => _MySearchScreenState();
@@ -46,8 +46,8 @@ class _MySearchScreenState extends State<MySearchScreen> {
   // maximum 10 items stored in history
   int maxLength = 10;
 
-  SpeechToText _speechToText = SpeechToText();
-  bool _speechEnabled = false;
+  final SpeechToText _speechToText = SpeechToText();
+  // bool _speechEnabled = false;
   String _lastWords = '';
 
   makeSuggestionList() async {
@@ -60,7 +60,8 @@ class _MySearchScreenState extends State<MySearchScreen> {
     setState(() {});
   }
 
-  deleteSearchHistoryItem(String deleteQuery) async {
+  deleteSearchHistoryItem(String deleteQuery, int index) async {
+    historyList!.removeAt(historyList!.length - index - 1);
     homeServices.deleteSearchHistoryItem(
         context: context, deleteQuery: deleteQuery);
     setState(() {});
@@ -69,6 +70,10 @@ class _MySearchScreenState extends State<MySearchScreen> {
   addToHistory(String searchQuery) async {
     homeServices.addToHistory(context: context, searchQuery: searchQuery);
     setState(() {});
+  }
+
+  searchViaApi(String searchQuery) async {
+    return await homeServices.searchProducts(context, searchQuery);
   }
 
   @override
@@ -90,12 +95,16 @@ class _MySearchScreenState extends State<MySearchScreen> {
 
   void navigateToSearchScreen(String query) {
     //make sure to pass the arguments here!
-    Navigator.pushNamed(context, SearchScreen.routeName, arguments: query);
+    String currentPath = getCurrentPathWithoutQuery(context);
+    // Build the new path
+    String newPath = '$currentPath?query=$query';
+    context.go(newPath);
+    //Navigator.pushReplacementNamed(context, SearchScreen.routeName, arguments: query);
   }
 
   /// This has to happen only once per app
   void _initSpeech() async {
-    _speechEnabled = await _speechToText.initialize();
+    await _speechToText.initialize();
     setState(() {});
   }
 
@@ -125,7 +134,7 @@ class _MySearchScreenState extends State<MySearchScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<UserProvider>(context).user;
+    // final user = Provider.of<UserProvider>(context).user;
     final searchProvider = Provider.of<SearchProvider>(context, listen: true);
     // add and remove from buildSuggestionsList according to the search query in onChange
     List<String>? buildSuggestionsList = searchProvider.getSuggetions;
@@ -139,53 +148,27 @@ class _MySearchScreenState extends State<MySearchScreen> {
           backgroundColor: Colors.white,
           leadingWidth: mq.width * .075,
           title: Container(
-            height: mq.height * .055,
             margin: EdgeInsets.only(left: mq.width * .03),
             child: Material(
               borderRadius: BorderRadius.circular(mq.width * .025),
               elevation: 1,
               child: TextFormField(
                 controller: _searchController,
-                onChanged: (val) {
+                onChanged: (val) async {
                   // user is typing something
                   if (val.isNotEmpty) {
                     setState(() {
                       isUserTyping = true;
                     });
-
+                    List<String> searchResults =
+                        await searchViaApi(val.toLowerCase());
                     // show relevant suggestions if they match the value user is typing is matching
                     // character by character from the start [using startsWith()]
                     // if they dont match or stop matching after a certain length of query
                     // remove them from the list
                     // Example :  val : pum,    suggestion : Puma Shoes
                     //            val : pumxyz, suggestion : empty
-                    for (int i = 0; i < allProductsList.length; i++) {
-                      bool searchMatches = allProductsList[i]
-                          .toLowerCase()
-                          .startsWith(val.toLowerCase());
-                      if (searchMatches &&
-                          !buildSuggestionsList!.contains(allProductsList[i])) {
-                        buildSuggestionsList.add(allProductsList[i]);
-                      } else if (!searchMatches &&
-                          buildSuggestionsList!.contains(allProductsList[i])) {
-                        searchProvider
-                            .removeFromSuggestions(allProductsList[i]);
-                      }
-                    }
-                    // if no suggestions match, try to find suggestions which contain the val
-                    // [using contains()]
-                    if (buildSuggestionsList!.isEmpty) {
-                      for (int i = 0; i < allProductsList.length; i++) {
-                        bool searchMatches = allProductsList[i]
-                            .toLowerCase()
-                            .contains(val.toLowerCase());
-                        if (searchMatches &&
-                            !buildSuggestionsList
-                                .contains(allProductsList[i].toLowerCase())) {
-                          buildSuggestionsList.add(allProductsList[i]);
-                        }
-                      }
-                    }
+                    searchProvider.addListToSuggestions(searchResults);
                   }
 
                   // user is not typing OR user has cleared the search bar
@@ -219,7 +202,7 @@ class _MySearchScreenState extends State<MySearchScreen> {
                     navigateToSearchScreen(val.trim());
                   }
 
-                  print("\n\n\nHistory now  -----------> :  $historyList");
+                  debugPrint("\n\n\nHistory now  -----------> :  $historyList");
                 },
                 autofocus: true,
                 // enabled: true,
@@ -228,16 +211,17 @@ class _MySearchScreenState extends State<MySearchScreen> {
                   filled: true,
                   fillColor: Colors.white,
                   contentPadding: EdgeInsets.only(top: mq.width * .03),
-                  border: const OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(7)),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(mq.width * .025),
                       borderSide: BorderSide.none),
-                  enabledBorder: const OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(7)),
-                      borderSide: BorderSide(color: Colors.black38, width: 1)),
-                  focusedBorder: const OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(7)),
+                  enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(mq.width * .025),
                       borderSide:
-                          BorderSide(color: Colors.black38, width: 0.4)),
+                          const BorderSide(color: Colors.black38, width: 1)),
+                  focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(mq.width * .025),
+                      borderSide:
+                          const BorderSide(color: Colors.black38, width: 0.4)),
                   // border: null,
                   hintText: "Search",
                   hintStyle: const TextStyle(fontWeight: FontWeight.w400),
@@ -255,28 +239,44 @@ class _MySearchScreenState extends State<MySearchScreen> {
           actions: [
             Padding(
               padding: EdgeInsets.only(right: mq.width * 0.035),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  InkWell(
-                    onTap: () {
-                      // Scaffold.of(context).openDrawer();
-                      // _scaffoldKey.currentState!.openEndDrawer();
+              child: SizedBox(
+                height: 40,
+                width: 40,
+                child: FloatingActionButton(
+                  elevation: 0,
+                  backgroundColor: const Color.fromARGB(255, 43, 6, 103),
+                  onPressed:
+                      // If not yet listening for speech start, otherwise stop
                       _speechToText.isNotListening
                           ? _startListening
-                          : _stopListening;
-                      // Navigator.of(context).push(
-                      //     MaterialPageRoute(builder: (_) => SpeechExample()));
-                    },
-                    child: Icon(
-                        _speechToText.isNotListening
-                            ? Icons.mic_off
-                            : Icons.mic,
-                        size: 30),
-                  ),
-                ],
+                          : _stopListening,
+                  tooltip: 'Listen',
+                  child: Icon(
+                      _speechToText.isNotListening ? Icons.mic_off : Icons.mic,
+                      color: Colors.white),
+                ),
               ),
             ),
+            // Padding(
+
+            //   padding: EdgeInsets.only(right: mq.width * 0.35),
+            //   child: InkWell(
+            //     onTap: () {
+            //       // Scaffold.of(context).openDrawer();
+            //       // _scaffoldKey.currentState!.openEndDrawer();
+            //       _speechToText.isNotListening
+            //           ? _startListening
+            //           : _stopListening;
+            //       // Navigator.of(context).push(
+            //       //     MaterialPageRoute(builder: (_) => SpeechExample()));
+            //     },
+            //     child: Icon(
+            //         _speechToText.isNotListening
+            //             ? Icons.mic_off
+            //             : Icons.mic,
+            //         size: 30),
+            //   ),
+            // ),
           ],
         ),
         body: Center(
@@ -549,8 +549,7 @@ class _MySearchScreenState extends State<MySearchScreen> {
                           // delete search history item
                           trailing: IconButton(
                             onPressed: () {
-                              homeServices.deleteSearchHistoryItem(
-                                  context: context, deleteQuery: listTitle);
+                              deleteSearchHistoryItem(listTitle, index);
                             },
                             icon: const Icon(Icons.cancel),
                           ),
@@ -562,124 +561,9 @@ class _MySearchScreenState extends State<MySearchScreen> {
                       },
                     ),
         ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
-        floatingActionButton: Padding(
-          padding: const EdgeInsets.only(bottom: 55),
-          child: SizedBox(
-            height: 40,
-            width: 40,
-            child: FloatingActionButton(
-              elevation: 0,
-              backgroundColor: Color.fromARGB(255, 43, 6, 103),
-              onPressed:
-                  // If not yet listening for speech start, otherwise stop
-                  _speechToText.isNotListening
-                      ? _startListening
-                      : _stopListening,
-              tooltip: 'Listen',
-              child: Icon(
-                  _speechToText.isNotListening ? Icons.mic_off : Icons.mic,
-                  color: Colors.white),
-            ),
-          ),
-        ),
+        // floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
+        // floatingActionButton:
       ),
     );
   }
 }
-
-/*
-class MySearchDelegate extends SearchDelegate {
-  MySearchDelegate({required this.searchResults});
-
-  List<String> searchResults;
-
-  //  ['Puma', 'DBZ', 'Bottle', 'Iphone', 'Australia'];
-
-  @override
-  ThemeData appBarTheme(BuildContext context) {
-    return ThemeData(
-      // colorScheme: ColorScheme.dark(background: Colors.redAccent),
-      colorSchemeSeed: Colors.white,
-
-      scaffoldBackgroundColor: const Color.fromARGB(255, 241, 219, 219),
-    );
-  }
-
-  @override
-  Widget? buildLeading(BuildContext context) {
-    return InkWell(
-      onTap: () => close(context, null),
-      child: const Icon(Icons.arrow_back_ios),
-    );
-  }
-
-  @override
-  InputDecorationTheme? get searchFieldDecorationTheme =>
-      const InputDecorationTheme(
-        filled: true,
-        fillColor: Colors.grey,
-        labelStyle: TextStyle(
-          color: Colors.white,
-          fontWeight: FontWeight.bold,
-        ),
-      );
-
-  @override
-  List<Widget>? buildActions(BuildContext context) {
-    return [
-      Padding(
-        padding: const EdgeInsets.only(right: 10.0),
-        child: InkWell(
-          onTap: () {
-            // if search is already empty, close it
-            if (query.isEmpty) {
-              close(context, null);
-            }
-            // else clear the query
-            else {
-              query = '';
-            }
-          },
-          child: const Icon(CupertinoIcons.xmark_circle_fill),
-        ),
-      )
-    ];
-  }
-
-  @override
-  Widget buildResults(BuildContext context) {
-    // void navigateToSearchScreen(String query) {
-    //   //make sure to pass the arguments here!
-    //   Navigator.pushNamed(context, SearchScreen.routeName, arguments: query);
-    // }
-
-    return SearchScreen(searchQuery: query);
-
-    // Center(child: Text(query, style: const TextStyle(fontSize: 50)));
-  }
-
-  @override
-  Widget buildSuggestions(BuildContext context) {
-    List<String> suggestions = searchResults.where((searchResult) {
-      final result = searchResult.toLowerCase();
-      final input = query.toLowerCase();
-      return result.contains(input);
-    }).toList();
-
-    return ListView.builder(
-      itemCount: suggestions.length,
-      itemBuilder: (context, index) {
-        final suggestion = suggestions[index];
-        return ListTile(
-          title: Text(suggestion),
-          onTap: () {
-            query = suggestion;
-            showResults(context);
-          },
-        );
-      },
-    );
-  }
-}
-*/

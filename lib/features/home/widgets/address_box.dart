@@ -33,7 +33,7 @@ class AddressBox extends StatelessWidget {
             child: Padding(
               padding: EdgeInsets.only(left: mq.width * .0125),
               child: Text(
-                "Delivery to ${user.name} - ${user.address}",
+               user.address==""?"Add a new address": "Delivery to ${user.name} - ${user.address}",
                 style: TextStyle(
                     color: GlobalVariables.secondaryGreyTextColor,
                     fontWeight: FontWeight.w500,

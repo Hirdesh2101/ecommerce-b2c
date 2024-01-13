@@ -11,33 +11,88 @@ import 'package:ecommerce_major_project/providers/user_provider.dart';
 import 'package:ecommerce_major_project/constants/error_handling.dart';
 import 'package:ecommerce_major_project/constants/global_variables.dart';
 
-//
-
-/*
-
-
-    var jsondata = '{"id": "${product.id!}"}';
-
-    var url = Uri.parse('$uri/api/add-to-cart');
-
- var response = await post(url, body: jsondata, headers: {
-        'Content-Type': 'application/json; charset=UTF-8',
-        'x-auth-token': userProvider.user.token,
-      });
-      print("response : ==> ${response.body}");
-
-
-*/
-
-//
-
 class ProductDetailServices {
-  void addToCart({
+
+ Future<Product?> getProductById(
+      {required BuildContext context, required String productId}) async {
+    final String? authToken = await GlobalVariables.getFirebaseAuthToken();
+    Product? product;
+    String tokenValue = '$authToken';
+    try {
+      http.Response res = await http
+          .get(Uri.parse('$uri/api/get-product-by-id/$productId'), headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': tokenValue,
+      });
+      
+
+      var data = jsonDecode(res.body);
+      
+      if (context.mounted) {
+        httpErrorHandle(
+          response: res,
+          context: context,
+          onSuccess: () {
+            product = Product.fromJson(data);
+          },
+        );
+      }
+    } catch (e) {
+      if (context.mounted) {
+        showSnackBar(
+          context: context,
+          text: "Following Error in fetching Product : $e");
+      }
+    }
+    return product;
+  }
+
+
+   Future<List<Product>> fetchSimilarProducts(
+      {required BuildContext context, required String category}) async {
+    final String? authToken = await GlobalVariables.getFirebaseAuthToken();
+    List<Product> productList = [];
+    String tokenValue = '$authToken';
+    try {
+      http.Response res = await http
+          .get(Uri.parse('$uri/api/similar-products/?category=$category'), headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': tokenValue,
+      });
+
+      var data = jsonDecode(res.body);
+      if (context.mounted) {
+        httpErrorHandle(
+          response: res,
+          context: context,
+          onSuccess: () {
+            for (Map<String, dynamic> item in data) {
+              // 
+              productList.add(Product.fromJson(item));
+            }
+          },
+        );
+      }
+    } catch (e) {
+      if (context.mounted) {
+        showSnackBar(
+          context: context,
+          text: "Following Error in fetching Simialar Products: $e");
+      }
+    }
+    return productList;
+  }
+
+
+  Future<void> addToCart({
     required BuildContext context,
     required Product product,
+    required String color,
+    required String size
   }) async {
-    print("========> Inside the add to cart function");
+    
     final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final String? authToken = await GlobalVariables.getFirebaseAuthToken();
     try {
       // var bodyData = {"id": "${product.id}"};
       http.Response res = await http.post(
@@ -46,23 +101,23 @@ class ProductDetailServices {
         ),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
-          'x-auth-token': userProvider.user.token,
+          'Authorization': '$authToken',
         },
-        body: jsonEncode({'id': product.id!}),
+        body: jsonEncode({'id': product.id!,'color':color,'size':size}),
       );
 
       // http.Response res = await http.post(
       //   Uri.parse("$uri/api/add-to-cart"),
       //   headers: <String, String>{
       //     'Content-Type': 'application/json; charset=UTF-8',
-      //     'x-auth-token': userProvider.user.token,
+      //     'Authorization': '$authToken',
       //   },
       //   body: jsonEncode({'id': product.id!}),
       // );
-      print(
-          "\n\nuser token after http post request: ===> ${userProvider.user.token} ");
+      // debugPrint(
+      //     "\n\nuser token after http post request: ===> ${'$authToken'} ");
 
-      // print("\nPost request sent successfully...");
+      // 
 
       //use context ensuring the mounted property across async functions
       if (context.mounted) {
@@ -70,82 +125,38 @@ class ProductDetailServices {
           response: res,
           context: context,
           onSuccess: () {
-            print("\nInside on success method..");
+            
             User user =
                 userProvider.user.copyWith(cart: jsonDecode(res.body)['cart']);
             userProvider.setUserFromModel(user);
-            print("\nUser cart now is ${user.cart}");
+            
           },
         );
       }
     } catch (e) {
-      print("\n========>Inside the catch block");
-      showSnackBar(context: context, text: e.toString());
+      
+      if (context.mounted)showSnackBar(context: context, text: e.toString());
     }
   }
-
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-
-  // Future<List<User>?> getUserImage(
-  //     {required BuildContext context, required Product product}) async {
-  //   final userProvider = Provider.of<UserProvider>(context, listen: false);
-  //   List<User>? userList = [];
-
-  //   try {
-  //     http.Response res = await http.get(
-  //       Uri.parse("$uri/api/get-user-of-product"),
-  //       headers: {
-  //         'Content-Type': 'application/json; charset=UTF-8',
-  //         'x-auth-token': userProvider.user.token,
-  //       },
-  //     );
-
-  //     var data = jsonDecode(res.body);
-  //     print("\nData coming -------------------------- $data");
-
-  //     //use context ensuring the mounted property across async functions
-  //     if (context.mounted) {
-  //       httpErrorHandle(
-  //         response: res,
-  //         context: context,
-  //         onSuccess: () {
-  //           // for (Map<String, dynamic> item in data) {
-  //           //   userList.add(User.fromJson(jsonEncode((item))));
-  //           // }
-  //         },
-  //       );
-  //     }
-  //   } catch (e) {
-  //     showSnackBar(context: context, text: e.toString());
-  //   }
-  //   return userList;
-  // }
 
   void rateProduct({
     required BuildContext context,
     required Product product,
     required double rating,
+    required String review,
   }) async {
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final String? authToken = await GlobalVariables.getFirebaseAuthToken();
     try {
       http.Response res = await http.post(
         Uri.parse("$uri/api/rate-product"),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
-          'x-auth-token': userProvider.user.token,
+          'Authorization': '$authToken',
         },
         body: jsonEncode({
           'id': product.id!,
           'rating': rating,
+          'review': review
         }),
       );
 
@@ -158,7 +169,7 @@ class ProductDetailServices {
         );
       }
     } catch (e) {
-      showSnackBar(context: context, text: e.toString());
+     if (context.mounted) showSnackBar(context: context, text: e.toString());
     }
   }
 }

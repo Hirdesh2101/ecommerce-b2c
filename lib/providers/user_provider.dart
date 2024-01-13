@@ -2,15 +2,17 @@ import 'package:flutter/material.dart';
 import '/models/user.dart';
 
 class UserProvider extends ChangeNotifier {
+  bool _isLoading = true;
   User _user = User(
     id: '',
     name: '',
     email: '',
-    password: '',
+    phoneNumber: '',
     address: '',
     type: '',
     token: '',
     imageUrl: '',
+    uid: '',
     cart: [],
     wishList: [],
     searchHistory: [],
@@ -18,6 +20,12 @@ class UserProvider extends ChangeNotifier {
   );
 
   User get user => _user;
+  bool get isLoading => _isLoading;
+
+  void setLoading(bool value){
+    _isLoading = value;
+    notifyListeners();
+  }
 
   void setUser(String user) {
     _user = User.fromJson(user);

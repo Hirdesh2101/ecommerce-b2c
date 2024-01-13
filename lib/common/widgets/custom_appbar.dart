@@ -1,6 +1,3 @@
-import 'package:ecommerce_major_project/main.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 // class CustomAppbar {
   // static AppBar customAppbar = AppBar(

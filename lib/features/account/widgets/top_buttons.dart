@@ -1,34 +1,43 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:ecommerce_major_project/features/home/screens/wish_list_screen.dart';
+import 'package:ecommerce_major_project/constants/utils.dart';
+import 'package:ecommerce_major_project/features/auth/services/auth_service.dart';
+import 'package:ecommerce_major_project/models/order.dart';
+import 'package:ecommerce_major_project/providers/tab_provider.dart';
 import 'package:flutter/material.dart';
-
 import 'package:ecommerce_major_project/main.dart';
-import 'package:ecommerce_major_project/features/cart/screens/cart_screen.dart';
 import 'package:ecommerce_major_project/features/account/widgets/account_button.dart';
-import 'package:ecommerce_major_project/features/account/services/account_services.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
-class TopButtons extends StatelessWidget {
-  TopButtons({Key? key}) : super(key: key);
-
-  // final List<String> buttonNames = [
-  //   "Your Orders",
-  //   "Turn Seller",
-  //   "Log out",
-  //   "Your Wishlist",
-  // ];
+class TopButtons extends StatefulWidget {
+  const TopButtons({Key? key, required this.orders}) : super(key: key);
+  final List<Order>? orders;
 
   @override
+  State<TopButtons> createState() => _TopButtonsState();
+}
+
+class _TopButtonsState extends State<TopButtons> {
+  // final List<String> buttonNames = [
+  @override
   Widget build(BuildContext context) {
+    final tabProvider = Provider.of<TabProvider>(context);
+    final authService = Provider.of<AuthService>(context);
     return Column(
       children: [
         Row(
           children: [
-            AccountButton(text: "Your Orders", onTap: () {}),
+            AccountButton(
+                text: "Your Orders",
+                onTap: () {
+                  String currentPath = getCurrentPathWithoutQuery(context);
+                  context.go('$currentPath/orders');
+                }),
             AccountButton(
                 text: "Your Wishlist",
                 onTap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (_) => WishListScreen()));
+                  String currentPath = getCurrentPathWithoutQuery(context);
+                  context.go('$currentPath/wishlist');
                 }),
           ],
         ),
@@ -38,11 +47,11 @@ class TopButtons extends StatelessWidget {
             AccountButton(
                 text: "Cart",
                 onTap: () {
-                  Navigator.pushNamed(context, CartScreen.routeName);
+                  tabProvider.setTab(2);
+                  context.go('/cart');
                 }),
             AccountButton(
-                text: "Log out",
-                onTap: () => AccountServices().logOut(context)),
+                text: "Log out", onTap: () => authService.logOut(context)),
           ],
         )
       ],
