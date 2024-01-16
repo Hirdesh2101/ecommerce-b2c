@@ -14,9 +14,9 @@ import 'package:provider/provider.dart';
 class WishListScreen extends StatefulWidget {
   // List<Product>? wishList;
   const WishListScreen({
-    Key? key,
+    super.key,
     // this.wishList,
-  }) : super(key: key);
+  });
 
   @override
   State<WishListScreen> createState() => _WishListScreenState();

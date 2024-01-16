@@ -12,8 +12,7 @@ class ReturnDetailsScreen extends StatefulWidget {
   static const String routeName = "/return-details";
   final Return returns;
 
-  const ReturnDetailsScreen({Key? key, required this.returns})
-      : super(key: key);
+  const ReturnDetailsScreen({super.key, required this.returns});
 
   @override
   State<ReturnDetailsScreen> createState() => _ReturnDetailsScreenState();

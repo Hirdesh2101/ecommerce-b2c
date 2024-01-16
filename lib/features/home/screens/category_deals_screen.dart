@@ -14,9 +14,9 @@ class CategoryDealsScreen extends StatefulWidget {
   static const String routeName = '/category-deals';
   final String category;
   const CategoryDealsScreen({
-    Key? key,
+    super.key,
     required this.category,
-  }) : super(key: key);
+  });
 
   @override
   State<CategoryDealsScreen> createState() => _CategoryDealsScreenState();

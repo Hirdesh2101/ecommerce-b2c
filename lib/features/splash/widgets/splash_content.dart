@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 
 class SplashContent extends StatelessWidget {
   const SplashContent({
-    Key? key,
+    super.key,
     this.text,
     this.image,
-  }) : super(key: key);
+  });
   final String? text, image;
 
   @override

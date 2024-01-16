@@ -10,7 +10,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class TopButtons extends StatefulWidget {
-  const TopButtons({Key? key, required this.orders}) : super(key: key);
+  const TopButtons({super.key, required this.orders});
   final List<Order>? orders;
 
   @override

@@ -18,7 +18,7 @@ class OrderDetailsScreen extends StatefulWidget {
   static const String routeName = "/order-details";
   final Order order;
 
-  const OrderDetailsScreen({Key? key, required this.order}) : super(key: key);
+  const OrderDetailsScreen({super.key, required this.order});
 
   @override
   State<OrderDetailsScreen> createState() => _OrderDetailsScreenState();

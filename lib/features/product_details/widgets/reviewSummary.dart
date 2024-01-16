@@ -9,7 +9,7 @@ class ReviewUI extends StatelessWidget {
   final Function onTap, onPressed;
   final bool isLess;
   const ReviewUI({
-    Key? key,
+    super.key,
     required this.image,
     required this.name,
     required this.date,
@@ -18,7 +18,7 @@ class ReviewUI extends StatelessWidget {
     required this.onTap,
     required this.isLess,
     required this.onPressed,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

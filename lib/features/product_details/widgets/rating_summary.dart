@@ -4,7 +4,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class RatingSummary extends StatelessWidget {
   const RatingSummary({
-    Key? key,
+    super.key,
     required this.counter,
     this.average = 0.0,
     this.showAverage = true,
@@ -36,7 +36,7 @@ class RatingSummary extends StatelessWidget {
     this.labelStyle = const TextStyle(fontWeight: FontWeight.w600),
     this.color = Colors.amber,
     this.backgroundColor = const Color(0xFFEEEEEE),
-  }) : super(key: key);
+  });
 
   /// The total number of ratings.
   ///
@@ -252,14 +252,13 @@ class RatingSummary extends StatelessWidget {
 /// ```
 class _ReviewBar extends StatelessWidget {
   const _ReviewBar({
-    Key? key,
     required this.label,
     required this.value,
     this.color = Colors.amber,
     this.backgroundColor = const Color(0xFFEEEEEE),
     this.labelStyle =
         const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-  }) : super(key: key);
+  });
 
   /// The label of the bar.
   ///

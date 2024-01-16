@@ -11,9 +11,9 @@ import 'package:provider/provider.dart';
 
 class CheckStatus extends StatefulWidget {
   const CheckStatus({
-    Key? key,
+    super.key,
     required this.orderId,
-  }) : super(key: key);
+  });
   final String orderId;
 
   @override
