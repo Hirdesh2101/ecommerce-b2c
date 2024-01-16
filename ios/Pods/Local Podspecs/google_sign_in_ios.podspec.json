@@ -22,7 +22,7 @@
 
     ],
     "GoogleSignIn": [
-      "~> 6.2"
+      "~> 7.0"
     ]
   },
   "static_framework": true,
