@@ -14,7 +14,7 @@
   "source_files": "Classes/**/*",
   "public_header_files": "Classes/**/*.h",
   "platforms": {
-    "ios": "8.0"
+    "ios": "11.0"
   },
   "dependencies": {
     "Flutter": [
