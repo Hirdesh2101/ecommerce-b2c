@@ -1,10 +1,7 @@
-import 'package:ecommerce_major_project/common/widgets/bottom_bar.dart';
+import 'package:ecommerce_major_project/app_service.dart';
 import 'package:ecommerce_major_project/common/widgets/custom_button.dart';
-import 'package:ecommerce_major_project/features/admin/screens/admin_screen.dart';
-import 'package:ecommerce_major_project/features/auth/screens/auth_screen.dart';
 import 'package:ecommerce_major_project/features/splash/widgets/splash_content.dart';
 import 'package:ecommerce_major_project/main.dart';
-import 'package:ecommerce_major_project/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -37,13 +34,14 @@ class _BodyState extends State<Body> {
   ];
   @override
   Widget build(BuildContext context) {
+    final appservice = Provider.of<AppService>(context);
     return SafeArea(
       child: SizedBox(
         width: double.infinity,
         child: Column(
           children: <Widget>[
             Expanded(
-              flex: 3,
+              flex: 5,
               child: PageView.builder(
                 onPageChanged: (value) {
                   setState(() {
@@ -80,25 +78,11 @@ class _BodyState extends State<Body> {
                         curve: Curves.easeInOutBack,
                         child: CustomButton(
                           text: "Continue",
-                          onTap: () {
+                          onTap: () async {
                             setState(() {
                               opacity = 0.5;
                             });
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (_) =>
-                                        Provider.of<UserProvider>(context)
-                                                .user
-                                                .token
-                                                .isNotEmpty
-                                            ? Provider.of<UserProvider>(context)
-                                                        .user
-                                                        .type ==
-                                                    'user'
-                                                ? const BottomBar()
-                                                : const AdminScreen()
-                                            : const AuthScreen()));
+                            appservice.onboarding = true;
                           },
                         ),
                       ),

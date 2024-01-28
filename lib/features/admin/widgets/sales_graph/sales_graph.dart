@@ -26,7 +26,7 @@ class SalesGraph extends StatelessWidget {
       BarChartData(
         maxY: 500000,
         minY: 0,
-        gridData: FlGridData(show: false),
+        gridData: const FlGridData(show: false),
         backgroundColor: Colors.white,
         borderData: FlBorderData(
           // show: false,
@@ -111,10 +111,10 @@ class SalesGraph extends StatelessWidget {
         // leftTitles: AxisTitles(
         //   sideTitles: SideTitles(showTitles: false),
         // ),
-        rightTitles: AxisTitles(
+        rightTitles: const AxisTitles(
           sideTitles: SideTitles(showTitles: false),
         ),
-        topTitles: AxisTitles(
+        topTitles: const AxisTitles(
           sideTitles: SideTitles(showTitles: false),
         ),
       );

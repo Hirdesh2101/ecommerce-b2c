@@ -18,13 +18,15 @@ void httpErrorHandle({
     //decoding response.body to String
     //Client error responses (400 – 499)
     //400 Bad Request
-    case 400:
+    case < 500 && > 400:
+      
       showSnackBar(context: context, text: jsonDecode(response.body)['msg']);
       break;
 
     //Server error responses (500 – 599)
     //500 Internal Serveer Error
-    case 500:
+    case < 600 && > 500:
+      
       showSnackBar(context: context, text: jsonDecode(response.body)['error']);
       break;
 

@@ -4,7 +4,8 @@ import 'package:ecommerce_major_project/main.dart';
 import 'package:ecommerce_major_project/models/product.dart';
 import 'package:ecommerce_major_project/common/widgets/color_loader_2.dart';
 import 'package:ecommerce_major_project/features/home/services/home_services.dart';
-import 'package:ecommerce_major_project/features/product_details/screens/product_detail_screen.dart';
+import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 
 class DealOfDay extends StatefulWidget {
   const DealOfDay({super.key});
@@ -16,6 +17,12 @@ class DealOfDay extends StatefulWidget {
 class _DealOfDayState extends State<DealOfDay> {
   final HomeServices homeServices = HomeServices();
   Product? product;
+  final indianRupeesFormat = NumberFormat.currency(
+           name: "INR",
+           locale: 'en_IN',
+           decimalDigits: 0,
+           symbol: '₹ ',
+        );
 
   @override
   void initState() {
@@ -29,8 +36,7 @@ class _DealOfDayState extends State<DealOfDay> {
   }
 
   void navigateToDetailScreen() {
-    Navigator.pushNamed(context, ProductDetailScreen.routeName,
-        arguments: product);
+    context.go('product/${product!.id}');
   }
 
   @override
@@ -76,7 +82,7 @@ class _DealOfDayState extends State<DealOfDay> {
                     //   alignment: Alignment.topLeft,
                     //   padding:
                     //       const EdgeInsets.only(left: 15, right: 40, top: 5),
-                    //   child: Text("₹${product!.price.toStringAsFixed(2)}",
+                    //   child: Text(indianRupeesFormat.format(product.price),
                     //       style: TextStyle(
                     //           fontWeight: FontWeight.bold, fontSize: 18)),
                     // ),

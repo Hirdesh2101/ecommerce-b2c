@@ -6,7 +6,7 @@ class User {
   final String id;
   final String name;
   final String email;
-  final String password;
+  final String phoneNumber;
   final String address;
   final String type;
   final String token;
@@ -15,28 +15,29 @@ class User {
   final List<dynamic>? wishList;
   final List<String>? searchHistory;
   final List<dynamic>? returnList;
+  final String uid;
 
-  User({
-    required this.id,
-    required this.name,
-    required this.email,
-    required this.password,
-    required this.address,
-    required this.type,
-    required this.token,
-    required this.imageUrl,
-    required this.cart,
-    this.wishList,
-    this.searchHistory,
-    this.returnList,
-  });
+  User(
+      {required this.id,
+      required this.name,
+      required this.email,
+      required this.phoneNumber,
+      required this.address,
+      required this.type,
+      required this.token,
+      required this.imageUrl,
+      required this.cart,
+      this.wishList,
+      this.searchHistory,
+      this.returnList,
+      required this.uid});
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,
       'name': name,
       'email': email,
-      'password': password,
+      'phoneNumber': phoneNumber,
       'address': address,
       'type': type,
       'token': token,
@@ -45,6 +46,7 @@ class User {
       'wishList': wishList,
       'searchHistory': searchHistory,
       'returnList': returnList,
+      'uid': uid,
     };
   }
 
@@ -54,11 +56,12 @@ class User {
       id: map['_id'] ?? '',
       name: map['name'] ?? '',
       email: map['email'] ?? '',
-      password: map['password'] ?? '',
+      phoneNumber: map['phoneNumber'] ?? '',
       address: map['address'] ?? '',
       type: map['type'] ?? '',
       token: map['token'] ?? '',
       imageUrl: map['imageUrl'] ?? '',
+      uid: map['uid'] ?? '',
       cart: List<Map<String, dynamic>>.from(
         map['cart']?.map(
               (x) => Map<String, dynamic>.from(x),
@@ -98,29 +101,30 @@ class User {
     String? id,
     String? name,
     String? email,
-    String? password,
+    String? phoneNumber,
     String? address,
     String? type,
     String? token,
     String? imageUrl,
+    String? uid,
     List<dynamic>? cart,
     List<dynamic>? wishList,
     List<String>? searchHistory,
     List<dynamic>? returnList,
   }) {
     return User(
-      id: id ?? this.id,
-      name: name ?? this.name,
-      email: email ?? this.email,
-      password: password ?? this.password,
-      address: address ?? this.address,
-      type: type ?? this.type,
-      token: token ?? this.token,
-      imageUrl: imageUrl ?? this.imageUrl,
-      cart: cart ?? this.cart,
-      wishList: wishList ?? this.wishList,
-      searchHistory: searchHistory ?? this.searchHistory,
-      returnList: returnList ?? this.returnList,
-    );
+        id: id ?? this.id,
+        name: name ?? this.name,
+        email: email ?? this.email,
+        phoneNumber: phoneNumber ?? this.phoneNumber,
+        address: address ?? this.address,
+        type: type ?? this.type,
+        token: token ?? this.token,
+        imageUrl: imageUrl ?? this.imageUrl,
+        cart: cart ?? this.cart,
+        wishList: wishList ?? this.wishList,
+        searchHistory: searchHistory ?? this.searchHistory,
+        returnList: returnList ?? this.returnList,
+        uid: uid ?? this.uid);
   }
 }

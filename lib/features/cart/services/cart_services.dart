@@ -12,23 +12,28 @@ import 'package:ecommerce_major_project/constants/error_handling.dart';
 import 'package:ecommerce_major_project/constants/global_variables.dart';
 
 class CartServices {
-  void removeFromCart({
+  Future<void> removeFromCart({
     required BuildContext context,
     required Product product,
+    required String color,
+    required String size,
   }) async {
-    print("========> Inside the remove from cart function");
+    
     final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final String? authToken = await GlobalVariables.getFirebaseAuthToken();
     try {
       http.Response res = await http.delete(
         Uri.parse(
-          '$uri/api/remove-from-cart/${product.id}',
+          '$uri/api/remove-from-cart',
         ),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
-          'x-auth-token': userProvider.user.token,
+          'Authorization': '$authToken',
         },
         body: jsonEncode({
           'id': product.id!,
+          'color': color,
+          'size': size
         }),
       );
 
@@ -38,17 +43,17 @@ class CartServices {
           response: res,
           context: context,
           onSuccess: () {
-            print("\nInside on success method..");
+            
             User user =
                 userProvider.user.copyWith(cart: jsonDecode(res.body)['cart']);
             userProvider.setUserFromModel(user);
-            print("\nUser cart now is ${user.cart}");
+            
           },
         );
       }
     } catch (e) {
-      print("\n========>Inside the catch block of remove from cart");
-      showSnackBar(context: context, text: e.toString());
+      
+      if (context.mounted) showSnackBar(context: context, text: e.toString());
     }
   }
 }

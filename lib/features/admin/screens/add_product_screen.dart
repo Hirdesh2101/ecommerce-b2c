@@ -58,7 +58,7 @@ Color
         showLoader = true;
       });
 
-      print("\n\nSHOW LOADER value before: ==> $showLoader");
+      
       adminServices.sellProduct(
         context: context,
         name: productNameController.text,
@@ -73,7 +73,7 @@ Color
       // setState(() {
       //   showLoader = false;
       // });
-      print("\n\nSHOW LOADER value after: ==> $showLoader");
+      
     }
     // print(
     //     " user type : \n\n${Provider.of<UserProvider>(context, listen: false).user.email}");
@@ -183,7 +183,8 @@ Color
                         child: DropdownButton(
                           focusColor: Colors.pinkAccent,
                           alignment: Alignment.centerLeft,
-                          dropdownColor: Color.fromARGB(255, 202, 183, 255),
+                          dropdownColor:
+                              const Color.fromARGB(255, 202, 183, 255),
                           borderRadius: BorderRadius.circular(10),
                           value: category,
                           onChanged: (String? newVal) {
@@ -270,7 +271,7 @@ Color
 //         showLoader = true;
 //       });
 
-//       print("\n\nSHOW LOADER value before: ==> $showLoader");
+//       
 //       adminServices.sellProduct(
 //         context: context,
 //         name: productNameController.text,
@@ -284,7 +285,7 @@ Color
 //       // setState(() {
 //       //   showLoader = false;
 //       // });
-//       print("\n\nSHOW LOADER value after: ==> $showLoader");
+//       
 //     }
 //     // print(
 //     //     " user type : \n\n${Provider.of<UserProvider>(context, listen: false).user.email}");

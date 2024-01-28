@@ -4,9 +4,10 @@ class CustomTextField extends StatelessWidget {
   final TextEditingController controller;
   final String hintText;
   final int maxLines;
-  bool? isObscureText;
-  TextInputType inputType;
-  CustomTextField({
+  final bool? isObscureText;
+  final TextInputType inputType;
+
+  const CustomTextField({
     super.key,
     required this.controller,
     required this.hintText,
@@ -37,7 +38,7 @@ class CustomTextField extends StatelessWidget {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(width: 0.25),
+          borderSide: const BorderSide(width: 0.25),
         ),
       ),
       validator: (val) {

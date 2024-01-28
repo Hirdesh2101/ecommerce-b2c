@@ -1,6 +1,0 @@
-framework module pay_ios {
-  umbrella header "pay_ios-umbrella.h"
-
-  export *
-  module * { export * }
-}
