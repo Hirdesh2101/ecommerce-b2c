@@ -9,6 +9,10 @@ import 'package:ecommerce_major_project/features/account/widgets/account_button.
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+import '../../../services/event_logging/analytics_events.dart';
+import '../../../services/event_logging/analytics_service.dart';
+import '../../../services/get_it/locator.dart';
+
 class TopButtons extends StatefulWidget {
   const TopButtons({Key? key, required this.orders}) : super(key: key);
   final List<Order>? orders;
@@ -18,6 +22,9 @@ class TopButtons extends StatefulWidget {
 }
 
 class _TopButtonsState extends State<TopButtons> {
+
+  final AnalyticsService _analytics = locator<AnalyticsService>();
+
   // final List<String> buttonNames = [
   @override
   Widget build(BuildContext context) {
@@ -30,12 +37,18 @@ class _TopButtonsState extends State<TopButtons> {
             AccountButton(
                 text: "Your Orders",
                 onTap: () {
+                  _analytics.track(eventName: AnalyticsEvents.yourOrders, properties: {
+                    "Your Orders Page":"Your orders page has opened successfully"
+                  });
                   String currentPath = getCurrentPathWithoutQuery(context);
                   context.go('$currentPath/orders');
                 }),
             AccountButton(
                 text: "Your Wishlist",
                 onTap: () {
+                  _analytics.track(eventName: AnalyticsEvents.yourOrders, properties: {
+                    "Your wishlist Page":"Your wishlist page has opened successfully"
+                  });
                   String currentPath = getCurrentPathWithoutQuery(context);
                   context.go('$currentPath/wishlist');
                 }),
@@ -47,11 +60,19 @@ class _TopButtonsState extends State<TopButtons> {
             AccountButton(
                 text: "Cart",
                 onTap: () {
+                  _analytics.track(eventName: AnalyticsEvents.cart, properties: {
+                    "Cart":"Cart has opened successfully"
+                  });
                   tabProvider.setTab(2);
                   context.go('/cart');
                 }),
             AccountButton(
-                text: "Log out", onTap: () => authService.logOut(context)),
+                text: "Log out", onTap: () {
+              _analytics.track(eventName: AnalyticsEvents.logOut, properties: {
+                "LogOut":"User has logged out successfully"
+              });
+              authService.logOut(context);
+            }),
           ],
         )
       ],

@@ -1,10 +1,14 @@
 import 'package:ecommerce_major_project/features/home/services/home_services.dart';
+import 'package:ecommerce_major_project/services/event_logging/analytics_service.dart';
+import 'package:ecommerce_major_project/services/get_it/locator.dart';
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
 import 'package:intl/intl.dart';
 import 'package:ecommerce_major_project/main.dart';
 import 'package:ecommerce_major_project/models/product.dart';
 import 'package:ecommerce_major_project/features/product_details/services/product_detail_services.dart';
+
+import '../../../services/event_logging/analytics_events.dart';
 
 class WishListProduct extends StatefulWidget {
   final int index;
@@ -17,6 +21,9 @@ class WishListProduct extends StatefulWidget {
 }
 
 class _WishListProductState extends State<WishListProduct> {
+
+  final AnalyticsService _analytics = locator<AnalyticsService>();
+
   ProductDetailServices productDetailServices = ProductDetailServices();
   final HomeServices homeServices = HomeServices();
   final indianRupeesFormat = NumberFormat.currency(
@@ -101,6 +108,10 @@ class _WishListProductState extends State<WishListProduct> {
                     // ),
                     InkWell(
                       onTap: () async{
+                        _analytics.track(eventName: AnalyticsEvents.wishListItem, properties: {
+                          "Item wishlist status":"Item removed from wishlist",
+                          "Item id":widget.product.id
+                        });
                        await HomeServices().removeFromWishList(
                             context: context, product: widget.product);
                         widget.fetchWishList();

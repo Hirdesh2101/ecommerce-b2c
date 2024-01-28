@@ -8,8 +8,15 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+import '../../../services/event_logging/analytics_events.dart';
+import '../../../services/event_logging/analytics_service.dart';
+import '../../../services/get_it/locator.dart';
+
 class AllOrdersList extends StatelessWidget {
-  const AllOrdersList({super.key, required this.allOrders});
+
+  final AnalyticsService _analytics = locator<AnalyticsService>();
+
+   AllOrdersList({super.key, required this.allOrders});
   final List<Order>? allOrders;
   static final indianRupeesFormat = NumberFormat.currency(
     name: "INR",
@@ -75,6 +82,9 @@ class AllOrdersList extends StatelessWidget {
                         child: InkWell(
                           borderRadius: BorderRadius.circular(20),
                           onTap: () {
+                            _analytics.track(eventName: AnalyticsEvents.orderedItemClicked, properties: {
+                              "Order Item Clicked":allOrders![index].id
+                            });
                             String currentPath =
                                 getCurrentPathWithoutQuery(context);
                             context.go('$currentPath/details', extra: allOrders![index]);
@@ -110,6 +120,9 @@ class AllOrdersList extends StatelessWidget {
                                       SizedBox(width: mq.height * .01),
                                       InkWell(
                                           onTap: () async {
+                                            _analytics.track(eventName: AnalyticsEvents.orderIdCopied, properties: {
+                                              "Order id":allOrders![index].id
+                                            });
                                             await Clipboard.setData(
                                                     ClipboardData(
                                                         text: allOrders![index]

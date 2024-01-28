@@ -9,6 +9,10 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+import '../../../services/event_logging/analytics_events.dart';
+import '../../../services/event_logging/analytics_service.dart';
+import '../../../services/get_it/locator.dart';
+
 class DeliveyLocation extends StatefulWidget {
   const DeliveyLocation({super.key});
 
@@ -17,6 +21,9 @@ class DeliveyLocation extends StatefulWidget {
 }
 
 class _DeliveyLocationState extends State<DeliveyLocation> {
+
+  final AnalyticsService _analytics = locator<AnalyticsService>();
+
   final _addressFormKey = GlobalKey<FormState>();
   final CheckoutServices addressServices = CheckoutServices();
   TextEditingController areaController = TextEditingController();
@@ -110,6 +117,9 @@ class _DeliveyLocationState extends State<DeliveyLocation> {
             ),
             InkWell(
               onTap: () {
+                _analytics.track(eventName: AnalyticsEvents.changeAddress, properties: {
+                  "Change address sheet":"Change address sheet has opened successfully"
+                });
                 showModalBottomSheet(
                     context: context,
                     elevation: 0,
@@ -133,26 +143,58 @@ class _DeliveyLocationState extends State<DeliveyLocation> {
                               child: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  CustomTextField(
-                                      controller: flatBuildingController,
-                                      hintText: "Flat, House No."),
+                                  GestureDetector(
+                                    onTap:(){
+                                      _analytics.track(eventName: AnalyticsEvents.flatNo, properties: {
+                                        "Flat Number":flatBuildingController
+                                      });
+                            },
+                                    child: CustomTextField(
+
+                                        controller: flatBuildingController,
+                                        hintText: "Flat, House No."),
+                                  ),
                                   SizedBox(height: mq.height * .01),
-                                  CustomTextField(
-                                      controller: areaController,
-                                      hintText: "Area, Street"),
+                                  GestureDetector(
+                                    onTap: (){
+                                      _analytics.track(eventName: AnalyticsEvents.area, properties: {
+                                        "Area":areaController
+                                      });
+                                    },
+                                    child: CustomTextField(
+                                        controller: areaController,
+                                        hintText: "Area, Street"),
+                                  ),
                                   SizedBox(height: mq.height * .01),
-                                  CustomTextField(
-                                      controller: pincodeController,
-                                      hintText: "Pincode",
-                                      inputType: TextInputType.number),
+                                  GestureDetector(
+                                    onTap: (){
+                                      _analytics.track(eventName: AnalyticsEvents.pincode, properties: {
+                                        "Pincode":pincodeController
+                                      });
+                                    },
+                                    child: CustomTextField(
+                                        controller: pincodeController,
+                                        hintText: "Pincode",
+                                        inputType: TextInputType.number),
+                                  ),
                                   SizedBox(height: mq.height * .01),
-                                  CustomTextField(
-                                      controller: cityController,
-                                      hintText: "Town/City"),
+                                  GestureDetector(
+                                    onTap: (){
+                                      _analytics.track(eventName: AnalyticsEvents.town, properties: {
+                                        "Town":cityController
+                                      });
+                                    },
+                                    child: CustomTextField(
+                                        controller: cityController,
+                                        hintText: "Town/City"),
+                                  ),
                                   SizedBox(height: mq.height * .04),
                                   CustomButton(
                                     text: "Save Address",
                                     onTap: () {
+                                      _analytics.track(eventName: AnalyticsEvents.saveAddress, properties: {
+                                        "Save address":"Address saved"
+                                      });
                                       saveUserAddress();
                                     },
                                     color: Colors.amber[400],

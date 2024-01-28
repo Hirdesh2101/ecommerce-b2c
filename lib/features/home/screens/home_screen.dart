@@ -20,7 +20,6 @@ class HomeScreen extends StatelessWidget {
               wantBackNavigation: false,
              // onClickSearchNavigateTo: const MySearchScreen()
               ),
-
           body: const TopCategories(),
           ),
     );

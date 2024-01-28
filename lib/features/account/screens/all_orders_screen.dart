@@ -8,6 +8,10 @@ import 'package:intl/intl.dart';
 import 'package:ecommerce_major_project/constants/global_variables.dart';
 import 'package:ecommerce_major_project/models/order.dart';
 
+import '../../../services/event_logging/analytics_events.dart';
+import '../../../services/event_logging/analytics_service.dart';
+import '../../../services/get_it/locator.dart';
+
 class AllOrdersScreen extends StatefulWidget {
   static const String routeName = '/all-orders-screen';
   const AllOrdersScreen({
@@ -25,6 +29,9 @@ class AllOrdersScreen extends StatefulWidget {
 }
 
 class _AllOrdersScreenState extends State<AllOrdersScreen> {
+
+  final AnalyticsService _analytics = locator<AnalyticsService>();
+
   final AccountServices accountServices = AccountServices();
   int activeTabIndex = 0;
   bool showLoader = false;
@@ -71,8 +78,14 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
                   activeTabIndex = index;
                 });
                 if (activeTabIndex == 1) {
+                  _analytics.track(eventName: AnalyticsEvents.returnedItem, properties: {
+                    "Item Opened":"All returns list"
+                  });
                   fetchReturns();
                 } else {
+                  _analytics.track(eventName: AnalyticsEvents.allOrderListOpened, properties: {
+                    "Item Opened":"All order list"
+                  });
                   fetchOrders();
                 }
               },

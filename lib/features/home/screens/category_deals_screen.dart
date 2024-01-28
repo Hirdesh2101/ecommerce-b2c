@@ -1,5 +1,6 @@
 import 'package:ecommerce_major_project/constants/utils.dart';
 import 'package:ecommerce_major_project/features/home/widgets/myGridWidgetItems.dart';
+import 'package:ecommerce_major_project/services/event_logging/analytics_events.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -10,6 +11,8 @@ import 'package:ecommerce_major_project/common/widgets/color_loader_2.dart';
 import 'package:ecommerce_major_project/features/home/services/home_services.dart';
 import 'package:ecommerce_major_project/features/home/providers/filter_provider.dart';
 import '../../../providers/user_provider.dart';
+import '../../../services/event_logging/analytics_service.dart';
+import '../../../services/get_it/locator.dart';
 
 class CategoryDealsScreen extends StatefulWidget {
   static const String routeName = '/category-deals';
@@ -25,6 +28,9 @@ class CategoryDealsScreen extends StatefulWidget {
 }
 
 class _CategoryDealsScreenState extends State<CategoryDealsScreen> {
+
+  final AnalyticsService _analytics = locator<AnalyticsService>();
+
   List<Product>? productList;
   final HomeServices homeServices = HomeServices();
 
@@ -143,7 +149,7 @@ class _CategoryDealsScreenState extends State<CategoryDealsScreen> {
                                   shrinkWrap: true,
                                   gridDelegate:
                                       const SliverGridDelegateWithFixedCrossAxisCount(
-                                    childAspectRatio: 0.65,
+                                    childAspectRatio: 0.59,
                                     crossAxisCount: 2,
                                     mainAxisSpacing: 0.0,
                                     crossAxisSpacing: 8.0,
@@ -190,6 +196,9 @@ class _CategoryDealsScreenState extends State<CategoryDealsScreen> {
                                           child: InkWell(
                                             borderRadius:BorderRadius.circular(8),
                                               onTap: () {
+                                                _analytics.track(eventName: AnalyticsEvents.tapItem, properties: {
+                                                  "Item id":productList![index].id
+                                                });
                                                 context.push(
                                                     '/product/${productList![index].id}');
                                               },
@@ -296,7 +305,7 @@ class _CategoryDealsScreenState extends State<CategoryDealsScreen> {
       child: GridView.builder(
         shrinkWrap: true,
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          childAspectRatio: 0.65,
+          childAspectRatio: 0.59,
           crossAxisCount: 2,
           mainAxisSpacing: 0.0,
           crossAxisSpacing: 8.0,
@@ -356,7 +365,7 @@ class _CategoryDealsScreenState extends State<CategoryDealsScreen> {
       child: GridView.builder(
         shrinkWrap: true,
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          childAspectRatio: 0.65,
+          childAspectRatio: 0.59,
           crossAxisCount: 2,
           mainAxisSpacing: 0.0,
           crossAxisSpacing: 8.0,
@@ -416,7 +425,7 @@ class _CategoryDealsScreenState extends State<CategoryDealsScreen> {
       child: GridView.builder(
         shrinkWrap: true,
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          childAspectRatio: 0.65,
+          childAspectRatio: 0.59,
           crossAxisCount: 2,
           mainAxisSpacing: 0.0,
           crossAxisSpacing: 8.0,

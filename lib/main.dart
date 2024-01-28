@@ -7,6 +7,7 @@ import 'package:ecommerce_major_project/features/home/providers/category_provide
 import 'package:ecommerce_major_project/firebase_options.dart';
 import 'package:ecommerce_major_project/go_router.dart';
 import 'package:ecommerce_major_project/providers/tab_provider.dart';
+import 'package:ecommerce_major_project/services/get_it/locator.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:firebase_ui_oauth_apple/firebase_ui_oauth_apple.dart';
@@ -37,6 +38,7 @@ void main() async {
     if (Platform.isIOS) AppleProvider(),
     PhoneAuthProvider(),
   ]);
+  await initializeLocator();
   SharedPreferences prefs = await SharedPreferences.getInstance();
   usePathUrlStrategy();
   runApp(
@@ -83,6 +85,7 @@ class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<AppService>(create: (_) => appService),

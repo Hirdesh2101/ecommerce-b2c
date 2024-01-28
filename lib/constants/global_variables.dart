@@ -116,6 +116,8 @@ class GlobalVariables {
   //   },
   // ];
 
+  static List<String> sortList=["A-Z","Price Low to High"," Price High to Low"];
+
   static Route createRoute(Widget className) {
     return PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) => className,

@@ -18,6 +18,12 @@
 @import file_picker;
 #endif
 
+#if __has_include(<firebase_analytics/FLTFirebaseAnalyticsPlugin.h>)
+#import <firebase_analytics/FLTFirebaseAnalyticsPlugin.h>
+#else
+@import firebase_analytics;
+#endif
+
 #if __has_include(<firebase_auth/FLTFirebaseAuthPlugin.h>)
 #import <firebase_auth/FLTFirebaseAuthPlugin.h>
 #else
@@ -89,6 +95,7 @@
 + (void)registerWithRegistry:(NSObject<FlutterPluginRegistry>*)registry {
   [DesktopWebviewAuthPlugin registerWithRegistrar:[registry registrarForPlugin:@"DesktopWebviewAuthPlugin"]];
   [FilePickerPlugin registerWithRegistrar:[registry registrarForPlugin:@"FilePickerPlugin"]];
+  [FLTFirebaseAnalyticsPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTFirebaseAnalyticsPlugin"]];
   [FLTFirebaseAuthPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTFirebaseAuthPlugin"]];
   [FLTFirebaseCorePlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTFirebaseCorePlugin"]];
   [FLTFirebaseDynamicLinksPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTFirebaseDynamicLinksPlugin"]];

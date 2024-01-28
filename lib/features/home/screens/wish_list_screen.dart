@@ -11,6 +11,10 @@ import 'package:ecommerce_major_project/features/home/screens/wish_list_product.
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+import '../../../services/event_logging/analytics_events.dart';
+import '../../../services/event_logging/analytics_service.dart';
+import '../../../services/get_it/locator.dart';
+
 class WishListScreen extends StatefulWidget {
   // List<Product>? wishList;
   const WishListScreen({
@@ -23,6 +27,9 @@ class WishListScreen extends StatefulWidget {
 }
 
 class _WishListScreenState extends State<WishListScreen> {
+
+  final AnalyticsService _analytics = locator<AnalyticsService>();
+
   bool isLoading = true;
   List<Product>? wishList;
   final HomeServices homeServices = HomeServices();
@@ -83,6 +90,9 @@ class _WishListScreenState extends State<WishListScreen> {
                           SizedBox(height: mq.height * .01),
                           ElevatedButton(
                               onPressed: () {
+                                _analytics.track(eventName: AnalyticsEvents.addAProduct, properties: {
+                                  "Add a product from wishlist screen":"Product added since nothing is found in wishlist screen"
+                                });
                                 tabProvider.setTab(0);
                                 context.go('/');
                               },

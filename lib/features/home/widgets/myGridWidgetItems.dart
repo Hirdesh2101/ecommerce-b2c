@@ -7,9 +7,15 @@ import '../../../constants/utils.dart';
 import '../../../main.dart';
 import '../../../models/product.dart';
 import '../../../providers/tab_provider.dart';
+import '../../../services/event_logging/analytics_events.dart';
+import '../../../services/event_logging/analytics_service.dart';
+import '../../../services/get_it/locator.dart';
 import '../services/home_services.dart';
 
 class GridWidgetItems extends StatelessWidget {
+
+  final AnalyticsService _analytics = locator<AnalyticsService>();
+
   final Product product;
   final bool isProductWishListed;
   GridWidgetItems({required this.product,required this.isProductWishListed,super.key});
@@ -41,9 +47,11 @@ class GridWidgetItems extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // navigate to product details screen
-          Stack(children: [
+          Stack(
+            fit: StackFit.loose,
+              children: [
             SizedBox(
-              height: mq.height * .24,
+              height: mq.height * .25,
               width: double.infinity,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(8),
@@ -66,15 +74,15 @@ class GridWidgetItems extends StatelessWidget {
                     "EXCLUSIVE",
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: GoogleFonts.lato(
+                    style: GoogleFonts.poppins(
                         fontSize: 11, color: Colors.white),
                   ),
                 ),
               ),
             ),
             Positioned(
-              top: mq.height * 0.182,
-              left: mq.width * 0.372,
+              top: mq.height * 0.19,
+              left: mq.width * 0.34,
               child: Container(
                 height: mq.height * .07,
                 width: mq.width * .07,
@@ -84,6 +92,10 @@ class GridWidgetItems extends StatelessWidget {
                 child: InkWell(
                   onTap: () {
                     if (isProductWishListed) {
+                      _analytics.track(eventName: AnalyticsEvents.wishListItem, properties: {
+                        "Item wishlist status":"Item removed from wishlist",
+                        "Item id":product.id
+                      });
                       HomeServices().removeFromWishList(
                           context: context, product: product);
                       showSnackBar(
@@ -91,6 +103,10 @@ class GridWidgetItems extends StatelessWidget {
                         text: "Removed from WishList",
                       );
                     } else {
+                      _analytics.track(eventName: AnalyticsEvents.wishListItem, properties: {
+                        "Item wishlist status":"Item added to wishlist",
+                        "Item id":product.id
+                      });
                       HomeServices().addToWishList(
                           context: context, product: product);
                       showSnackBar(
@@ -123,53 +139,46 @@ class GridWidgetItems extends StatelessWidget {
               ),
             ),
           ]),
-          SizedBox(height: mq.height * .005),
           Text(
             product.brandName,
-            maxLines: 1,
+            maxLines: 2,
             overflow: TextOverflow.ellipsis,
-            style: GoogleFonts.lato(
-              color: Colors.black54,
-              fontWeight: FontWeight.bold,
+            style: GoogleFonts.poppins(
+              color: Colors.black,
             ),
           ),
-          SizedBox(height: mq.height * .005),
           Text(
             product.name,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
-            style: GoogleFonts.lato(
-                fontSize: 13, color: Colors.black54),
+            style: GoogleFonts.poppins(
+              fontSize: 15,
+               color: Colors.black,fontWeight: FontWeight.bold),
           ),
           SizedBox(height: mq.height * .005),
+          Text(
+             indianRupeesFormat
+                .format(product.varients[0]['price']),
+            style: const TextStyle(
+              color: Color(0xff4091FF),
+              fontWeight: FontWeight.bold,
+            ),
+          ),
           RichText(
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             text: TextSpan(
               children: [
                 TextSpan(
-                  text: indianRupeesFormat
-                      .format(product.varients[0]['price']),
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: Colors.black,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                WidgetSpan(
-                  child: SizedBox(width: mq.width * .02),
-                ),
-                TextSpan(
                   text: indianRupeesFormat.format(
                       product.varients[0]['markedPrice']),
                   style: TextStyle(
-                    fontSize: 14,
                     color: Colors.grey.shade700,
                     decoration: TextDecoration.lineThrough,
                   ),
                 ),
                 WidgetSpan(
-                  child: SizedBox(width: mq.width * .02),
+                  child: SizedBox(width: mq.width * .03),
                 ),
                 TextSpan(
                   text:
@@ -177,9 +186,8 @@ class GridWidgetItems extends StatelessWidget {
                       product.varients[0]['price'],
                       product.varients[0]['markedPrice'])}% off",
                   style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.green,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xffFB7181),
                   ),
                 ),
               ],

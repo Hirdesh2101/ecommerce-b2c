@@ -1,11 +1,21 @@
 import 'package:ecommerce_major_project/main.dart';
 import 'package:flutter/material.dart';
 
+import '../../../models/product.dart';
+import '../../../services/event_logging/analytics_events.dart';
+import '../../../services/event_logging/analytics_service.dart';
+import '../../../services/get_it/locator.dart';
+
 class BuyButtons extends StatelessWidget {
-  const BuyButtons(
+
+  final AnalyticsService _analytics = locator<AnalyticsService>();
+
+  final Product product;
+
+   BuyButtons(
       {super.key,
       required this.addToCart,
-      required this.buyNow});
+      required this.buyNow, required this.product});
   final Function() addToCart;
   final Function() buyNow;
 
@@ -16,6 +26,9 @@ class BuyButtons extends StatelessWidget {
         Center(
           child: ElevatedButton(
             onPressed: () {
+              _analytics.track(eventName: AnalyticsEvents.addToCart, properties: {
+                "Item id":product.id
+              });
               addToCart();
             },
             style: ElevatedButton.styleFrom(
@@ -33,6 +46,9 @@ class BuyButtons extends StatelessWidget {
         Center(
           child: ElevatedButton(
             onPressed: () {
+              _analytics.track(eventName: AnalyticsEvents.buyProduct, properties: {
+                "Item id":product.id
+              });
               buyNow();
             },
             style: ElevatedButton.styleFrom(

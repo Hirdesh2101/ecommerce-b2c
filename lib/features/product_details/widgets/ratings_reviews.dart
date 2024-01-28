@@ -12,6 +12,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../services/event_logging/analytics_events.dart';
+import '../../../services/event_logging/analytics_service.dart';
+import '../../../services/get_it/locator.dart';
+
 class AllRatings extends StatefulWidget {
   const AllRatings({
     super.key,
@@ -38,6 +42,9 @@ class AllRatings extends StatefulWidget {
 }
 
 class _AllRatingsState extends State<AllRatings> {
+
+  final AnalyticsService _analytics = locator<AnalyticsService>();
+
   final ProductDetailServices productDetailServices = ProductDetailServices();
   bool isMore = false;
   @override
@@ -173,6 +180,11 @@ class _AllRatingsState extends State<AllRatings> {
           SizedBox(height: mq.width * .05),
           const Text('Write a review'),
           TextField(
+            onTap: (){
+              _analytics.track(eventName: AnalyticsEvents.writeAReview, properties: {
+                "Review written":controller
+              });
+            },
             controller: controller,
           )
         ],

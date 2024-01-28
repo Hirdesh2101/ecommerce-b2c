@@ -14,6 +14,10 @@ import 'package:ecommerce_major_project/features/cart/widgets/cart_subtotal.dart
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+import '../../../services/event_logging/analytics_events.dart';
+import '../../../services/event_logging/analytics_service.dart';
+import '../../../services/get_it/locator.dart';
+
 class CartScreen extends StatefulWidget {
   static const String routeName = '/cart';
   const CartScreen({super.key});
@@ -23,6 +27,9 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
+
+  final AnalyticsService _analytics = locator<AnalyticsService>();
+
   bool isLoading = false;
   final HomeServices homeServices = HomeServices();
 
@@ -91,6 +98,10 @@ class _CartScreenState extends State<CartScreen> {
                   if (isLoading || cartProvider.getCart!.isEmpty) {
                     return;
                   }
+                  _analytics.track(eventName: AnalyticsEvents.proceedToBuy, properties: {
+                    "Items to buy":cartProvider.getCart!.length,
+                    "Cost of all item":cartProvider.getSum
+                  });
                   navigateToAddress(cartProvider.getSum);
                 },
                 color: (isLoading || cartProvider.getCart!.isEmpty)
@@ -111,6 +122,9 @@ class _CartScreenState extends State<CartScreen> {
                       SizedBox(height: mq.height * 0.02),
                       ElevatedButton(
                         onPressed: () {
+                          _analytics.track(eventName: AnalyticsEvents.keepExploring, properties: {
+                            "Category exploring":"Opted to explore other categories"
+                          });
                           tabProvider.setTab(0);
                         },
                         style: ElevatedButton.styleFrom(

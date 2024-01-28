@@ -4,6 +4,7 @@ import 'package:ecommerce_major_project/features/home/widgets/carousel_image.dar
 import 'package:ecommerce_major_project/features/home/widgets/myGridWidgetItems.dart';
 import 'package:ecommerce_major_project/providers/tab_provider.dart';
 import 'package:ecommerce_major_project/providers/user_provider.dart';
+import 'package:ecommerce_major_project/services/event_logging/analytics_events.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -18,6 +19,8 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../../constants/utils.dart';
+import '../../../services/event_logging/analytics_service.dart';
+import '../../../services/get_it/locator.dart';
 
 class TopCategories extends StatefulWidget {
   const TopCategories({super.key});
@@ -28,6 +31,7 @@ class TopCategories extends StatefulWidget {
 
 class _TopCategoriesState extends State<TopCategories>
     with TickerProviderStateMixin {
+  final AnalyticsService _analytics = locator<AnalyticsService>();
 
   // tabbar variables
   int activeTabIndex = 0;
@@ -112,6 +116,12 @@ class _TopCategoriesState extends State<TopCategories>
                   setState(() {
                     activeTabIndex = index;
                   });
+                  _analytics.track(
+                      eventName: AnalyticsEvents.topCategories,
+                      properties: {
+                        "Category name":
+                            categoryProvider.category[activeTabIndex].name
+                      });
                   fetchCategoryProducts(
                       categoryProvider.category[activeTabIndex].name);
                 },
@@ -193,6 +203,12 @@ class _TopCategoriesState extends State<TopCategories>
                                 children: [
                                   InkWell(
                                     onTap: () {
+                                      _analytics.track(
+                                          eventName: AnalyticsEvents.seeAllItems,
+                                          properties: {
+                                            "See all items":
+                                            categoryProvider.category[activeTabIndex].name
+                                          });
                                       navigateToCategoryPage(
                                           context,
                                           categoryProvider
@@ -211,7 +227,7 @@ class _TopCategoriesState extends State<TopCategories>
                           ),
                           SliverPadding(
                               padding: const EdgeInsets.symmetric(
-                                horizontal: 0,
+                                horizontal: 8,
                               ),
                               sliver: isProductLoading
                                   ? const SliverToBoxAdapter(
@@ -228,12 +244,11 @@ class _TopCategoriesState extends State<TopCategories>
                                               const SliverGridDelegateWithFixedCrossAxisCount(
                                             crossAxisCount: kIsWeb ? 4 : 2,
                                             childAspectRatio:
-                                                kIsWeb ? 1.1 : 0.69,
+                                                kIsWeb ? 1.1 : 0.59,
                                             mainAxisSpacing: 5,
                                             crossAxisSpacing: 0,
                                           ),
-                                          delegate:
-                                          SliverChildBuilderDelegate(
+                                          delegate: SliverChildBuilderDelegate(
                                               childCount:
                                                   min(productList!.length, 8),
                                               (context, index) {
@@ -268,28 +283,36 @@ class _TopCategoriesState extends State<TopCategories>
                                                 break;
                                               }
                                             }
-
                                             return Padding(
-                                              padding: const EdgeInsets.all(8.0),
+                                              padding: const EdgeInsets.only(
+                                                  left: 10.0,
+                                                  right: 8,
+                                                  top: 8,
+                                                  bottom: 8),
                                               child: InkWell(
-                                                borderRadius: BorderRadius.circular(8),
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
                                                 onTap: () {
+                                                  _analytics.track(eventName: AnalyticsEvents.tapItem, properties: {
+                                                    "Product Id":product.id
+                                                  });
                                                   // Get the current location
                                                   String currentPath =
-                                                  getCurrentPathWithoutQuery(context);
+                                                      getCurrentPathWithoutQuery(
+                                                          context);
                                                   // Build the new path
                                                   String newPath =
                                                       '${currentPath}product/${product.id}';
                                                   context.go(newPath);
                                                 },
                                                 child: GridWidgetItems(
-                                                    product: productList![index], isProductWishListed: isProductWishListed),
+                                                    product:
+                                                        productList![index],
+                                                    isProductWishListed:
+                                                        isProductWishListed),
                                               ),
                                             );
-                                          }
-                                          )
-                              )
-                          )
+                                          })))
                         ],
                       ),
                     ),

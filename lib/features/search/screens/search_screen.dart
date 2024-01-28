@@ -96,55 +96,57 @@ class _SearchScreenState extends State<SearchScreen> {
                     SizedBox(height: mq.width * .025),
                     const AddressBox(),
                     SizedBox(height: mq.width * .025),
-                    Expanded(
-                      child: GridView.builder(
-                        shrinkWrap: true,
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                              childAspectRatio: 0.65,
-                          crossAxisCount: 2,
-                          mainAxisSpacing: 0.0,
-                          crossAxisSpacing: 8.0,
-                        ),
-                        itemCount: products!.length,
-                        itemBuilder: (context, index) {
-                          final user = context
-                              .watch<UserProvider>()
-                              .user;
-                          List<dynamic> wishList =
-                          user.wishList != null
-                              ? user.wishList!
-                              : [];
-                          bool isProductWishListed = false;
-
-                          for (int i = 0;
-                          i < wishList.length;
-                          i++) {
-                            // final productWishList = wishList[i];
-                            // final productFromJson =
-                            //     Product.fromJson(
-                            //         productWishList['product']);
-                            // final productId = productFromJson.id;
-                            if (wishList[i]['product'] ==
-                                products![index].id) {
-                              isProductWishListed = true;
-                              break;
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Expanded(
+                        child: GridView.builder(
+                          shrinkWrap: true,
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                childAspectRatio: 0.59,
+                            crossAxisCount: 2,
+                            mainAxisSpacing: 0.0,
+                            crossAxisSpacing: 8.0,
+                          ),
+                          itemCount: products!.length,
+                          itemBuilder: (context, index) {
+                            final user = context
+                                .watch<UserProvider>()
+                                .user;
+                            List<dynamic> wishList =
+                            user.wishList != null
+                                ? user.wishList!
+                                : [];
+                            bool isProductWishListed = false;
+                            for (int i = 0;
+                            i < wishList.length;
+                            i++) {
+                              // final productWishList = wishList[i];
+                              // final productFromJson =
+                              //     Product.fromJson(
+                              //         productWishList['product']);
+                              // final productId = productFromJson.id;
+                              if (wishList[i]['product'] ==
+                                  products![index].id) {
+                                isProductWishListed = true;
+                                break;
+                              }
                             }
-                          }
-                          return Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: InkWell(
-                              borderRadius: BorderRadius.circular(8),
-                              onTap: () {
-                                context.push('/product/${products![index].id}');
-                              },
-                              child: GridWidgetItems(
-                                product: products![index],
-                                isProductWishListed: isProductWishListed,
+                            return Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: InkWell(
+                                borderRadius: BorderRadius.circular(8),
+                                onTap: () {
+                                  context.push('/product/${products![index].id}');
+                                },
+                                child: GridWidgetItems(
+                                  product: products![index],
+                                  isProductWishListed: isProductWishListed,
+                                ),
                               ),
-                            ),
-                          );
-                        },
+                            );
+                          },
+                        ),
                       ),
                     ),
                   ],

@@ -7,6 +7,7 @@ import Foundation
 
 import desktop_webview_auth
 import file_selector_macos
+import firebase_analytics
 import firebase_auth
 import firebase_core
 import package_info_plus
@@ -17,6 +18,7 @@ import speech_to_text_macos
 func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {
   DesktopWebviewAuthPlugin.register(with: registry.registrar(forPlugin: "DesktopWebviewAuthPlugin"))
   FileSelectorPlugin.register(with: registry.registrar(forPlugin: "FileSelectorPlugin"))
+  FLTFirebaseAnalyticsPlugin.register(with: registry.registrar(forPlugin: "FLTFirebaseAnalyticsPlugin"))
   FLTFirebaseAuthPlugin.register(with: registry.registrar(forPlugin: "FLTFirebaseAuthPlugin"))
   FLTFirebaseCorePlugin.register(with: registry.registrar(forPlugin: "FLTFirebaseCorePlugin"))
   FLTPackageInfoPlusPlugin.register(with: registry.registrar(forPlugin: "FLTPackageInfoPlusPlugin"))

@@ -10,8 +10,15 @@ import 'package:ecommerce_major_project/features/account/widgets/single_product.
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+import '../../../services/event_logging/analytics_events.dart';
+import '../../../services/event_logging/analytics_service.dart';
+import '../../../services/get_it/locator.dart';
+
 class Orders extends StatefulWidget {
-  const Orders({super.key, required this.orders, required this.showLoader});
+
+
+
+   Orders({super.key, required this.orders, required this.showLoader});
   final List<Order>? orders;
   final bool showLoader;
 
@@ -26,6 +33,7 @@ class Orders extends StatefulWidget {
 // status == 4 Product returned back
 
 class _OrdersState extends State<Orders> {
+  final AnalyticsService _analytics = locator<AnalyticsService>();
   // List list = [
   //   "https://images.unsplash.com/photo-1681239063386-fc4a373c927b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw0fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=500&q=60",
   //   "https://images.unsplash.com/photo-1682006289331-19e4e0327d6d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyfHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=500&q=60",
@@ -51,6 +59,9 @@ class _OrdersState extends State<Orders> {
                 onTap: widget.orders == null || widget.orders!.isEmpty
                     ? null
                     : () async {
+                  _analytics.track(eventName: AnalyticsEvents.allOrderListOpened, properties: {
+                    "Recent Orders":"All recent orders viewed"
+                  });
                         String currentPath =
                             getCurrentPathWithoutQuery(context);
                         context.go('$currentPath/orders');

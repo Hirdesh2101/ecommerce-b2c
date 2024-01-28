@@ -8,6 +8,10 @@ import 'package:ecommerce_major_project/main.dart';
 import 'package:ecommerce_major_project/providers/user_provider.dart';
 import 'package:ecommerce_major_project/features/account/services/account_services.dart';
 
+import '../../../services/event_logging/analytics_events.dart';
+import '../../../services/event_logging/analytics_service.dart';
+import '../../../services/get_it/locator.dart';
+
 class BelowAppBar extends StatefulWidget {
   const BelowAppBar({super.key});
 
@@ -16,6 +20,9 @@ class BelowAppBar extends StatefulWidget {
 }
 
 class _BelowAppBarState extends State<BelowAppBar> {
+
+  final AnalyticsService _analytics = locator<AnalyticsService>();
+
   String? _image;
   AccountServices accountServices = AccountServices();
 
@@ -32,6 +39,9 @@ class _BelowAppBarState extends State<BelowAppBar> {
       // decoration: const BoxDecoration(gradient: GlobalVariables.appBarGradient),
       child: InkWell(
         onTap: () {
+          _analytics.track(eventName: AnalyticsEvents.yourProfile, properties: {
+            "Your Profile":"Your profile page has opened"
+          });
           String currentPath = getCurrentPathWithoutQuery(context);
           context.go('$currentPath/profile');
         },
@@ -78,6 +88,9 @@ class _BelowAppBarState extends State<BelowAppBar> {
                 // ),
                 InkWell(
                   onTap: () {
+                    _analytics.track(eventName: AnalyticsEvents.pickProfileImage, properties: {
+                      "Profile Image Edit":"Opted to change the profile image"
+                    });
                     _showBottomSheet();
                   },
                   child: Container(
