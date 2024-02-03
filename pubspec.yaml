@@ -61,7 +61,7 @@ dependencies:
     dotted_border: ^2.0.0+3
 
     # pick files from device
-    file_picker: ^5.2.11
+    file_picker: ^5.5.0
 
     # to store media [images]
     cloudinary_public: ^0.23.1
