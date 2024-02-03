@@ -218,18 +218,18 @@ class AppRouter {
               ]),
         ],
       ),
-      GoRoute(
-        path: '/onboarding',
-        builder: (context, state) => const SplashScreen(),
-      ),
+      // GoRoute(
+      //   path: '/onboarding',
+      //   builder: (context, state) => const SplashScreen(),
+      // ),
       GoRoute(
         path: '/splash',
         builder: (context, state) => const LoadingSplashScreen(),
       ),
-      GoRoute(
-        path: '/auth',
-        builder: (context, state) => const AuthScreen(),
-      ),
+      // GoRoute(
+      //   path: '/auth',
+      //   builder: (context, state) => const AuthScreen(),
+      // ),
       GoRoute(
         path: '/product/:id',
         builder: (context, state) => ProductDetailScreen(
@@ -258,36 +258,36 @@ class AppRouter {
       ),
     ],
     //errorBuilder: (context, state) => ErrorPage(error: state.error.toString()),
-    redirect: (context, state) {
-      final isLogedIn = appService.loginState;
-      final isInitialized = appService.initialized;
-      final isOnboarded = appService.onboarding;
+    // redirect: (context, state) {
+    //   final isLogedIn = appService.loginState;
+    //   final isInitialized = appService.initialized;
+    //   final isOnboarded = appService.onboarding;
 
-      final isGoingToLogin = state.uri.toString() == '/auth';
-      final isGoingToInit = state.uri.toString() == '/splash';
-      final isGoingToOnboard = state.uri.toString() == '/onboarding';
+    //   final isGoingToLogin = state.uri.toString() == '/auth';
+    //   final isGoingToInit = state.uri.toString() == '/splash';
+    //   final isGoingToOnboard = state.uri.toString() == '/onboarding';
 
-      // If not Initialized and not going to Initialized redirect to Splash
-      if (!isInitialized && !isGoingToInit) {
-        return '/splash';
-        // If not onboard and not going to onboard redirect to OnBoarding
-      } else if (isInitialized && !isOnboarded && !isGoingToOnboard) {
-        return '/onboarding';
-        // If not logedin and not going to login redirect to Login
-      } else if (isInitialized &&
-          isOnboarded &&
-          !isLogedIn &&
-          !isGoingToLogin) {
-        return '/auth';
-        // If all the scenarios are cleared but still going to any of that screen redirect to Home
-      } else if ((isLogedIn && isGoingToLogin) ||
-          (isInitialized && isGoingToInit) ||
-          (isOnboarded && isGoingToOnboard)) {
-        return '/';
-      } else {
-        // Else Don't do anything
-        return null;
-      }
-    },
+    //   // If not Initialized and not going to Initialized redirect to Splash
+    //   if (!isInitialized && !isGoingToInit) {
+    //     return '/splash';
+    //     // If not onboard and not going to onboard redirect to OnBoarding
+    //   } else if (isInitialized && !isOnboarded && !isGoingToOnboard) {
+    //     return '/onboarding';
+    //     // If not logedin and not going to login redirect to Login
+    //   } else if (isInitialized &&
+    //       isOnboarded &&
+    //       !isLogedIn &&
+    //       !isGoingToLogin) {
+    //     return '/auth';
+    //     // If all the scenarios are cleared but still going to any of that screen redirect to Home
+    //   } else if ((isLogedIn && isGoingToLogin) ||
+    //       (isInitialized && isGoingToInit) ||
+    //       (isOnboarded && isGoingToOnboard)) {
+    //     return '/';
+    //   } else {
+    //     // Else Don't do anything
+    //     return null;
+    //   }
+    // },
   );
 }
