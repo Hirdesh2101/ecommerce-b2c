@@ -23,41 +23,18 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-  FirebaseUIAuth.configureProviders([
-    EmailAuthProvider(),
-    GoogleProvider(
-        clientId:
-            "1072371601182-171fhmmstseo4mhvitaq4btte1on5rnq.apps.googleusercontent.com",
-        iOSPreferPlist: true),
-    if (Platform.isIOS) AppleProvider(),
-    PhoneAuthProvider(),
-  ]);
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  usePathUrlStrategy();
-  runApp(
-    MyApp(
-      sharedPreferences: prefs,
-    ),
-  );
-}
-
 late Size mq;
 late TextTheme myTextTheme;
 
-class MyApp extends StatefulWidget {
-  const MyApp({super.key, required this.sharedPreferences});
+class StavanStore extends StatefulWidget {
+  const StavanStore({super.key, required this.sharedPreferences});
   final SharedPreferences sharedPreferences;
 
   @override
-  State<MyApp> createState() => _MyAppState();
+  State<StavanStore> createState() => _StavanStoreState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _StavanStoreState extends State<StavanStore> {
   late AppService appService;
   late AuthService authService;
   late StreamSubscription<bool> authSubscription;
