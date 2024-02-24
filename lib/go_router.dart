@@ -25,7 +25,7 @@ import 'package:ecommerce_major_project/features/checkout/screens/checkout_scree
 import 'package:ecommerce_major_project/features/home/screens/category_deals_screen.dart';
 import 'package:ecommerce_major_project/features/product_details/screens/product_detail_screen.dart';
 
-final myRoutes = <Map<String, RouteBase>>[
+final eshopRoutes = <Map<String, RouteBase>>[
   {
     "mainShell": ShellRoute(
       // navigatorKey: _shellNavigatorKey,
