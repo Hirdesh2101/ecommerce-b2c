@@ -10,7 +10,6 @@ import 'package:ecommerce_major_project/features/product_details/screens/product
 import 'package:ecommerce_major_project/providers/tab_provider.dart';
 import 'package:ecommerce_major_project/providers/user_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:ecommerce_major_project/main.dart';
 import 'package:ecommerce_major_project/constants/global_variables.dart';
 import 'package:ecommerce_major_project/common/widgets/custom_button.dart';
 import 'package:ecommerce_major_project/features/home/widgets/address_box.dart';
@@ -62,6 +61,7 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
+  late Size mq = MediaQuery.of(context).size;
   bool isLoading = false;
   final HomeServices homeServices = HomeServices();
 
