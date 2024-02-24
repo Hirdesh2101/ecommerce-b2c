@@ -1,6 +1,5 @@
 import 'package:ecommerce_major_project/features/home/providers/category_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:ecommerce_major_project/main.dart';
 import 'package:ecommerce_major_project/constants/global_variables.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -13,6 +12,7 @@ class CategoryGridScreen extends StatefulWidget {
 }
 
 class _CategoryGridScreenState extends State<CategoryGridScreen> {
+late Size mq = MediaQuery.of(context).size;
   void navigateToCategoryPage(BuildContext context, String category) {
     context.go('/category/$category');
   }

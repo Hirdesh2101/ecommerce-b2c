@@ -10,7 +10,6 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 
-import 'package:ecommerce_major_project/main.dart';
 import 'package:ecommerce_major_project/providers/user_provider.dart';
 import 'package:ecommerce_major_project/constants/global_variables.dart';
 import 'package:ecommerce_major_project/common/widgets/custom_button.dart';
@@ -38,6 +37,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   TextEditingController cityController = TextEditingController();
   TextEditingController pincodeController = TextEditingController();
   TextEditingController flatBuildingController = TextEditingController();
+late Size mq = MediaQuery.of(context).size;
 
   String? recentOrderId;
   int totalAmount = 0;

@@ -1,7 +1,6 @@
 import 'package:ecommerce_major_project/constants/utils.dart';
 import 'package:ecommerce_major_project/features/home/providers/search_provider.dart';
 import 'package:ecommerce_major_project/features/home/services/home_services.dart';
-import 'package:ecommerce_major_project/main.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -42,6 +41,7 @@ class _MySearchScreenState extends State<MySearchScreen> {
   List<String> allProductsList = [];
   List<String>? historyList = [];
   bool isUserTyping = false;
+late Size mq = MediaQuery.of(context).size;
 
   // maximum 10 items stored in history
   int maxLength = 10;

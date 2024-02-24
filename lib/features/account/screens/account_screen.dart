@@ -13,7 +13,6 @@ import 'package:ecommerce_major_project/constants/global_variables.dart';
 import 'package:ecommerce_major_project/features/account/widgets/below_app_bar.dart';
 import 'package:ecommerce_major_project/features/account/widgets/orders.dart';
 import 'package:ecommerce_major_project/features/account/widgets/top_buttons.dart';
-import 'package:ecommerce_major_project/main.dart';
 import 'package:provider/provider.dart';
 
 class AccountScreen extends StatefulWidget {
@@ -24,6 +23,7 @@ class AccountScreen extends StatefulWidget {
 }
 
 class _AccountScreenState extends State<AccountScreen> {
+late Size mq = MediaQuery.of(context).size;
   List<Order>? orders;
   final AccountServices accountServices = AccountServices();
   bool showLoader = false;

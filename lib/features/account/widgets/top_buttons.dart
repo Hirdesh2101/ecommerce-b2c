@@ -4,7 +4,6 @@ import 'package:ecommerce_major_project/features/auth/services/auth_service.dart
 import 'package:ecommerce_major_project/models/order.dart';
 import 'package:ecommerce_major_project/providers/tab_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:ecommerce_major_project/main.dart';
 import 'package:ecommerce_major_project/features/account/widgets/account_button.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -18,6 +17,7 @@ class TopButtons extends StatefulWidget {
 }
 
 class _TopButtonsState extends State<TopButtons> {
+late Size mq = MediaQuery.of(context).size;
   // final List<String> buttonNames = [
   @override
   Widget build(BuildContext context) {

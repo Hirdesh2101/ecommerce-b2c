@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '/main.dart';
 
 //account page buttons
 class AccountButton extends StatelessWidget {
@@ -9,6 +8,7 @@ class AccountButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+late Size mq = MediaQuery.of(context).size;
     return Expanded(
       child: Container(
         height: mq.height * .06,

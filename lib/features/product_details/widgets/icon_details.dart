@@ -1,4 +1,3 @@
-import 'package:ecommerce_major_project/main.dart';
 import 'package:ecommerce_major_project/models/product.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -29,6 +28,7 @@ class DetailsWithICons extends StatelessWidget {
   Widget iconAndText(
       BuildContext context, IconData iconData, String title, String description,
       {Color color = Colors.black}) {
+late Size mq = MediaQuery.of(context).size;
     return Flexible(
       child: InkWell(
         onTap: () {

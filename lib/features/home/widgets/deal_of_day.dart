@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:ecommerce_major_project/main.dart';
 import 'package:ecommerce_major_project/models/product.dart';
 import 'package:ecommerce_major_project/common/widgets/color_loader_2.dart';
 import 'package:ecommerce_major_project/features/home/services/home_services.dart';
@@ -15,6 +14,7 @@ class DealOfDay extends StatefulWidget {
 }
 
 class _DealOfDayState extends State<DealOfDay> {
+late Size mq = MediaQuery.of(context).size;
   final HomeServices homeServices = HomeServices();
   Product? product;
   final indianRupeesFormat = NumberFormat.currency(

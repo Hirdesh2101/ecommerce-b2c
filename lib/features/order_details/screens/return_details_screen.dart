@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:ecommerce_major_project/constants/global_variables.dart';
 import 'package:ecommerce_major_project/features/admin/services/admin_services.dart';
-import 'package:ecommerce_major_project/main.dart';
 
 class ReturnDetailsScreen extends StatefulWidget {
   static const String routeName = "/return-details";
@@ -21,6 +20,7 @@ class ReturnDetailsScreen extends StatefulWidget {
 class _ReturnDetailsScreenState extends State<ReturnDetailsScreen> {
   int currentStep = 0;
   final AdminServices adminServices = AdminServices();
+late Size mq = MediaQuery.of(context).size;
   //final int allowReturnProductDays = 15;
   //bool allowReturn = false;
   bool viewMoreDetails = true;

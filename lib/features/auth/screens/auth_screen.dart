@@ -20,6 +20,7 @@ class AuthScreen extends StatefulWidget {
 }
 
 class _AuthScreenState extends State<AuthScreen> {
+late Size mq = MediaQuery.of(context).size;
   //form keys for validation
   final _signInFormKey = GlobalKey<FormState>();
 

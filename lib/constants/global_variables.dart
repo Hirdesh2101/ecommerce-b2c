@@ -4,7 +4,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import 'package:ecommerce_major_project/main.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
@@ -168,6 +167,7 @@ class GlobalVariables {
     bool? wantActions = true,
     String? title = "",
   }) {
+late Size mq = MediaQuery.of(context).size;
     final tabProvider = Provider.of<TabProvider>(context, listen: false);
     return AppBar(
       title: Text("$title",
@@ -234,6 +234,7 @@ class GlobalVariables {
     required BuildContext context,
     String? title = "",
   }) {
+late Size mq = MediaQuery.of(context).size;
     return AppBar(
       title: Text("$title",
           style: appBarTextStyle, maxLines: 1, overflow: TextOverflow.ellipsis),

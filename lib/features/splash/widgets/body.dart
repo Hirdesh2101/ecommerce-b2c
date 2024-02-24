@@ -1,7 +1,6 @@
 import 'package:ecommerce_major_project/app_service.dart';
 import 'package:ecommerce_major_project/common/widgets/custom_button.dart';
 import 'package:ecommerce_major_project/features/splash/widgets/splash_content.dart';
-import 'package:ecommerce_major_project/main.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -16,6 +15,7 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
+late Size mq = MediaQuery.of(context).size;
   double opacity = 0.3;
   int currentPage = 0;
   List<Map<String, String>> splashData = [

@@ -18,6 +18,7 @@ class BottomNavbar extends StatefulWidget {
 }
 
 class _BottomNavbarState extends State<BottomNavbar> {
+late Size mq = MediaQuery.of(context).size;
   int _page = 0;
   double bottomBarWidth = 42;
   double bottomBarBorderWidth = 5;

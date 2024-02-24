@@ -2,13 +2,13 @@ import 'package:ecommerce_major_project/constants/global_variables.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '/providers/user_provider.dart';
-import '/main.dart';
 
 class AddressBox extends StatelessWidget {
   const AddressBox({super.key});
 
   @override
   Widget build(BuildContext context) {
+late Size mq = MediaQuery.of(context).size;
     final user = Provider.of<UserProvider>(context).user;
     return Container(
       margin: EdgeInsets.symmetric(horizontal: mq.width * .05),

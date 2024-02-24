@@ -11,7 +11,6 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:ecommerce_major_project/constants/global_variables.dart';
-import 'package:ecommerce_major_project/main.dart';
 import 'package:ecommerce_major_project/models/order.dart';
 
 class OrderDetailsScreen extends StatefulWidget {
@@ -25,6 +24,7 @@ class OrderDetailsScreen extends StatefulWidget {
 }
 
 class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
+late Size mq = MediaQuery.of(context).size;
   //Loading for whole screen
   bool showProgress = false;
   //Loading for user

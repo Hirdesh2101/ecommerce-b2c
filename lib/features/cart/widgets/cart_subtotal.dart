@@ -1,4 +1,3 @@
-import 'package:ecommerce_major_project/main.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -8,6 +7,7 @@ class CartSubtotal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+late Size mq = MediaQuery.of(context).size;
     final indianRupeesFormat = NumberFormat.currency(
            name: "INR",
            locale: 'en_IN',

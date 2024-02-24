@@ -2,7 +2,6 @@ import 'package:ecommerce_major_project/constants/global_variables.dart';
 import 'package:ecommerce_major_project/features/auth/services/auth_service.dart';
 import 'package:flutter/material.dart';
 
-import 'package:ecommerce_major_project/main.dart';
 import 'package:ecommerce_major_project/features/admin/models/sales.dart';
 import 'package:ecommerce_major_project/common/widgets/color_loader_2.dart';
 import 'package:ecommerce_major_project/features/admin/services/admin_services.dart';
@@ -18,6 +17,7 @@ class AnalyticsScreen extends StatefulWidget {
 
 class _AnalyticsScreenState extends State<AnalyticsScreen> {
   final AdminServices adminServices = AdminServices();
+late Size mq = MediaQuery.of(context).size;
   num? totalSales;
   List<Sales>? earnings;
   bool isLoading = false;

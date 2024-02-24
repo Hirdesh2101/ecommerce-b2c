@@ -3,7 +3,6 @@ import 'package:ecommerce_major_project/constants/global_variables.dart';
 import 'package:ecommerce_major_project/features/auth/services/auth_service.dart';
 import 'package:flutter/material.dart';
 
-import 'package:ecommerce_major_project/main.dart';
 import 'package:ecommerce_major_project/models/order.dart';
 import 'package:ecommerce_major_project/features/admin/services/admin_services.dart';
 import 'package:ecommerce_major_project/features/account/widgets/single_product.dart';
@@ -18,6 +17,7 @@ class OrdersScreen extends StatefulWidget {
 }
 
 class _OrdersScreenState extends State<OrdersScreen> {
+late Size mq = MediaQuery.of(context).size;
   final AdminServices adminServices = AdminServices();
   List<Order>? orders;
 

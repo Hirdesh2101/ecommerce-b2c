@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:ecommerce_major_project/main.dart';
 import 'package:ecommerce_major_project/models/product.dart';
 import 'package:ecommerce_major_project/features/cart/services/cart_services.dart';
 import 'package:ecommerce_major_project/features/product_details/services/product_detail_services.dart';
@@ -24,6 +23,7 @@ class OrderSummaryProduct extends StatefulWidget {
 }
 
 class _OrderSummaryProductState extends State<OrderSummaryProduct> {
+late Size mq = MediaQuery.of(context).size;
   final ProductDetailServices productDetailServices = ProductDetailServices();
   int price = 0;
   final CartServices cartServices = CartServices();

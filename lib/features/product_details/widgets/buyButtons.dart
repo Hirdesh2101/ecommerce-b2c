@@ -1,4 +1,3 @@
-import 'package:ecommerce_major_project/main.dart';
 import 'package:flutter/material.dart';
 
 class BuyButtons extends StatelessWidget {
@@ -11,6 +10,7 @@ class BuyButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+late Size mq = MediaQuery.of(context).size;
     return Column(
       children: [
         Center(

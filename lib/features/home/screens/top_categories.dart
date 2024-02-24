@@ -6,7 +6,6 @@ import 'package:ecommerce_major_project/providers/user_provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:ecommerce_major_project/main.dart';
 import 'package:ecommerce_major_project/models/product.dart';
 import 'package:ecommerce_major_project/constants/global_variables.dart';
 import 'package:ecommerce_major_project/common/widgets/color_loader_2.dart';
@@ -28,6 +27,7 @@ class TopCategories extends StatefulWidget {
 
 class _TopCategoriesState extends State<TopCategories>
     with TickerProviderStateMixin {
+late Size mq = MediaQuery.of(context).size;
   // tabbar variables
   int activeTabIndex = 0;
   final indianRupeesFormat = NumberFormat.currency(

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ecommerce_major_project/main.dart';
 import 'package:ecommerce_major_project/models/product.dart';
 import 'package:ecommerce_major_project/common/widgets/stars.dart';
 import 'package:intl/intl.dart';
@@ -17,6 +16,7 @@ class SearchedProduct extends StatelessWidget {
   //widget to display the resultant searched product
   @override
   Widget build(BuildContext context) {
+late Size mq = MediaQuery.of(context).size;
     double totalRating = 0.0;
 
     for (int i = 0; i < product.rating!.length; i++) {

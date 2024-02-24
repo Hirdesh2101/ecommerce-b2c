@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 
-import 'package:ecommerce_major_project/main.dart';
 import 'package:ecommerce_major_project/features/admin/widgets/sales_graph/sales_data.dart';
 
 class SalesGraph extends StatelessWidget {
@@ -10,6 +9,7 @@ class SalesGraph extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+late Size mq = MediaQuery.of(context).size;
     SalesData mySalesData = SalesData(
       mobileSales: salesSummary[0],
       essentialsSales: salesSummary[1],

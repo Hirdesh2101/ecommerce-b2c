@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:ecommerce_major_project/main.dart';
 import 'package:ecommerce_major_project/providers/user_provider.dart';
 import 'package:ecommerce_major_project/features/account/services/account_services.dart';
 
@@ -16,6 +15,7 @@ class BelowAppBar extends StatefulWidget {
 }
 
 class _BelowAppBarState extends State<BelowAppBar> {
+late Size mq = MediaQuery.of(context).size;
   String? _image;
   AccountServices accountServices = AccountServices();
 

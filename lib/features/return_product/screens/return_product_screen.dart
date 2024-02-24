@@ -5,7 +5,6 @@ import 'package:ecommerce_major_project/models/order.dart';
 import 'package:flutter/material.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:ecommerce_major_project/main.dart';
 import 'package:ecommerce_major_project/constants/utils.dart';
 import 'package:ecommerce_major_project/common/widgets/custom_textfield.dart';
 
@@ -24,6 +23,7 @@ class _ReturnProductScreenState extends State<ReturnProductScreen> {
   final TextEditingController descriptionController = TextEditingController();
   ReturnServices refundServices = ReturnServices();
   bool isLoading = false;
+late Size mq = MediaQuery.of(context).size;
 
   List<File> images = [];
   bool showLoader = false;

@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
-import 'package:ecommerce_major_project/main.dart';
 import 'package:ecommerce_major_project/constants/utils.dart';
 import 'package:ecommerce_major_project/common/widgets/loader.dart';
 import 'package:ecommerce_major_project/constants/global_variables.dart';
@@ -40,6 +39,7 @@ Color
 */
 
   String category = "Mobiles";
+late Size mq = MediaQuery.of(context).size;
   List<File> images = [];
   final _addProductFormKey = GlobalKey<FormState>();
   bool showLoader = false;

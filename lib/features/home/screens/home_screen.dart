@@ -1,5 +1,3 @@
-import 'package:ecommerce_major_project/app_service.dart';
-import 'package:ecommerce_major_project/features/auth/services/auth_service.dart';
 import 'package:ecommerce_major_project/features/cart/providers/cart_provider.dart';
 import 'package:ecommerce_major_project/features/home/providers/ads_provider.dart';
 import 'package:ecommerce_major_project/features/home/providers/category_provider.dart';
@@ -54,7 +52,6 @@ class HomeScreen extends StatelessWidget {
         appBar: GlobalVariables.getAppBar(
           context: context,
           wantBackNavigation: false,
-          // onClickSearchNavigateTo: const MySearchScreen()
         ),
         body: const TopCategories(),
       ),

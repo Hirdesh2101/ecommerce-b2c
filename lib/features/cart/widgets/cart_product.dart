@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:ecommerce_major_project/main.dart';
 import 'package:ecommerce_major_project/models/product.dart';
 import 'package:ecommerce_major_project/features/cart/services/cart_services.dart';
 import 'package:ecommerce_major_project/features/product_details/services/product_detail_services.dart';
@@ -26,6 +25,7 @@ class CartProduct extends StatefulWidget {
 }
 
 class _CartProductState extends State<CartProduct> {
+late Size mq = MediaQuery.of(context).size;
   int price = 0;
   int quantity = 0;
   @override

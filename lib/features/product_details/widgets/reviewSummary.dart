@@ -1,4 +1,3 @@
-import 'package:ecommerce_major_project/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:intl/intl.dart';
@@ -22,6 +21,7 @@ class ReviewUI extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+late Size mq = MediaQuery.of(context).size;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

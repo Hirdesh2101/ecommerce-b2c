@@ -1,5 +1,4 @@
 import 'package:ecommerce_major_project/features/splash/widgets/body.dart';
-import 'package:ecommerce_major_project/main.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatelessWidget {
@@ -8,7 +7,7 @@ class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
   @override
   Widget build(BuildContext context) {
-    mq = MediaQuery.of(context).size;
+late Size mq = MediaQuery.of(context).size;
     // You have to call it on your starting screen
     // SizeConfig().init(context);
     return const Scaffold(

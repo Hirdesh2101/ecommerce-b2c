@@ -1,5 +1,4 @@
 import 'package:ecommerce_major_project/app_service.dart';
-import 'package:ecommerce_major_project/main.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -14,6 +13,7 @@ class LoadingSplashScreen extends StatefulWidget {
 
 class _LoadingSplashScreenState extends State<LoadingSplashScreen> {
   late AppService _appService;
+late Size mq = MediaQuery.of(context).size;
 
   @override
   void initState() {
@@ -28,7 +28,6 @@ class _LoadingSplashScreenState extends State<LoadingSplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    mq = MediaQuery.of(context).size;
     // You have to call it on your starting screen
     // SizeConfig().init(context);
     return Scaffold(

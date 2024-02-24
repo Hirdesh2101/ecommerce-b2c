@@ -1,6 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:ecommerce_major_project/features/home/providers/ads_provider.dart';
-import 'package:ecommerce_major_project/main.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -10,6 +9,7 @@ class CarouselImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+late Size mq = MediaQuery.of(context).size;
     final carouselAds = context.watch<AdsProvider>().ads;
     return CarouselSlider(
       items: carouselAds.map((individaulAd) {

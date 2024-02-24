@@ -2,7 +2,6 @@ import 'dart:ui';
 import 'package:ecommerce_major_project/common/widgets/custom_button.dart';
 import 'package:ecommerce_major_project/common/widgets/custom_textfield.dart';
 import 'package:ecommerce_major_project/features/checkout/services/checkout_services.dart';
-import 'package:ecommerce_major_project/main.dart';
 import 'package:ecommerce_major_project/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -17,6 +16,7 @@ class DeliveyLocation extends StatefulWidget {
 }
 
 class _DeliveyLocationState extends State<DeliveyLocation> {
+late Size mq = MediaQuery.of(context).size;
   final _addressFormKey = GlobalKey<FormState>();
   final CheckoutServices addressServices = CheckoutServices();
   TextEditingController areaController = TextEditingController();

@@ -1,4 +1,3 @@
-import 'package:ecommerce_major_project/main.dart';
 import 'package:ecommerce_major_project/models/product.dart';
 import 'package:flutter/material.dart';
 
@@ -22,6 +21,7 @@ class SizeAndColor extends StatefulWidget {
 
 class _SizeAndColorState extends State<SizeAndColor> {
   //final List<String> productSize = ;
+late Size mq = MediaQuery.of(context).size;
 
   @override
   Widget build(BuildContext context) {

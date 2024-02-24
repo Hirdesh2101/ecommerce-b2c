@@ -6,7 +6,6 @@ import 'package:ecommerce_major_project/models/product.dart';
 import 'package:ecommerce_major_project/providers/tab_provider.dart';
 import 'package:ecommerce_major_project/providers/user_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:ecommerce_major_project/main.dart';
 import 'package:ecommerce_major_project/features/home/screens/wish_list_product.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -26,6 +25,7 @@ class _WishListScreenState extends State<WishListScreen> {
   bool isLoading = true;
   List<Product>? wishList;
   final HomeServices homeServices = HomeServices();
+late Size mq = MediaQuery.of(context).size;
 
   @override
   void initState() {

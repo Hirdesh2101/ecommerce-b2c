@@ -1,7 +1,6 @@
 import 'package:ecommerce_major_project/features/home/services/home_services.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:ecommerce_major_project/main.dart';
 import 'package:ecommerce_major_project/features/product_details/services/product_detail_services.dart';
 
 typedef QuantityCallback = void Function(int quantity);
@@ -28,6 +27,7 @@ class ReturnProduct extends StatefulWidget {
 class _ReturnProductState extends State<ReturnProduct> {
   ProductDetailServices productDetailServices = ProductDetailServices();
   final HomeServices homeServices = HomeServices();
+late Size mq = MediaQuery.of(context).size;
   final indianRupeesFormat = NumberFormat.currency(
     name: "INR",
     locale: 'en_IN',

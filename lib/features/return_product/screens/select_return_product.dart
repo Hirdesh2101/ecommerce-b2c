@@ -2,7 +2,6 @@ import 'package:ecommerce_major_project/constants/global_variables.dart';
 import 'package:ecommerce_major_project/features/return_product/widgets/return_product.dart';
 import 'package:ecommerce_major_project/models/order.dart';
 import 'package:flutter/material.dart';
-import 'package:ecommerce_major_project/main.dart';
 import 'package:go_router/go_router.dart';
 
 class SelectReturnProduct extends StatefulWidget {
@@ -16,6 +15,7 @@ class SelectReturnProduct extends StatefulWidget {
 
 class _SelectReturnProductState extends State<SelectReturnProduct> {
   List<dynamic> selectedProducts = <dynamic>[];
+late Size mq = MediaQuery.of(context).size;
 
   @override
   Widget build(BuildContext context) {

@@ -5,7 +5,6 @@ import 'package:ecommerce_major_project/constants/global_variables.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart' as ui;
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:provider/provider.dart';
-import 'package:ecommerce_major_project/main.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -15,6 +14,7 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+late Size mq = MediaQuery.of(context).size;
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<UserProvider>(context).user;

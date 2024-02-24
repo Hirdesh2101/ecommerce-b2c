@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:ecommerce_major_project/common/widgets/custom_button.dart';
 import 'package:ecommerce_major_project/features/auth/services/auth_service.dart';
 import 'package:ecommerce_major_project/features/checkout/services/checkout_services.dart';
-import 'package:ecommerce_major_project/main.dart';
 import 'package:ecommerce_major_project/providers/tab_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -21,6 +20,7 @@ class CheckStatus extends StatefulWidget {
 }
 
 class AddFundsCheckStatusState extends State<CheckStatus> {
+late Size mq = MediaQuery.of(context).size;
   Timer? timer;
   // Timer? timer2;
   bool isLoading = true;

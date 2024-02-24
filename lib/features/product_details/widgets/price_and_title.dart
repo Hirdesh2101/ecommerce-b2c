@@ -1,4 +1,3 @@
-import 'package:ecommerce_major_project/main.dart';
 import 'package:ecommerce_major_project/models/product.dart';
 
 import 'package:flutter/material.dart';
@@ -25,6 +24,7 @@ class TitleAndPrice extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+late Size mq = MediaQuery.of(context).size;
     int discount = calculatePercentageDiscount(
         product.varients[colorVarient]['price'],
         product.varients[colorVarient]['markedPrice']);

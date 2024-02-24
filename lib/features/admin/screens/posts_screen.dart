@@ -1,7 +1,6 @@
 import 'package:ecommerce_major_project/common/widgets/color_loader_2.dart';
 import 'package:ecommerce_major_project/constants/global_variables.dart';
 import 'package:ecommerce_major_project/constants/utils.dart';
-import 'package:ecommerce_major_project/main.dart';
 import 'package:flutter/material.dart';
 
 import 'package:ecommerce_major_project/models/product.dart';
@@ -19,6 +18,7 @@ class PostsScreen extends StatefulWidget {
 
 class _PostsScreenState extends State<PostsScreen> {
   List<Product>? products = [];
+late Size mq = MediaQuery.of(context).size;
   final AdminServices adminServices = AdminServices();
 
   //goto add product screen

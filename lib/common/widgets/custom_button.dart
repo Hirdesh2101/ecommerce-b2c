@@ -1,4 +1,3 @@
-import '/main.dart';
 import 'package:flutter/material.dart';
 
 class CustomButton extends StatelessWidget {
@@ -10,6 +9,7 @@ class CustomButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+late Size mq = MediaQuery.of(context).size;
     return ElevatedButton(
       onPressed: onTap,
       style: ElevatedButton.styleFrom(

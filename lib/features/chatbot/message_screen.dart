@@ -1,4 +1,3 @@
-import 'package:ecommerce_major_project/main.dart';
 import 'package:ecommerce_major_project/models/user.dart';
 import 'package:ecommerce_major_project/providers/user_provider.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +12,7 @@ class MessageScreen extends StatefulWidget {
 }
 
 class _MessageScreenState extends State<MessageScreen> {
+late Size mq = MediaQuery.of(context).size;
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<UserProvider>(context).user;

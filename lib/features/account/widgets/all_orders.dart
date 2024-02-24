@@ -1,5 +1,4 @@
 import 'package:ecommerce_major_project/constants/utils.dart';
-import 'package:ecommerce_major_project/main.dart';
 import 'package:ecommerce_major_project/models/order.dart';
 import 'package:ecommerce_major_project/providers/tab_provider.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +19,7 @@ class AllOrdersList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+late Size mq = MediaQuery.of(context).size;
     final tabProvider = Provider.of<TabProvider>(context);
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,

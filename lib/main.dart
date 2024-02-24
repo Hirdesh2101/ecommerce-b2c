@@ -1,16 +1,9 @@
 import 'dart:async';
-import 'dart:io';
 import 'package:ecommerce_major_project/app_service.dart';
 import 'package:ecommerce_major_project/features/cart/providers/cart_provider.dart';
 import 'package:ecommerce_major_project/features/home/providers/ads_provider.dart';
 import 'package:ecommerce_major_project/features/home/providers/category_provider.dart';
-import 'package:ecommerce_major_project/firebase_options.dart';
-import 'package:ecommerce_major_project/go_router.dart';
 import 'package:ecommerce_major_project/providers/tab_provider.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_ui_auth/firebase_ui_auth.dart';
-import 'package:firebase_ui_oauth_apple/firebase_ui_oauth_apple.dart';
-import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:ecommerce_major_project/providers/user_provider.dart';
@@ -18,12 +11,9 @@ import 'package:ecommerce_major_project/constants/global_variables.dart';
 import 'package:ecommerce_major_project/features/auth/services/auth_service.dart';
 import 'package:ecommerce_major_project/features/home/providers/search_provider.dart';
 import 'package:ecommerce_major_project/features/home/providers/filter_provider.dart';
-import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_web_plugins/url_strategy.dart';
 
-late Size mq;
 late TextTheme myTextTheme;
 
 class StavanStore extends StatefulWidget {

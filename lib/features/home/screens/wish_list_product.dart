@@ -2,7 +2,6 @@ import 'package:ecommerce_major_project/features/home/services/home_services.dar
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
 import 'package:intl/intl.dart';
-import 'package:ecommerce_major_project/main.dart';
 import 'package:ecommerce_major_project/models/product.dart';
 import 'package:ecommerce_major_project/features/product_details/services/product_detail_services.dart';
 
@@ -17,6 +16,7 @@ class WishListProduct extends StatefulWidget {
 }
 
 class _WishListProductState extends State<WishListProduct> {
+late Size mq = MediaQuery.of(context).size;
   ProductDetailServices productDetailServices = ProductDetailServices();
   final HomeServices homeServices = HomeServices();
   final indianRupeesFormat = NumberFormat.currency(
