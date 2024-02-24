@@ -1,6 +1,10 @@
 import 'package:ecommerce_major_project/constants/utils.dart';
 import 'package:ecommerce_major_project/features/checkout/services/checkout_services.dart';
 import 'package:ecommerce_major_project/features/cart/providers/cart_provider.dart';
+import 'package:ecommerce_major_project/features/home/providers/ads_provider.dart';
+import 'package:ecommerce_major_project/features/home/providers/category_provider.dart';
+import 'package:ecommerce_major_project/features/home/providers/filter_provider.dart';
+import 'package:ecommerce_major_project/features/home/providers/search_provider.dart';
 import 'package:ecommerce_major_project/features/home/services/home_services.dart';
 import 'package:ecommerce_major_project/features/product_details/screens/product_detail_screen.dart';
 import 'package:ecommerce_major_project/providers/tab_provider.dart';
@@ -14,6 +18,40 @@ import 'package:ecommerce_major_project/features/cart/widgets/cart_product.dart'
 import 'package:ecommerce_major_project/features/cart/widgets/cart_subtotal.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+
+class CartScreenProvider extends StatelessWidget {
+  const CartScreenProvider({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => UserProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => SearchProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => FilterProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => CartProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => TabProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => CategoryProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => AdsProvider(),
+        ),
+      ],
+      child: const CartScreen(),
+    );
+  }
+}
 
 class CartScreen extends StatefulWidget {
   static const String routeName = '/cart';

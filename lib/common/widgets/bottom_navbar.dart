@@ -25,7 +25,7 @@ class _BottomNavbarState extends State<BottomNavbar> {
   List<Widget> pages = [
     const HomeScreen(),
     const AccountScreen(),
-    const CartScreen(),
+    const CartScreenProvider(),
   ];
 
   void updatePage(int page) {
